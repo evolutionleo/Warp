@@ -1,0 +1,20 @@
+Here's how the project's organized
+	and how to use this framework:
+
+- All the configs are located at __NetworkingConfig script
+- oClient initiates the connection
+- When oClient gets a packet, it passes it to handlePacket() function,
+  which you can modify
+- network_write() sends the specified data (in struct format) to server
+- you can write simple wrappers for outcoming signals and put those into SendStuff script
+  e.x. you can replace `network_write({cmd: "Hello", msg: "World"})` with `sendHello()`
+
+
+TL;DR:
+- handle input in HandlePacket() script
+- handle output using network_write()
+- change ip/port in __NetworkingConfig
+- don't worry about internal stuff
+
+- best practice would to define all your
+  sending functions in SendStuff script
