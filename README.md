@@ -1,6 +1,6 @@
 # GM-Online-Framework
-### A simple, light-weight framework for multiplayer games, built with GameMaker and NodeJS
-### Maintained by [@evolutionleo](https://github.com/evolutionleo)
+#### A simple, light-weight framework for multiplayer games, written in in GMS2.3 and NodeJS
+#### Maintained by [@evolutionleo](https://github.com/evolutionleo)
 # Features
 - **Simple one-line calls** to send/process packages on both server and client sides
 - **No need to deal with buffers** whatsoever
