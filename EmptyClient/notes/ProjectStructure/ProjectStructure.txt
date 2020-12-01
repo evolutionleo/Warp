@@ -13,7 +13,7 @@ Here's how the project's organized
 TL;DR:
 - handle input in HandlePacket() script
 - handle output using network_write()
-- change ip/port in __NetworkingConfig
+- change ip/port in __NetworkingConfig (or input it in-game)
 - don't worry about internal stuff
 
 - best practice would to define all your

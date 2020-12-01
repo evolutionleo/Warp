@@ -7,6 +7,7 @@ socket = network_create_socket(network_socket_tcp)
 network_connect_raw_async(socket, IP, real(PORT));
 
 // This can be used to initiate the server interaction
+// (send the first packet)
 onConnect = function() {
 	sendHello()
 	sendHello2()

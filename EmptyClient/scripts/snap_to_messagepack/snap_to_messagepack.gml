@@ -4,7 +4,7 @@
 /// 
 /// @param struct/array   The data to be encoded. Can contain structs, arrays, strings, and numbers.   N.B. Will not encode ds_list, ds_map etc.
 /// 
-/// @jujuadams 2020-09-13
+/// @jujuadams 2020-11-06
 
 //In the general case, functions/methods cannot be deserialised so we default to preventing their serialisation to begin with
 //If you'd like to throw an error whenever this function tries to serialise a function/method, set SNAP_MESSAGEPACK_SERIALISE_FUNCTION_NAMES to -1
@@ -199,17 +199,17 @@ function __snap_to_messagepack_parser(_ds) constructor
                 else if (_value <= 0xffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xcd);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u16, _value);
                 }
                 else if (_value <= 0xffffffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xce);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u32, _value);
                 }
                 else
                 {
                     buffer_write(buffer, buffer_u8, 0xcf);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u64, _value);
                 }
             }
             else if (_value == 0)
@@ -235,18 +235,18 @@ function __snap_to_messagepack_parser(_ds) constructor
                 else if (_value <= 0xffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xd1);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u16, _value);
                 }
                 else if (_value <= 0xffffffff)
                 {
                     buffer_write(buffer, buffer_u8, 0xd2);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u32, _value);
                 }
                 else
                 {
                     //!!! No signed 64-bit integer read in GameMaker so this might be redundant
                     buffer_write(buffer, buffer_u8, 0xd3);
-                    buffer_write_little(buffer_u8, _value);
+                    buffer_write_little(buffer_u64, _value);
                 }
             }
         }

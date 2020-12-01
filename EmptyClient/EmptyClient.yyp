@@ -2,14 +2,14 @@
   "resources": [
     {"id":{"name":"HandlePacket","path":"scripts/HandlePacket/HandlePacket.yy",},"order":2,},
     {"id":{"name":"oDemo","path":"objects/oDemo/oDemo.yy",},"order":2,},
-    {"id":{"name":"snap_to_messagepack","path":"scripts/snap_to_messagepack/snap_to_messagepack.yy",},"order":2,},
     {"id":{"name":"SendStuff","path":"scripts/SendStuff/SendStuff.yy",},"order":1,},
-    {"id":{"name":"snap_from_messagepack","path":"scripts/snap_from_messagepack/snap_from_messagepack.yy",},"order":1,},
     {"id":{"name":"oClient","path":"objects/oClient/oClient.yy",},"order":1,},
     {"id":{"name":"__NetworkingConfig","path":"scripts/__NetworkingConfig/__NetworkingConfig.yy",},"order":3,},
+    {"id":{"name":"snap_to_messagepack","path":"scripts/snap_to_messagepack/snap_to_messagepack.yy",},"order":13,},
     {"id":{"name":"network_write","path":"scripts/network_write/network_write.yy",},"order":0,},
     {"id":{"name":"ProjectStructure","path":"notes/ProjectStructure/ProjectStructure.yy",},"order":11,},
     {"id":{"name":"Trace","path":"scripts/Trace/Trace.yy",},"order":0,},
+    {"id":{"name":"snap_from_messagepack","path":"scripts/snap_from_messagepack/snap_from_messagepack.yy",},"order":7,},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},"order":0,},
   ],
   "Options": [
@@ -26,16 +26,14 @@
     "name": "Default",
     "children": [],
   },
-  "RoomOrder": [
-    {"name":"Room1","path":"rooms/Room1/Room1.yy",},
-  ],
+  "RoomOrder": [],
   "Folders": [
     {"folderPath":"folders/Scripts.yy","order":5,"resourceVersion":"1.0","name":"Scripts","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Objects.yy","order":9,"resourceVersion":"1.0","name":"Objects","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Rooms.yy","order":10,"resourceVersion":"1.0","name":"Rooms","tags":[],"resourceType":"GMFolder",},
-    {"folderPath":"folders/Scripts/lib/Struct N' Array Parser.yy","order":1,"resourceVersion":"1.0","name":"Struct N' Array Parser","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/Networking.yy","order":2,"resourceVersion":"1.0","name":"Networking","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Scripts/lib.yy","order":3,"resourceVersion":"1.0","name":"lib","tags":[],"resourceType":"GMFolder",},
+    {"folderPath":"folders/Scripts/lib/Struct N' Array Parser.yy","order":1,"resourceVersion":"1.0","name":"Struct N' Array Parser","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
     {"targets":461609314234257646,"resourceVersion":"1.0","name":"audiogroup_default","resourceType":"GMAudioGroup",},
