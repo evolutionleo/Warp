@@ -67,7 +67,7 @@ export class Client
         // you can add more variables here
     }
     
-	write(data): void
+	write(data: Data): void
 	{
 		this.socket.write(packet.build(data));
 	}

@@ -49,6 +49,23 @@ if you write a wrapper
 - Client runs as a usual GMS2 project
 - To start the server - navigate to the folder and execute `node server.js`
 
+## Typescript Server
+### Installing
+- Follow the original steps, but clone TypescriptServer/ 
+- Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
+
+### Networking
+
+| | |
+--------|------------
+| Send command | Use the `Client.write` function or add a wrapper in the `Client`class |
+| Recieve command | Add a case in the `handlePacket` function |
+
+### Running
+- Compile the project by running `tsc` or run `tsc -w` to avoid recompiling after every change
+- Run `node .` or `node dist/server.js`
+  
+
 ## Credits
 - [Messagepack](https://msgpack.org/) serialization format 
 - [@jujuadams](https://github.com/jujuadams)'s [SNAP](https://github.com/jujuadams/snap) library, which enables Messagepack's encoding/decoding inside GameMaker
