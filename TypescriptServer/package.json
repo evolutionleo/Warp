@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "private": true,
     "description": "kappa",
-    "main": "server.js",
+    "main": "dist/server.js",
     "author": {
         "name": "Evoleo"
     },
