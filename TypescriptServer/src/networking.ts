@@ -3,7 +3,7 @@ import { encode, decode } from '@msgpack/msgpack'
 
 export type Data = { [key: string]: string; };
 
-export let handlePacket = (c: Client, data: Data) =>
+export function handlePacket(c: Client, data: Data): void
 {
 	var cmd = data.cmd.toLowerCase();
 
@@ -20,36 +20,6 @@ export let handlePacket = (c: Client, data: Data) =>
 		// Add your commands here:
 	}
 }
-
-export let packet =
-{
-	build: (data: Data) =>
-	{
-		var dataBuff = encode(data);
-		var sizeBuff = Buffer.alloc(2, dataBuff.length);
-
-		var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 2);
-		return buff;
-	},
-
-	parse: (c: Client, data: any) =>
-	{
-		var dataSize = data.length;
-		for(var i = 0; i < dataSize;)
-		{
-			var packSize = data.readUInt16LE(i); // unpack the size
-			i += 2;
-
-			var dataPack = Buffer.alloc(packSize); // unpack the data
-			data.copy(dataPack, 0, i, i + packSize);
-			i += packSize;
-
-
-			// pass the decoded data to handlePacket()
-			handlePacket(c, decode(dataPack) as Data);
-		}
-	}
-};
 
 export class Client
 {
@@ -72,7 +42,7 @@ export class Client
 		this.socket.write(packet.build(data));
 	}
 	
-    broadcastAll(data: Data, clients: Client[])
+    broadcastAll(data: Data, clients: Client[]): void
 	{
         clients.forEach(
 			c =>
@@ -96,3 +66,32 @@ export class Client
 	//#endregion
 }
 
+export let packet =
+{
+	build: (data: Data): Buffer =>
+	{
+		var dataBuff = encode(data);
+		var sizeBuff = Buffer.alloc(2, dataBuff.length);
+
+		var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 2);
+		return buff;
+	},
+
+	parse: (c: Client, data: any): void =>
+	{
+		var dataSize = data.length;
+		for(var i = 0; i < dataSize;)
+		{
+			var packSize = data.readUInt16LE(i); // unpack the size
+			i += 2;
+
+			var dataPack = Buffer.alloc(packSize); // unpack the data
+			data.copy(dataPack, 0, i, i + packSize);
+			i += packSize;
+
+
+			// pass the decoded data to handlePacket()
+			handlePacket(c, decode(dataPack) as Data);
+		}
+	}
+};
