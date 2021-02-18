@@ -1,0 +1,20 @@
+{
+    "name": "ponk",
+    "version": "0.0.1",
+    "private": true,
+    "description": "kappa",
+    "main": "dist/server.js",
+    "author": {
+        "name": "Evoleo"
+    },
+    "dependencies": {
+        "@msgpack/msgpack": "^2.3.0",
+        "@types/node": "^14.14.28",
+        "binary-parser": "^1.6.2",
+        "extend": "^3.0.2",
+        "minimist": "^1.2.5",
+        "mongoose": "^5.9.27",
+        "performance-now": "^2.1.0",
+        "underscore": "^1.10.2"
+    }
+}
