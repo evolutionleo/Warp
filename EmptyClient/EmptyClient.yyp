@@ -18,6 +18,10 @@
     {"name":"macOS","path":"options/mac/options_mac.yy",},
     {"name":"Main","path":"options/main/options_main.yy",},
     {"name":"Windows","path":"options/windows/options_windows.yy",},
+    {"name":"Amazon Fire","path":"options/amazonfire/options_amazonfire.yy",},
+    {"name":"Android","path":"options/android/options_android.yy",},
+    {"name":"iOS","path":"options/ios/options_ios.yy",},
+    {"name":"tvOS","path":"options/tvos/options_tvos.yy",},
   ],
   "isDnDProject": false,
   "isEcma": false,
@@ -26,7 +30,9 @@
     "name": "Default",
     "children": [],
   },
-  "RoomOrder": [],
+  "RoomOrderNodes": [
+    {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+  ],
   "Folders": [
     {"folderPath":"folders/Scripts.yy","order":5,"resourceVersion":"1.0","name":"Scripts","tags":[],"resourceType":"GMFolder",},
     {"folderPath":"folders/Objects.yy","order":9,"resourceVersion":"1.0","name":"Objects","tags":[],"resourceType":"GMFolder",},
@@ -36,16 +42,16 @@
     {"folderPath":"folders/Scripts/lib/Struct N' Array Parser.yy","order":1,"resourceVersion":"1.0","name":"Struct N' Array Parser","tags":[],"resourceType":"GMFolder",},
   ],
   "AudioGroups": [
-    {"targets":461609314234257646,"resourceVersion":"1.0","name":"audiogroup_default","resourceType":"GMAudioGroup",},
+    {"targets":-1,"resourceVersion":"1.3","name":"audiogroup_default","resourceType":"GMAudioGroup",},
   ],
   "TextureGroups": [
-    {"isScaled":true,"autocrop":true,"border":2,"mipsToGenerate":0,"targets":461609314234257646,"resourceVersion":"1.0","name":"Default","resourceType":"GMTextureGroup",},
+    {"isScaled":true,"autocrop":true,"border":2,"mipsToGenerate":0,"groupParent":null,"targets":-1,"resourceVersion":"1.3","name":"Default","resourceType":"GMTextureGroup",},
   ],
   "IncludedFiles": [],
   "MetaData": {
-    "IDEVersion": "2.3.0.529",
+    "IDEVersion": "2.3.2.556",
   },
-  "resourceVersion": "1.3",
+  "resourceVersion": "1.4",
   "name": "EmptyClient",
   "tags": [],
   "resourceType": "GMProject",

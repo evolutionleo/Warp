@@ -1,10 +1,11 @@
 const { encode, decode } = require('@msgpack/msgpack');
-const {handlePacket} = require('../custom/handlePacket.js');
+const { handlePacket } = require('../custom/handlePacket.js');
 
 module.exports = packet = class {
     static build(data) {
         var dataBuff = encode(data);
-        var sizeBuff = Buffer.alloc(2, dataBuff.length);
+        var sizeBuff = Buffer.alloc(2);
+        sizeBuff.writeUInt16LE(dataBuff.length);
 
         var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 2);
         return buff;

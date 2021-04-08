@@ -70,12 +70,13 @@ export let packet =
 {
 	build: (data: Data): Buffer =>
 	{
-		var dataBuff = encode(data);
-		var sizeBuff = Buffer.alloc(2, dataBuff.length);
+        var dataBuff = encode(data);
+        var sizeBuff = Buffer.alloc(2);
+        sizeBuff.writeUInt16LE(dataBuff.length);
 
-		var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 2);
-		return buff;
-	},
+        var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 2);
+        return buff;
+    },
 
 	parse: (c: Client, data: any): void =>
 	{

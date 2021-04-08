@@ -3,10 +3,11 @@
 
 var type = async_load[? "type"]
 var buff = async_load[? "buffer"]
-var size = async_load[? "size"]
 
 switch(type) {
 	case network_type_data:
+		var size = async_load[? "size"]
+		
 		for(var i = 0; i < size;) { // Break up the binary blob into single packets
 			// Read the packet size
 			var packSize = buffer_read(buff, buffer_u16);
