@@ -11,6 +11,9 @@ export function handlePacket(c: Client, data: Data):void {
 			console.log("Hello from client: " + data.kappa);
 			c.sendHello();
 			break;
+		case 'hello2':
+			console.log("Second hello from client: " + data.kappa);
+			break;
 		case 'message':
 			console.log('Message from client: ' + data.msg);
 			c.sendMessage(data.msg + ' indeed');
@@ -50,7 +53,8 @@ export class Client {
 
 	// Custom Wrappers
 	sendHello():void {
-		this.write({ cmd: 'hello', str: 'Hello, client' });
+		this.write({ cmd: 'hello', str: 'Hello, client!' });
+		this.write({ cmd: 'hello2', str: 'Hello again, client!' });
 	}
 
 	sendMessage(msg: string):void {

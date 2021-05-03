@@ -8,7 +8,8 @@ module.exports = class SendStuff {
     // these functions can be called using %insert_client%.sendHello())
     // in handlePacket.js or wherever else
     sendHello() {
-        this.write({cmd: 'hello', str: 'Hello, client'})
+        this.write({cmd: 'hello', str: 'Hello, client!'})
+        this.write({cmd: 'hello2', str: 'Hello again, client!'})
     }
 
     sendMessage(msg) {

@@ -7,11 +7,9 @@ function handlePacket(pack) {
 	
 	switch(cmd) {
 		case "hello":
-			trace("Hello!")
 			trace(data.str)
 			break
 		case "hello2":
-			trace("Hello2!")
 			trace(data.str)
 			break
 		case "message":
