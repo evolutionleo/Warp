@@ -13,11 +13,11 @@
 - Import it to your project using Local Package system
 
  OR
-- Clone EmptyClient/
+- Clone EmptyClient/ or Releases/EmptyClient.zip
 ### Server-side
 - Install [NodeJS](https://nodejs.org/en/)
 - I recommend using [VS Code](https://code.visualstudio.com/), as it's **very cool** (and in addition to that it provides a handy command line, embedded into the code editor)
-- Clone EmptyServer/
+- Download EmptyServer.zip from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases)
 - Open up the clonned folder in command line (or open the folder in VS Code)
 - Enter `npm install`
 
@@ -47,11 +47,11 @@ if you write a wrapper
 
 ## Runnning
 - Client runs as a usual GMS2 project
-- To start the server - navigate to the folder and execute `node server.js`
+- To start the server - navigate to the folder and execute `node .`
 
 ## Typescript Server
 ### Installing
-- Follow the original steps, but clone TypescriptServer/ 
+- Follow the original steps, but install TypescriptServer.zip instead of EmptyServer.zip
 - Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
 
 ### Networking
