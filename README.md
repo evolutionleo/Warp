@@ -65,7 +65,7 @@ if you write a wrapper
 ### (Advanced) Using accounts and saving:
 - Make sure you installed MongoDB (instructions in the Installing section)
 - Use the "register" and "login" commands on the client-side, the server will do all the authentification for you
-- Info: "Account" is an object that holds a pair of login + password, and some data bound to them. ""
+- Info: "Account" is an object that holds a pair of login + password, and some data bound to them, while "Profile" holds the actual gameplay data. One Account can theoretically have many profiles bound to it
 - You can access the gameplay data of each client in `c.profile.%insert_variable%`, it will save automatically
 - If you want to add new properties, extend the schemas in the `schemas/` folder
 
