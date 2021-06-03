@@ -93,5 +93,6 @@ module.exports = class SendStuff {
         this.write({ cmd: 'play', start_pos: start_pos });
     }
 
+    // #################################
     // You can write your wrappers here:
 }

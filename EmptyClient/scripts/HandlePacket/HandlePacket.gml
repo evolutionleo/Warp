@@ -89,6 +89,7 @@ function handlePacket(pack) {
 			break
 		
 		
+		// ##############################
 		// Add your custom commands here:
 		
 		case "haha":

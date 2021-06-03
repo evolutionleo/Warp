@@ -26,7 +26,6 @@ module.exports = async function handlePacket(c, data) {
                 // this also sends the message
                 c.login(account);
             }).catch(function(reason) {
-                console.log(reason);
                 c.sendLogin('fail', reason);
             })
             break;
@@ -57,6 +56,7 @@ module.exports = async function handlePacket(c, data) {
             }
             break;
 
+        // #######################
         // Add your commands here:
     }
 }
