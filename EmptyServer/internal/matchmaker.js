@@ -27,10 +27,8 @@ module.exports = class MatchMaker {
         const percent = (player_mmr + opponent_mmr) / player_mmr;
         const transformed_mmr1 = 10 ** (player_mmr / mmr_scale);
         const transformed_mmr2 = 10 ** (opponent_mmr / mmr_scale);
-        console.log('transormed: ' + transformed_mmr1 + ' ' + transformed_mmr2);
 
         const expected_result = transformed_mmr1 / (transformed_mmr1 + transformed_mmr2);
-        console.log('expected:', expected_result);
 
         return Math.round(k * (result - expected_result));
     }

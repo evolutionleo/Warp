@@ -100,16 +100,6 @@ module.exports = class Lobby {
     // data that is being sent about this lobby
     // (e.x. we don't want to send functions and everything about every player)
     serialize() {
-        console.log('serialied lobby: ')
-        console.log({
-            lobbyid: this.lobbyid,
-            map: this.map,
-            status: this.status,
-            max_players: this.max_players,
-            player_count: this.player_count,
-            full: this.full
-        })
-
         return {
             lobbyid: this.lobbyid,
             map: this.map,

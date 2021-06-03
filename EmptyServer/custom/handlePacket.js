@@ -4,7 +4,7 @@ const Account = require('./../schemas/account.js');
 
 module.exports = async function handlePacket(c, data) {
     var cmd = data.cmd.toLowerCase();
-    console.log('received command: ' + cmd);
+    // console.log('received command: ' + cmd);
     
     switch(cmd) {
         case 'hello':
