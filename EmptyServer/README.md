@@ -9,4 +9,4 @@
 *you probably don't need to touch most of this stuff* to make a basic online game!
 - Take a look in the **custom/** folder, the two files called `handlePacket.js` and `sendStuff.js`
 are what you're looking for!
-- 
+- Add a couple custom commands here + in GML and mess around a bit!
