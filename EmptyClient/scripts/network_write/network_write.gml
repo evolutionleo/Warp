@@ -1,3 +1,4 @@
+///@function network_write(data, *socket)
 ///@arg data
 ///@arg *socket
 function network_write(data, sock) {
@@ -6,7 +7,7 @@ function network_write(data, sock) {
 		sock = oClient.socket
 	}
 	
-	trace("Encoding data: %", data)
+	//trace("Encoding data: %", data)
 	
 	// the data buffer
 	var buff = snap_to_messagepack(data)
@@ -24,6 +25,14 @@ function network_write(data, sock) {
 	// Clean up
 	buffer_delete(buff)
 	buffer_delete(new_buff)
+}
+
+
+///@function send(data, *socket)
+///@arg data
+///@arg *socket
+function send(data, sock) {
+	return network_write(data, sock)
 }
 
 // P.s:

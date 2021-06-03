@@ -1,29 +1,57 @@
+require('./config.js')
 const net = require('net');
-const port = 1338;
+const port = config.port;
 
-require('./custom/handlePacket.js');
-require('./static/clients.js'); // clients = []
-require('./static/packet.js'); // packet = { parse(), build() }
-require('./constructors/client.js'); // class Client {...}
+const fs = require('fs');
 
+const packet = require('./internal/packet.js'); // { build(), parse() }
+const Client = require('./entities/client.js'); // class Client {...}
+const { delayReceive } = require('./internal/artificial_delay.js');
+
+
+// load some init scripts (to not put everything in this file)
+const init_files = fs.readdirSync(__dirname + '/initializers', 'utf8');
+init_files.forEach(function(file) {
+    require(__dirname + '/initializers/' + file);
+})
+console.log('loaded initializers!');
+
+
+// The Actual Server
 const server = net.createServer(function(socket) {
     console.log("Socket connected!");
     
     var c = new Client(socket);
-    c.username = ""; // todo: implement actual nicknames
-    clients.push(c); // add the client to clients list (unnecessary)
+    global.clients.push(c); // add the client to clients list (unnecessary)
 
     // Bind functions on events
+
     socket.on('error', function(err) {
-        console.log(`Error! ${err}`); // Don't crash on error
+        if (err.message.includes('ECONNRESET')) { // this is a disconnect
+            console.log('Socket violently disconnected.');
+            // handle disconnect here
+        }
+
+        console.log(`Error! ${err}`);
     });
     
+    // When data arrived
     socket.on('data', function(data) {
-        packet.parse(c, data); // Do stuff
+        // create artificial_delay
+        if (delayReceive.enabled) {
+            setTimeout(function() {
+                packet.parse(c, data); // handle the logic
+            }, delayReceive.get());
+        }
+        else { // just parse normally
+            packet.parse(c, data); // handle the logic
+        }
     });
 
-    socket.on('end', function() {
-        console.log('Socket ended.');
+    // When a socket/connection closed
+    socket.on('close', function() {
+        c.onDisconnect();
+        console.log('Socket closed.');
     })
 });
 

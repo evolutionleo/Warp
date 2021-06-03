@@ -13,8 +13,9 @@ Here's how the project's organized
 TL;DR:
 - handle input in HandlePacket() script
 - handle output using network_write()
-- change ip/port in __NetworkingConfig (or input it in-game)
-- don't worry about internal stuff
+- change ip/port in __NetworkingConfig (or input it in-game somehow)
+- don't worry about internal stuff too much
 
 - best practice would to define all your
-  sending functions in SendStuff script
+  sending functions in SendStuff script,
+  even tho you can just send() things

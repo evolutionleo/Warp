@@ -6,13 +6,13 @@
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
-/// @jujuadams 2020-06-20
+/// @jujuadams 2021-06-03
 
 function snap_from_messagepack()
 {
     var _buffer         = argument[0];
     var _offset         = ((argument_count > 1) && (argument[1] != undefined))? argument[1] : 0;
-    var _destroy_buffer = ((argument_count > 3) && (argument[3] != undefined))? argument[3] : false;
+    var _destroy_buffer = ((argument_count > 2) && (argument[2] != undefined))? argument[2] : false;
     
     var _old_tell = buffer_tell(_buffer);
     buffer_seek(_buffer, buffer_seek_start, _offset);
@@ -54,6 +54,9 @@ function __snap_from_messagepack_parser(_buffer) constructor
     
     static read_string = function(_size)
     {
+        //Return an empty string if we don't expect any data whatsoever
+        if (_size == 0) return "";
+        
         var _null_position = buffer_tell(buffer) + _size;
         if (_null_position >= buffer_get_size(buffer))
         {
@@ -149,6 +152,7 @@ function __snap_from_messagepack_parser(_buffer) constructor
     static read_value = function()
     {
         var _byte = buffer_read(buffer, buffer_u8);
+        
         if (_byte <= 0x7f) //positive fixint 0x00 -> 0x7f
         {
             //First 7 bits are the integer

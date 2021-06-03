@@ -16,6 +16,8 @@
     {"instances":[
         {"properties":[],"isDnd":false,"objectId":{"name":"oClient","path":"objects/oClient/oClient.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":5.0,"scaleY":7.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":160.0,"y":128.0,"resourceVersion":"1.0","name":"inst_7F628D4E","tags":[],"resourceType":"GMRInstance",},
         {"properties":[],"isDnd":false,"objectId":{"name":"oDemo","path":"objects/oDemo/oDemo.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":11.0,"scaleY":15.0,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":512.0,"y":128.0,"resourceVersion":"1.0","name":"inst_6E6AC7BB","tags":[],"resourceType":"GMRInstance",},
+        {"properties":[],"isDnd":false,"objectId":{"name":"btnToLobbies","path":"objects/btnToLobbies/btnToLobbies.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":3.1,"scaleY":3.1,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":928.000061,"y":576.0,"resourceVersion":"1.0","name":"inst_3373F80C","tags":[],"resourceType":"GMRInstance",},
+        {"properties":[],"isDnd":false,"objectId":{"name":"btnToLogin","path":"objects/btnToLogin/btnToLogin.yy",},"inheritCode":false,"hasCreationCode":false,"colour":4294967295,"rotation":0.0,"scaleX":3.11249924,"scaleY":3.11249924,"imageIndex":0,"imageSpeed":1.0,"inheritedItemId":null,"frozen":false,"ignore":false,"inheritItemSettings":false,"x":384.0,"y":576.000061,"resourceVersion":"1.0","name":"inst_4CDB7560","tags":[],"resourceType":"GMRInstance",},
       ],"visible":true,"depth":0,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"resourceVersion":"1.0","name":"Instances","tags":[],"resourceType":"GMRInstanceLayer",},
     {"spriteId":null,"colour":4279834905,"x":0,"y":0,"htiled":false,"vtiled":false,"hspeed":0.0,"vspeed":0.0,"stretch":false,"animationFPS":15.0,"animationSpeedType":0,"userdefinedAnimFPS":false,"visible":true,"depth":100,"userdefinedDepth":false,"inheritLayerDepth":false,"inheritLayerSettings":false,"gridX":32,"gridY":32,"layers":[],"hierarchyFrozen":false,"resourceVersion":"1.0","name":"Background","tags":[],"resourceType":"GMRBackgroundLayer",},
   ],
@@ -23,8 +25,10 @@
   "creationCodeFile": "",
   "inheritCode": false,
   "instanceCreationOrder": [
-    {"name":"inst_7F628D4E","path":"rooms/Room1/Room1.yy",},
-    {"name":"inst_6E6AC7BB","path":"rooms/Room1/Room1.yy",},
+    {"name":"inst_7F628D4E","path":"rooms/rMenu/rMenu.yy",},
+    {"name":"inst_6E6AC7BB","path":"rooms/rMenu/rMenu.yy",},
+    {"name":"inst_3373F80C","path":"rooms/rMenu/rMenu.yy",},
+    {"name":"inst_4CDB7560","path":"rooms/rMenu/rMenu.yy",},
   ],
   "inheritCreationOrder": false,
   "sequenceId": null,
@@ -49,10 +53,10 @@
   },
   "parent": {
     "name": "Rooms",
-    "path": "folders/Rooms.yy",
+    "path": "folders/Demo/Rooms.yy",
   },
   "resourceVersion": "1.0",
-  "name": "Room1",
+  "name": "rMenu",
   "tags": [],
   "resourceType": "GMRoom",
 }
