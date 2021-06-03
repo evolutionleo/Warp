@@ -34,9 +34,7 @@
 Congratulations if you've completed the Installation step!
 
 Anyways. You see, many other networking frameworks might seem a bit overwhelming (even to people who are somewhat experienced in the topic).
-
-That's why I tried my best to provide the simplest interface.
-
+And even though v3.0 of this framework did add some advanced features, I still tried my best to provide the simplest interface:
 ### Sending a packet (JS and GML)
 Sending a message to the server might be as easy as:
 ```gml
