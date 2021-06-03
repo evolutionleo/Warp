@@ -1,16 +1,17 @@
 # GM-Online-Framework
-#### A simple, light-weight framework for multiplayer games, written in in GMS2.3 and NodeJS
+#### A simple yet feature-rich framework for multiplayer games, written in in GMS2.3 and NodeJS
 #### Maintained by [@evolutionleo](https://github.com/evolutionleo)
 # Features
 - **Simple one-line calls** to send/process packages on both server and client sides
 - **No need to deal with buffers** whatsoever
-- **Well-commented code** if you decide to dive into the sources**
-- **NodeJS server** can run on a Linux dedicated server
-- **Open-source license** (you can use this in commercial projects and modify/contribute in any way)**
+- **Advanced features:** lobbies, account/profile system, saving/loading data, dev/prod configurations
+- **Well-commented code** if you decide to dive into the sources
+- **NodeJS server** can run on a Linux hosting/dedicated server, as opposed to servers in GML
+- **GNU General Public license** (you can use this framework in commercial projects and modify/contribute in any way)
 # Installing
 ### Client-side
-- Install .yymps from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases)
-- Import it to your project using Local Package system
+- Install .yymps from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases/latest)
+- Import it to your project using Local Package system *(you can also choose to include the Demo)*
 
  OR
 - Clone EmptyClient/ or Releases/EmptyClient.zip
@@ -19,15 +20,24 @@
 - I recommend using [VS Code](https://code.visualstudio.com/), as it's **very cool** (and in addition to that it provides a handy command line, embedded into the code editor)
 - Download EmptyServer.zip from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases)
 - Open up the clonned folder in command line (or open the folder in VS Code)
-- Enter `npm install`
+- Run `npm install`
+
+- (Optional) To use the accounts/saving system, install the database engine:
+
+### Database \(Optional\)
+- Install [MongoDB](https://www.mongodb.com/try/download/community)
+- Choose the default settings, it should now run in background
+- Done!
+
 
 ## Usage/Workflow
 Congratulations if you've completed the Installation step!
 
 Anyways. You see, many other networking frameworks might seem a bit overwhelming (even to people who are somewhat experienced in the topic).
 
-That's why I tried my best to provide the simplest interface:
-### Sending a packet
+That's why I tried my best to provide the simplest interface.
+
+### Sending a packet (JS and GML)
 Sending a message to the server might be as easy as:
 ```gml
 network_write({ cmd: "Hello", str: "Hello, Server!" })
@@ -45,11 +55,32 @@ if you write a wrapper
 | Client | Add a new function in SendStuff.gml| Add a new case in HandlePacket.gml |
 | Server | Add a new function in SendStuff.js | Add a new case in HandlePacket.js |
 
+### (Advanced) Using lobbies and maps:
+- Add new maps in the `maps/` folder
+- Choose how many lobbies you need in `initializers/03_lobbies.js`
+- Use `"lobby list"`, `"lobby join"`, `"lobby leave"` to work with lobbies
+- Most of the generic logic is already coded, but you can add in features that you personally need
+- You can extend the `Lobby` class in `entities/lobby.js`, the `Map` class in `entities/map.js` and
+
+### (Advanced) Using accounts and saving:
+- Make sure you installed MongoDB (instructions in the Installing section)
+- Use the "register" and "login" commands on the client-side, the server will do all the authentification for you
+- Info: "Account" is an object that holds a pair of login + password, and some data bound to them, while "Profile" holds the actual gameplay data. One Account can theoretically have many profiles bound to it
+- You can access the gameplay data of each client in `c.profile.%insert_variable%`, it will save automatically
+- If you want to add new properties, extend the schemas in the `schemas/` folder
+
 ## Runnning
 - Client runs as a usual GMS2 project
-- To start the server - navigate to the folder and execute `node .`
+- To start the server - navigate to the folder and execute `node .` 
 
-## Typescript Server
+## Configuration
+- Edit the server configs inside `config.js`
+- Edit the client configs inside `__NetworkingConfig.gml`
+- Select the server config by adding `--env=prod` or `--env=dev` parameter to the classic `node .` command
+- Select the client config by clicking the 'target' button in the top-right corner of IDE
+
+## Typescript Server (DEPRECATED AS OF v3.0)
+### Note: As of v3.0, the latest major update, the TypeScript Server doesn't support any of the new features, but I'm accepting pull requests if someone's willing to contribute by porting the code to TS
 ### Installing
 - Follow the original steps, but install TypescriptServer.zip instead of EmptyServer.zip
 - Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
@@ -64,10 +95,11 @@ if you write a wrapper
 ### Running
 - Compile the project by running `tsc` or run `tsc -w` to avoid recompiling after every change
 - Run `node .` or `node dist/server.js`
-  
 
-## Credits
+
+# Credits
 - [Messagepack](https://msgpack.org/) serialization format 
 - [@jujuadams](https://github.com/jujuadams)'s [SNAP](https://github.com/jujuadams/snap) library, which enables Messagepack's encoding/decoding inside GameMaker
 - [NodeJS Messagepack](https://github.com/msgpack/msgpack) encoder/decoder
+- [rm2kdev's ancient series that inspired this](https://www.youtube.com/watch?v=EyNVeTzhC1w&list=PLLUWsMtogf9jQGzn3nAjAw2_aq3PM08pC)
 - Framework by: [@evolutionleo](https://github.com/evolutionleo) (me)
