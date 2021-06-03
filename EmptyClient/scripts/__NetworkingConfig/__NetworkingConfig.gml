@@ -5,21 +5,26 @@
 // These are config-dependant macros.
 // Choose configs in GameMaker in the top-right corner
 
-#macro CONFIGS_SET true
-#macro Default:CONFIGS_SET false
+
+// Default (just mirrors debug)
+#macro Default:IP "127.0.0.1"
+#macro DEFAULT:PORT "1338"
 
 // Production
 #macro Prod:IP   "xxxxxx" // your external server IP
 #macro Prod:PORT "1337"
 
-// Debug
+// Debug/Development
 #macro Dev:IP   "127.0.0.1"	// localhost
 //#macro IP "192.168.1.224" // LAN (replace with your local IP)
 #macro Dev:PORT "1338"
 
 
+// warn about not setting the config (press the "target" icon)
+#macro CONFIGS_SET true
+#macro Default:CONFIGS_SET false
 if (!CONFIGS_SET) {
-	throw "Remember to set your config in the top-right corner of IDE! (Dev = Development, Prod = Production)"
+	trace("Remember to set your config by pressing the 'target' icon in the top-right corner of IDE! (Dev = Development, Prod = Production)")
 }
 
 
