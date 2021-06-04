@@ -89,7 +89,7 @@ module.exports = class SendStuff {
     }
 
     sendPlay(lobby, start_pos) {
-        this.write({ cmd: 'play', lobby: lobby, start_pos: start_pos });
+        this.write({ cmd: 'play', lobby: lobby.serialize(), start_pos: start_pos });
     }
 
     // #################################
