@@ -45,6 +45,10 @@ module.exports = async function handlePacket(c, data) {
         case 'lobby list':
             c.sendLobbyList();
             break;
+        case 'lobby info':
+            var lobbyid = data.lobbyid;
+            c.sendLobbyInfo(lobbyid);
+            break;
         case 'lobby join':
             var lobbyid = data.lobbyid;
             var lobby;

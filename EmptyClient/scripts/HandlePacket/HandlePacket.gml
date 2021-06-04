@@ -52,6 +52,15 @@ function handlePacket(pack) {
 			var lobbies = data.lobbies
 			global.lobbies = lobbies
 			break
+		case "lobby info":
+			var lobby = data.lobby
+			for(var i = 0; i < array_length(global.lobbies); i++) {
+				var _lobby = global.lobbies[i]
+				if (_lobby.lobbyid == lobby.lobbyid) {
+					global.lobbies[i] = lobby
+				}
+			}
+			break
 		case "lobby join":
 			var lobby = data.lobby
 			global.lobby = lobby
@@ -79,7 +88,8 @@ function handlePacket(pack) {
 			//room_goto(rMenu)
 			break
 		case "play":
-			var rm = asset_get_index(global.lobby.room_name)
+			global.lobby = data.lobby // again, just to be safe + update the data
+			var rm = asset_get_index(global.lobby.map.room_name)
 			if (rm < 0) {
 				show_message_async("Error: Invalid room name!")
 				break
