@@ -27,14 +27,14 @@ module.exports = class SendStuff {
     }
 
     broadcastAll(pack, notme) {
-        return broadcastList(clients, pack, notme);
+        return this.broadcastList(global.clients, pack, notme);
     }
 
     broadcastLobby(pack, notme) {
         if (this.lobby === null)
             return -1
 
-        return broadcastList(this.lobby.players, pack, notme);
+        return this.broadcastList(this.lobby.players, pack, notme);
     }
     
     // these functions can be later called using %insert_client%.sendThing()
