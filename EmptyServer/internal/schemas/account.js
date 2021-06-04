@@ -1,8 +1,9 @@
 // this section contains a schema for saving players' account info
 const mongoose = require('mongoose'); // MongoDB driver
-const { hash_password, verify_password } = require('./../internal/password_encryption.js'); // gotta encrypt out passwords!
+const { hash_password, verify_password } = require('../password_encryption.js'); // gotta encrypt out passwords!
 const Profile = require('./profile.js');
 
+// you can edit this schema!
 const accountSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: String
@@ -32,7 +33,7 @@ accountSchema.statics.register = function(username, password) {
 
             // add more stuff below that is defined in the Account Schema above
         })
-        
+
         account.save(function(err) {
             if (err) {
                 console.log('Error while registering: ' + err.message);

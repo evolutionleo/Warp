@@ -1,5 +1,4 @@
 const packet = require('./../internal/packet.js');
-// const { clients, lobbies } = require('./../internal/globals.js');
 
 module.exports = class SendStuff {
     constructor() {}

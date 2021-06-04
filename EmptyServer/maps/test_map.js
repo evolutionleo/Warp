@@ -1,4 +1,4 @@
-const Map = require('./../entities/map.js');
+const Map = require('./../internal/entities/map.js');
 
 module.exports = new Map({
     name: 'Test Map',

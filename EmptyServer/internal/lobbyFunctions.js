@@ -1,5 +1,4 @@
-// const { users, lobbies } = require('./../internal/globals.js');
-const Lobby = require('./../entities/lobby.js');
+const Lobby = require('./entities/lobby.js');
 const crypto = require('crypto');
 
 module.exports.createLobby = function(map_name) { // returns the lobby instance

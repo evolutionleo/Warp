@@ -1,9 +1,11 @@
 const fs = require('fs');
+const path = require('path');
 
 // this file isn't really meant to be touched, all you have to know is that
 // basically all this does is just loading all the maps from the 'maps/' folder, that globals.maps is then set to
 
-const maps_dir = __dirname + '/../maps/';
+// __dirname is where this file is located
+const maps_dir = path.join(__dirname, '/../../maps/');
 global.maps = [];
 const filenames = fs.readdirSync(maps_dir); // sync because CommonJS
 

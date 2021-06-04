@@ -1,6 +1,7 @@
 const { findLobby, getLobbies } = require('./../internal/lobbyFunctions.js');
-const Profile = require('../schemas/profile.js');
-const Account = require('./../schemas/account.js');
+const { make_match } = require('./../internal/matchmaker.js');
+const Profile = require('../internal/schemas/profile.js');
+const Account = require('../internal/schemas/account.js');
 
 module.exports = async function handlePacket(c, data) {
     var cmd = data.cmd.toLowerCase();
@@ -18,6 +19,7 @@ module.exports = async function handlePacket(c, data) {
             console.log('Message from client: '+data.msg);
             c.sendMessage(data.msg+' indeed');
             break;
+
         // preset commands
         case 'login':
             var { username, password } = data;
@@ -36,6 +38,7 @@ module.exports = async function handlePacket(c, data) {
                 // this also sends the message
                 c.register(account);
             }).catch(function(reason) {
+                console.log('error: ' + reason);
                 c.sendRegister('fail', reason);
             })
             break;
@@ -44,8 +47,14 @@ module.exports = async function handlePacket(c, data) {
             break;
         case 'lobby join':
             var lobbyid = data.lobbyid;
-            var lobby = findLobby(lobbyid);
-            
+            var lobby;
+            if (lobbyid) {
+                lobby = findLobby(lobbyid);
+            }
+            else {
+                lobby = make_match(c);
+            }
+
             // it also sends the response
             lobby.addPlayer(c);
             break;

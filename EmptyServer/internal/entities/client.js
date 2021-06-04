@@ -1,4 +1,4 @@
-const SendStuff = require("./../custom/sendStuff.js");
+const SendStuff = require("../../custom/sendStuff.js");
 const { Profile, freshProfile } = require('./../schemas/profile.js');
 
 // this is a wrapper around sockets
@@ -45,22 +45,28 @@ module.exports = class Client extends SendStuff {
             this.lobby.kickPlayer(this, 'disconnected', true);
     }
 
+    // preset functions
 
+    // this one saves everything
     save() {
         if (this.account !== null) {
             this.account.save(function(err) {
-                if (err)
+                if (err) {
                     console.log('Error while saving account: ' + err);
-                else
+                }
+                else {
                     console.log('Saved the account successfully');
+                }
             })
         }
         if (this.profile !== null) {
             this.profile.save(function(err) {
-                if (err)
+                if (err) {
                     console.log('Error while saving profile: ' + err);
-                else
+                }
+                else {
                     console.log('Saved the profile successfully.');
+                }
             });
         }
     }
@@ -69,9 +75,9 @@ module.exports = class Client extends SendStuff {
         this.account = account;
         this.profile = freshProfile(account);
 
-        this.save().then(() => {
-            c.sendRegister('success');
-        });
+        // this.save() returns a Promise
+        this.save();
+        this.sendRegister('success');
     }
 
     login(account) {

@@ -1,5 +1,3 @@
-// const { maps, clients } = require('./../internal/globals.js');
-
 // note: only create lobbies with createLobby(), don't call the constructor directly
 module.exports = class Lobby {
     lobbyid = -1; // assigned when created

@@ -5,14 +5,14 @@ const port = config.port;
 const fs = require('fs');
 
 const packet = require('./internal/packet.js'); // { build(), parse() }
-const Client = require('./entities/client.js'); // class Client {...}
+const Client = require('./internal/entities/client.js'); // class Client {...}
 const { delayReceive } = require('./internal/artificial_delay.js');
 
 
 // load some init scripts (to not put everything in this file)
-const init_files = fs.readdirSync(__dirname + '/initializers', 'utf8');
+const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
 init_files.forEach(function(file) {
-    require(__dirname + '/initializers/' + file);
+    require(__dirname + '/internal/initializers/' + file);
 })
 console.log('loaded initializers!');
 

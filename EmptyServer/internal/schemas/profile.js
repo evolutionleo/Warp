@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Account = require('./account.js');
 
 // this holds the state of the profile
+// you can edit this schema!
 const profileSchema = new mongoose.Schema({
     account_id: { type: mongoose.Schema.Types.ObjectId },
     name: String,

@@ -1,6 +1,3 @@
-// const { lobbies } = require('./../internal/globals.js');
-// const {  } = require('./../internal/lobbyFunctions.js');
-
 module.exports = class MatchMaker {
     // this will just pick the first non-full lobby
     static make_match(user) {

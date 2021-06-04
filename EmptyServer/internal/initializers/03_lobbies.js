@@ -1,4 +1,4 @@
-const { createLobby } = require('../internal/lobbyFunctions.js');
+const { createLobby } = require('../lobbyFunctions.js');
 
 // create a lobby for each map
 global.maps.forEach(function(map) {
