@@ -83,8 +83,9 @@ module.exports = class Lobby {
     }
 
     play() {
+        var lobby = this;
         this.players.forEach(function(player) {
-            addIntoPlay(player);
+            lobby.addIntoPlay(player);
         })
     }
 

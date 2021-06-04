@@ -88,8 +88,8 @@ module.exports = class SendStuff {
         this.write({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.serialize()) }); // lobbies as an array
     }
 
-    sendPlay(start_pos) {
-        this.write({ cmd: 'play', start_pos: start_pos });
+    sendPlay(lobby, start_pos) {
+        this.write({ cmd: 'play', lobby: lobby, start_pos: start_pos });
     }
 
     // #################################

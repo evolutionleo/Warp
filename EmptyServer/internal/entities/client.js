@@ -36,7 +36,7 @@ module.exports = class Client extends SendStuff {
     }
 
     onPlay(lobby, start_pos) {
-        this.sendPlay(start_pos);
+        this.sendPlay(lobby, start_pos);
     }
 
     onDisconnect() {
