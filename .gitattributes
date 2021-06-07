@@ -1,2 +1,2 @@
 # Ignore .yy files (for GMS 2 projects)      
-*.yy linguist-language=Game Maker Language
+*.yy linguist-vendored
