@@ -1,2 +1,4 @@
+EmptyClient/ linguist-vendored
+
 # Ignore .yy files (for GMS 2 projects)      
 **/*.yy linguist-vendored
