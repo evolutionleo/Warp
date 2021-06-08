@@ -1,10 +1,19 @@
 {
-	"compilerOptions": {
-		"allowJs": true,
-		"rootDir": "./src/",
-		"outDir": "./dist/",
-		"module": "CommonJS",
-		"target": "ES5",
-		"moduleResolution": "node"
-	}
+    "compilerOptions": {
+        "allowJs": true,
+        "moduleResolution": "Node",
+        "baseUrl": "src",
+        "outDir": "out/",
+        "rootDir": "src/",
+        "module": "esnext",
+        "target": "es2020",
+        "paths": {
+            "#root/*": ["./*"],
+            "#custom/*": ["custom/*"],
+            "#internal/*": ["internal/*"],
+            "#schemas/*": ["internal/schemas/*"],
+            "#entities/*": ["internal/entities/*"],
+            "#initializers/*": ["internal/initializers/*"]
+        }
+    }
 }

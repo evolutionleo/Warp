@@ -3,18 +3,37 @@
     "version": "0.0.1",
     "private": true,
     "description": "kappa",
-    "main": "dist/server.js",
+    "main": "out/server.js",
     "author": {
         "name": "Evoleo"
     },
+    "type": "module",
+    "scripts": {
+        "postbuild": "ef-tspm"
+    },
     "dependencies": {
+        "@ef-carbon/tspm": "^2.2.5",
         "@msgpack/msgpack": "^2.3.0",
-        "@types/node": "^14.14.28",
+        "@types/mongoose": "^5.11.97",
         "binary-parser": "^1.6.2",
+        "crypto": "^1.0.1",
         "extend": "^3.0.2",
         "minimist": "^1.2.5",
-        "mongoose": "^5.9.27",
-        "performance-now": "^2.1.0",
-        "underscore": "^1.10.2"
+        "module-alias": "^2.2.2",
+        "mongoose": "^5.12.12",
+        "node": "^16.0.0",
+        "performance-now": "^2.1.0"
+    },
+    "devDependencies": {
+        "@types/node": "^15.12.1",
+        "typescript": "^3.9.9"
+    },
+    "imports": {
+        "#root/*": "./out/*.js",
+        "#custom/*": "./out/custom/*.js",
+        "#internal/*": "./out/internal/*.js",
+        "#schemas/*": "./out/internal/schemas/*.js",
+        "#entities/*": "./out/internal/entities/*.js",
+        "#initializers/*": "./out/internal/initializers/*.js"
     }
 }
