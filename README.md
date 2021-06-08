@@ -102,5 +102,5 @@ if you write a wrapper
 - [@jujuadams](https://github.com/jujuadams)'s [SNAP](https://github.com/jujuadams/snap) library, which enables Messagepack's encoding/decoding inside GameMaker
 - [NodeJS Messagepack](https://github.com/msgpack/msgpack) encoder/decoder
 - [rm2kdev's ancient series that inspired this](https://www.youtube.com/watch?v=EyNVeTzhC1w&list=PLLUWsMtogf9jQGzn3nAjAw2_aq3PM08pC)
-- Framework by: [@evolutionleo](https://github.com/evolutionleo) (me)
 - Pull request for the first TypeScript version: [@davawen](https://github.com/davawen)
+- Framework by: [@evolutionleo](https://github.com/evolutionleo) (me)
