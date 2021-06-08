@@ -34,6 +34,7 @@
 Congratulations if you've completed the Installation step!
 
 Anyways. You see, many other networking frameworks might seem a bit overwhelming (even to people who are somewhat experienced in the topic).
+
 And even though v3.0 of this framework did add some advanced features, I still tried my best to provide the simplest interface:
 ### Sending a packet (JS and GML)
 Sending a message to the server might be as easy as:
@@ -77,8 +78,9 @@ if you write a wrapper
 - Select the server config by adding `--env=prod` or `--env=dev` parameter to the classic `node .` command
 - Select the client config by clicking the 'target' button in the top-right corner of IDE
 
-## Typescript Server (DEPRECATED AS OF v3.0)
+## Typescript Server (EXTREMELY EXPERIMENTAL new version as of v3.3)
 ### Note: As of v3.0, the latest major update, the TypeScript Server doesn't support any of the new features, but I'm accepting pull requests if someone's willing to contribute by porting the code to TS
+### EDIT: There's now a v3.3 experimental release. I do not recommend it for use in actual production projects as well as to anyone who is not very experienced in NodeJS/TypeScript or who isn't willing to deal with tons of cursed bugs
 ### Installing
 - Follow the original steps, but install TypescriptServer.zip instead of EmptyServer.zip
 - Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
@@ -87,12 +89,12 @@ if you write a wrapper
 
 | | |
 --------|------------
-| Send command | Use the `Client.write` function or add a wrapper in the `Client`class |
+| Send command | Use the `Client.send` function or add a wrapper in `sendStuff.ts` |
 | Recieve command | Add a case in the `handlePacket` function |
 
 ### Running
 - Compile the project by running `tsc` or run `tsc -w` to avoid recompiling after every change
-- Run `node .` or `node dist/server.js`
+- Run `node .` or `node out/server.js`
 
 
 # Credits
@@ -101,3 +103,4 @@ if you write a wrapper
 - [NodeJS Messagepack](https://github.com/msgpack/msgpack) encoder/decoder
 - [rm2kdev's ancient series that inspired this](https://www.youtube.com/watch?v=EyNVeTzhC1w&list=PLLUWsMtogf9jQGzn3nAjAw2_aq3PM08pC)
 - Framework by: [@evolutionleo](https://github.com/evolutionleo) (me)
+- Pull request for the first TypeScript version: [@davawen](https://github.com/davawen)
