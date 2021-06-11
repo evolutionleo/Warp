@@ -17,9 +17,10 @@ module.exports = class SendStuff {
         if (notme) {
             notme = true;
         }
+        var client = this;
 
         clients.forEach(function(c) {
-            if (c === this && notme) {}
+            if (c === client && notme) {}
             else {
                 c.write(pack);
             }

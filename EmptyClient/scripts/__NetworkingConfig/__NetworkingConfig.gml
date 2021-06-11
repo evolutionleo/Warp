@@ -8,7 +8,7 @@
 
 // Default (just mirrors debug)
 #macro Default:IP "127.0.0.1"
-#macro DEFAULT:PORT "1338"
+#macro Default:PORT "1338"
 
 // Production
 #macro Prod:IP   "xxxxxx" // your external server IP
