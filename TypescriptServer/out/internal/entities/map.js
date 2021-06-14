@@ -1,4 +1,4 @@
-var GAME_MODE;
+export var GAME_MODE;
 (function (GAME_MODE) {
     GAME_MODE["MMO"] = "mmo";
     GAME_MODE["PVP"] = "pvp";
@@ -9,7 +9,8 @@ export default class GameMap {
         this.room_name = ''; // room name in GMS2
         this.description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
         this.preview = ''; // maybe implement preview images
-        this.mode = GAME_MODE.MMO; // 'mmo' or 'pvp'
+        this.max_players = 99;
+        this.mode = GAME_MODE.MMO; // either 'mmo' or 'pvp'
         this.start_pos = [{ x: 0, y: 0 }]; // if 'mmo', it picks a random starting pos, otherwise - in order
         Object.assign(this, options);
     }

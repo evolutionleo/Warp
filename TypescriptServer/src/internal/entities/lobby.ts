@@ -1,12 +1,15 @@
 import GameMap from '#entities/map';
+import Client from '#entities/client';
+
+type LobbyStatus = 'waiting' | 'playing' | 'closed'
 
 // note: only create lobbies with createLobby(), don't call the constructor directly
 export default class Lobby {
     lobbyid:string = "-1"; // assigned when created
-    map = undefined;
-    status = 'waiting'; // waiting, playing, or 'closed'
-    players = [];
-    max_players = undefined;
+    map:GameMap = undefined;
+    status:LobbyStatus = 'waiting';
+    players:Client[] = [];
+    max_players:number = undefined;
 
     constructor(map:string|GameMap) {
         // if provided a string -
@@ -30,7 +33,7 @@ export default class Lobby {
         this.max_players = this.map.max_players;
     }
 
-    updateStatus() {
+    updateStatus():void {
         if (this.full) {
             this.status = 'playing';
             this.play();
@@ -40,7 +43,7 @@ export default class Lobby {
         }
     }
 
-    addPlayer(player) {
+    addPlayer(player:Client):void|-1 {
         if (this.full) {
             console.log('warning: can\'t add a player - the lobby is full!');
             player.onRejectLobby(this, 'lobby is full!');
@@ -62,7 +65,7 @@ export default class Lobby {
         this.updateStatus();
     }
 
-    kickPlayer(player, reason, forced) {
+    kickPlayer(player:Client, reason?:string, forced?:boolean):void {
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
         // todo: maybe send some command to the client
@@ -72,26 +75,26 @@ export default class Lobby {
         this.updateStatus();
     }
 
-    addIntoPlay(player) {
+    addIntoPlay(player:Client):void {
         var idx = global.clients.indexOf(player);
         var start_pos = this.map.getStartPos(idx);
         player.onPlay(this, start_pos);
     }
 
-    broadcast(data) {
+    broadcast(data:object):void {
         this.players.forEach(function(player) {
             player.write(data);
         })
     }
 
-    play() {
+    play():void {
         var lobby = this;
         this.players.forEach(function(player) {
             lobby.addIntoPlay(player);
         })
     }
 
-    close() {
+    close():void {
         // kick all plaayers
         this.players.forEach((player) => this.kickPlayer(player, 'lobby is closing!', true));
         this.status = 'closed';
@@ -100,7 +103,7 @@ export default class Lobby {
 
     // data that is being sent about this lobby
     // (e.x. we don't want to send functions and everything about every player)
-    serialize() {
+    serialize():object {
         return {
             lobbyid: this.lobbyid,
             map: this.map,
@@ -111,15 +114,15 @@ export default class Lobby {
         }
     }
 
-    get player_count() {
+    get player_count():number {
         return this.players.length;
     }
 
-    get full() {
+    get full():boolean {
         return this.player_count >= this.max_players;
     }
 
-    get empty() {
+    get empty():boolean {
         return this.player_count == 0;
     }
 }

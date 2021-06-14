@@ -3,16 +3,13 @@ export default class SendStuff {
     constructor() { }
     // basic send
     write(data) {
-        this.socket.write(packet.build(data));
+        return this.socket.write(packet.build(data));
     }
     send(data) {
         return this.write(data);
     }
     // different types of broadcast
-    broadcastList(clients, pack, notme) {
-        if (notme) {
-            notme = true;
-        }
+    broadcastList(clients, pack, notme = true) {
         clients.forEach(function (c) {
             if (c === this && notme) { }
             else {
@@ -38,29 +35,19 @@ export default class SendStuff {
         this.write({ cmd: 'message', msg: msg });
     }
     // these are some preset functions
-    sendRegister(status, reason) {
-        if (!reason)
-            reason = '';
+    sendRegister(status, reason = '') {
         this.write({ cmd: 'register', status: status, reason: reason });
     }
-    sendLogin(status, reason) {
-        if (!reason)
-            reason = '';
+    sendLogin(status, reason = '') {
         this.write({ cmd: 'login', status: status, reason: reason, account: this.account, profile: this.profile });
     }
     sendJoinLobby(lobby) {
         this.write({ cmd: 'lobby join', lobby: lobby.serialize() });
     }
-    sendRejectLobby(lobby, reason) {
-        if (!reason)
-            reason = '';
+    sendRejectLobby(lobby, reason = '') {
         this.write({ cmd: 'lobby reject', lobby: lobby.serialize(), reason: reason });
     }
-    sendKickLobby(lobby, reason, forced) {
-        if (!forced)
-            forced = true;
-        if (!reason)
-            reason = '';
+    sendKickLobby(lobby, reason = '', forced = true) {
         this.write({ cmd: 'lobby leave', lobby: lobby.serialize(), reason: reason, forced: forced });
     }
     sendUpdateLobby(lobby) {

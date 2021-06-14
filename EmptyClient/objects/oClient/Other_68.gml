@@ -45,8 +45,13 @@ switch(type) {
 			
 			i += packSize;
 			
-			// Handle the packet
-			handlePacket(pack);
+			try {
+				// Handle the packet
+				handlePacket(pack);
+			}
+			catch(e) {
+				trace("an error occured while parsing the packet: " + e.message)
+			}
 			
 			pack_count++;
 			

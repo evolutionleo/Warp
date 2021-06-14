@@ -3,7 +3,7 @@ export default class Lobby {
     constructor(map) {
         this.lobbyid = "-1"; // assigned when created
         this.map = undefined;
-        this.status = 'waiting'; // waiting, playing, or 'closed'
+        this.status = 'waiting';
         this.players = [];
         this.max_players = undefined;
         // if provided a string -

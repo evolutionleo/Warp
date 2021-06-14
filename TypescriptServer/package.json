@@ -34,6 +34,7 @@
         "#internal/*": "./out/internal/*.js",
         "#schemas/*": "./out/internal/schemas/*.js",
         "#entities/*": "./out/internal/entities/*.js",
-        "#initializers/*": "./out/internal/initializers/*.js"
+        "#initializers/*": "./out/internal/initializers/*.js",
+        "#types/*": "./out/internal/types/*.js"
     }
 }

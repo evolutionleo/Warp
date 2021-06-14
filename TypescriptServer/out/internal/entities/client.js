@@ -22,10 +22,12 @@ export default class Client extends SendStuff {
     onLeaveLobby(lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
-    onKickLobby(lobby, reason) {
+    onKickLobby(lobby, reason, forced) {
         if (!reason)
             reason = '';
-        this.sendKickLobby(lobby, reason, true);
+        if (forced === null || forced === undefined)
+            forced = true;
+        this.sendKickLobby(lobby, reason, forced);
     }
     onPlay(lobby, start_pos) {
         this.sendPlay(lobby, start_pos);
@@ -73,7 +75,7 @@ export default class Client extends SendStuff {
         }).then((profile) => {
             if (profile) {
                 this.profile = profile;
-                this.sendLogin('success', this.profile);
+                this.sendLogin('success');
             }
             else {
                 console.log('Error: Couldn\'t find a profile with these credentials!');

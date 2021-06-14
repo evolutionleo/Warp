@@ -8,7 +8,7 @@ export class delaySend {
     static min = 100;
     static max = 2000;
 
-    static get() {
+    static get():number {
         if (!this.enabled)
             return -1;
         return crypto.randomInt(this.min, this.max);
@@ -21,7 +21,7 @@ export class delayReceive {
     static min = 100;
     static max = 2000;
     
-    static get() {
+    static get():number {
         if (!this.enabled)
             return -1;
         return crypto.randomInt(this.min, this.max);

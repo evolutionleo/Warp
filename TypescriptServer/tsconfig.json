@@ -13,7 +13,8 @@
             "#internal/*": ["internal/*"],
             "#schemas/*": ["internal/schemas/*"],
             "#entities/*": ["internal/entities/*"],
-            "#initializers/*": ["internal/initializers/*"]
+            "#initializers/*": ["internal/initializers/*"],
+            "#types/*": ["internal/types/*"]
         }
     }
 }

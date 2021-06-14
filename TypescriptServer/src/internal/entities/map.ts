@@ -1,20 +1,18 @@
-enum GAME_MODE {
+export enum GAME_MODE {
     MMO = "mmo",
     PVP = "pvp"
 }
 
-type Point = {
-    x: number,
-    y: number
-}
+import Point from '#types/point';
 
 export default class GameMap { // represents a game map
     name:string = ''; // map's display name
     room_name:string = ''; // room name in GMS2
     description:string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
     preview:string = ''; // maybe implement preview images
+    max_players:number = 99;
 
-    mode:GAME_MODE = GAME_MODE.MMO; // 'mmo' or 'pvp'
+    mode:GAME_MODE = GAME_MODE.MMO; // either 'mmo' or 'pvp'
     start_pos:Point[]|Point = [{x: 0, y: 0}]; // if 'mmo', it picks a random starting pos, otherwise - in order
     
     constructor(options:object) {

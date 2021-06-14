@@ -3,6 +3,7 @@ import { Profile, IProfile, freshProfile } from '#schemas/profile';
 import { Account, IAccount } from '#schemas/account';
 
 import { Socket } from 'net';
+import Point from '#root/internal/types/point';
 
 import Lobby from '#entities/lobby';
 
@@ -12,6 +13,8 @@ export default class Client extends SendStuff {
     lobby: Lobby;
     account: IAccount;
     profile: IProfile;
+
+    halfpack: Buffer; // used internally in packet.ts
 
     constructor(socket:Socket) {
         super();
@@ -25,27 +28,29 @@ export default class Client extends SendStuff {
     }
 
     // some events
-    onJoinLobby(lobby) {
+    onJoinLobby(lobby:Lobby) {
         this.sendJoinLobby(lobby);
     }
 
-    onRejectLobby(lobby, reason) {
+    onRejectLobby(lobby:Lobby, reason?:string) {
         if (!reason)
             reason = 'lobby is full!';
         this.sendRejectLobby(lobby, reason);
     }
 
-    onLeaveLobby(lobby) {
+    onLeaveLobby(lobby:Lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
     
-    onKickLobby(lobby, reason) {
+    onKickLobby(lobby:Lobby, reason?:string, forced?:boolean) {
         if (!reason)
             reason = '';
-        this.sendKickLobby(lobby, reason, true);
+        if (forced === null || forced === undefined)
+            forced = true;
+        this.sendKickLobby(lobby, reason, forced);
     }
 
-    onPlay(lobby, start_pos) {
+    onPlay(lobby:Lobby, start_pos:Point) {
         this.sendPlay(lobby, start_pos);
     }
 
@@ -81,7 +86,7 @@ export default class Client extends SendStuff {
         }
     }
     
-    register(account) {
+    register(account:IAccount) {
         this.account = account;
         this.profile = freshProfile(account);
 
@@ -90,14 +95,14 @@ export default class Client extends SendStuff {
         this.sendRegister('success');
     }
 
-    login(account) {
+    login(account:IAccount) {
         this.account = account;
         Profile.findOne({
             account_id: this.account._id
         }).then((profile) => {
             if (profile) {
                 this.profile = profile;
-                this.sendLogin('success', this.profile);
+                this.sendLogin('success');
             }
             else {
                 console.log('Error: Couldn\'t find a profile with these credentials!');

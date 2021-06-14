@@ -21,12 +21,12 @@ export function createLobby(map_name:string|GameMap) { // returns the lobby inst
     return lobby;
 }
 
-export function findLobby(lobbyid) {
+export function findLobby(lobbyid:string) {
     // changed the implementation to objects/structs instead of arrays
     return global.lobbies[lobbyid];
 }
 
-export function deleteLobby(lobbyid) {
+export function deleteLobby(lobbyid:string) {
     var lobby = global.lobbies[lobbyid];
     lobby.close();
 

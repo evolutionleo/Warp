@@ -2,10 +2,12 @@ import { findLobby } from '#internal/lobbyFunctions';
 import MatchMaker from '#internal/matchmaker';
 import { Profile } from '#schemas/profile';
 import { Account, IAccount } from '#schemas/account';
+import Client from '#entities/client';
+import Lobby from '#entities/lobby';
 
 const { make_match } = MatchMaker;
 
-export default async function handlePacket(c, data) {
+export default async function handlePacket(c:Client, data:any) {
     var cmd = data.cmd.toLowerCase();
     // console.log('received command: ' + cmd);
     
@@ -26,7 +28,7 @@ export default async function handlePacket(c, data) {
         case 'login':
             var { username, password } = data;
             Account.login(username, password)
-            .then(function(account) {
+            .then(function(account:IAccount) {
                 // this also sends the message
                 c.login(account);
             }).catch(function(reason) {
@@ -36,12 +38,12 @@ export default async function handlePacket(c, data) {
         case 'register':
             var { username, password } = data;
             Account.register(username, password)
-            .then(function(account) {
+            .then(function(account:IAccount) {
                 // this also sends the message
                 c.register(account);
-            }).catch(function(reason) {
+            }).catch(function(reason:Error) {
                 console.log('error: ' + reason);
-                c.sendRegister('fail', reason);
+                c.sendRegister('fail', reason.toString());
             })
             break;
         case 'lobby list':
@@ -53,7 +55,7 @@ export default async function handlePacket(c, data) {
             break;
         case 'lobby join':
             var lobbyid = data.lobbyid;
-            var lobby;
+            var lobby:Lobby;
             if (lobbyid) {
                 lobby = findLobby(lobbyid);
             }
@@ -65,7 +67,7 @@ export default async function handlePacket(c, data) {
             lobby.addPlayer(c);
             break;
         case 'lobby leave':
-            var lobby = c.lobby;
+            var lobby:Lobby = c.lobby;
             if (lobby !== null) {
                 lobby.kickPlayer(c, 'you left the lobby', false);
             }

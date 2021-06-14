@@ -1,8 +1,9 @@
 import Client from '#entities/client';
+import Lobby from '#entities/lobby';
 
 export default class MatchMaker {
     // this will just pick the first non-full lobby
-    static make_match(user:Client) {
+    static make_match(user:Client):Lobby {
         var match_lobby = null;
         // this a so called 'arrow function'.
         // (lobby) => {} is the same as function(lobby) {}
@@ -19,7 +20,7 @@ export default class MatchMaker {
 
     // if you want to implement an MMR system
     // result should be 1 if won, 0 if lost and 0.5 on draw
-    static get_mmr_change(player_mmr:number, opponent_mmr:number, result:0|1) {
+    static get_mmr_change(player_mmr:number, opponent_mmr:number, result:0|1):number {
         const k = 100; // maximum possible gain/loss, when the weakest players wins from the best
         const mmr_scale = 800; // the bigger the number, the less the result changes with mmr difference. (e.x. chess uses 400, making a huge difference from even 200 mmr)
 

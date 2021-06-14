@@ -3,6 +3,7 @@ import { Socket } from 'net';
 import Lobby from '#entities/lobby';
 import { Account, IAccount } from '#schemas/account';
 import { Profile, IProfile } from '#schemas/profile'
+import Point from '#types/point';
 
 export default class SendStuff {
     socket: Socket|null;
@@ -14,19 +15,15 @@ export default class SendStuff {
 
     // basic send
     write(data:object) {
-        this.socket.write(packet.build(data));
+        return this.socket.write(packet.build(data));
     }
 
-    send(data) { // just another name
+    send(data:object) { // just another name
         return this.write(data);
     }
     
     // different types of broadcast
-    broadcastList(clients, pack, notme) {
-        if (notme) {
-            notme = true;
-        }
-
+    broadcastList(clients:SendStuff[], pack:object, notme:boolean = true) {
         clients.forEach(function(c) {
             if (c === this && notme) {}
             else {
@@ -35,11 +32,11 @@ export default class SendStuff {
         });
     }
 
-    broadcastAll(pack, notme) {
+    broadcastAll(pack:object, notme?:boolean) {
         return this.broadcastList(global.clients, pack, notme);
     }
 
-    broadcastLobby(pack, notme) {
+    broadcastLobby(pack:object, notme?:boolean) {
         if (this.lobby === null)
             return -1
 
@@ -48,60 +45,50 @@ export default class SendStuff {
     
     // these functions can be later called using %insert_client%.sendThing()
     // in handlePacket.js or wherever else where you have client objects
-    sendHello() {
+    sendHello():void {
         this.write({cmd: 'hello', str: 'Hello, client!'})
         this.write({cmd: 'hello2', str: 'Hello again, client!'})
     }
 
-    sendMessage(msg) {
+    sendMessage(msg:string):void {
         this.write({cmd: 'message', msg: msg})
     }
 
     // these are some preset functions
 
-    sendRegister(status, reason?:string) {
-        if (!reason)
-            reason = '';
+    sendRegister(status:string, reason:string = ''):void {
         this.write({cmd: 'register', status: status, reason: reason});
     }
 
-    sendLogin(status, reason) {
-        if (!reason)
-            reason = '';
+    sendLogin(status:string, reason:string = ''):void {
         this.write({cmd: 'login', status: status, reason: reason, account: this.account, profile: this.profile});
     }
 
-    sendJoinLobby(lobby) {
+    sendJoinLobby(lobby:Lobby):void {
         this.write({ cmd: 'lobby join', lobby: lobby.serialize() });
     }
 
-    sendRejectLobby(lobby, reason) {
-        if (!reason)
-            reason = '';
+    sendRejectLobby(lobby:Lobby, reason:string = ''):void {
         this.write({ cmd: 'lobby reject', lobby: lobby.serialize(), reason: reason });
     }
 
-    sendKickLobby(lobby, reason, forced) {
-        if (!forced)
-            forced = true;
-        if (!reason)
-            reason = '';
+    sendKickLobby(lobby:Lobby, reason:string = '', forced:boolean = true):void {
         this.write({ cmd: 'lobby leave', lobby: lobby.serialize(), reason: reason, forced: forced });
     }
 
-    sendUpdateLobby(lobby) { // some data changed
+    sendUpdateLobby(lobby:Lobby):void { // some data changed
         this.write({ cmd: 'lobby update', lobby: lobby.serialize() });
     }
 
-    sendLobbyList() {
+    sendLobbyList():void {
         this.write({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.serialize()) }); // lobbies as an array
     }
 
-    sendLobbyInfo(lobbyid) {
+    sendLobbyInfo(lobbyid:string):void {
         this.write({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].serialize()})
     }
 
-    sendPlay(lobby, start_pos) {
+    sendPlay(lobby:Lobby, start_pos:Point):void {
         this.write({ cmd: 'play', lobby: lobby.serialize(), start_pos: start_pos });
     }
 

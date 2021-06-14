@@ -77,7 +77,7 @@ accountSchema.statics.register = function(username:string, password:string):Prom
 
 accountSchema.statics.login = function(username:string, password:string):Promise<string|IAccount> {
     return new Promise(async (resolve, reject) => {
-        Account.findOne({username: username}, async (err, account) => {
+        Account.findOne({username: username}, async (err:Error, account:IAccount) => {
             if (!account) {
                 reject('account not found');
             }

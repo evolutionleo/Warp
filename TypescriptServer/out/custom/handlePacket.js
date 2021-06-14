@@ -36,7 +36,7 @@ export default async function handlePacket(c, data) {
                 c.register(account);
             }).catch(function (reason) {
                 console.log('error: ' + reason);
-                c.sendRegister('fail', reason);
+                c.sendRegister('fail', reason.toString());
             });
             break;
         case 'lobby list':
