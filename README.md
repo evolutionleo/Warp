@@ -78,9 +78,7 @@ if you write a wrapper
 - Select the server config by adding `--env=prod` or `--env=dev` parameter to the classic `node .` command
 - Select the client config by clicking the 'target' button in the top-right corner of IDE
 
-## Typescript Server (EXTREMELY EXPERIMENTAL new version as of v3.3)
-### Note: As of v3.0, the latest major update, the TypeScript Server doesn't support any of the new features, but I'm accepting pull requests if someone's willing to contribute by porting the code to TS
-### EDIT: There's now a v3.3 experimental release. I do not recommend it for use in actual production projects as well as to anyone who is not very experienced in NodeJS/TypeScript or who isn't willing to deal with tons of cursed bugs
+## Typescript Server
 ### Installing
 - Follow the original steps, but install TypescriptServer.zip instead of EmptyServer.zip
 - Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
@@ -89,8 +87,8 @@ if you write a wrapper
 
 | | |
 --------|------------
-| Send command | Use the `Client.send` function or add a wrapper in `sendStuff.ts` |
-| Recieve command | Add a case in the `handlePacket` function |
+| Send command | Use the `Client.send` function or add a wrapper in `custom/sendStuff.ts` |
+| Recieve command | Add a case in `custom/handlePacket.ts` |
 
 ### Running
 - Compile the project by running `tsc` or run `tsc -w` to avoid recompiling after every change
