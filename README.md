@@ -1,6 +1,7 @@
 # GM-Online-Framework
 #### A simple yet feature-rich framework for multiplayer games, written in GMS2.3 and NodeJS
 #### Maintained by [@evolutionleo](https://github.com/evolutionleo)
+#### If you have any questions, please join my [Discord](https://discord.gg/WRsgumM2T6)
 # Features
 - **Simple one-line calls** to send/process packages on both server and client sides
 - **No need to deal with buffers** whatsoever
