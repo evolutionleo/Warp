@@ -1,4 +1,1 @@
-EmptyClient/ linguist-vendored
-
-# Ignore .yy files (for GMS 2 projects)      
-**/*.yy linguist-vendored
+*.yy linguist-language=Game Maker Language
