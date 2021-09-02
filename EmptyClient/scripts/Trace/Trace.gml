@@ -15,7 +15,8 @@ function trace(r) {
 		}
 	}
 	show_debug_message(r)
-	debug_log(r)
+	// slow af
+	//debug_log(r)
 }
 
 

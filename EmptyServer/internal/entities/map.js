@@ -23,7 +23,7 @@ module.exports = class Map { // represents a game map
                     var index = idx % this.start_pos.length;
                     return this.start_pos[index];
                 default:
-                    console.log('Error: Invalid map mode');
+                    trace('Error: Invalid map mode');
                     return undefined;
             }
         }

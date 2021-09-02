@@ -43,3 +43,6 @@ function sendRegister(username, password) {
 function sendSomeStuff() {
 	send({cmd: "some stuff", foo: "blah", bar: 123})
 }
+
+
+/// 

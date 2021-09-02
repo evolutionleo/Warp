@@ -5,7 +5,7 @@ const fs = require('fs');
     @param {String} *str
  */
 global.trace = function(str) {
-    str ??= '';
+    str = str === null ? str : '';
     str = str.toString();
 
     for(var i = 1; i < arguments.length; i++) {
@@ -15,6 +15,6 @@ global.trace = function(str) {
     let datetime = new Date().toLocaleString();
     str = '[' + datetime + ']' + ' ' + str;
 
-    fs.writeFile(__dirname + '/server_log.txt', str);
+    fs.writeFile(__dirname + '/server_log.txt', str, () => {});
     console.log(arguments);
 }

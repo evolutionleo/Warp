@@ -29,9 +29,12 @@ switch(type) {
 		
 		for(var i = 0; i < size;) { // Break up the binary blob into single packets
 			// Read the packet size
-			var packSize = buffer_peek(buff, i, buffer_u16); // this also seeks
+			if (i + 2 <= size)
+				var packSize = buffer_peek(buff, i, buffer_u16); // this also seeks
+			else
+				var packSize = 0
 			
-			if (i + packSize > size) {
+			if (i + packSize > size or packSize == 0) {
 				halfpack = buffer_create(1, buffer_grow, 1);
 				buffer_copy(buff, i, i + 2 + packSize, halfpack, 0);
 				trace("half in-")
