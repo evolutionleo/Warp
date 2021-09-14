@@ -13,10 +13,7 @@ module.exports = class SendStuff {
     }
     
     // different types of broadcast
-    broadcastList(clients, pack, notme) {
-        if (notme) {
-            notme = true;
-        }
+    broadcastList(clients, pack, notme = true) {
         var client = this;
 
         clients.forEach(function(c) {

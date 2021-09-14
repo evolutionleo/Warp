@@ -10,8 +10,9 @@ export default class SendStuff {
     }
     // different types of broadcast
     broadcastList(clients, pack, notme = true) {
+        var client = this;
         clients.forEach(function (c) {
-            if (c === this && notme) { }
+            if (c === client && notme) { }
             else {
                 c.write(pack);
             }
