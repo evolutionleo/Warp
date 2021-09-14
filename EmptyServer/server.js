@@ -1,4 +1,5 @@
-require('./config.js')
+require('./internal/logging.js'); // trace()
+require('./config.js');
 const net = require('net');
 const port = config.port;
 
@@ -14,12 +15,12 @@ const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
 init_files.forEach(function(file) {
     require(__dirname + '/internal/initializers/' + file);
 })
-console.log('loaded initializers!');
+trace('loaded initializers!');
 
 
 // The Actual Server
 const server = net.createServer(function(socket) {
-    console.log("Socket connected!");
+    trace("Socket connected!");
     
     var c = new Client(socket);
     global.clients.push(c); // add the client to clients list (unnecessary)
@@ -28,11 +29,11 @@ const server = net.createServer(function(socket) {
 
     socket.on('error', function(err) {
         if (err.message.includes('ECONNRESET')) { // this is a disconnect
-            console.log('Socket violently disconnected.');
+            trace('Socket violently disconnected.');
             // handle disconnect here
         }
 
-        console.log(`Error! ${err}`);
+        trace(`Error! ${err}`);
     });
     
     // When data arrived
@@ -51,9 +52,9 @@ const server = net.createServer(function(socket) {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        console.log('Socket closed.');
+        trace('Socket closed.');
     })
 });
 
 server.listen(port);
-console.log("Server running on port " + port + "!");
+trace("Server running on port " + port + "!");

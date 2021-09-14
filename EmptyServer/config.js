@@ -51,7 +51,7 @@ else {
 }
 
 
-console.log('Config loaded! environment: ' + config.env_name);
+trace('Config loaded! environment: ' + config.env_name);
 
 global.config = config;
 module.exports = config;

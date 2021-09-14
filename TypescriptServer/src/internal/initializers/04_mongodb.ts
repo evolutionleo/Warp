@@ -1,3 +1,5 @@
+import trace from '#internal/logging';
+
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
@@ -15,7 +17,7 @@ if (global.config.db_enabled) {
 
     _export = new Promise((resolve, reject) => {
         db.once('open', () => {
-            console.log('Database connected:', url);
+            trace('Database connected:', url);
             resolve(db);
         })
         
@@ -26,7 +28,7 @@ if (global.config.db_enabled) {
     })
 }
 else {
-    console.log('Database is disabled');
+    trace('Database is disabled');
     _export = null;
 }
 

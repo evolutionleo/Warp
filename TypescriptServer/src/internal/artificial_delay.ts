@@ -1,5 +1,7 @@
 import * as crypto from 'crypto';
 
+import trace from '#internal/logging';
+
 // this file is used to immitate delay/latency of the connection
 
 export class delaySend {

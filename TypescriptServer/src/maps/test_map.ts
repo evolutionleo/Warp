@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 import GameMap from '#entities/map';
 
 export default new GameMap({

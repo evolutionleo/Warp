@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 import { findLobby } from '#internal/lobbyFunctions';
 import MatchMaker from '#internal/matchmaker';
 import { Profile } from '#schemas/profile';
@@ -9,18 +10,18 @@ const { make_match } = MatchMaker;
 
 export default async function handlePacket(c:Client, data:any) {
     var cmd = data.cmd.toLowerCase();
-    // console.log('received command: ' + cmd);
+    // trace('received command: ' + cmd);
     
     switch(cmd) {
         case 'hello':
-            console.log("Hello from client: "+data.kappa);
+            trace("Hello from client: "+data.kappa);
             c.sendHello();
             break;
         case 'hello2':
-            console.log('Second hello from client: '+data.kappa);
+            trace('Second hello from client: '+data.kappa);
             break;
         case 'message':
-            console.log('Message from client: '+data.msg);
+            trace('Message from client: '+data.msg);
             c.sendMessage(data.msg+' indeed');
             break;
 
@@ -42,7 +43,7 @@ export default async function handlePacket(c:Client, data:any) {
                 // this also sends the message
                 c.register(account);
             }).catch(function(reason:Error) {
-                console.log('error: ' + reason);
+                trace('error: ' + reason);
                 c.sendRegister('fail', reason.toString());
             })
             break;

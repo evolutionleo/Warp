@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 import * as crypto from 'crypto'; // encrypt our passwords!
 
 

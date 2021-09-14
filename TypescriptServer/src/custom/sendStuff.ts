@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 import packet from '#internal/packet';
 import { Socket } from 'net';
 import Lobby from '#entities/lobby';

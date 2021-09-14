@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 import { createLobby } from '#internal/lobbyFunctions';
 
 // create a lobby for each map
