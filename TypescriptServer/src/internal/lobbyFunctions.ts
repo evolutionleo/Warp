@@ -1,3 +1,5 @@
+import trace from '#internal/logging';
+
 import Lobby from '#entities/lobby';
 import GameMap from '#entities/map';
 import * as crypto from 'crypto';

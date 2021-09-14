@@ -3,6 +3,7 @@ export enum GAME_MODE {
     PVP = "pvp"
 }
 
+import trace from '#internal/logging';
 import Point from '#types/point';
 
 export default class GameMap { // represents a game map
@@ -31,7 +32,7 @@ export default class GameMap { // represents a game map
                     var index = idx % this.start_pos.length;
                     return this.start_pos[index];
                 default:
-                    console.log('Error: Invalid map mode');
+                    trace('Error: Invalid map mode');
                     return undefined;
             }
         }

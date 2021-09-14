@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 import SendStuff from '#custom/sendStuff';
 import { Profile, freshProfile } from '#schemas/profile';
 // this is a wrapper around sockets
@@ -43,20 +44,20 @@ export default class Client extends SendStuff {
         if (this.account !== null) {
             this.account.save(function (err) {
                 if (err) {
-                    console.log('Error while saving account: ' + err);
+                    trace('Error while saving account: ' + err);
                 }
                 else {
-                    console.log('Saved the account successfully');
+                    trace('Saved the account successfully');
                 }
             });
         }
         if (this.profile !== null) {
             this.profile.save(function (err) {
                 if (err) {
-                    console.log('Error while saving profile: ' + err);
+                    trace('Error while saving profile: ' + err);
                 }
                 else {
-                    console.log('Saved the profile successfully.');
+                    trace('Saved the profile successfully.');
                 }
             });
         }
@@ -78,7 +79,7 @@ export default class Client extends SendStuff {
                 this.sendLogin('success');
             }
             else {
-                console.log('Error: Couldn\'t find a profile with these credentials!');
+                trace('Error: Couldn\'t find a profile with these credentials!');
             }
         });
     }

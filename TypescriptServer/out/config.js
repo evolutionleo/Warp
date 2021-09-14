@@ -1,6 +1,7 @@
 // get the command line arguments
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
+import trace from '#internal/logging';
 const common_config = {
     meta: {
         game_name: 'online game',
@@ -41,6 +42,6 @@ else if (env === 'development' || env === 'dev' || args.dev) {
 else {
     Object.assign(config, default_config);
 }
-console.log('Config loaded! environment: ' + config.env_name);
+trace('Config loaded! environment: ' + config.env_name);
 global.config = config;
 export default config;

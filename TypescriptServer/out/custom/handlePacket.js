@@ -1,20 +1,21 @@
+import trace from '#internal/logging';
 import { findLobby } from '#internal/lobbyFunctions';
 import MatchMaker from '#internal/matchmaker';
 import { Account } from '#schemas/account';
 const { make_match } = MatchMaker;
 export default async function handlePacket(c, data) {
     var cmd = data.cmd.toLowerCase();
-    // console.log('received command: ' + cmd);
+    // trace('received command: ' + cmd);
     switch (cmd) {
         case 'hello':
-            console.log("Hello from client: " + data.kappa);
+            trace("Hello from client: " + data.kappa);
             c.sendHello();
             break;
         case 'hello2':
-            console.log('Second hello from client: ' + data.kappa);
+            trace('Second hello from client: ' + data.kappa);
             break;
         case 'message':
-            console.log('Message from client: ' + data.msg);
+            trace('Message from client: ' + data.msg);
             c.sendMessage(data.msg + ' indeed');
             break;
         // preset commands
@@ -35,7 +36,7 @@ export default async function handlePacket(c, data) {
                 // this also sends the message
                 c.register(account);
             }).catch(function (reason) {
-                console.log('error: ' + reason);
+                trace('error: ' + reason);
                 c.sendRegister('fail', reason.toString());
             });
             break;

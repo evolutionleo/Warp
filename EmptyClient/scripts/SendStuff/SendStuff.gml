@@ -40,9 +40,8 @@ function sendRegister(username, password) {
 // ##################################
 // Write your own functions down here:
 
+// example
 function sendSomeStuff() {
 	send({cmd: "some stuff", foo: "blah", bar: 123})
 }
 
-
-/// 

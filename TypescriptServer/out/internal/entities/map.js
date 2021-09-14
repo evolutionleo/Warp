@@ -3,6 +3,7 @@ export var GAME_MODE;
     GAME_MODE["MMO"] = "mmo";
     GAME_MODE["PVP"] = "pvp";
 })(GAME_MODE || (GAME_MODE = {}));
+import trace from '#internal/logging';
 export default class GameMap {
     constructor(options) {
         this.name = ''; // map's display name
@@ -26,7 +27,7 @@ export default class GameMap {
                     var index = idx % this.start_pos.length;
                     return this.start_pos[index];
                 default:
-                    console.log('Error: Invalid map mode');
+                    trace('Error: Invalid map mode');
                     return undefined;
             }
         }

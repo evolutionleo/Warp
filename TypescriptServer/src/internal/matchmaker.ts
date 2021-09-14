@@ -1,3 +1,5 @@
+import trace from '#internal/logging';
+
 import Client from '#entities/client';
 import Lobby from '#entities/lobby';
 
