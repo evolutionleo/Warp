@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 import Client from '#entities/client';
 import GameMap from '#entities/map';
 import Lobby from '#entities/lobby';

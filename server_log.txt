@@ -1,0 +1,48 @@
+[14.09.2021, 13:59:34] 
+[14.09.2021, 13:59:35]  01_globals.js
+[14.09.2021, 13:59:35]  02_maps.js
+[14.09.2021, 13:59:35]  03_lobbies.js
+[14.09.2021, 14:00:15] 
+[14.09.2021, 14:00:16]  01_globals.js
+[14.09.2021, 14:00:16]  02_maps.js
+[14.09.2021, 14:00:16]  03_lobbies.js
+[14.09.2021, 14:02:26] 
+[14.09.2021, 14:02:27] 
+[14.09.2021, 14:02:27]  01_globals.js
+[14.09.2021, 14:02:27]  02_maps.js
+[14.09.2021, 14:02:27]  03_lobbies.js
+[14.09.2021, 14:03:03] 
+[14.09.2021, 14:03:04] 
+[14.09.2021, 14:03:04]  01_globals.js
+[14.09.2021, 14:03:04]  02_maps.js
+[14.09.2021, 14:03:04]  03_lobbies.js
+[14.09.2021, 14:03:07] 
+[14.09.2021, 14:03:08] 
+[14.09.2021, 14:03:08] 
+[14.09.2021, 14:03:08] 
+[14.09.2021, 14:03:08] 
+[14.09.2021, 14:03:55]  Config loaded! environment: dev
+[14.09.2021, 14:03:56]  it works!
+[14.09.2021, 14:03:56]  loading initializer:01_globals.js
+[14.09.2021, 14:03:56]  loading initializer:02_maps.js
+[14.09.2021, 14:03:56]  loading initializer:03_lobbies.js
+[14.09.2021, 14:04:30]  Config loaded! environment: dev
+[14.09.2021, 14:04:31]  loading initializer:01_globals.js
+[14.09.2021, 14:04:31]  loading initializer:02_maps.js
+[14.09.2021, 14:04:31]  loading initializer:03_lobbies.js
+[14.09.2021, 14:04:31]  loading initializer:04_mongodb.js
+[14.09.2021, 14:04:31]  loaded initializers!
+[14.09.2021, 14:04:31]  Server running on port 1338!
+[14.09.2021, 14:04:31]  Database connected: mongodb://127.0.0.1:27017/online-game
+[14.09.2021, 14:04:50]  Socket connected!
+[14.09.2021, 14:04:50]  Hello from client: Kappa Pepega
+[14.09.2021, 14:04:50]  Second hello from client: Second Kappa
+[14.09.2021, 14:04:50]  Socket connected!
+[14.09.2021, 14:04:50]  Hello from client: Kappa Pepega
+[14.09.2021, 14:04:50]  Second hello from client: Second Kappa
+[14.09.2021, 14:05:24]  Socket violently disconnected.
+[14.09.2021, 14:05:24]  Error! Error: read ECONNRESET
+[14.09.2021, 14:05:24]  Socket closed.
+[14.09.2021, 14:05:27]  Error! Error: read ECONNRESET
+[14.09.2021, 14:05:27]  Socket violently disconnected.
+[14.09.2021, 14:05:27]  Socket closed.

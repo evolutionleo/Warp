@@ -103,8 +103,10 @@ function handlePacket(pack) {
 		// Add your custom commands here:
 		
 		case "haha":
-			trace("haha")
+			var some_var = data.stuff
+			trace("haha received!")
 			break
+		
 		default:
 			throw ("Error: Unknown command: " + string(data.cmd))
 			break

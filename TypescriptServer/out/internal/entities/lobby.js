@@ -1,3 +1,4 @@
+import trace from '#internal/logging';
 // note: only create lobbies with createLobby(), don't call the constructor directly
 export default class Lobby {
     constructor(map) {
@@ -13,7 +14,7 @@ export default class Lobby {
                 return _map.name === map;
             });
             if (this.map === undefined) {
-                console.log(`Error: could not find a map called "${map}"`);
+                trace(`Error: could not find a map called "${map}"`);
                 this.close();
                 return;
             }
@@ -35,12 +36,12 @@ export default class Lobby {
     }
     addPlayer(player) {
         if (this.full) {
-            console.log('warning: can\'t add a player - the lobby is full!');
+            trace('warning: can\'t add a player - the lobby is full!');
             player.onRejectLobby(this, 'lobby is full!');
             return -1;
         }
         else if (this.players.indexOf(player) !== -1) {
-            console.log('warning: can\'t add a player who\'s already in the lobby');
+            trace('warning: can\'t add a player who\'s already in the lobby');
             player.onRejectLobby(this, 'already in the lobby');
             return -1;
         }

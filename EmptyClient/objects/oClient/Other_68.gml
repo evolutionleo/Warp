@@ -18,23 +18,26 @@ switch(type) {
 			buffer_delete(halfpack);
 			halfpack = -1;
 			
-			trace("-half out")
+			//trace("-half out")
 		}
 		
 		//var size = async_load[? "size"]
 		var size = buffer_get_size(buff)
 		var pack_count = 0
 		
-		trace("global pack size: %", size)
+		//trace("global pack size: %", size)
 		
 		for(var i = 0; i < size;) { // Break up the binary blob into single packets
 			// Read the packet size
-			var packSize = buffer_peek(buff, i, buffer_u16); // this also seeks
+			if (i + 2 <= size)
+				var packSize = buffer_peek(buff, i, buffer_u16); // this also seeks
+			else
+				var packSize = 0
 			
-			if (i + packSize > size) {
+			if (i + packSize > size or packSize == 0) {
 				halfpack = buffer_create(1, buffer_grow, 1);
 				buffer_copy(buff, i, i + 2 + packSize, halfpack, 0);
-				trace("half in-")
+				//trace("half in-")
 				break;
 			}
 			i += 2;
@@ -59,7 +62,7 @@ switch(type) {
 			buffer_delete(pack);
 		}
 		
-		trace("packet_count: %", pack_count);
+		//trace("packet_count: %", pack_count);
 		
 		buffer_delete(buff);
 		

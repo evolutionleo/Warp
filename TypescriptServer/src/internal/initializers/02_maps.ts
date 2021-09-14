@@ -1,3 +1,5 @@
+import trace from '#internal/logging';
+
 import * as fs from 'fs';
 import * as path from 'path';
 

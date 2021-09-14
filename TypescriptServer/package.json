@@ -14,7 +14,6 @@
     "dependencies": {
         "@ef-carbon/tspm": "^2.2.5",
         "@msgpack/msgpack": "^2.3.0",
-        "@types/mongoose": "^5.11.97",
         "binary-parser": "^1.6.2",
         "crypto": "^1.0.1",
         "extend": "^3.0.2",

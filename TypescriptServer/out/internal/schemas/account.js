@@ -3,6 +3,7 @@
 // const { Model, Document } = require('mongoose');
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
+import trace from '#internal/logging';
 // import * as mongoose from 'mongoose';
 const mongoose = require('mongoose');
 const { Schema, model } = mongoose;
@@ -26,9 +27,9 @@ accountSchema.statics.register = function (username, password) {
     /* for example:
 
         Account.register('steve', '1234').then(function() {
-            console.log('success!');
+            trace('success!');
         }).catch(function() {
-            console.log('fail!');
+            trace('fail!');
         })
     
     */
@@ -40,7 +41,7 @@ accountSchema.statics.register = function (username, password) {
         });
         account.save(function (err) {
             if (err) {
-                console.log('Error while registering: ' + err.message);
+                trace('Error while registering: ' + err.message);
                 reject('failed to register');
             }
             else {
@@ -56,7 +57,7 @@ accountSchema.statics.login = function (username, password) {
                 reject('account not found');
             }
             else if (err) {
-                console.log(err);
+                trace(err);
                 reject('error while logging in');
             }
             else {

@@ -5,18 +5,18 @@ const Account = require('../internal/schemas/account.js');
 
 module.exports = async function handlePacket(c, data) {
     var cmd = data.cmd.toLowerCase();
-    // console.log('received command: ' + cmd);
+    // trace('received command: ' + cmd);
     
     switch(cmd) {
         case 'hello':
-            console.log("Hello from client: "+data.kappa);
+            trace("Hello from client: "+data.kappa);
             c.sendHello();
             break;
         case 'hello2':
-            console.log('Second hello from client: '+data.kappa);
+            trace('Second hello from client: '+data.kappa);
             break;
         case 'message':
-            console.log('Message from client: '+data.msg);
+            trace('Message from client: '+data.msg);
             c.sendMessage(data.msg+' indeed');
             break;
 
@@ -38,7 +38,7 @@ module.exports = async function handlePacket(c, data) {
                 // this also sends the message
                 c.register(account);
             }).catch(function(reason) {
-                console.log('error: ' + reason);
+                trace('error: ' + reason);
                 c.sendRegister('fail', reason);
             })
             break;
@@ -71,5 +71,19 @@ module.exports = async function handlePacket(c, data) {
 
         // #######################
         // Add your commands here:
+        case 'player pos':
+            var pos_x = data.x;
+            var pos_y = data.y;
+
+            var username = c.account.username;
+
+            for(var i = 0; i <  global.clients.length; i++) {
+                var client = global.clients[i];
+                if (client.account !== null) {
+                    client.send({cmd: 'playerPos', x: pos_x, y: pos_y, username: username});
+                }
+            }
+
+            break;
     }
 }

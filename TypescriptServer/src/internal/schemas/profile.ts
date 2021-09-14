@@ -6,6 +6,8 @@
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
+import trace from '#internal/logging';
+
 // import * as mongoose from 'mongoose';
 const mongoose = require('mongoose');
 

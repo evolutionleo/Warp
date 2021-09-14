@@ -8,7 +8,7 @@ if (config.db_enabled) {
 
     module.exports = new Promise((resolve, reject) => {
         db.once('open', () => {
-            console.log('Database connected:', url);
+            trace('Database connected:', url);
             resolve(db);
         })
         
@@ -19,6 +19,6 @@ if (config.db_enabled) {
     })
 }
 else {
-    console.log('Database is disabled');
+    trace('Database is disabled');
     module.exports = null;
 }
