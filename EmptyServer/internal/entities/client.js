@@ -1,10 +1,18 @@
 const SendStuff = require("../../custom/sendStuff.js");
 const { Profile, freshProfile } = require('./../schemas/profile.js');
+const net = require('net');
 
 // this is a wrapper around sockets
 module.exports = class Client extends SendStuff {
-    constructor(socket) {
-        super();
+    /**
+     * 
+     * @param {net.Socket} socket
+     * @param {string} type
+     */
+    constructor(socket, type = 'tcp') {
+        super(socket, type);
+
+        this.type = type;
         
         this.socket = socket;
         this.lobby = null; // no lobby

@@ -1,11 +1,33 @@
 const packet = require('./../internal/packet.js');
+const ws = require('ws');
+const net = require('net');
 
+/**
+ * @property {string} type
+ * @property {ws|net.Socket} socket
+ */
 module.exports = class SendStuff {
-    constructor() {}
+    type; // 'ws' / 'tcp'
+    socket; // WebSocket or net.Socket
+
+    /**
+     * 
+     * @param {ws|net.Socket} socket
+     * @param {string} type
+     */
+    constructor(socket, type) {
+        this.socket = socket;
+        this.type = type.toLowerCase();
+    }
 
     // basic send
     write(data) {
-        this.socket.write(packet.build(data));
+        if (this.type === 'ws') {
+            this.socket.send(packet.ws_build(data));
+        }
+        else {
+            this.socket.write(packet.build(data));
+        }
     }
 
     send(data) { // just another name
@@ -38,12 +60,12 @@ module.exports = class SendStuff {
     // these functions can be later called using %insert_client%.sendThing()
     // in handlePacket.js or wherever else where you have client objects
     sendHello() {
-        this.write({cmd: 'hello', str: 'Hello, client!'})
-        this.write({cmd: 'hello2', str: 'Hello again, client!'})
+        this.write({cmd: 'hello', str: 'Hello, client!'});
+        // this.write({cmd: 'hello2', str: 'Hello again, client!'});
     }
 
     sendMessage(msg) {
-        this.write({cmd: 'message', msg: msg})
+        this.write({cmd: 'message', msg: msg});
     }
 
     // these are some preset functions

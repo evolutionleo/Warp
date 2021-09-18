@@ -13,6 +13,10 @@ module.exports = class packet {
         return buff;
     }
 
+    static ws_build(data) {
+        return encode(data);
+    }
+
     static parse(c, data) {
         if (c.halfpack === undefined)
             c.halfpack = null;
@@ -58,6 +62,16 @@ module.exports = class packet {
             catch(e) {
                 trace('An error occurred while parsing the packet: ' + e.message);
             }
+        }
+    }
+
+    static ws_parse(c, data) {
+        try {
+            // pass the decoded data to handlePacket()
+            handlePacket(c, decode(data));
+        }
+        catch(e) {
+            trace('An error occurred while parsing the packet: ' + e.message);
         }
     }
 };

@@ -17,8 +17,9 @@ const prod_config = {
         server: 'production'
     },
     env_name: 'prod',
-    port: args.port || 1337,
-    db: args.db || 'mongodb://127.0.0.1:27017/oniline-game'
+    port: 1337,
+    ws_port: 3000,
+    db: 'mongodb://127.0.0.1:27017/oniline-game'
 }
 
 
@@ -27,8 +28,9 @@ const dev_config = {
         server: 'development'
     },
     env_name: 'dev',
-    port: args.port || 1338,
-    db: args.db || 'mongodb://127.0.0.1:27017/online-game'
+    port: 1338,
+    ws_port: 3001,
+    db: 'mongodb://127.0.0.1:27017/online-game'
 }
 
 
