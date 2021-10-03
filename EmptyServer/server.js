@@ -10,7 +10,7 @@ const ws_port = config.ws_port;
 const fs = require('fs');
 
 const packet = require('./internal/packet.js'); // { build(), parse() }
-const Client = require('./internal/entities/client.js'); // class Client {...}
+const Client = require('./internal/concepts/client.js'); // class Client {...}
 const { delayReceive } = require('./internal/artificial_delay.js');
 
 

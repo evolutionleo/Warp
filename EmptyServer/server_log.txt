@@ -443,3 +443,101 @@
 [18.09.2021, 11:43:58] WebSocket connected!
 [18.09.2021, 11:43:58] Hello from client: peppega
 [18.09.2021, 12:16:48] Socket closed.
+[03.10.2021, 13:48:33] Config loaded! environment: dev
+[03.10.2021, 13:48:34] loaded initializers!
+[03.10.2021, 13:48:34] Server running on port 1338!
+[03.10.2021, 13:48:34] WebSocket Server running on port 3001!
+[03.10.2021, 13:48:34] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 13:49:42] Socket connected!
+[03.10.2021, 13:51:31] Config loaded! environment: dev
+[03.10.2021, 13:51:32] loaded initializers!
+[03.10.2021, 13:51:32] Server running on port 1338!
+[03.10.2021, 13:51:32] WebSocket Server running on port 3001!
+[03.10.2021, 13:51:33] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 13:51:45] Socket connected!
+[03.10.2021, 13:53:01] Config loaded! environment: dev
+[03.10.2021, 13:53:02] loaded initializers!
+[03.10.2021, 13:53:02] Server running on port 1338!
+[03.10.2021, 13:53:02] WebSocket Server running on port 3001!
+[03.10.2021, 13:53:03] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 13:53:10] Socket connected!
+[03.10.2021, 13:53:43] Config loaded! environment: dev
+[03.10.2021, 13:53:44] loaded initializers!
+[03.10.2021, 13:53:44] Server running on port 1338!
+[03.10.2021, 13:53:44] WebSocket Server running on port 3001!
+[03.10.2021, 13:53:44] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 13:54:19] WebSocket connected!
+[03.10.2021, 13:55:10] Config loaded! environment: dev
+[03.10.2021, 13:55:12] loaded initializers!
+[03.10.2021, 13:55:12] Server running on port 1338!
+[03.10.2021, 13:55:12] WebSocket Server running on port 3001!
+[03.10.2021, 13:55:12] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:01:28] Config loaded! environment: dev
+[03.10.2021, 14:01:29] loaded initializers!
+[03.10.2021, 14:01:29] Server running on port 1338!
+[03.10.2021, 14:01:29] WebSocket Server running on port 3001!
+[03.10.2021, 14:01:30] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:02:24] Config loaded! environment: dev
+[03.10.2021, 14:02:25] loaded initializers!
+[03.10.2021, 14:02:25] Server running on port 1338!
+[03.10.2021, 14:02:25] WebSocket Server running on port 3001!
+[03.10.2021, 14:02:25] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:02:54] Config loaded! environment: dev
+[03.10.2021, 14:02:55] loaded initializers!
+[03.10.2021, 14:02:55] Server running on port 1338!
+[03.10.2021, 14:02:55] WebSocket Server running on port 3001!
+[03.10.2021, 14:02:55] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:03:15] Config loaded! environment: dev
+[03.10.2021, 14:03:16] loaded initializers!
+[03.10.2021, 14:03:16] Server running on port 1338!
+[03.10.2021, 14:03:16] WebSocket Server running on port 3001!
+[03.10.2021, 14:03:16] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:04:48] Config loaded! environment: dev
+[03.10.2021, 14:04:49] loaded initializers!
+[03.10.2021, 14:04:49] Server running on port 1338!
+[03.10.2021, 14:04:49] WebSocket Server running on port 3001!
+[03.10.2021, 14:04:49] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:04:58] WebSocket connected!
+[03.10.2021, 14:09:39] Config loaded! environment: dev
+[03.10.2021, 14:09:40] loaded initializers!
+[03.10.2021, 14:09:40] Server running on port 1338!
+[03.10.2021, 14:09:40] WebSocket Server running on port 3001!
+[03.10.2021, 14:09:40] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:39:04] Config loaded! environment: dev
+[03.10.2021, 14:39:06] loaded initializers!
+[03.10.2021, 14:39:06] Server running on port 1338!
+[03.10.2021, 14:39:06] WebSocket Server running on port 3001!
+[03.10.2021, 14:39:06] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:39:07] WebSocket connected!
+[03.10.2021, 14:41:05] Config loaded! environment: dev
+[03.10.2021, 14:41:06] loaded initializers!
+[03.10.2021, 14:41:06] Server running on port 1338!
+[03.10.2021, 14:41:06] WebSocket Server running on port 3001!
+[03.10.2021, 14:41:06] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:41:08] WebSocket connected!
+[03.10.2021, 14:41:45] Config loaded! environment: dev
+[03.10.2021, 14:41:46] loaded initializers!
+[03.10.2021, 14:41:46] Server running on port 1338!
+[03.10.2021, 14:41:46] WebSocket Server running on port 3001!
+[03.10.2021, 14:41:46] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:41:47] WebSocket connected!
+[03.10.2021, 14:41:49] Config loaded! environment: dev
+[03.10.2021, 14:41:50] loaded initializers!
+[03.10.2021, 14:41:50] Server running on port 1338!
+[03.10.2021, 14:41:50] WebSocket Server running on port 3001!
+[03.10.2021, 14:41:50] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:46:27] Config loaded! environment: dev
+[03.10.2021, 14:46:28] loaded initializers!
+[03.10.2021, 14:46:28] Server running on port 1338!
+[03.10.2021, 14:46:28] WebSocket Server running on port 3001!
+[03.10.2021, 14:46:28] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:46:39] Config loaded! environment: dev
+[03.10.2021, 14:46:40] loaded initializers!
+[03.10.2021, 14:46:40] Server running on port 1338!
+[03.10.2021, 14:46:40] WebSocket Server running on port 3001!
+[03.10.2021, 14:46:40] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 14:47:21] Config loaded! environment: dev
+[03.10.2021, 14:47:23] loaded initializers!
+[03.10.2021, 14:47:23] Server running on port 1338!
+[03.10.2021, 14:47:23] WebSocket Server running on port 3001!
+[03.10.2021, 14:47:23] Database connected: mongodb://127.0.0.1:27017/online-game

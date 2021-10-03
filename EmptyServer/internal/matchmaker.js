@@ -1,5 +1,13 @@
+const Client = require('./concepts/client.js');
+const Lobby = require('./concepts/lobby.js');
+
 module.exports = class MatchMaker {
     // this will just pick the first non-full lobby
+    /**
+     * 
+     * @param {Client} user 
+     * @returns {Lobby} match_lobby
+     */
     static make_match(user) {
         var match_lobby = null;
         // this a so called 'arrow function'.
@@ -16,7 +24,13 @@ module.exports = class MatchMaker {
     }
 
     // if you want to implement an MMR system
-    // result should be 1 if won, 0 if lost and 0.5 on draw
+    /**
+     * 
+     * @param {number} player_mmr 
+     * @param {number} opponent_mmr 
+     * @param {1|0|0.5} result result should be 1 if won, 0 if lost and 0.5 on draw
+     * @returns {number} mmr_change
+     */
     static get_mmr_change(player_mmr, opponent_mmr, result) {
         const k = 100; // maximum possible gain/loss, when the weakest players wins from the best
         const mmr_scale = 800; // the bigger the number, the less the result changes with mmr difference. (e.x. chess uses 400, making a huge difference from even 200 mmr)

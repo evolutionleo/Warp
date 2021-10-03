@@ -1,7 +1,12 @@
 const { encode, decode } = require('@msgpack/msgpack');
 const handlePacket       = require('./../custom/handlePacket.js');
 
-module.exports = class packet {
+module.exports = packet = class packet {
+    /**
+     * 
+     * @param {Object} data 
+     * @returns {Buffer} pack
+     */
     static build(data) {
         var dataBuff = encode(data);
         var sizeBuff = Buffer.alloc(2);
@@ -13,10 +18,22 @@ module.exports = class packet {
         return buff;
     }
 
+    /**
+     * 
+     * @param {Object} data 
+     * @returns {Buffer} pack
+     */
     static ws_build(data) {
         return encode(data);
     }
 
+
+
+    /**
+     * 
+     * @param {any} c 
+     * @param {Buffer} data 
+     */
     static parse(c, data) {
         if (c.halfpack === undefined)
             c.halfpack = null;
@@ -65,6 +82,11 @@ module.exports = class packet {
         }
     }
 
+    /**
+     * 
+     * @param {any} c 
+     * @param {Buffer} data 
+     */
     static ws_parse(c, data) {
         try {
             // pass the decoded data to handlePacket()

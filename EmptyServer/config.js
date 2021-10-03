@@ -19,7 +19,7 @@ const prod_config = {
     env_name: 'prod',
     port: 1337,
     ws_port: 3000,
-    db: 'mongodb://127.0.0.1:27017/oniline-game'
+    db: 'mongodb://127.0.0.1:27017/online-game'
 }
 
 
@@ -38,7 +38,7 @@ const dev_config = {
 const default_config = dev_config;
 const env = args.env || 'dev'
 
-
+/** @global */
 const config = {};
 Object.assign(config, common_config);
 

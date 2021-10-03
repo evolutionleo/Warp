@@ -1,8 +1,8 @@
 const fs = require('fs');
 
-/*
-    @function trace(*str)
-    @param {String} *str
+/**
+    @function trace([str])
+    @param {...string} [str]
  */
 global.trace = function(...strs) {
     let str = strs.map((s) => s.toString()).join(' ');

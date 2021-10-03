@@ -47,6 +47,7 @@ class Client {
      * @param {Object} data 
      */
     handlePacket(data) {
+        this.emit('data', data);
         this.emit(data.cmd, data);
     }
 
