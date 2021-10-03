@@ -1,10 +1,22 @@
 const SendStuff = require("../../custom/sendStuff.js");
 const { Profile, freshProfile } = require('./../schemas/profile.js');
+const net = require('net');
+
+// const Lobby = require('./lobby.js');
 
 // this is a wrapper around sockets
+/**
+ * @extends SendStuff
+ */
 module.exports = class Client extends SendStuff {
-    constructor(socket) {
-        super();
+    /**
+     * @param {net.Socket} socket
+     * @param {string} type
+     */
+    constructor(socket, type = 'tcp') {
+        super(socket, type);
+
+        this.type = type;
         
         this.socket = socket;
         this.lobby = null; // no lobby
@@ -15,26 +27,47 @@ module.exports = class Client extends SendStuff {
     }
 
     // some events
+
+    /**
+     * @param {Lobby} lobby 
+     */
     onJoinLobby(lobby) {
         this.sendJoinLobby(lobby);
     }
 
+    /**
+     * @param {Lobby} lobby 
+     * @param {string} reason 
+     */
     onRejectLobby(lobby, reason) {
         if (!reason)
             reason = 'lobby is full!';
         this.sendRejectLobby(lobby, reason);
     }
 
+    /**
+     * @param {Lobby} lobby 
+     */
     onLeaveLobby(lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
     
+    /**
+     * 
+     * @param {Lobby} lobby 
+     * @param {string} reason 
+     */
     onKickLobby(lobby, reason) {
         if (!reason)
             reason = '';
         this.sendKickLobby(lobby, reason, true);
     }
 
+    /**
+     * 
+     * @param {Lobby} lobby 
+     * @param {Point} start_pos 
+     */
     onPlay(lobby, start_pos) {
         this.sendPlay(lobby, start_pos);
     }
@@ -71,6 +104,9 @@ module.exports = class Client extends SendStuff {
         }
     }
     
+    /**
+     * @param {Account} account 
+     */
     register(account) {
         this.account = account;
         this.profile = freshProfile(account);
@@ -80,6 +116,9 @@ module.exports = class Client extends SendStuff {
         this.sendRegister('success');
     }
 
+    /**
+     * @param {Account} account 
+     */
     login(account) {
         this.account = account;
         Profile.findOne({
@@ -95,9 +134,12 @@ module.exports = class Client extends SendStuff {
         })
     }
 
-    // you can also add methods/functions below
+    // you can also add custom methods/functions below
     // e.x.
 
+    /**
+     * @param {string} name
+     */
     setUsername(name) {
         this.profile.username = name;
     }

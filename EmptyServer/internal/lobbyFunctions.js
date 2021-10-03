@@ -1,6 +1,12 @@
-const Lobby = require('./entities/lobby.js');
+const Lobby = require('./concepts/lobby.js');
 const crypto = require('crypto');
+const Map = require('./concepts/map.js');
 
+/**
+ * Creates a new lobby with the selected map
+ * @param {string|Map} map_name 
+ * @returns {Lobby} lobby
+ */
 module.exports.createLobby = function(map_name) { // returns the lobby instance
     var lobby = new Lobby(map_name);
 
@@ -20,11 +26,20 @@ module.exports.createLobby = function(map_name) { // returns the lobby instance
     return lobby;
 }
 
+/**
+ * Finds a lobby by id
+ * @param {string} lobbyid 
+ * @returns {Lobby}
+ */
 module.exports.findLobby = function(lobbyid) {
     // changed the implementation to objects/structs instead of arrays
     return global.lobbies[lobbyid];
 }
 
+/**
+ * Deletes a lobby by id
+ * @param {string} lobbyid 
+ */
 module.exports.deleteLobby = function(lobbyid) {
     var lobby = global.lobbies[lobbyid];
     lobby.close();

@@ -2,6 +2,11 @@ const crypto = require('crypto'); // encrypt our passwords!
 
 
 // complicated stuff, don't worry about this too much
+/**
+ * 
+ * @param {string} password 
+ * @returns {string} hash
+ */
 module.exports.hash_password = function hash_password(password) {
     return new Promise((resolve, reject) => {
         const salt = crypto.randomBytes(8).toString('hex');
@@ -12,6 +17,11 @@ module.exports.hash_password = function hash_password(password) {
     })
 }
 
+/**
+ * @param {string} password
+ * @param {string} _hash
+ * @returns {Promise<boolean>} result
+ */
 module.exports.verify_password = function verify_password(password, _hash) {
     return new Promise((resolve, reject) => {
         const [salt, hash] = _hash.split(':');

@@ -16,6 +16,7 @@
         "minimist": "^1.2.5",
         "mongoose": "^5.12.12",
         "node": "^16.0.0",
-        "performance-now": "^2.1.0"
+        "performance-now": "^2.1.0",
+        "ws": "^8.2.2"
     }
 }

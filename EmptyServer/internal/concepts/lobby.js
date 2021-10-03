@@ -1,11 +1,16 @@
+const Client = require('./client');
+
 // note: only create lobbies with createLobby(), don't call the constructor directly
-module.exports = class Lobby {
+class Lobby {
     lobbyid = -1; // assigned when created
     map = undefined;
     status = 'waiting'; // waiting, playing, or 'closed'
     players = [];
     max_players = undefined;
 
+    /**
+     * @param {Map|String} map 
+     */
     constructor(map) {
         // if provided a string -
         if (typeof map === 'string') {
@@ -38,6 +43,11 @@ module.exports = class Lobby {
         }
     }
 
+    /**
+     * 
+     * @param {Player} player 
+     * @returns {number|null}
+     */
     addPlayer(player) {
         if (this.full) {
             trace('warning: can\'t add a player - the lobby is full!');
@@ -60,6 +70,11 @@ module.exports = class Lobby {
         this.updateStatus();
     }
 
+    /**
+     * @param {Client} player 
+     * @param {string} reason 
+     * @param {boolean} forced 
+     */
     kickPlayer(player, reason, forced) {
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
@@ -70,12 +85,18 @@ module.exports = class Lobby {
         this.updateStatus();
     }
 
+    /**
+     * @param {Clientt} player 
+     */
     addIntoPlay(player) {
         var idx = clients.indexOf(player);
         var start_pos = this.map.getStartPos(idx);
         player.onPlay(this, start_pos);
     }
 
+    /**
+     * @param {Object} data 
+     */
     broadcast(data) {
         this.players.forEach(function(player) {
             player.write(data);
@@ -121,3 +142,5 @@ module.exports = class Lobby {
         return this.player_count == 0;
     }
 }
+
+module.exports = Lobby;

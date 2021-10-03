@@ -42,6 +42,7 @@
     {"name":"Android","path":"options/android/options_android.yy",},
     {"name":"iOS","path":"options/ios/options_ios.yy",},
     {"name":"tvOS","path":"options/tvos/options_tvos.yy",},
+    {"name":"operagx","path":"options/operagx/options_operagx.yy",},
   ],
   "isDnDProject": false,
   "isEcma": false,
@@ -83,7 +84,7 @@
     {"CopyToMask":-1,"filePath":"datafiles","resourceVersion":"1.0","name":"log.txt","resourceType":"GMIncludedFile",},
   ],
   "MetaData": {
-    "IDEVersion": "2.3.4.580",
+    "IDEVersion": "2.3.5.589",
   },
   "resourceVersion": "1.4",
   "name": "EmptyClient",

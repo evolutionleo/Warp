@@ -1,4 +1,4 @@
-module.exports = class Map { // represents a game map
+class Map { // represents a game map
     name = ''; // map's display name
     room_name = ''; // room name in GMS2
     description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
@@ -11,6 +11,11 @@ module.exports = class Map { // represents a game map
         Object.assign(this, options);
     }
 
+    /**
+     * Gets the start coordinates for a player
+     * @param {number} idx 
+     * @returns 
+     */
     getStartPos(idx) {
         if (Array.isArray(this.start_pos)) { // it's an array of positions
             switch(this.mode) {
@@ -32,3 +37,5 @@ module.exports = class Map { // represents a game map
         }
     }
 }
+
+module.exports = Map;
