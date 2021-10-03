@@ -541,3 +541,45 @@
 [03.10.2021, 14:47:23] Server running on port 1338!
 [03.10.2021, 14:47:23] WebSocket Server running on port 3001!
 [03.10.2021, 14:47:23] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 16:34:06] Config loaded! environment: dev
+[03.10.2021, 16:34:07] loaded initializers!
+[03.10.2021, 16:34:07] Server running on port 1338!
+[03.10.2021, 16:34:07] WebSocket Server running on port 3001!
+[03.10.2021, 16:34:07] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 16:37:02] WebSocket connected!
+[03.10.2021, 16:37:23] Config loaded! environment: dev
+[03.10.2021, 16:37:24] loaded initializers!
+[03.10.2021, 16:37:24] Server running on port 1338!
+[03.10.2021, 16:37:24] WebSocket Server running on port 3001!
+[03.10.2021, 16:37:24] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 16:38:40] Config loaded! environment: dev
+[03.10.2021, 16:38:42] loaded initializers!
+[03.10.2021, 16:38:42] Server running on port 1338!
+[03.10.2021, 16:38:42] WebSocket Server running on port 3001!
+[03.10.2021, 16:38:42] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 16:38:47] WebSocket connected!
+[03.10.2021, 16:38:47] Hello from client: peppega
+[03.10.2021, 16:39:01] Socket closed.
+[03.10.2021, 16:39:01] WebSocket connected!
+[03.10.2021, 16:39:01] Hello from client: peppega
+[03.10.2021, 16:39:40] Socket closed.
+[03.10.2021, 16:39:40] WebSocket connected!
+[03.10.2021, 16:39:40] Hello from client: peppega
+[03.10.2021, 16:43:13] Socket connected!
+[03.10.2021, 16:43:35] Config loaded! environment: dev
+[03.10.2021, 16:43:36] loaded initializers!
+[03.10.2021, 16:43:36] Server running on port 1338!
+[03.10.2021, 16:43:36] WebSocket Server running on port 3001!
+[03.10.2021, 16:43:36] Database connected: mongodb://127.0.0.1:27017/online-game
+[03.10.2021, 16:43:47] Socket connected!
+[03.10.2021, 16:43:47] Hello from client: Kappa Pepega
+[03.10.2021, 16:43:47] Second hello from client: Second Kappa
+[03.10.2021, 16:43:47] Socket connected!
+[03.10.2021, 16:43:48] Hello from client: Kappa Pepega
+[03.10.2021, 16:43:48] Second hello from client: Second Kappa
+[03.10.2021, 16:43:54] Socket violently disconnected.
+[03.10.2021, 16:43:54] Error! Error: read ECONNRESET
+[03.10.2021, 16:43:54] Socket closed.
+[03.10.2021, 16:43:56] Socket violently disconnected.
+[03.10.2021, 16:43:56] Error! Error: read ECONNRESET
+[03.10.2021, 16:43:56] Socket closed.

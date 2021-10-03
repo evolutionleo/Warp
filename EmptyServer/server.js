@@ -13,6 +13,9 @@ const packet = require('./internal/packet.js'); // { build(), parse() }
 const Client = require('./internal/concepts/client.js'); // class Client {...}
 const { delayReceive } = require('./internal/artificial_delay.js');
 
+// global.packet = packet;
+console.log(global.packet);
+
 
 // load some init scripts (to not put everything in this file)
 const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');

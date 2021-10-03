@@ -1,10 +1,7 @@
-const packet = require('./../internal/packet.js');
+// const packet = require('./../internal/packet.js');
 const ws = require('ws');
 const net = require('net');
 
-
-// console.log(Object.keys(packet));
-console.log(packet);
 
 
 /**
@@ -36,7 +33,7 @@ module.exports = class SendStuff {
             this.socket.send(packet.ws_build(data));
         }
         else {
-            this.socket.send(packet.build(data));
+            this.socket.write(packet.build(data));
         }
     }
 

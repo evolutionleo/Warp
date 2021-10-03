@@ -1,7 +1,7 @@
 const { encode, decode } = require('@msgpack/msgpack');
 const handlePacket       = require('./../custom/handlePacket.js');
 
-module.exports = packet = class packet {
+module.exports = global.packet = class packet {
     /**
      * 
      * @param {Object} data 
