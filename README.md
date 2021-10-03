@@ -8,7 +8,12 @@
 - **Advanced features:** lobbies, account/profile system, saving/loading data, dev/prod configurations
 - **Well-commented code** if you decide to dive into the sources
 - **NodeJS server** can run on a Linux hosting/dedicated server, as opposed to servers in GML
-- **GNU General Public license** (you can use this framework in commercial projects and modify/contribute in any way)
+- **MIT license** (you can use this framework in commercial projects and modify/contribute in any way)
+
+# Examples
+- [1v1 Pong Example](https://github.com/evolutionleo/GMOF-pong-example)
+- [Platformer Example](https://github.com/evolutionleo/StreamGame)
+
 # Installing
 ### Client-side
 - Install .yymps from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases/latest)
