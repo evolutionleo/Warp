@@ -1,21 +1,23 @@
 Here's how the project's organized
-	and how to use this framework:
+	and how to use the client-side of the framework:
 
 - All the configs are located at __NetworkingConfig script
 - oClient initiates the connection
 - When oClient gets a packet, it passes it to handlePacket() function,
   which you can modify
-- network_write() sends the specified data (in struct format) to server
+- send() sends the specified data (in struct format) to server
 - you can write simple wrappers for outcoming signals and put those into SendStuff script
-  e.x. you can replace `network_write({cmd: "Hello", msg: "World"})` with `sendHello()`
+  e.x. you can replace `send({cmd: "hello", msg: "world"})` with `sendHello()`
+  please make all of the commands lower-case
 
 
 TL;DR:
-- handle input in HandlePacket() script
-- handle output using network_write()
-- change ip/port in __NetworkingConfig (or input it in-game somehow)
+- handle input in *handlePacket.gml* script
+- send things to the server using *send()*
+- write custom wrappers for send() in *sendStuff.gml*
+- change ip/port in *__NetworkingConfig* (or input it in-game somehow)
 - don't worry about internal stuff too much
 
 - best practice would to define all your
   sending functions in SendStuff script,
-  even tho you can just send() things
+  even tho you can just send() things directly
