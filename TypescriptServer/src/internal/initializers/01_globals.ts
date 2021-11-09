@@ -1,7 +1,7 @@
-import trace from '#internal/logging';
-import Client from '#entities/client';
-import GameMap from '#entities/map';
-import Lobby from '#entities/lobby';
+import Client from '#concepts/client';
+import GameMap from '#concepts/map';
+import Lobby from '#concepts/lobby';
+import Entity, { EntityType } from '#concepts/entity';
 
 declare global {
     namespace NodeJS {
@@ -9,12 +9,19 @@ declare global {
             clients:Client[];
             maps:GameMap[];
             lobbies:{[index: string]: Lobby};
+            entities:EntityType[];
+
+            entityNames:{[key: string]: EntityType}; // type -> EntityType
+            entityObjects:{[key: string]: EntityType}; // object_name -> EntityType
         }
     }
 }
 
 global.clients = [];
-global.maps = [];    // loaded in 01_maps.js
-global.lobbies = {}; // loaded in 02_lobbies.js
+global.maps = [];           // loaded in 02_maps.js
+global.entities = [];       // loaded in 03_entities.js
+global.entityNames = {};
+global.entityObjects = {};
+global.lobbies = {};        // loaded in 04_lobbies.js 
 
 export {}

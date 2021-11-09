@@ -3,49 +3,25 @@
 // const { Model, Document } = require('mongoose');
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-
 // import * as mongoose from 'mongoose';
 const mongoose = require('mongoose');
-
-// import { Schema, model, connect, Document, Model } from 'mongoose';
-import { Model, Document } from 'mongoose';
 const { Schema, model } = mongoose;
-
 // const mongoose = require('mongoose');
 // const Model = mongoose.Model;
 // const Schema = mongoose.Schema;
-
 // import * as mongoose from 'mongoose';
 // const { Schema, model } = mongoose; // because it doesn't have a named export
 // import { Model, Document } from 'mongoose';
 import { hash_password, verify_password } from '#util/password_encryption';
-import { Profile } from '#schemas/profile';
-
-
-export interface IAccount extends Document {
-    username: string,
-    password: string
-}
-
-export interface IAccountModel extends Model<IAccount> {
-    login: (username:string, password:string) => Promise<string|IAccount>,
-    register: (username:string, password:string) => Promise<string|IAccount>
-}
-
 // you can edit this schema!
 const accountSchema = new Schema({
     username: { type: String, required: true, unique: true },
-    password: { type:String, required: true },
-
-    // you can add additional properties to the schema here:
-}, {collection: 'Accounts'});
-
-
+    password: { type: String, required: true },
+}, { collection: 'Accounts' });
 // logging in/registering stuff
-accountSchema.statics.register = function(username:string, password:string):Promise<string|IAccount> {
+accountSchema.statics.register = function (username, password) {
     // Promises: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
     // TL;DR: you can use .then() and .catch() to handle the result of the register
-    
     /* for example:
 
         Account.register('steve', '1234').then(function() {
@@ -59,11 +35,8 @@ accountSchema.statics.register = function(username:string, password:string):Prom
         var account = new Account({
             username: username,
             password: await hash_password(password),
-
-            // add more stuff below that is defined in the Account Schema above
-        })
-
-        account.save(function(err) {
+        });
+        account.save(function (err) {
             if (err) {
                 console.log('Error while registering: ' + err.message);
                 reject('failed to register');
@@ -71,13 +44,12 @@ accountSchema.statics.register = function(username:string, password:string):Prom
             else {
                 resolve(account);
             }
-        })
-    })
-}
-
-accountSchema.statics.login = function(username:string, password:string):Promise<string|IAccount> {
+        });
+    });
+};
+accountSchema.statics.login = function (username, password) {
     return new Promise(async (resolve, reject) => {
-        Account.findOne({username: username}, async (err:Error, account:IAccount) => {
+        Account.findOne({ username: username }, async (err, account) => {
             if (!account) {
                 reject('account not found');
             }
@@ -93,12 +65,9 @@ accountSchema.statics.login = function(username:string, password:string):Promise
                     reject('wrong password');
                 }
             }
-        })
-    })
-}
-
+        });
+    });
+};
 // export const Account:IAccountModel = model<IAccount, IAccountModel>('Account', accountSchema);
-export const Account:IAccountModel = model('Account', accountSchema);
-
-
+export const Account = model('Account', accountSchema);
 export default Account;
