@@ -86,7 +86,7 @@ class Lobby {
     }
 
     /**
-     * @param {Clientt} player 
+     * @param {Client} player 
      */
     addIntoPlay(player) {
         var idx = clients.indexOf(player);
