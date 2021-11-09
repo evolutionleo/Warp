@@ -1,6 +1,6 @@
 import GameMap from '#concepts/map';
 import Client from '#concepts/client';
-import Room   from '#concepts/room';
+import Room, { SerializedRoom }  from '#concepts/room';
 import { EventEmitter } from 'events';
 
 export type LobbyStatus = 'open' | 'closed';
@@ -13,6 +13,7 @@ export type SerializedLobby = {
     status: LobbyStatus,
     max_players: number,
     player_count: number,
+    rooms: SerializedRoom[],
     full: boolean
 }
 
@@ -48,7 +49,7 @@ export default class Lobby extends EventEmitter {
         else if (player.lobby !== null) {
             player.lobby.kickPlayer(player, 'changing lobbies', false);
         }
-        else if (player.profile === null) {
+        else if (global.config.necessary_login && player.profile === null) {
             console.log('warning: can\'t add a player who\'s not logged in');
             player.onRejectLobby(this, 'login to join a lobby!');
             return -1;
@@ -72,15 +73,11 @@ export default class Lobby extends EventEmitter {
 
     addIntoPlay(player:Client):void {
         if (player.lobby === this) {
-            // var room = this.rooms.find(room => room.map.name == player.profile.room);
             player.onPlay();
         }
         else {
             console.log('something went wrong - trying to add into play a player not from this lobby');
         }
-        // var idx = global.clients.indexOf(player);
-        // var start_pos = this.map.getStartPos(idx);
-        // player.onPlay(this, start_pos);
     }
 
     broadcast(data:object):void {
@@ -108,6 +105,7 @@ export default class Lobby extends EventEmitter {
     serialize():SerializedLobby {
         return {
             lobbyid: this.lobbyid,
+            rooms: this.rooms.map(r => r.serialize()),
             status: this.status,
             max_players: this.max_players,
             player_count: this.player_count,

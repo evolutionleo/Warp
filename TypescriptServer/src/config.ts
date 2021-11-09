@@ -17,7 +17,8 @@ const common_config = {
     tps: 60, // tickrate
     db_enabled: true,
     starting_room: 'Test Room',
-    start_pos: { x: 100, y: 100 }
+    start_pos: { x: 100, y: 100 },
+    necessary_login: false
 }
 
 const prod_config = {

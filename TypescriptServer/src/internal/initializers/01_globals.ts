@@ -1,3 +1,4 @@
+import trace from '#util/logging';
 import Client from '#concepts/client';
 import GameMap from '#concepts/map';
 import Lobby from '#concepts/lobby';

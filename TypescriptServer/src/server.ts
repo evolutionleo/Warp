@@ -6,7 +6,6 @@ import { createServer } from 'net';
 const port = global.config.port;
 
 import * as fs from 'fs';
-import * as readline from 'readline';
 
 import packet from '#internal/packet';
 import Client from '#concepts/client';

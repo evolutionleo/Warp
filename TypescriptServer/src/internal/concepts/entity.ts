@@ -6,8 +6,6 @@ import { v4 as uuidv4, v4 } from 'uuid';
 import Client from "./client";
 import Room from "./room";
 
-// import { BBox } from 'rbush';
-
 import PlayerEntity from "#entity/player";
 
 

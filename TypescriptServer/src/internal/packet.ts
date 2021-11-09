@@ -20,7 +20,7 @@ export default class packet {
 
 
         if (c.halfpack !== null) {
-            data = Buffer.concat([c.halfpack, data], c.halfpack.length + data.length)
+            data = Buffer.concat([c.halfpack, data], c.halfpack.length + data.length);
             // console.log('-one out');
             c.halfpack = null;
 
