@@ -13,7 +13,12 @@ function trace(...strs:any[]):void {
     
     for(var i = 0; i < strs.length; i++) {
         let s = strs[i];
-        str += ' ' + s.toString();
+        if (typeof s === 'object') {
+            str += ' ' + JSON.stringify(s);
+        }
+        else {
+            str += ' ' + s.toString();
+        }
     }
 
     let datetime = new Date().toLocaleString();

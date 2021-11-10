@@ -89,13 +89,34 @@ function handlePacket(pack) {
 			break
 		case "play":
 			global.lobby = data.lobby // again, just to be safe + update the data
-			var rm = asset_get_index(global.lobby.map.room_name)
-			if (rm < 0) {
+			global.room = data.room
+			var rm = asset_get_index(global.room.map.room_name)
+			global.start_pos = data.start_pos
+			if (!room_exists(rm)) {
 				show_message_async("Error: Invalid room name!")
 				break
 			}
 			
 			room_goto(rm)
+			break
+		
+		case "entity":
+			var uuid = data.id
+			var type = asset_get_index(data.object_name)
+			var inst = find_or_create(uuid, type, true)
+			
+			inst.x = data.x
+			inst.y = data.y
+			inst.image_xscale = data.xscale
+			inst.image_yscale = data.yscale
+			if (variable_struct_exists(data, "spd")) {
+				if (!variable_instance_exists(inst, "spd")) {
+					inst.spd = {x: 0, y: 0}
+				}
+				inst.spd.x = data.spd.x
+				inst.spd.y = data.spd.y
+			}
+			
 			break
 		
 		

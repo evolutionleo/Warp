@@ -1,11 +1,11 @@
+import trace from '#util/logging';
+import Point from '#types/point';
+import LoadRoom from '#util/load_room';
+
 export enum GAME_MODE {
     MMO = "mmo",
     PVP = "pvp"
 }
-
-import Point from '#types/point';
-import LoadRoom from '#util/load_room';
-
 
 type MapData = {
     name: string,
@@ -43,7 +43,7 @@ export default class GameMap { // represents a game map
         Object.assign(this, options);
         Object.assign(this, LoadRoom('./rooms/' + this.room_name + '.yy'));
 
-        // console.log(this.contents);
+        // trace(this.contents);
     }
 
     getStartPos(idx:number):Point {
@@ -51,7 +51,7 @@ export default class GameMap { // represents a game map
             switch(this.mode) {
                 case 'mmo':
                     // a random number between 0 and start_pos.length
-                    var index = Math.round(Math.random() * this.start_pos.length);
+                    var index = Math.round(Math.random() * (this.start_pos.length - 1));
                     return this.start_pos[index];
                 case 'pvp':
                     // just index clamped to start_pos.length

@@ -1,3 +1,4 @@
+import trace from '#util/logging';
 import { encode, decode } from '@msgpack/msgpack';
 import handlePacket from '#custom/handlePacket';
 import Client from '#concepts/client';
@@ -9,7 +10,7 @@ export default class packet {
         sizeBuff.writeUInt16LE(dataBuff.length);
 
         var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 2);
-        // console.log(buff);
+        // trace(buff);
 
         return buff;
     }
@@ -20,16 +21,16 @@ export default class packet {
 
 
         if (c.halfpack !== null) {
-            data = Buffer.concat([c.halfpack, data], c.halfpack.length + data.length);
-            // console.log('-one out');
+            data = Buffer.concat([c.halfpack, data], c.halfpack.length + data.length)
+            // trace('-one out');
             c.halfpack = null;
 
-            // console.log('converted packet: ', data.toString());
+            // trace('converted packet: ', data.toString());
         }
 
         var dataSize = data.length;
 
-        // console.log('global packet size: ' + dataSize);
+        // trace('global packet size: ' + dataSize);
 
         for(var i = 0; i < dataSize;) {
             var packSize = data.readUInt16LE(i); // unpack the size
@@ -38,7 +39,7 @@ export default class packet {
             if (i + packSize > dataSize) {
                 c.halfpack = Buffer.alloc(dataSize - (i - 2));
                 data.copy(c.halfpack, 0, i - 2, dataSize);
-                // console.log('one in-');
+                // trace('one in-');
                 break;
             }
 
@@ -52,7 +53,7 @@ export default class packet {
                 handlePacket(c, decode(dataPack));
             }
             catch(e) {
-                console.error('An error occurred while parsing the packet: ' + e.message);
+                trace('An error occurred while parsing the packet: ' + e.message);
             }
         }
     }

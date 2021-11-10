@@ -28,7 +28,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "UI",
-    "path": "folders/Demo/Objects/UI.yy",
+    "path": "folders/GMOF/Demo/Objects/UI.yy",
   },
   "resourceVersion": "1.0",
   "name": "txtUsername",

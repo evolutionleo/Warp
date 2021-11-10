@@ -1,4 +1,5 @@
 // get the command line arguments
+import trace from '#util/logging';
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
 
@@ -17,7 +18,7 @@ const common_config = {
     tps: 60, // tickrate
     db_enabled: true,
     starting_room: 'Test Room',
-    start_pos: { x: 100, y: 100 },
+    // start_pos: { x: 100, y: 100 }, // moved to map definitions
     necessary_login: false
 }
 
@@ -73,7 +74,7 @@ else {
 }
 
 
-console.log('Config loaded! environment: ' + config.env_name);
+trace('Config loaded! environment: ' + config.env_name);
 
 global.config = config;
 export default config;

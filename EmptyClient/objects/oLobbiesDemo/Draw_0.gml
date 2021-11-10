@@ -7,10 +7,11 @@ for(var i = 0; i < array_length(global.lobbies); i++) {
 	var lobby = global.lobbies[i]
 	var lobby_string = string(i+1) + ")" + string({
 		lobbyid: lobby.lobbyid,
-		map: lobby.map.name,
-		mode: lobby.map.mode,
-		room_name: lobby.map.room_name,
-		players: string(lobby.player_count) + "/" + string(lobby.max_players)
+		//map: lobby.map.name,
+		//mode: lobby.map.mode,
+		//room_name: lobby.map.room_name,
+		players: string(lobby.player_count) + "/" + string(lobby.max_players),
+		//rooms: lobby.rooms
 	})
 	
 	draw_text(room_width/2, 100 + i * 50, lobby_string)

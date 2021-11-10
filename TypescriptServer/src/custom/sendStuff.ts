@@ -1,3 +1,4 @@
+import trace from '#util/logging';
 import packet from '#internal/packet';
 import { Socket } from 'net';
 import Lobby from '#concepts/lobby';
@@ -101,7 +102,7 @@ export default class SendStuff {
 
     sendPlay(lobby:Lobby, room:Room, start_pos:Point):void {
         this.write({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos });
-        console.log( 'sent the Play command' );
+        trace( 'sent the Play command' );
     }
 
     // #################################

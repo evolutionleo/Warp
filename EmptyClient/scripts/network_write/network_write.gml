@@ -1,12 +1,8 @@
 ///@function network_write(data, *socket)
 ///@arg data
 ///@arg *socket
-function network_write(data, sock) {
-	// most of the time you just want to send the data to oClient.socket
-	if is_undefined(argument[1]) /* is_undefined(sock) */ {
-		sock = oClient.socket
-	}
-	
+// most of the time you just want to send the data to oClient.socket
+function network_write(data, sock = oClient.sock) {
 	//trace("Encoding data: %", data)
 	
 	// the data buffer
@@ -31,7 +27,7 @@ function network_write(data, sock) {
 ///@function send(data, *socket)
 ///@arg data
 ///@arg *socket
-function send(data, sock) {
+function send(data, sock = oClient.socket) {
 	return network_write(data, sock)
 }
 

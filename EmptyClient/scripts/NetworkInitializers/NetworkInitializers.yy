@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Networking",
-    "path": "folders/Scripts/Networking.yy",
+    "name": "Scripts",
+    "path": "folders/GMOF/Scripts.yy",
   },
   "resourceVersion": "1.0",
   "name": "NetworkInitializers",

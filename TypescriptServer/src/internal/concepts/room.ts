@@ -1,3 +1,4 @@
+import trace from '#util/logging';
 import Client from '#concepts/client';
 import Entity, { SerializedEntity } from '#concepts/entity';
 import { EntityConstructor, PlayerEntityConstructor } from '#concepts/entity';
@@ -6,7 +7,6 @@ import PlayerEntity from '#entities/entity_types/player';
 import GameMap from '#concepts/map';
 import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
-// import Chunk from '#concepts/chunk';
 import RBush from 'rbush';
 
 class MyRBush extends RBush<Entity> {
@@ -36,9 +36,22 @@ export class EntityList extends Array<Entity> {
     ofType(type:string) {
         return this.filterByType(type);
     }
+
+    solid() {
+        return this.filter(e => e.isSolid);
+    }
+
+    floor() {
+        return this.filter(e => e.isFloor);
+    }
 }
 
-export default class Room extends EventEmitter {
+
+interface Room {
+    on(event:RoomEvent, callback:(...args:any[])=>void):this;
+}
+
+class Room extends EventEmitter {
     lobby:Lobby;
     tickrate:number = tickrate;
     entities:EntityList/*Entity[]*/ = new EntityList();
@@ -65,7 +78,7 @@ export default class Room extends EventEmitter {
             })
 
             if (this.map === undefined) {
-                console.log(`Error: could not find a map called "${map}"`);
+                trace(`Error: could not find a map called "${map}"`);
                 this.close();
                 return;
             }
@@ -94,7 +107,7 @@ export default class Room extends EventEmitter {
     
             entities.forEach(entity => {
                 const etype = global.entityNames[entity.type];
-                // console.log(etype);
+                // trace(etype);
                 this.spawnEntity(etype, entity.x, entity.y);
             });
             
@@ -102,7 +115,7 @@ export default class Room extends EventEmitter {
         else if (Array.isArray(contents)) {
             contents.forEach(entity => {
                 const etype = global.entityNames[entity.type];
-                // console.log(etype);
+                // trace(etype);
                 const e = this.spawnEntity(etype, entity.x, entity.y);
                 e.xscale = entity.xscale;
                 e.yscale = entity.yscale;
@@ -118,7 +131,7 @@ export default class Room extends EventEmitter {
     }
     
     tick():void {
-        // console.log('tick!');
+        // trace('tick!');
         this.entities.forEach(entity => entity.update());
         this.emit('tick');
     }
@@ -152,7 +165,18 @@ export default class Room extends EventEmitter {
         this.players.push(player);
         player.room = this;
         
-        const player_entity = this.spawnEntity(PlayerEntity, player.profile.x, player.profile.y, player);
+        let x:number, y:number;
+        // if (player.profile) {
+        //     x = player.profile.x;
+        //     y = player.profile.y;
+        // }
+        // else {
+
+        // }
+        const p = this.map.getStartPos(this.players.length-1);
+        x = p.x;
+        y = p.y;
+        const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
         player.entity = player_entity;
         // send all the existing entities, but only after the initial "Play" packet
         setTimeout(() => {
@@ -192,3 +216,7 @@ export default class Room extends EventEmitter {
         };
     }
 }
+
+
+
+export default Room;

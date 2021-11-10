@@ -53,7 +53,9 @@ export function freshProfile(account:IAccount):IProfile { // for when just regis
         lobbyid: -1,
         room: global.config.starting_room,
 
-        x: global.config.start_pos.x,
-        y: global.config.start_pos.y,
+        x: 0,
+        y: 0
+        // x: global.config.start_pos.x,
+        // y: global.config.start_pos.y,
     });
 }

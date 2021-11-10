@@ -11,11 +11,11 @@
 #macro Default:PORT "1338"
 
 // Production
-#macro Prod:IP   "xxxxxx" // your external server IP
+#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
 #macro Prod:PORT "1337"
 
 // Debug/Development
-#macro Dev:IP   "127.0.0.1"	// localhost
+#macro Dev:IP   "192.168.0.12"	// localhost
 //#macro IP "192.168.1.224" // LAN (replace with your local IP)
 #macro Dev:PORT "1338"
 
@@ -26,6 +26,9 @@
 if (!CONFIGS_SET) {
 	trace("Remember to set your config by pressing the 'target' icon in the top-right corner of IDE! (Dev = Development, Prod = Production)")
 }
+
+
+#macro CONNECT_TIMEOUT 60 * 5 // 5 seconds
 
 
 // Allow up to 4000 ping (YYG recommends ~1000 for LAN-only games)

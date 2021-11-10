@@ -55,7 +55,7 @@
   },
   "parent": {
     "name": "Rooms",
-    "path": "folders/Demo/Rooms.yy",
+    "path": "folders/GMOF/Demo/Rooms.yy",
   },
   "resourceVersion": "1.0",
   "name": "rLogin",

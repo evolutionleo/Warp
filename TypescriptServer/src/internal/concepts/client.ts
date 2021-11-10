@@ -1,3 +1,4 @@
+import trace from '#util/logging';
 import SendStuff from '#custom/sendStuff';
 import { Profile, IProfile, freshProfile } from '#schemas/profile';
 import { Account, IAccount } from '#schemas/account';
@@ -58,12 +59,24 @@ export default class Client extends SendStuff {
     }
 
     onPlay() {
-        var room = this.lobby.rooms.find(room => {
-            return room.map.name === this.profile.room
-        });
-        var start_pos = {x: this.profile.x, y: this.profile.y};
+        if (!this.profile) {
+            if (!global.config.necessary_login) {
+                var room = this.lobby.rooms.find(room => {
+                    return room.map.name === global.config.starting_room;
+                });
+            }
+            else {
+                console.error('non-logged in player entering the playing state! if it\'s intentional, please disable config.necessary_login');
+                return -1;
+            }
+        }
+        else if (this.profile) {
+            var room = this.lobby.rooms.find(room => {
+                return room.map.name === this.profile.room;
+            });
+        }
         room.addPlayer(this);
-        this.sendPlay(this.lobby, room, start_pos);
+        this.sendPlay(this.lobby, room, this.entity.pos);
     }
 
     onDisconnect() {
@@ -79,20 +92,20 @@ export default class Client extends SendStuff {
         if (this.account !== null) {
             this.account.save(function(err) {
                 if (err) {
-                    console.log('Error while saving account: ' + err);
+                    trace('Error while saving account: ' + err);
                 }
                 else {
-                    console.log('Saved the account successfully');
+                    trace('Saved the account successfully');
                 }
             })
         }
         if (this.profile !== null) {
             this.profile.save(function(err) {
                 if (err) {
-                    console.log('Error while saving profile: ' + err);
+                    trace('Error while saving profile: ' + err);
                 }
                 else {
-                    console.log('Saved the profile successfully.');
+                    trace('Saved the profile successfully.');
                 }
             });
         }
@@ -117,7 +130,7 @@ export default class Client extends SendStuff {
                 this.sendLogin('success');
             }
             else {
-                console.log('Error: Couldn\'t find a profile with these credentials!');
+                trace('Error: Couldn\'t find a profile with these credentials!');
             }
         })
     }

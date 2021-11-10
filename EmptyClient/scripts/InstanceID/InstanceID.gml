@@ -4,21 +4,27 @@
 // put this in create event
 function use_uuid() {
 	self.uuid = uuidv4_generate()
+	self.remote = false // whether an entity is remote or local
 }
 
-function find_by_uuid(uuid, object_type = all) {
+function find_by_uuid(uuid, object_type = all, remote = undefined) {
 	with(object_type) {
-		if (variable_instance_exists(self, "uuid") and self.uuid == uuid)
+		if (variable_instance_exists(self, "uuid") and self.uuid == uuid
+		and (is_undefined(remote)
+		or variable_instance_exists(self, "remote") and self.remote == remote))
 			return self
 	}
 	return noone
 }
 
-function find_or_create(uuid, object_type) {
-	var inst = find_by_uuid(uuid, object_type)
+function find_or_create(uuid, object_type, remote = undefined) {
+	var inst = find_by_uuid(uuid, object_type, remote)
 	if inst == noone {
 		inst = instance_create_layer(0, 0, "Instances", object_type)
 		inst.uuid = uuid
+		if (!is_undefined(remote)) {
+			inst.remote = remote
+		}
 	}
 	
 	return inst
@@ -27,6 +33,7 @@ function find_or_create(uuid, object_type) {
 
 
 /// @func uuidv4_generate()
+/// Credit - @TabularElf
 function uuidv4_generate() {
 	var _timeZone = date_get_timezone();
 	date_set_timezone(timezone_utc);

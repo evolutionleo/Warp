@@ -1,26 +1,27 @@
+import trace from '#util/logging';
 import { findLobby } from '#util/lobby_functions';
 import MatchMaker from '#util/matchmaker';
-import { Profile } from '#schemas/profile';
 import { Account, IAccount } from '#schemas/account';
 import Client from '#concepts/client';
 import Lobby from '#concepts/lobby';
+import Point from '#types/point';
 
 const { make_match } = MatchMaker;
 
 export default async function handlePacket(c:Client, data:any) {
     var cmd = data.cmd.toLowerCase();
-    // console.log('received command: ' + cmd);
+    // trace('received command: ' + cmd);
     
     switch(cmd) {
         case 'hello':
-            console.log("Hello from client: "+data.kappa);
+            trace("Hello from client: "+data.kappa);
             c.sendHello();
             break;
         case 'hello2':
-            console.log('Second hello from client: '+data.kappa);
+            trace('Second hello from client: '+data.kappa);
             break;
         case 'message':
-            console.log('Message from client: '+data.msg);
+            trace('Message from client: '+data.msg);
             c.sendMessage(data.msg+' indeed');
             break;
 
@@ -42,7 +43,7 @@ export default async function handlePacket(c:Client, data:any) {
                 // this also sends the message
                 c.register(account);
             }).catch(function(reason:Error) {
-                console.log('error: ' + reason);
+                trace('error: ' + reason);
                 c.sendRegister('fail', reason.toString());
             })
             break;
@@ -82,20 +83,20 @@ export default async function handlePacket(c:Client, data:any) {
             break;
         
         case 'player controls':
-            const { kjump, move } = data;
-            let p = c.entity;
-            // if (Math.sign(p.spd.x) == Math.sign(move.x) && Math.abs(p.spd.x) > 7) {}
-            // else {
-                p.spd.x += move.x * .1
-            // }
-            // if (Math.sign(p.spd.y) == Math.sign(move.y) && Math.abs(p.spd.y) > 7) {}
-            // else {
-                p.spd.y += move.y * .1
-            // }
-            // p.move(move.x * 7, move.y * 7);
-            if (kjump && p.placeMeeting(p.x, p.y + 1)) {
-                p.spd.y = -10;
+            c.entity.inputs = {
+                move: data.move as Point,
+                keys: {
+                    kright: data.kright,
+                    kleft: data.kleft,
+                    kup: data.kup,
+                    kdown: data.kdown,
+
+                    kjump: data.kjump,
+                    kjump_rel: data.kjump_rel,
+                    kjump_press: data.kjump_press
+                }
             }
+            c.entity.send();
             break;
     }
 }

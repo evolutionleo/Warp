@@ -6,7 +6,7 @@
         "outDir": "out/",
         "rootDir": "src/",
         "module": "esnext",
-        "target": "es2021",
+        "target": "es2020",
         "paths": {
             "#schemas/*": ["internal/schemas/*"],
             "#entity/*": ["internal/entities/entity_types/*"],

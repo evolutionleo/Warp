@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Networking",
-    "path": "folders/Scripts/Networking.yy",
+    "name": "util",
+    "path": "folders/GMOF/Scripts/util.yy",
   },
   "resourceVersion": "1.0",
   "name": "buffer_visualize",

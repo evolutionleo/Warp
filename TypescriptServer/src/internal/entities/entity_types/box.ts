@@ -8,6 +8,9 @@ export default class Box extends PhysicsEntity {
     type = Box.type;
     object_name = Box.object_name;
 
+    // isSolid = true;
+    // isFloor = true;
+
     base_size = {
         x: 32,
         y: 32

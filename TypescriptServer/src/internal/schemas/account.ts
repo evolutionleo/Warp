@@ -1,9 +1,10 @@
 // this section contains a schema for saving players' account info
-// import { Schema, model } from 'mongoose';
-// const { Model, Document } = require('mongoose');
+import trace from '#util/logging';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
+// import { Schema, model } from 'mongoose';
+// const { Model, Document } = require('mongoose');
 // import * as mongoose from 'mongoose';
 const mongoose = require('mongoose');
 
@@ -49,9 +50,9 @@ accountSchema.statics.register = function(username:string, password:string):Prom
     /* for example:
 
         Account.register('steve', '1234').then(function() {
-            console.log('success!');
+            trace('success!');
         }).catch(function() {
-            console.log('fail!');
+            trace('fail!');
         })
     
     */
@@ -65,7 +66,7 @@ accountSchema.statics.register = function(username:string, password:string):Prom
 
         account.save(function(err) {
             if (err) {
-                console.log('Error while registering: ' + err.message);
+                trace('Error while registering: ' + err.message);
                 reject('failed to register');
             }
             else {
@@ -82,7 +83,7 @@ accountSchema.statics.login = function(username:string, password:string):Promise
                 reject('account not found');
             }
             else if (err) {
-                console.log(err);
+                trace(err);
                 reject('error while logging in');
             }
             else {

@@ -1,3 +1,4 @@
+import trace from '#util/logging';
 import GameMap from '#concepts/map';
 import Client from '#concepts/client';
 import Room, { SerializedRoom }  from '#concepts/room';
@@ -37,12 +38,12 @@ export default class Lobby extends EventEmitter {
 
     addPlayer(player:Client):void|-1 {
         if (this.full) {
-            console.log('warning: can\'t add a player - the lobby is full!');
+            trace('warning: can\'t add a player - the lobby is full!');
             player.onRejectLobby(this, 'lobby is full!');
             return -1;
         }
         else if (this.players.indexOf(player) !== -1) {
-            console.log('warning: can\'t add a player who\'s already in the lobby');
+            trace('warning: can\'t add a player who\'s already in the lobby');
             player.onRejectLobby(this, 'already in the lobby');
             return -1;
         }
@@ -50,7 +51,7 @@ export default class Lobby extends EventEmitter {
             player.lobby.kickPlayer(player, 'changing lobbies', false);
         }
         else if (global.config.necessary_login && player.profile === null) {
-            console.log('warning: can\'t add a player who\'s not logged in');
+            trace('warning: can\'t add a player who\'s not logged in');
             player.onRejectLobby(this, 'login to join a lobby!');
             return -1;
         }
@@ -76,7 +77,7 @@ export default class Lobby extends EventEmitter {
             player.onPlay();
         }
         else {
-            console.log('something went wrong - trying to add into play a player not from this lobby');
+            trace('something went wrong - trying to add into play a player not from this lobby');
         }
     }
 

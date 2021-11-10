@@ -1,3 +1,4 @@
+import trace from '#util/logging';
 import Point from "#types/point";
 import BBox from '#types/bbox';
 import { EventEmitter } from "events";
@@ -45,6 +46,7 @@ class Entity extends EventEmitter {
     prev_serialized:string; // json of serialized entity
 
     base_size:Point = { x: 64, y: 64 };
+    scale:Point = { x: 1, y: 1 };
 
     get size():Point { // for collisions
         return {
@@ -53,14 +55,14 @@ class Entity extends EventEmitter {
         }
     }
 
-    scale:Point;
-
     static type = 'Unknown';
     static object_name = 'oUnknownEntity';
     type = Entity.type; // non-static variable
     object_name = Entity.object_name;
 
     isSolid: boolean = false;
+    isFloor: boolean = false;
+    sendEveryTick: boolean = false; // either send every frame or only on change
 
     room: Room;
 
@@ -75,14 +77,13 @@ class Entity extends EventEmitter {
         this.room = room;
         this.create(x, y);
         if (this.isSolid) {
-            console.log('inserting a ' + this.type);
+            trace('inserting a ' + this.type);
             this.tree.insert(this);
         }
     }
 
     create(x:number, y:number) {
         this.pos = { x, y };
-        this.scale = { x: 1, y: 1 };
         this.spd = { x: 0, y: 0};
     }
 
@@ -92,9 +93,36 @@ class Entity extends EventEmitter {
 
         // if something changed - send again
         const serialized = JSON.stringify(this.serialize());
-        if (serialized != this.prev_serialized) {
+        if (serialized != this.prev_serialized || this.sendEveryTick) {
             this.prev_serialized = serialized;
             this.send();
+        }
+    }
+
+
+    private matchesType(type: EntityType|string):boolean {
+        if (typeof type === 'string') {
+            if (this.type === type) {
+                return true;
+            }
+            else if (this.object_name === type) {
+                return true;
+            }
+            else if (type === 'floor') {
+                return this.isFloor;
+            }
+            else if (type === 'solid') {
+                return this.isSolid;
+            }
+        }
+        else if (typeof type === 'object') {
+            if (this instanceof (type as any)) {
+                return true;
+            }
+        }
+        else {
+            console.error('Warning: Unknown type of `type`: ' + typeof type);
+            return true;
         }
     }
 
@@ -107,15 +135,21 @@ class Entity extends EventEmitter {
         else {
             let candidates = this.tree.search(bbox);
             for(let entity of candidates) {
-                if (entity.type === type) {
-                    return true;
-                }
-                else if (entity instanceof (type as any)) {
+                if (entity.matchesType(type)) {
                     return true;
                 }
             }
             return false;
         }
+    }
+
+    placeMeetingAll(x:number = this.x, y:number = this.y, type?:EntityType|string):Entity[] {
+        let bbox = this.getBBox(x, y);
+
+        let candidates = this.tree.search(bbox);
+        return candidates.filter((entity) => {
+            
+        });
     }
 
     // entity death
@@ -163,13 +197,13 @@ class Entity extends EventEmitter {
         return {
             minX: x - w/2,
             minY: y - h/2,
-            maxX: x + w/2,
+            maxX: x + w/2 - 1, // because rbush is being weird about pixel-perfect stuff
             maxY: y + h/2,
 
             get left() { return this.minX },
             get right() { return this.maxX },
             get top() { return this.minY },
-            get bottom() { return this.maxY}
+            get bottom() { return this.maxY }
         }
     }
 
