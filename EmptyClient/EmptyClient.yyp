@@ -19,7 +19,7 @@
     {"id":{"name":"sBox","path":"sprites/sBox/sBox.yy",},"order":0,},
     {"id":{"name":"oWall","path":"objects/oWall/oWall.yy",},"order":1,},
     {"id":{"name":"rLogin","path":"rooms/rLogin/rLogin.yy",},"order":1,},
-    {"id":{"name":"NetworkInitializers","path":"scripts/NetworkInitializers/NetworkInitializers.yy",},"order":4,},
+    {"id":{"name":"NetworkInitializers","path":"scripts/NetworkInitializers/NetworkInitializers.yy",},"order":3,},
     {"id":{"name":"btnLogin","path":"objects/btnLogin/btnLogin.yy",},"order":6,},
     {"id":{"name":"WinDev","path":"extensions/WinDev/WinDev.yy",},"order":0,},
     {"id":{"name":"network_write","path":"scripts/network_write/network_write.yy",},"order":3,},

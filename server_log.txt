@@ -38864,3 +38864,997 @@
 [10.11.2021, 22:33:56]  Socket violently disconnected.
 [10.11.2021, 22:33:56]  Error! Error: read ECONNRESET
 [10.11.2021, 22:33:56]  Socket closed.
+[11.11.2021, 07:59:14]  Config loaded! environment: dev
+[11.11.2021, 07:59:15]  loading initializer: 01_globals.js
+[11.11.2021, 07:59:15]  loading initializer: 02_entities.js
+[11.11.2021, 07:59:15]  loading initializer: 03_maps.js
+[11.11.2021, 07:59:15]  loading initializer: 04_lobbies.js
+[11.11.2021, 07:59:15]  loading initializer: 05_constants.js
+[11.11.2021, 07:59:15]  loading initializer: 06_mongodb.js
+[11.11.2021, 07:59:15]  loading initializer: 07_console.js
+[11.11.2021, 07:59:15]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 07:59:15]  starting the eval console...
+[11.11.2021, 07:59:15]  > type right into the console to execute JS code in real time <
+[11.11.2021, 07:59:15]  Server running on port 1338!
+[11.11.2021, 07:59:15]  loaded initializers!
+[11.11.2021, 10:50:18]  Config loaded! environment: dev
+[11.11.2021, 10:50:19]  loading initializer: 01_globals.js
+[11.11.2021, 10:50:19]  loading initializer: 02_entities.js
+[11.11.2021, 10:50:19]  loading initializer: 03_maps.js
+[11.11.2021, 10:50:20]  loading initializer: 04_lobbies.js
+[11.11.2021, 10:50:20]  loading initializer: 05_constants.js
+[11.11.2021, 10:50:20]  loading initializer: 06_mongodb.js
+[11.11.2021, 10:50:20]  loading initializer: 07_console.js
+[11.11.2021, 10:50:20]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 10:50:20]  starting the eval console...
+[11.11.2021, 10:50:20]  > type right into the console to execute JS code in real time <
+[11.11.2021, 10:50:20]  loaded initializers!
+[11.11.2021, 10:50:20]  Server running on port 1338!
+[11.11.2021, 10:51:49]  Socket connected!
+[11.11.2021, 10:51:49]  Socket connected!
+[11.11.2021, 10:51:54]  sent the Play command
+[11.11.2021, 10:52:42]  sent the Play command
+[11.11.2021, 10:58:22]  Socket violently disconnected.
+[11.11.2021, 10:58:22]  Error! Error: read ECONNRESET
+[11.11.2021, 10:58:22]  Socket closed.
+[11.11.2021, 11:07:35]  Socket violently disconnected.
+[11.11.2021, 11:07:35]  Error! Error: read ECONNRESET
+[11.11.2021, 11:07:35]  Socket closed.
+[11.11.2021, 14:34:03]  Config loaded! environment: dev
+[11.11.2021, 14:34:04]  loading initializer: 01_globals.js
+[11.11.2021, 14:34:04]  loading initializer: 02_entities.js
+[11.11.2021, 14:34:04]  loading initializer: 03_maps.js
+[11.11.2021, 14:34:04]  loading initializer: 04_lobbies.js
+[11.11.2021, 14:34:05]  loading initializer: 05_constants.js
+[11.11.2021, 14:34:05]  loading initializer: 06_mongodb.js
+[11.11.2021, 14:34:05]  loading initializer: 07_console.js
+[11.11.2021, 14:34:05]  starting the eval console...
+[11.11.2021, 14:34:05]  > type right into the console to execute JS code in real time <
+[11.11.2021, 14:34:05]  loaded initializers!
+[11.11.2021, 14:34:05]  Server running on port 1338!
+[11.11.2021, 14:34:05]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 14:34:07]  Socket connected!
+[11.11.2021, 14:34:08]  Socket connected!
+[11.11.2021, 14:34:11]  sent the Play command
+[11.11.2021, 14:34:16]  sent the Play command
+[11.11.2021, 14:34:23]  sent the Play command
+[11.11.2021, 14:35:21]  Config loaded! environment: dev
+[11.11.2021, 14:35:23]  loading initializer: 01_globals.js
+[11.11.2021, 14:35:23]  loading initializer: 02_entities.js
+[11.11.2021, 14:35:23]  loading initializer: 03_maps.js
+[11.11.2021, 14:35:23]  loading initializer: 04_lobbies.js
+[11.11.2021, 14:35:23]  loading initializer: 05_constants.js
+[11.11.2021, 14:35:23]  loading initializer: 06_mongodb.js
+[11.11.2021, 14:35:23]  loading initializer: 07_console.js
+[11.11.2021, 14:35:23]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 14:35:23]  starting the eval console...
+[11.11.2021, 14:35:23]  > type right into the console to execute JS code in real time <
+[11.11.2021, 14:35:23]  loaded initializers!
+[11.11.2021, 14:35:23]  Server running on port 1338!
+[11.11.2021, 14:35:26]  Socket connected!
+[11.11.2021, 14:35:28]  Socket connected!
+[11.11.2021, 14:35:31]  sent the Play command
+[11.11.2021, 14:39:35]  Config loaded! environment: dev
+[11.11.2021, 14:39:36]  loading initializer: 01_globals.js
+[11.11.2021, 14:39:36]  loading initializer: 02_entities.js
+[11.11.2021, 14:39:36]  loading initializer: 03_maps.js
+[11.11.2021, 14:39:37]  loading initializer: 04_lobbies.js
+[11.11.2021, 14:39:37]  loading initializer: 05_constants.js
+[11.11.2021, 14:39:37]  loading initializer: 06_mongodb.js
+[11.11.2021, 14:39:37]  loading initializer: 07_console.js
+[11.11.2021, 14:39:37]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 14:39:37]  starting the eval console...
+[11.11.2021, 14:39:37]  > type right into the console to execute JS code in real time <
+[11.11.2021, 14:39:37]  loaded initializers!
+[11.11.2021, 14:39:37]  Server running on port 1338!
+[11.11.2021, 14:39:59]  Socket connected!
+[11.11.2021, 14:40:00]  sent the Play command
+[11.11.2021, 14:40:49]  Socket violently disconnected.
+[11.11.2021, 14:40:49]  Error! Error: read ECONNRESET
+[11.11.2021, 14:40:49]  Socket closed.
+[11.11.2021, 14:40:56]  Socket connected!
+[11.11.2021, 14:40:57]  Socket connected!
+[11.11.2021, 14:42:21]  sent the Play command
+[11.11.2021, 14:42:25]  Socket violently disconnected.
+[11.11.2021, 14:42:25]  Error! Error: read ECONNRESET
+[11.11.2021, 14:42:25]  Socket closed.
+[11.11.2021, 14:42:25]  Socket violently disconnected.
+[11.11.2021, 14:42:25]  Socket closed.
+[11.11.2021, 14:42:25]  Error! Error: read ECONNRESET
+[11.11.2021, 14:42:32]  Socket connected!
+[11.11.2021, 14:42:32]  Socket connected!
+[11.11.2021, 14:42:34]  sent the Play command
+[11.11.2021, 14:42:55]  Socket violently disconnected.
+[11.11.2021, 14:42:55]  Error! Error: read ECONNRESET
+[11.11.2021, 14:42:55]  Socket closed.
+[11.11.2021, 14:42:55]  Socket violently disconnected.
+[11.11.2021, 14:42:55]  Error! Error: read ECONNRESET
+[11.11.2021, 14:42:55]  Socket closed.
+[11.11.2021, 14:43:02]  Socket connected!
+[11.11.2021, 14:43:02]  Socket connected!
+[11.11.2021, 14:43:08]  sent the Play command
+[11.11.2021, 14:43:10]  sent the Play command
+[11.11.2021, 14:49:22]  sent the Play command
+[11.11.2021, 16:15:22]  Config loaded! environment: dev
+[11.11.2021, 16:15:23]  loading initializer: 01_globals.js
+[11.11.2021, 16:15:23]  loading initializer: 02_entities.js
+[11.11.2021, 16:15:23]  loading initializer: 03_maps.js
+[11.11.2021, 16:15:23]  loading initializer: 04_lobbies.js
+[11.11.2021, 16:15:23]  loading initializer: 05_constants.js
+[11.11.2021, 16:15:23]  loading initializer: 06_mongodb.js
+[11.11.2021, 16:15:23]  loading initializer: 07_console.js
+[11.11.2021, 16:15:23]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 16:15:23]  starting the eval console...
+[11.11.2021, 16:15:23]  Server running on port 1338!
+[11.11.2021, 16:15:23]  > type right into the console to execute JS code in real time <
+[11.11.2021, 16:15:23]  loaded initializers!
+[11.11.2021, 16:15:36]  Socket connected!
+[11.11.2021, 16:19:52]  Socket connected!
+[11.11.2021, 17:27:10]  Config loaded! environment: dev
+[11.11.2021, 17:27:12]  loading initializer: 01_globals.js
+[11.11.2021, 17:27:12]  loading initializer: 02_entities.js
+[11.11.2021, 17:27:12]  loading initializer: 03_maps.js
+[11.11.2021, 17:27:12]  loading initializer: 04_lobbies.js
+[11.11.2021, 17:27:12]  loading initializer: 05_constants.js
+[11.11.2021, 17:27:12]  loading initializer: 06_mongodb.js
+[11.11.2021, 17:27:12]  loading initializer: 07_console.js
+[11.11.2021, 17:27:12]  starting the eval console...
+[11.11.2021, 17:27:12]  > type right into the console to execute JS code in real time <
+[11.11.2021, 17:27:12]  loaded initializers!
+[11.11.2021, 17:27:12]  Server running on port 1338!
+[11.11.2021, 17:27:12]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 18:46:41]  Socket connected!
+[11.11.2021, 18:46:42]  Socket connected!
+[11.11.2021, 18:54:55]  Config loaded! environment: dev
+[11.11.2021, 18:54:57]  loading initializer: 01_globals.js
+[11.11.2021, 18:54:57]  loading initializer: 02_entities.js
+[11.11.2021, 18:54:57]  loading initializer: 03_maps.js
+[11.11.2021, 18:54:57]  loading initializer: 04_lobbies.js
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  loading initializer: 05_constants.js
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  Unknown
+[11.11.2021, 18:54:57]  loading initializer: 06_mongodb.js
+[11.11.2021, 18:54:58]  loading initializer: 07_console.js
+[11.11.2021, 18:54:58]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 18:54:58]  starting the eval console...
+[11.11.2021, 18:54:58]  > type right into the console to execute JS code in real time <
+[11.11.2021, 18:54:58]  Server running on port 1338!
+[11.11.2021, 18:54:58]  loaded initializers!
+[11.11.2021, 18:54:59]  Socket connected!
+[11.11.2021, 18:55:01]  Unknown
+[11.11.2021, 18:55:01]  inserting a Unknown
+[11.11.2021, 18:56:45]  Config loaded! environment: dev
+[11.11.2021, 18:56:46]  loading initializer: 01_globals.js
+[11.11.2021, 18:56:46]  loading initializer: 02_entities.js
+[11.11.2021, 18:56:46]  loading initializer: 03_maps.js
+[11.11.2021, 18:56:46]  loading initializer: 04_lobbies.js
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  Unknown
+[11.11.2021, 18:56:46]  loading initializer: 05_constants.js
+[11.11.2021, 18:56:46]  loading initializer: 06_mongodb.js
+[11.11.2021, 18:56:46]  loading initializer: 07_console.js
+[11.11.2021, 18:56:46]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 18:56:46]  starting the eval console...
+[11.11.2021, 18:56:46]  > type right into the console to execute JS code in real time <
+[11.11.2021, 18:56:46]  loaded initializers!
+[11.11.2021, 18:56:46]  Server running on port 1338!
+[11.11.2021, 19:03:15]  Config loaded! environment: dev
+[11.11.2021, 19:03:16]  loading initializer: 01_globals.js
+[11.11.2021, 19:03:16]  loading initializer: 02_entities.js
+[11.11.2021, 19:03:17]  loading initializer: 03_maps.js
+[11.11.2021, 19:03:17]  loading initializer: 04_lobbies.js
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  loading initializer: 05_constants.js
+[11.11.2021, 19:03:17]  inserting a Wall
+[11.11.2021, 19:03:17]  loading initializer: 06_mongodb.js
+[11.11.2021, 19:03:17]  loading initializer: 07_console.js
+[11.11.2021, 19:03:17]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 19:03:17]  starting the eval console...
+[11.11.2021, 19:03:17]  > type right into the console to execute JS code in real time <
+[11.11.2021, 19:03:17]  loaded initializers!
+[11.11.2021, 19:03:17]  Server running on port 1338!
+[11.11.2021, 19:08:46]  loading initializer: 01_globals.js
+[11.11.2021, 19:08:45]  Config loaded! environment: dev
+[11.11.2021, 19:08:46]  loading initializer: 02_entities.js
+[11.11.2021, 19:08:46]  loading initializer: 03_maps.js
+[11.11.2021, 19:08:46]  loading initializer: 04_lobbies.js
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  loading initializer: 05_constants.js
+[11.11.2021, 19:08:46]  inserting a Wall
+[11.11.2021, 19:08:46]  loading initializer: 06_mongodb.js
+[11.11.2021, 19:08:46]  loading initializer: 07_console.js
+[11.11.2021, 19:08:46]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 19:08:46]  starting the eval console...
+[11.11.2021, 19:08:46]  > type right into the console to execute JS code in real time <
+[11.11.2021, 19:08:46]  loaded initializers!
+[11.11.2021, 19:08:46]  Server running on port 1338!
+[11.11.2021, 20:00:51]  Config loaded! environment: dev
+[11.11.2021, 20:00:52]  loading initializer: 01_globals.js
+[11.11.2021, 20:00:52]  loading initializer: 02_entities.js
+[11.11.2021, 20:00:52]  loading initializer: 03_maps.js
+[11.11.2021, 20:00:52]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  loading initializer: 05_constants.js
+[11.11.2021, 20:00:52]  inserting a Wall
+[11.11.2021, 20:00:52]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:00:52]  loading initializer: 07_console.js
+[11.11.2021, 20:00:52]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:00:52]  starting the eval console...
+[11.11.2021, 20:00:52]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:00:52]  loaded initializers!
+[11.11.2021, 20:00:52]  Server running on port 1338!
+[11.11.2021, 20:01:02]  Socket connected!
+[11.11.2021, 20:01:02]  Socket connected!
+[11.11.2021, 20:01:06]  inserting a Player
+[11.11.2021, 20:05:49]  Config loaded! environment: dev
+[11.11.2021, 20:05:50]  loading initializer: 01_globals.js
+[11.11.2021, 20:05:50]  loading initializer: 02_entities.js
+[11.11.2021, 20:05:50]  loading initializer: 03_maps.js
+[11.11.2021, 20:05:50]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  loading initializer: 05_constants.js
+[11.11.2021, 20:05:50]  inserting a Wall
+[11.11.2021, 20:05:50]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:05:50]  loading initializer: 07_console.js
+[11.11.2021, 20:05:50]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:05:51]  starting the eval console...
+[11.11.2021, 20:05:51]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:05:51]  loaded initializers!
+[11.11.2021, 20:05:51]  Server running on port 1338!
+[11.11.2021, 20:07:17]  Config loaded! environment: dev
+[11.11.2021, 20:07:18]  loading initializer: 01_globals.js
+[11.11.2021, 20:07:18]  loading initializer: 02_entities.js
+[11.11.2021, 20:07:18]  loading initializer: 03_maps.js
+[11.11.2021, 20:07:18]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  loading initializer: 05_constants.js
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  inserting a Wall
+[11.11.2021, 20:07:18]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:07:18]  loading initializer: 07_console.js
+[11.11.2021, 20:07:18]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:07:18]  starting the eval console...
+[11.11.2021, 20:07:18]  Server running on port 1338!
+[11.11.2021, 20:07:18]  loaded initializers!
+[11.11.2021, 20:07:18]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:07:29]  Socket connected!
+[11.11.2021, 20:07:30]  inserting a Player
+[11.11.2021, 20:07:30]  player
+[11.11.2021, 20:07:42]  Socket connected!
+[11.11.2021, 20:07:43]  player
+[11.11.2021, 20:07:43]  inserting a Player
+[11.11.2021, 20:07:47]  player
+[11.11.2021, 20:07:47]  inserting a Player
+[11.11.2021, 20:09:45]  Config loaded! environment: dev
+[11.11.2021, 20:09:46]  loading initializer: 01_globals.js
+[11.11.2021, 20:09:46]  loading initializer: 02_entities.js
+[11.11.2021, 20:09:46]  loading initializer: 03_maps.js
+[11.11.2021, 20:09:46]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Box
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  loading initializer: 05_constants.js
+[11.11.2021, 20:09:46]  inserting a Wall
+[11.11.2021, 20:09:46]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:09:46]  loading initializer: 07_console.js
+[11.11.2021, 20:09:46]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:09:46]  starting the eval console...
+[11.11.2021, 20:09:46]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:09:46]  Server running on port 1338!
+[11.11.2021, 20:09:46]  loaded initializers!
+[11.11.2021, 20:10:01]  Socket connected!
+[11.11.2021, 20:10:01]  Socket connected!
+[11.11.2021, 20:10:04]  player
+[11.11.2021, 20:10:04]  inserting a Player
+[11.11.2021, 20:12:51]  player
+[11.11.2021, 20:12:51]  inserting a Player
+[11.11.2021, 20:27:07]  Config loaded! environment: dev
+[11.11.2021, 20:27:08]  loading initializer: 01_globals.js
+[11.11.2021, 20:27:08]  loading initializer: 02_entities.js
+[11.11.2021, 20:27:08]  loading initializer: 03_maps.js
+[11.11.2021, 20:27:08]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:27:08]  loading initializer: 05_constants.js
+[11.11.2021, 20:27:08]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:27:08]  loading initializer: 07_console.js
+[11.11.2021, 20:27:08]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:27:08]  starting the eval console...
+[11.11.2021, 20:27:08]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:27:08]  loaded initializers!
+[11.11.2021, 20:27:08]  Server running on port 1338!
+[11.11.2021, 20:27:43]  Config loaded! environment: dev
+[11.11.2021, 20:27:44]  loading initializer: 01_globals.js
+[11.11.2021, 20:27:44]  loading initializer: 02_entities.js
+[11.11.2021, 20:27:44]  loading initializer: 03_maps.js
+[11.11.2021, 20:27:44]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:27:44]  loading initializer: 05_constants.js
+[11.11.2021, 20:27:44]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:27:44]  loading initializer: 07_console.js
+[11.11.2021, 20:27:44]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:27:44]  starting the eval console...
+[11.11.2021, 20:27:44]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:27:44]  Server running on port 1338!
+[11.11.2021, 20:27:44]  loaded initializers!
+[11.11.2021, 20:27:52]  Socket connected!
+[11.11.2021, 20:27:56]  Socket connected!
+[11.11.2021, 20:51:52]  Config loaded! environment: dev
+[11.11.2021, 20:51:53]  loading initializer: 01_globals.js
+[11.11.2021, 20:51:53]  loading initializer: 02_entities.js
+[11.11.2021, 20:51:53]  loading initializer: 03_maps.js
+[11.11.2021, 20:51:53]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Box
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  loading initializer: 05_constants.js
+[11.11.2021, 20:51:53]  inserting a Wall
+[11.11.2021, 20:51:53]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:51:53]  loading initializer: 07_console.js
+[11.11.2021, 20:51:53]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:51:53]  starting the eval console...
+[11.11.2021, 20:51:53]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:51:53]  loaded initializers!
+[11.11.2021, 20:51:53]  Server running on port 1338!
+[11.11.2021, 20:52:14]  loading initializer: 01_globals.js
+[11.11.2021, 20:52:13]  Config loaded! environment: dev
+[11.11.2021, 20:52:15]  loading initializer: 02_entities.js
+[11.11.2021, 20:52:15]  loading initializer: 03_maps.js
+[11.11.2021, 20:52:15]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Box
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  loading initializer: 05_constants.js
+[11.11.2021, 20:52:15]  inserting a Wall
+[11.11.2021, 20:52:15]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:52:15]  loading initializer: 07_console.js
+[11.11.2021, 20:52:15]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:52:15]  starting the eval console...
+[11.11.2021, 20:52:15]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:52:15]  loaded initializers!
+[11.11.2021, 20:52:15]  Server running on port 1338!
+[11.11.2021, 20:52:29]  loading initializer: 01_globals.js
+[11.11.2021, 20:52:27]  Config loaded! environment: dev
+[11.11.2021, 20:52:29]  loading initializer: 02_entities.js
+[11.11.2021, 20:52:29]  loading initializer: 03_maps.js
+[11.11.2021, 20:52:29]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Box
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  loading initializer: 05_constants.js
+[11.11.2021, 20:52:29]  inserting a Wall
+[11.11.2021, 20:52:29]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:52:29]  loading initializer: 07_console.js
+[11.11.2021, 20:52:29]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:52:29]  starting the eval console...
+[11.11.2021, 20:52:29]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:52:29]  loaded initializers!
+[11.11.2021, 20:52:29]  Server running on port 1338!
+[11.11.2021, 20:52:33]  Socket connected!
+[11.11.2021, 20:52:34]  inserting a Player
+[11.11.2021, 20:52:58]  Config loaded! environment: dev
+[11.11.2021, 20:53:00]  loading initializer: 01_globals.js
+[11.11.2021, 20:53:00]  loading initializer: 02_entities.js
+[11.11.2021, 20:53:00]  loading initializer: 03_maps.js
+[11.11.2021, 20:53:00]  loading initializer: 04_lobbies.js
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Box
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  loading initializer: 05_constants.js
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  inserting a Wall
+[11.11.2021, 20:53:00]  loading initializer: 06_mongodb.js
+[11.11.2021, 20:53:00]  loading initializer: 07_console.js
+[11.11.2021, 20:53:00]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 20:53:00]  starting the eval console...
+[11.11.2021, 20:53:00]  > type right into the console to execute JS code in real time <
+[11.11.2021, 20:53:00]  loaded initializers!
+[11.11.2021, 20:53:00]  Server running on port 1338!
+[11.11.2021, 20:53:02]  Socket connected!
+[11.11.2021, 20:53:03]  inserting a Player
+[11.11.2021, 20:53:28]  Socket violently disconnected.
+[11.11.2021, 20:53:28]  Error! Error: read ECONNRESET
+[11.11.2021, 20:53:28]  Socket closed.
+[11.11.2021, 20:53:35]  Socket connected!
+[11.11.2021, 20:53:35]  Socket connected!
+[11.11.2021, 20:53:38]  inserting a Player
+[11.11.2021, 20:53:43]  Error! Error: read ECONNRESET
+[11.11.2021, 20:53:43]  Socket violently disconnected.
+[11.11.2021, 20:53:43]  Socket closed.
+[11.11.2021, 20:53:46]  Socket violently disconnected.
+[11.11.2021, 20:53:46]  Error! Error: read ECONNRESET
+[11.11.2021, 20:53:46]  Socket closed.
+[11.11.2021, 21:02:48]  Config loaded! environment: dev
+[11.11.2021, 21:02:49]  loading initializer: 01_globals.js
+[11.11.2021, 21:02:49]  loading initializer: 02_entities.js
+[11.11.2021, 21:02:49]  loading initializer: 03_maps.js
+[11.11.2021, 21:02:49]  loading initializer: 04_lobbies.js
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Box
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  loading initializer: 05_constants.js
+[11.11.2021, 21:02:49]  inserting a Wall
+[11.11.2021, 21:02:49]  loading initializer: 06_mongodb.js
+[11.11.2021, 21:02:49]  loading initializer: 07_console.js
+[11.11.2021, 21:02:49]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 21:02:49]  starting the eval console...
+[11.11.2021, 21:02:49]  > type right into the console to execute JS code in real time <
+[11.11.2021, 21:02:49]  Server running on port 1338!
+[11.11.2021, 21:02:49]  loaded initializers!
+[11.11.2021, 21:02:49]  Socket connected!
+[11.11.2021, 21:02:50]  Socket connected!
+[11.11.2021, 21:02:53]  inserting a Player
+[11.11.2021, 21:03:25]  Socket violently disconnected.
+[11.11.2021, 21:03:25]  Error! Error: read ECONNRESET
+[11.11.2021, 21:03:25]  Socket closed.
+[11.11.2021, 21:03:25]  Error! Error: read ECONNRESET
+[11.11.2021, 21:03:25]  Socket violently disconnected.
+[11.11.2021, 21:03:25]  Socket closed.
+[11.11.2021, 21:03:32]  Socket connected!
+[11.11.2021, 21:03:32]  Socket connected!
+[11.11.2021, 21:03:35]  inserting a Player
+[11.11.2021, 21:05:19]  inserting a Player
+[11.11.2021, 21:05:28]  inserting a Player
+[11.11.2021, 21:05:56]  Config loaded! environment: dev
+[11.11.2021, 21:05:57]  loading initializer: 01_globals.js
+[11.11.2021, 21:05:57]  loading initializer: 02_entities.js
+[11.11.2021, 21:05:57]  loading initializer: 03_maps.js
+[11.11.2021, 21:05:57]  loading initializer: 04_lobbies.js
+[11.11.2021, 21:05:57]  loading initializer: 05_constants.js
+[11.11.2021, 21:05:57]  loading initializer: 06_mongodb.js
+[11.11.2021, 21:05:57]  loading initializer: 07_console.js
+[11.11.2021, 21:05:57]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 21:05:57]  starting the eval console...
+[11.11.2021, 21:05:57]  > type right into the console to execute JS code in real time <
+[11.11.2021, 21:05:57]  Server running on port 1338!
+[11.11.2021, 21:05:57]  loaded initializers!
+[11.11.2021, 21:06:00]  Socket connected!
+[11.11.2021, 21:06:06]  Socket connected!
+[11.11.2021, 21:17:46]  loading initializer: 01_globals.js
+[11.11.2021, 21:17:45]  Config loaded! environment: dev
+[11.11.2021, 21:17:46]  loading initializer: 02_entities.js
+[11.11.2021, 21:17:46]  loading initializer: 03_maps.js
+[11.11.2021, 21:17:46]  loading initializer: 04_lobbies.js
+[11.11.2021, 21:17:46]  loading initializer: 05_constants.js
+[11.11.2021, 21:17:46]  loading initializer: 06_mongodb.js
+[11.11.2021, 21:17:46]  loading initializer: 07_console.js
+[11.11.2021, 21:17:46]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 21:17:47]  starting the eval console...
+[11.11.2021, 21:17:47]  > type right into the console to execute JS code in real time <
+[11.11.2021, 21:17:47]  Server running on port 1338!
+[11.11.2021, 21:17:47]  loaded initializers!
+[11.11.2021, 21:17:51]  Socket connected!
+[11.11.2021, 21:23:33]  Error! Error: write ECONNRESET
+[11.11.2021, 21:23:33]  Socket closed.
+[11.11.2021, 21:23:33]  Socket violently disconnected.
+[11.11.2021, 21:23:36]  Config loaded! environment: dev
+[11.11.2021, 21:23:37]  loading initializer: 01_globals.js
+[11.11.2021, 21:23:38]  loading initializer: 02_entities.js
+[11.11.2021, 21:23:38]  loading initializer: 03_maps.js
+[11.11.2021, 21:23:38]  loading initializer: 04_lobbies.js
+[11.11.2021, 21:23:38]  loading initializer: 05_constants.js
+[11.11.2021, 21:23:38]  loading initializer: 06_mongodb.js
+[11.11.2021, 21:23:38]  loading initializer: 07_console.js
+[11.11.2021, 21:23:38]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 21:23:38]  starting the eval console...
+[11.11.2021, 21:23:38]  > type right into the console to execute JS code in real time <
+[11.11.2021, 21:23:38]  Server running on port 1338!
+[11.11.2021, 21:23:38]  loaded initializers!
+[11.11.2021, 21:23:39]  Socket connected!
+[11.11.2021, 21:23:40]  Socket connected!
+[11.11.2021, 21:24:40]  Socket connected!
+[11.11.2021, 21:24:45]  Socket violently disconnected.
+[11.11.2021, 21:24:45]  Error! Error: write ECONNRESET
+[11.11.2021, 21:24:45]  Socket closed.
+[11.11.2021, 21:24:45]  Socket violently disconnected.
+[11.11.2021, 21:24:45]  Error! Error: write ECONNRESET
+[11.11.2021, 21:24:45]  Socket closed.
+[11.11.2021, 21:26:10]  Socket connected!
+[11.11.2021, 21:26:10]  Socket connected!
+[11.11.2021, 21:26:10]  Socket violently disconnected.
+[11.11.2021, 21:26:10]  Error! Error: read ECONNRESET
+[11.11.2021, 21:26:10]  Socket closed.
+[11.11.2021, 21:26:53]  Socket violently disconnected.
+[11.11.2021, 21:26:53]  Error! Error: write ECONNRESET
+[11.11.2021, 21:26:53]  Socket closed.
+[11.11.2021, 21:26:53]  Socket violently disconnected.
+[11.11.2021, 21:26:53]  Socket closed.
+[11.11.2021, 21:26:53]  Error! Error: write ECONNRESET
+[11.11.2021, 21:27:00]  Socket connected!
+[11.11.2021, 21:27:00]  Socket connected!
+[11.11.2021, 21:27:23]  Socket violently disconnected.
+[11.11.2021, 21:27:23]  Error! Error: write ECONNRESET
+[11.11.2021, 21:27:23]  Socket violently disconnected.
+[11.11.2021, 21:27:23]  Socket closed.
+[11.11.2021, 21:27:23]  Error! Error: read ECONNRESET
+[11.11.2021, 21:27:23]  Socket closed.
+[11.11.2021, 21:27:29]  Socket connected!
+[11.11.2021, 21:27:29]  Socket connected!
+[11.11.2021, 21:27:49]  loading initializer: 01_globals.js
+[11.11.2021, 21:27:48]  Config loaded! environment: dev
+[11.11.2021, 21:27:49]  loading initializer: 02_entities.js
+[11.11.2021, 21:27:49]  loading initializer: 03_maps.js
+[11.11.2021, 21:27:49]  loading initializer: 04_lobbies.js
+[11.11.2021, 21:27:49]  loading initializer: 05_constants.js
+[11.11.2021, 21:27:49]  loading initializer: 06_mongodb.js
+[11.11.2021, 21:27:49]  loading initializer: 07_console.js
+[11.11.2021, 21:27:49]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 21:27:49]  starting the eval console...
+[11.11.2021, 21:27:49]  > type right into the console to execute JS code in real time <
+[11.11.2021, 21:27:49]  loaded initializers!
+[11.11.2021, 21:27:49]  Server running on port 1338!
+[11.11.2021, 21:27:51]  Socket connected!
+[11.11.2021, 21:31:37]  Socket violently disconnected.
+[11.11.2021, 21:31:37]  Error! Error: read ECONNRESET
+[11.11.2021, 21:31:37]  Socket closed.
+[11.11.2021, 21:31:44]  Socket connected!
+[11.11.2021, 21:31:44]  Socket connected!
+[11.11.2021, 21:33:24]  Socket violently disconnected.
+[11.11.2021, 21:33:24]  Error! Error: read ECONNRESET
+[11.11.2021, 21:33:24]  Socket closed.
+[11.11.2021, 21:33:25]  Socket violently disconnected.
+[11.11.2021, 21:33:25]  Error! Error: write ECONNRESET
+[11.11.2021, 21:33:25]  Socket closed.
+[11.11.2021, 21:44:51]  Socket connected!
+[11.11.2021, 21:44:52]  Socket connected!
+[11.11.2021, 21:44:59]  Socket violently disconnected.
+[11.11.2021, 21:44:59]  Error! Error: write ECONNRESET
+[11.11.2021, 21:45:00]  Socket closed.
+[11.11.2021, 21:45:00]  Socket violently disconnected.
+[11.11.2021, 21:45:00]  Error! Error: read ECONNRESET
+[11.11.2021, 21:45:00]  Socket closed.
+[11.11.2021, 21:50:42]  Config loaded! environment: dev
+[11.11.2021, 21:50:43]  loading initializer: 01_globals.js
+[11.11.2021, 21:50:43]  loading initializer: 02_entities.js
+[11.11.2021, 21:50:43]  loading initializer: 03_maps.js
+[11.11.2021, 21:50:43]  loading initializer: 04_lobbies.js
+[11.11.2021, 21:50:43]  loading initializer: 05_constants.js
+[11.11.2021, 21:50:43]  loading initializer: 06_mongodb.js
+[11.11.2021, 21:50:44]  loading initializer: 07_console.js
+[11.11.2021, 21:50:44]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 21:50:44]  starting the eval console...
+[11.11.2021, 21:50:44]  > type right into the console to execute JS code in real time <
+[11.11.2021, 21:50:44]  loaded initializers!
+[11.11.2021, 21:50:44]  Server running on port 1338!
+[11.11.2021, 21:50:50]  Socket connected!
+[11.11.2021, 21:50:51]  Socket connected!
+[11.11.2021, 21:55:02]  Config loaded! environment: dev
+[11.11.2021, 21:55:03]  loading initializer: 01_globals.js
+[11.11.2021, 21:55:03]  loading initializer: 02_entities.js
+[11.11.2021, 21:55:03]  loading initializer: 03_maps.js
+[11.11.2021, 21:55:03]  loading initializer: 04_lobbies.js
+[11.11.2021, 21:55:03]  loading initializer: 05_constants.js
+[11.11.2021, 21:55:03]  loading initializer: 06_mongodb.js
+[11.11.2021, 21:55:03]  loading initializer: 07_console.js
+[11.11.2021, 21:55:03]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[11.11.2021, 21:55:03]  starting the eval console...
+[11.11.2021, 21:55:04]  > type right into the console to execute JS code in real time <
+[11.11.2021, 21:55:04]  loaded initializers!
+[11.11.2021, 21:55:04]  Server running on port 1338!
+[11.11.2021, 21:55:31]  Socket connected!
+[11.11.2021, 21:55:34]  Socket connected!
+[11.11.2021, 22:01:09]  Socket violently disconnected.
+[11.11.2021, 22:01:09]  Error! Error: read ECONNRESET
+[11.11.2021, 22:01:09]  Socket closed.
+[11.11.2021, 22:01:10]  Socket violently disconnected.
+[11.11.2021, 22:01:10]  Error! Error: read ECONNRESET
+[11.11.2021, 22:01:10]  Socket closed.

@@ -97,6 +97,7 @@ export default async function handlePacket(c:Client, data:any) {
                 }
             }
             c.entity.send();
+            // c.sendPlayerControls(data);
             break;
     }
 }

@@ -53,6 +53,8 @@
   },
   "resourceVersion": "1.0",
   "name": "rLobbiesList",
-  "tags": [],
+  "tags": [
+    "menu",
+  ],
   "resourceType": "GMRoom",
 }

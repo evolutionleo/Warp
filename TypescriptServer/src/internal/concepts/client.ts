@@ -10,8 +10,9 @@ import Lobby from '#concepts/lobby';
 import Room from '#concepts/room';
 import PlayerEntity from '#entities/entity_types/player';
 
-// this is a wrapper around sockets
-export default class Client extends SendStuff {
+
+
+export class ClientProperties {
     socket: Socket;
     
     lobby: Lobby;
@@ -23,7 +24,11 @@ export default class Client extends SendStuff {
     halfpack: Buffer; // used internally in packet.ts
 
     entity: PlayerEntity;
+}
 
+
+// this is a wrapper around sockets
+export default class Client extends SendStuff {
     constructor(socket:Socket) {
         super();
         
@@ -76,7 +81,7 @@ export default class Client extends SendStuff {
             });
         }
         room.addPlayer(this);
-        this.sendPlay(this.lobby, room, this.entity.pos);
+        this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
     }
 
     onDisconnect() {

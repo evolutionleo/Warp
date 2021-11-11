@@ -7,17 +7,10 @@ import { Profile, IProfile } from '#schemas/profile'
 import Point from '#types/point';
 import Entity from '#concepts/entity';
 import Room from '#concepts/room';
+import Client, { ClientProperties } from '#concepts/client';
 
 
-export default class SendStuff {
-    socket: Socket|null;
-    lobby: Lobby;
-    room: Room;
-    account: IAccount;
-    profile: IProfile;
-
-    constructor() {}
-
+export default class SendStuff extends ClientProperties {
     // basic send
     write(data:object) {
         return this.socket.write(packet.build(data));
@@ -100,17 +93,20 @@ export default class SendStuff {
         this.write({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].serialize()})
     }
 
-    sendPlay(lobby:Lobby, room:Room, start_pos:Point):void {
-        this.write({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos });
-        trace( 'sent the Play command' );
+    sendPlay(lobby:Lobby, room:Room, start_pos:Point, uuid?:string):void {
+        this.write({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos, uuid });
+    }
+
+    sendPlayerControls(data) {
+        let id = (this as unknown as Client).entity.uuid; // i know right?
+        this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
     }
 
     // #################################
     // You can write your wrappers here:
-    
-    // sendEntity(entity:Entity):void {
-    //     this.write({cmd: 'entity', ...entity.serialize()});
-    // }
 
-    // moved to Entity.send() for broadcasting
+    // for example:
+    sendSomething(greeting:string) {
+        this.write({ cmd: 'something', greeting: greeting });
+    }
 }

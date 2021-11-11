@@ -47,6 +47,8 @@
   },
   "resourceVersion": "1.0",
   "name": "rTest",
-  "tags": [],
+  "tags": [
+    "gameplay",
+  ],
   "resourceType": "GMRoom",
 }

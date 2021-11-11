@@ -77,6 +77,7 @@ function handlePacket(pack) {
 			var reason = data.reason
 			var forced = data.forced
 			global.lobby = undefined
+			global.playing = false
 			if (forced)
 				show_message_async("Kicked from the lobby! Reason: " + reason)
 			else
@@ -88,9 +89,15 @@ function handlePacket(pack) {
 			//room_goto(rMenu)
 			break
 		case "play":
+			global.playing = true
+			
 			global.lobby = data.lobby // again, just to be safe + update the data
 			global.room = data.room
-			var rm = asset_get_index(global.room.map.room_name)
+			global.game_map = data.room.map
+			if (variable_struct_exists(data, "uuid")) {
+				global.player_uuid = data.uuid
+			}
+			var rm = asset_get_index(data.room.map.room_name)
 			global.start_pos = data.start_pos
 			if (!room_exists(rm)) {
 				show_message_async("Error: Invalid room name!")
@@ -100,11 +107,29 @@ function handlePacket(pack) {
 			room_goto(rm)
 			break
 		
+		// data about the entity
 		case "entity":
+			// don't spawn in entities if we're not playing (e.x in menus)
+			if (!global.playing) {
+				trace("Warning: received entity, but not playing yet (or already)!")
+				break
+			}
+			
 			var uuid = data.id
 			var type = asset_get_index(data.object_name)
-			var inst = find_or_create(uuid, type, true)
+			var existed = instance_exists(find_by_uuid(uuid, type))
+			var inst = find_or_create(uuid, type)
 			
+			
+			// if it was just created - it's remote
+			if (!existed)
+				inst.remote = true
+			//else inst.remote = inst.remote
+			
+			if (uuid == global.player_uuid)
+				inst.remote = false
+			
+			// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
 			inst.x = data.x
 			inst.y = data.y
 			inst.image_xscale = data.xscale
@@ -118,10 +143,42 @@ function handlePacket(pack) {
 			}
 			
 			break
-		
+		case "entity death": // also triggers remove
+			var uuid = data.id
+			var inst = find_by_uuid(uuid)
+			// use this for death effects
+			break
+		case "entity remove":
+			var uuid = data.id
+			var inst = find_by_uuid(uuid, all)
+			if (instance_exists(inst))
+				instance_destroy(inst)
+			break
 		
 		// ##############################
 		// Add your custom commands here:
+		
+		case "player controls":
+			if (!global.playing)
+				break
+			
+			var uuid = data.id
+			var inst = find_by_uuid(uuid, oPlayer, true)
+			
+			with(inst) {
+				kright = data.kright
+				kleft = data.kleft
+				kup = data.kup
+				kdown = data.kdown
+		
+				kjump = data.kjump
+				kjump_rel = data.kjump_rel
+				kjump_press = data.kjump_press
+				
+				move_x = data.move.x
+				move_y = data.move.y
+			}
+			break
 		
 		case "haha":
 			var some_var = data.stuff

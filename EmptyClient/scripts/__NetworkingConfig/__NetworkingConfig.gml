@@ -15,7 +15,7 @@
 #macro Prod:PORT "1337"
 
 // Debug/Development
-#macro Dev:IP   "192.168.0.12"	// localhost
+#macro Dev:IP   "127.0.0.1"	// localhost
 //#macro IP "192.168.1.224" // LAN (replace with your local IP)
 #macro Dev:PORT "1338"
 
@@ -44,4 +44,11 @@ onConnect = function() {
 
 onDisconnect = function() {
 	trace("Warning: Unhandled disconnect event!")
+}
+
+
+function leaveGame() {
+	global.playing = false
+	sendLeaveLobby()
+	room_goto(rMenu)
 }

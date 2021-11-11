@@ -5,8 +5,8 @@
         "baseUrl": "src",
         "outDir": "out/",
         "rootDir": "src/",
-        "module": "esnext",
-        "target": "es2020",
+        "module": "ESNext",
+        "target": "ESNext",
         "paths": {
             "#schemas/*": ["internal/schemas/*"],
             "#entity/*": ["internal/entities/entity_types/*"],

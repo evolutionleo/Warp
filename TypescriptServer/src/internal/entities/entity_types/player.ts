@@ -37,7 +37,6 @@ export const defaultInputs:IPlayerInputs = {
 
 
 export default class PlayerEntity extends PhysicsEntity {
-    isSolid = true;
 
     static type = 'Player';
     static object_name = 'oPlayer';
@@ -62,17 +61,23 @@ export default class PlayerEntity extends PhysicsEntity {
 
     inputs:IPlayerInputs = defaultInputs;
 
-    walksp:number = 7;
-    jumpHeight:number = 12.5;
-    cutJump:boolean = false;
+
+    isSolid:boolean = true;
+
+    walksp:number;
+    jumpHeight:number;
+    cutJump:boolean;
 
     constructor(room:Room, x:number = 0, y:number = 0, client:Client) {
         super(room, x, y);
         this.client = client;
     }
 
-    create(x:number, y:number) {
-        super.create(x, y);
+    create() {
+        super.create();
+        this.walksp = 7;
+        this.jumpHeight = 12.5;
+        this.cutJump = false;
     }
 
     update() {

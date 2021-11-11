@@ -18,14 +18,10 @@ export default class PhysicsEntity extends Entity {
     collisionType:CollisionType = 'discrete';
     collisionPrecision:number = 5; // only works with collisionType = 'discrete'
 
-    preciseCollisions = false;
+    preciseCollisions = true; // pixel-perfect, but is slower
 
     constructor(room:Room, x: number = 0, y: number = 0) {
         super(room, x, y);
-    }
-
-    create(x: number, y: number) {
-        super.create(x, y);
     }
 
 
@@ -96,7 +92,7 @@ export default class PhysicsEntity extends Entity {
     }
 
 
-    grounded(x = this.x, y = this.y, type = 'floor'):boolean {
+    grounded(x = this.x, y = this.y, type = undefined):boolean {
         return this.placeMeeting(x, y+1, type);
     }
 

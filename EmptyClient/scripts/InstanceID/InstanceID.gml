@@ -4,7 +4,7 @@
 // put this in create event
 function use_uuid() {
 	self.uuid = uuidv4_generate()
-	self.remote = false // whether an entity is remote or local
+	self.remote = false // whether an entity is remote or local - local by default
 }
 
 function find_by_uuid(uuid, object_type = all, remote = undefined) {

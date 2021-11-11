@@ -1,0 +1,15 @@
+{
+  "name": "autorelease",
+  "version": "1.0.0",
+  "description": "",
+  "main": "release.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "^0.5.9"
+  }
+}

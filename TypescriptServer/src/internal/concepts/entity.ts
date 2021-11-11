@@ -39,6 +39,8 @@ interface Entity {
 
 // a thing
 class Entity extends EventEmitter {
+    isSolid = false;
+
     pos:Point;
     spd:Point;
 
@@ -60,8 +62,7 @@ class Entity extends EventEmitter {
     type = Entity.type; // non-static variable
     object_name = Entity.object_name;
 
-    isSolid: boolean = false;
-    isFloor: boolean = false;
+    tags:string[] = [];
     sendEveryTick: boolean = false; // either send every frame or only on change
 
     room: Room;
@@ -75,16 +76,15 @@ class Entity extends EventEmitter {
         super();
         this.id = uuidv4();
         this.room = room;
-        this.create(x, y);
-        if (this.isSolid) {
-            trace('inserting a ' + this.type);
-            this.tree.insert(this);
-        }
-    }
-
-    create(x:number, y:number) {
+        // this.create(x, y); // moved to room.spawnEntity
         this.pos = { x, y };
         this.spd = { x: 0, y: 0};
+    }
+
+    create() {
+        if (this.tags.includes('solid') || this.isSolid) {
+            this.tree.insert(this);
+        }
     }
 
     // called from room.tick()
@@ -108,11 +108,14 @@ class Entity extends EventEmitter {
             else if (this.object_name === type) {
                 return true;
             }
-            else if (type === 'floor') {
-                return this.isFloor;
-            }
+            // else if (type === 'floor') {
+            //     return this.isFloor;
+            // }
             else if (type === 'solid') {
                 return this.isSolid;
+            }
+            else if (this.hasTag(type)) {
+                return true;
             }
         }
         else if (typeof type === 'object') {
@@ -130,12 +133,13 @@ class Entity extends EventEmitter {
         let bbox = this.getBBox(x, y);
 
         if (type === undefined) {
-            return this.tree.collides(bbox);
+            return this.tree.search(bbox).some(e => e !== this);
+            // return this.tree.collides(bbox);
         }
         else {
             let candidates = this.tree.search(bbox);
             for(let entity of candidates) {
-                if (entity.matchesType(type)) {
+                if (entity !== this && entity.matchesType(type)) {
                     return true;
                 }
             }
@@ -147,9 +151,7 @@ class Entity extends EventEmitter {
         let bbox = this.getBBox(x, y);
 
         let candidates = this.tree.search(bbox);
-        return candidates.filter((entity) => {
-            
-        });
+        return candidates.filter((entity) => entity.matchesType(type));
     }
 
     // entity death
@@ -207,6 +209,14 @@ class Entity extends EventEmitter {
         }
     }
 
+    // tags idk
+    hasTag(tag:string) {
+        return this.tags.includes(tag);
+    }
+
+    addTag(tag:string) {
+        return this.tags.push(tag);
+    }
 
     // pos
     get x() { return this.pos.x }

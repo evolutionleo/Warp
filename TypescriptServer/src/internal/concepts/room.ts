@@ -13,6 +13,7 @@ class MyRBush extends RBush<Entity> {
     toBBox(e:Entity) { return e.bbox; }
     compareMinX(a:Entity, b:Entity) { return a.bbox.left - b.bbox.left; }
     compareMinY(a:Entity, b:Entity) { return a.bbox.top - b.bbox.top; }
+    
 }
 
 
@@ -37,13 +38,18 @@ export class EntityList extends Array<Entity> {
         return this.filterByType(type);
     }
 
+    // returns only the solid 
     solid() {
         return this.filter(e => e.isSolid);
     }
 
-    floor() {
-        return this.filter(e => e.isFloor);
+    withTag(tag:string) {
+        return this.filter(e => e.hasTag(tag));
     }
+
+    // floor() {
+    //     return this.filter(e => e.isFloor);
+    // }
 }
 
 
@@ -58,11 +64,11 @@ class Room extends EventEmitter {
     // entity_chunks:Chunk[][] = [];
     tree:MyRBush;
     players:Client[] = [];
+    recentlyJoined:[Client, number][] = [];
+    recentlyJoinedTimer = 120; // 2 seconds?
 
     width:number;
     height:number;
-
-    chunk_size:number;
 
     map:GameMap;
 
@@ -94,10 +100,7 @@ class Room extends EventEmitter {
 
 
         setInterval(this.tick.bind(this), 1000 / this.tickrate);
-        this.unwrap(this.map.contents); //|| '[]');
-        // this.unwrap(`[
-        //     { "type": "Box", "x": 300, "y": 100 }
-        // ]`);
+        this.unwrap(this.map.contents); // || '[]');
     }
 
     // create entities from the contents string
@@ -131,9 +134,17 @@ class Room extends EventEmitter {
     }
     
     tick():void {
-        // trace('tick!');
-        this.entities.forEach(entity => entity.update());
+        this.entities.forEach(entity => {
+            entity.update();
+            this.recentlyJoined.forEach(([player, _]) => entity.send(player));
+        });
         this.emit('tick');
+
+        // we will send everything every frame to those who joined recently (so that they 100% get it)
+        this.recentlyJoined.map((player, timer) => [player, timer-1]);
+        this.recentlyJoined.filter(([player, timer]) => {
+            return timer > 0;
+        });
     }
 
     // entity stuff
@@ -145,7 +156,14 @@ class Room extends EventEmitter {
         else {
             var entity = new (etype as PlayerEntityConstructor)(this, x, y, client);
         }
+        entity.create();
         this.entities.push(entity);
+        entity.on('death', () => {
+            this.broadcast({ cmd: 'entity death', id: entity.uuid });
+        });
+        entity.on('remove', () => {
+            this.broadcast({ cmd: 'entity remove', id: entity.uuid });
+        });
         this.emit('spawn', entity);
         return entity;
     }
@@ -159,6 +177,7 @@ class Room extends EventEmitter {
         // });
         player.entity.remove();
         this.emit('player leave', player);
+        // this.broadcast({ cmd: 'player leave', player: player });
     }
 
     addPlayer(player:Client):void {
@@ -178,12 +197,11 @@ class Room extends EventEmitter {
         y = p.y;
         const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
         player.entity = player_entity;
-        // send all the existing entities, but only after the initial "Play" packet
-        setTimeout(() => {
-            this.entities.forEach(entity => {
-                entity.send(player);
-            });
-        }, 10);
+        // send all the existing entities
+        this.entities.forEach(entity => {
+            entity.send(player);
+        });
+        this.recentlyJoined.push([ player, this.recentlyJoinedTimer ]);
         
         this.emit('player join', player);
     }

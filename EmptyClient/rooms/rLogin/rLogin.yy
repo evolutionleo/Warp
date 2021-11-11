@@ -59,6 +59,8 @@
   },
   "resourceVersion": "1.0",
   "name": "rLogin",
-  "tags": [],
+  "tags": [
+    "menu",
+  ],
   "resourceType": "GMRoom",
 }
