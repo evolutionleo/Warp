@@ -1,10 +1,10 @@
-import trace from '#internal/logging';
-import { findLobby } from '#internal/lobbyFunctions';
-import MatchMaker from '#internal/matchmaker';
-import { Profile } from '#schemas/profile';
+import trace from '#util/logging';
+import { findLobby } from '#util/lobby_functions';
+import MatchMaker from '#util/matchmaker';
 import { Account, IAccount } from '#schemas/account';
-import Client from '#entities/client';
-import Lobby from '#entities/lobby';
+import Client from '#concepts/client';
+import Lobby from '#concepts/lobby';
+import Point from '#types/point';
 
 const { make_match } = MatchMaker;
 
@@ -76,5 +76,28 @@ export default async function handlePacket(c:Client, data:any) {
 
         // #######################
         // Add your commands here:
+        case 'room transition':
+            var room_to_name:string = data.room_to;
+            var room_to = c.lobby.rooms.find(room => room.map.name === room_to_name)
+            c.room.movePlayer(c, room_to);
+            break;
+        
+        case 'player controls':
+            c.entity.inputs = {
+                move: data.move as Point,
+                keys: {
+                    kright: data.kright,
+                    kleft: data.kleft,
+                    kup: data.kup,
+                    kdown: data.kdown,
+
+                    kjump: data.kjump,
+                    kjump_rel: data.kjump_rel,
+                    kjump_press: data.kjump_press
+                }
+            }
+            c.entity.send();
+            // c.sendPlayerControls(data);
+            break;
     }
 }

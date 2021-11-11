@@ -1,7 +1,7 @@
 {
   "parent": {
-    "name": "EmptyClient",
-    "path": "EmptyClient.yyp",
+    "name": "GMOF",
+    "path": "folders/GMOF.yy",
   },
   "resourceVersion": "1.1",
   "name": "ProjectStructure",

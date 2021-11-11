@@ -25,8 +25,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Demo/Objects.yy",
+    "name": "Menu",
+    "path": "folders/GMOF/Demo/Objects/Menu.yy",
   },
   "resourceVersion": "1.0",
   "name": "oLobbiesDemo",

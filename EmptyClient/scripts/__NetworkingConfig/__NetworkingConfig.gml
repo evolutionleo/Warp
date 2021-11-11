@@ -11,7 +11,7 @@
 #macro Default:PORT "1338"
 
 // Production
-#macro Prod:IP   "xxxxxx" // your external server IP
+#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
 #macro Prod:PORT "1337"
 
 // Debug/Development
@@ -28,6 +28,9 @@ if (!CONFIGS_SET) {
 }
 
 
+#macro CONNECT_TIMEOUT 60 * 5 // 5 seconds
+
+
 // Allow up to 4000 ping (YYG recommends ~1000 for LAN-only games)
 network_set_config(network_config_connect_timeout, 4000)
 
@@ -41,4 +44,11 @@ onConnect = function() {
 
 onDisconnect = function() {
 	trace("Warning: Unhandled disconnect event!")
+}
+
+
+function leaveGame() {
+	global.playing = false
+	sendLeaveLobby()
+	room_goto(rMenu)
 }

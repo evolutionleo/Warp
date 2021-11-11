@@ -6,7 +6,7 @@
 /// @param [offset]         Start position for binary decoding in the buffer. Defaults to 0, the start of the buffer
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
-/// @jujuadams 2021-06-03
+/// @jujuadams 2021-09-05
 
 function snap_from_messagepack()
 {
@@ -175,8 +175,8 @@ function __snap_from_messagepack_parser(_buffer) constructor
         }
         else if ((_byte >= 0xe0) && (_byte <= 0xff)) //negative fixint 0xe0 -> 0xff
         {
-            //First 5 bites are the integer
-            return -(_byte & 0x1f);
+            //Least significant 5 bites are the integer
+            return ((_byte & 0x1f) - 0x20);
         }
         else switch(_byte)
         {
@@ -201,7 +201,7 @@ function __snap_from_messagepack_parser(_buffer) constructor
             case 0xce: /*206*/ return buffer_read_little(  buffer_u32); break; // uint 32
             case 0xcf: /*207*/ return buffer_read_little(  buffer_u64); break; // uint 64
             
-            case 0xd0: /*208*/ return  buffer_read(buffer, buffer_s8 ); break; //  int  8
+            case 0xd0: /*208*/ return buffer_read(buffer, buffer_s8 ); break;  //  int  8
             case 0xd1: /*209*/ return buffer_read_little(  buffer_s16); break; //  int 16
             case 0xd2: /*210*/ return buffer_read_little(  buffer_s32); break; //  int 32
             case 0xd3: /*211*/ return buffer_read_little(  buffer_u64); break; //  int 64 !!! No signed 64-bit integer read in GameMaker

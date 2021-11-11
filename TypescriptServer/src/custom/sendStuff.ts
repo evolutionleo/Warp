@@ -1,19 +1,16 @@
-import trace from '#internal/logging';
+import trace from '#util/logging';
 import packet from '#internal/packet';
 import { Socket } from 'net';
-import Lobby from '#entities/lobby';
+import Lobby from '#concepts/lobby';
 import { Account, IAccount } from '#schemas/account';
 import { Profile, IProfile } from '#schemas/profile'
 import Point from '#types/point';
+import Entity from '#concepts/entity';
+import Room from '#concepts/room';
+import Client, { ClientProperties } from '#concepts/client';
 
-export default class SendStuff {
-    socket: Socket|null;
-    lobby: Lobby;
-    account: IAccount;
-    profile: IProfile;
 
-    constructor() {}
-
+export default class SendStuff extends ClientProperties {
     // basic send
     write(data:object) {
         return this.socket.write(packet.build(data));
@@ -25,10 +22,8 @@ export default class SendStuff {
     
     // different types of broadcast
     broadcastList(clients:SendStuff[], pack:object, notme:boolean = true) {
-        var client = this;
-        
         clients.forEach(function(c) {
-            if (c === client && notme) {}
+            if (c === this && notme) {}
             else {
                 c.write(pack);
             }
@@ -44,6 +39,13 @@ export default class SendStuff {
             return -1
 
         return this.broadcastList(this.lobby.players, pack, notme);
+    }
+
+    broadcastRoom(pack:object, notme:boolean) {
+        if (this.room === null)
+            return -1
+        
+        return this.broadcastList(this.room.players, pack, notme);
     }
     
     // these functions can be later called using %insert_client%.sendThing()
@@ -64,7 +66,7 @@ export default class SendStuff {
     }
 
     sendLogin(status:string, reason:string = ''):void {
-        this.write({cmd: 'login', status: status, reason: reason, account: this.account, profile: this.profile});
+        this.write({cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON()});
     }
 
     sendJoinLobby(lobby:Lobby):void {
@@ -91,10 +93,20 @@ export default class SendStuff {
         this.write({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].serialize()})
     }
 
-    sendPlay(lobby:Lobby, start_pos:Point):void {
-        this.write({ cmd: 'play', lobby: lobby.serialize(), start_pos: start_pos });
+    sendPlay(lobby:Lobby, room:Room, start_pos:Point, uuid?:string):void {
+        this.write({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos, uuid });
+    }
+
+    sendPlayerControls(data) {
+        let id = (this as unknown as Client).entity.uuid; // i know right?
+        this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
     }
 
     // #################################
     // You can write your wrappers here:
+
+    // for example:
+    sendSomething(greeting:string) {
+        this.write({ cmd: 'something', greeting: greeting });
+    }
 }

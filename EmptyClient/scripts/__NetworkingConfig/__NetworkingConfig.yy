@@ -2,8 +2,8 @@
   "isDnD": false,
   "isCompatibility": false,
   "parent": {
-    "name": "Networking",
-    "path": "folders/Scripts/Networking.yy",
+    "name": "__Custom (Edit this)",
+    "path": "folders/GMOF/Scripts/__Custom (Edit this).yy",
   },
   "resourceVersion": "1.0",
   "name": "__NetworkingConfig",

@@ -5,16 +5,23 @@
         "baseUrl": "src",
         "outDir": "out/",
         "rootDir": "src/",
-        "module": "esnext",
-        "target": "es2020",
+        "module": "ESNext",
+        "target": "ESNext",
         "paths": {
-            "#root/*": ["./*"],
-            "#custom/*": ["custom/*"],
-            "#internal/*": ["internal/*"],
             "#schemas/*": ["internal/schemas/*"],
+            "#entity/*": ["internal/entities/entity_types/*"],
             "#entities/*": ["internal/entities/*"],
             "#initializers/*": ["internal/initializers/*"],
-            "#types/*": ["internal/types/*"]
+            "#types/*": ["internal/types/*"],
+            "#concepts/*": ["internal/concepts/*"],
+            "#util/*": ["internal/util/*"],
+
+            "#custom/*": ["custom/*"],
+            "#internal/*": ["internal/*"],
+
+            "#root/*": ["./*"],
+
+            "*": ["node_moduls/*", "src/*"]
         }
     }
 }

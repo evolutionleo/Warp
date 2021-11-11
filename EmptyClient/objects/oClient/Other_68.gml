@@ -71,10 +71,14 @@ switch(type) {
 	case network_type_non_blocking_connect:
 	case network_type_connect:
 		trace("Connected to the server!")
+		connected = true
+		connecting = false
 		onConnect()
 		break
 	case network_type_disconnect:
 		trace("Disconnected from the server!")
+		connected = false
+		connecting = false
 		onDisconnect()
 		break
 }
