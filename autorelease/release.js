@@ -15,27 +15,27 @@ ts_zip.writeZip('../Release/TSServer.zip');
 
 // JavaScript server
 const js_zip = new AdmZip();
-js_zip.addLocalFolder(path.join(__dirname, '../EmptyServer/custom'), '/custom');
-js_zip.addLocalFolder(path.join(__dirname, '../EmptyServer/internal'), '/internal');
-js_zip.addLocalFolder(path.join(__dirname, '../EmptyServer/maps'), '/maps');
-js_zip.addLocalFile(path.join(__dirname, '../EmptyServer/package.json'));
-js_zip.addLocalFile(path.join(__dirname, '../EmptyServer/.gitignore'));
-js_zip.addLocalFile(path.join(__dirname, '../EmptyServer/server.js'));
-js_zip.addLocalFile(path.join(__dirname, '../EmptyServer/config.js'));
-js_zip.addLocalFile(path.join(__dirname, '../EmptyServer/README.md'));
+js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/custom'), '/custom');
+js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/internal'), '/internal');
+js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/maps'), '/maps');
+js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/package.json'));
+js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/.gitignore'));
+js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/server.js'));
+js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/config.js'));
+js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/README.md'));
 
 js_zip.writeZip('../Release/JSServer.zip');
 
 
-// JavaScript client
+// GameMaker client
 const gm_zip = new AdmZip();
 gm_zip.addLocalFolder(path.join(__dirname, '../EmptyClient'));
 
-gm_zip.writeZip('../Release/GMClient.zip');
+gm_zip.writeZip('../Release/EmptyClient.zip');
 
 
-// GameMaker client
+// JavaScript client
 const web_zip = new AdmZip();
-web_zip.addLocalFolder(path.join(__dirname, '../JSClient'));
+web_zip.addLocalFolder(path.join(__dirname, '../WebClient'));
 
-web_zip.writeZip('../Release/JSClient.zip');
+web_zip.writeZip('../Release/WebClient.zip');

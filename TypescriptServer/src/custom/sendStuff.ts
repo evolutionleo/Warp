@@ -7,10 +7,25 @@ import { Profile, IProfile } from '#schemas/profile'
 import Point from '#types/point';
 import Entity from '#concepts/entity';
 import Room from '#concepts/room';
-import Client, { ClientProperties } from '#concepts/client';
+import Client from '#concepts/client';
+import PlayerEntity from '#entity/player';
+// import ClientProperties from '#types/clientProperties';
 
 
-export default class SendStuff extends ClientProperties {
+export default class SendStuff {
+    socket: Socket;
+    
+    lobby: Lobby;
+    room: Room;
+
+    account: IAccount;
+    profile: IProfile;
+
+    halfpack: Buffer; // used internally in packet.ts
+
+    entity: PlayerEntity;
+
+
     // basic send
     write(data:object) {
         return this.socket.write(packet.build(data));

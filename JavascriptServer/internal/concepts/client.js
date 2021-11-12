@@ -1,65 +1,42 @@
 import trace from '#util/logging';
 import SendStuff from '#custom/sendStuff';
-import { Profile, IProfile, freshProfile } from '#schemas/profile';
-import { Account, IAccount } from '#schemas/account';
-
-import { Socket } from 'net';
-import Point from '#root/internal/types/point';
-
-import Lobby from '#concepts/lobby';
-import Room from '#concepts/room';
-import PlayerEntity from '#entities/entity_types/player';
-
-
+import { Profile, freshProfile } from '#schemas/profile';
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
     // socket: Socket;
-    
     // lobby: Lobby;
     // room: Room;
-
     // account: IAccount;
     // profile: IProfile;
-
     // halfpack: Buffer; // used internally in packet.ts
-
     // entity: PlayerEntity;
-
-
-    constructor(socket:Socket) {
+    constructor(socket) {
         super();
-        
         this.socket = socket;
         this.lobby = null; // no lobby
-
         // these are the objects that contain all the meaningful data
         this.account = null; // account info
         this.profile = null; // gameplay info
     }
-
     // some events
-    onJoinLobby(lobby:Lobby) {
+    onJoinLobby(lobby) {
         this.sendJoinLobby(lobby);
     }
-
-    onRejectLobby(lobby:Lobby, reason?:string) {
+    onRejectLobby(lobby, reason) {
         if (!reason)
             reason = 'lobby is full!';
         this.sendRejectLobby(lobby, reason);
     }
-
-    onLeaveLobby(lobby:Lobby) {
+    onLeaveLobby(lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
-    
-    onKickLobby(lobby:Lobby, reason?:string, forced?:boolean) {
+    onKickLobby(lobby, reason, forced) {
         if (!reason)
             reason = '';
         if (forced === null || forced === undefined)
             forced = true;
         this.sendKickLobby(lobby, reason, forced);
     }
-
     onPlay() {
         if (!this.profile) {
             if (!global.config.necessary_login) {
@@ -80,29 +57,26 @@ export default class Client extends SendStuff {
         room.addPlayer(this);
         this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
     }
-
     onDisconnect() {
         this.save();
         if (this.lobby !== null)
             this.lobby.kickPlayer(this, 'disconnected', true);
     }
-
     // preset functions
-
     // this one saves everything
     save() {
         if (this.account !== null) {
-            this.account.save(function(err) {
+            this.account.save(function (err) {
                 if (err) {
                     trace('Error while saving account: ' + err);
                 }
                 else {
                     trace('Saved the account successfully');
                 }
-            })
+            });
         }
         if (this.profile !== null) {
-            this.profile.save(function(err) {
+            this.profile.save(function (err) {
                 if (err) {
                     trace('Error while saving profile: ' + err);
                 }
@@ -112,17 +86,14 @@ export default class Client extends SendStuff {
             });
         }
     }
-    
-    register(account:IAccount) {
+    register(account) {
         this.account = account;
         this.profile = freshProfile(account);
-
         // this.save() returns a Promise
         this.save();
         this.sendRegister('success');
     }
-
-    login(account:IAccount) {
+    login(account) {
         this.account = account;
         Profile.findOne({
             account_id: this.account._id
@@ -134,8 +105,6 @@ export default class Client extends SendStuff {
             else {
                 trace('Error: Couldn\'t find a profile with these credentials!');
             }
-        })
+        });
     }
-
-    // you can also add methods/functions below
 }
