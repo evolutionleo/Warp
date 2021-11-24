@@ -153,3 +153,78 @@
 [24.11.2021, 21:02:53]  loading initializer: 06_mongodb.js
 [24.11.2021, 21:02:53]  loading initializer: 07_console.js
 [24.11.2021, 21:02:53]  Database connected: mongodb://127.0.0.1:27017/online-game
+[24.11.2021, 21:09:04]  Config loaded! environment: dev
+[24.11.2021, 21:09:05]  loading initializer: 01_globals.js
+[24.11.2021, 21:09:05]  loading initializer: 02_entities.js
+[24.11.2021, 21:09:06]  loading initializer: 03_maps.js
+[24.11.2021, 21:09:06]  loading initializer: 04_lobbies.js
+[24.11.2021, 21:09:06]  loading initializer: 05_constants.js
+[24.11.2021, 21:09:06]  loading initializer: 06_mongodb.js
+[24.11.2021, 21:09:06]  loading initializer: 07_console.js
+[24.11.2021, 21:09:06]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[24.11.2021, 21:09:06]  starting the eval console...
+[24.11.2021, 21:09:06]  loaded initializers!
+[24.11.2021, 21:09:06]  > type right into the console to execute JS code in real time <
+[24.11.2021, 21:09:06]  Server running on port 1338!
+[24.11.2021, 21:09:06]  WebSocket Server running on port 3001!
+[24.11.2021, 21:18:55]  Config loaded! environment: dev
+[24.11.2021, 21:18:57]  loading initializer: 01_globals.js
+[24.11.2021, 21:18:57]  loading initializer: 02_entities.js
+[24.11.2021, 21:18:57]  loading initializer: 03_maps.js
+[24.11.2021, 21:18:57]  loading initializer: 04_lobbies.js
+[24.11.2021, 21:18:57]  loading initializer: 05_constants.js
+[24.11.2021, 21:18:57]  loading initializer: 06_mongodb.js
+[24.11.2021, 21:18:57]  loading initializer: 07_console.js
+[24.11.2021, 21:18:57]  Database connected: mongodb://127.0.0.1:27017/online-game
+[24.11.2021, 21:18:57]  starting the eval console...
+[24.11.2021, 21:18:57]  > type right into the console to execute JS code in real time <
+[24.11.2021, 21:18:57]  Server running on port 1338!
+[24.11.2021, 21:18:57]  loaded initializers!
+[24.11.2021, 21:18:57]  WebSocket Server running on port 3001!
+[24.11.2021, 21:19:15]  WebSocket connected!
+[24.11.2021, 21:19:24]  Socket closed.
+[24.11.2021, 21:19:48]  Config loaded! environment: dev
+[24.11.2021, 21:19:50]  loading initializer: 01_globals.js
+[24.11.2021, 21:19:50]  loading initializer: 02_entities.js
+[24.11.2021, 21:19:50]  loading initializer: 03_maps.js
+[24.11.2021, 21:19:50]  loading initializer: 04_lobbies.js
+[24.11.2021, 21:19:50]  loading initializer: 05_constants.js
+[24.11.2021, 21:19:50]  loading initializer: 06_mongodb.js
+[24.11.2021, 21:19:50]  loading initializer: 07_console.js
+[24.11.2021, 21:19:50]  Database connected: mongodb://127.0.0.1:27017/online-game
+[24.11.2021, 21:19:50]  starting the eval console...
+[24.11.2021, 21:19:50]  > type right into the console to execute JS code in real time <
+[24.11.2021, 21:19:50]  Server running on port 1338!
+[24.11.2021, 21:19:50]  loaded initializers!
+[24.11.2021, 21:19:50]  WebSocket Server running on port 3001!
+[24.11.2021, 21:19:51]  WebSocket connected!
+[24.11.2021, 21:19:52]  Hello from client: peppega
+[24.11.2021, 21:20:04]  WebSocket connected!
+[24.11.2021, 21:20:04]  Hello from client: peppega
+[24.11.2021, 21:20:14]  Socket closed.
+[24.11.2021, 21:20:14]  Socket closed.
+[24.11.2021, 21:20:25]  Config loaded! environment: dev
+[24.11.2021, 21:20:26]  loading initializer: 01_globals.js
+[24.11.2021, 21:20:26]  loading initializer: 02_entities.js
+[24.11.2021, 21:20:27]  loading initializer: 03_maps.js
+[24.11.2021, 21:20:27]  loading initializer: 04_lobbies.js
+[24.11.2021, 21:20:27]  loading initializer: 05_constants.js
+[24.11.2021, 21:20:27]  loading initializer: 06_mongodb.js
+[24.11.2021, 21:20:27]  loading initializer: 07_console.js
+[24.11.2021, 21:20:27]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[24.11.2021, 21:20:34]  Config loaded! environment: dev
+[24.11.2021, 21:20:35]  loading initializer: 01_globals.js
+[24.11.2021, 21:20:35]  loading initializer: 02_entities.js
+[24.11.2021, 21:20:35]  loading initializer: 03_maps.js
+[24.11.2021, 21:20:35]  loading initializer: 04_lobbies.js
+[24.11.2021, 21:20:35]  loading initializer: 05_constants.js
+[24.11.2021, 21:20:35]  loading initializer: 06_mongodb.js
+[24.11.2021, 21:20:35]  loading initializer: 07_console.js
+[24.11.2021, 21:20:36]  Database connected: mongodb://127.0.0.1:27017/resource-mmo
+[24.11.2021, 21:20:36]  starting the eval console...
+[24.11.2021, 21:20:36]  > type right into the console to execute JS code in real time <
+[24.11.2021, 21:20:36]  Server running on port 1338!
+[24.11.2021, 21:20:36]  WebSocket Server running on port 3001!
+[24.11.2021, 21:20:36]  loaded initializers!
+[24.11.2021, 21:20:48]  WebSocket connected!
+[24.11.2021, 21:20:48]  Hello from client: peppega

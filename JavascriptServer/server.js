@@ -78,7 +78,7 @@ if (config.ws_enabled) {
 
 // The WS Server
 const ws_server = new ws.WebSocketServer({
-    host: 'localhost',
+    host: '127.0.0.1',
     port: config.ws_port
 }, function() {
     trace('WebSocket Server running on port ' + ws_port + '!');
