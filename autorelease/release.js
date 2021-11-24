@@ -31,7 +31,7 @@ js_zip.writeZip('../Release/JSServer.zip');
 const gm_zip = new AdmZip();
 gm_zip.addLocalFolder(path.join(__dirname, '../EmptyClient'));
 
-gm_zip.writeZip('../Release/EmptyClient.zip');
+gm_zip.writeZip('../Release/GMClient.zip');
 
 
 // JavaScript client
