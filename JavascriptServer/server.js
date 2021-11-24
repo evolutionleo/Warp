@@ -4,6 +4,10 @@ import './config.js';
 
 import { createServer } from 'net';
 const port = global.config.port;
+
+import * as ws from 'ws';
+const ws_port = config.ws_port;
+
 import * as fs from 'fs';
 import trace from '#util/logging';
 import packet from '#internal/packet';
@@ -68,6 +72,55 @@ const server = createServer(function (socket) {
         trace('Socket closed.');
     });
 });
+
+
+if (config.ws_enabled) {
+
+// The WS Server
+const ws_server = new ws.WebSocketServer({
+    host: 'localhost',
+    port: config.ws_port
+}, function() {
+    trace('WebSocket Server running on port ' + ws_port + '!');
+});
+
+ws_server.on('connection', (socket) => {
+    trace("WebSocket connected!");
+
+    var c = new Client(socket, 'ws');
+    global.clients.push(c); // add the client to clients list (unnecessary)
+
+    // Bind functions on events
+
+    socket.on('error', function(err) {
+        if (err.message.includes('ECONNRESET')) { // this is a disconnect
+            trace('WebSocket violently disconnected.');
+            // handle disconnect here
+        }
+
+        trace(`Error! ${err}`);
+    });
+    
+    // When data arrived
+    socket.on('message', function(data) {
+        // create artificial_delay
+        if (delayReceive.enabled) {
+            setTimeout(function() {
+                packet.ws_parse(c, data); // handle the logic
+            }, delayReceive.get());
+        }
+        else { // just parse normally
+            packet.ws_parse(c, data); // handle the logic
+        }
+    });
+
+    // When a socket/connection closed
+    socket.on('close', function() {
+        c.onDisconnect();
+        trace('Socket closed.');
+    });
+});
+}
 
 
 server.listen(port);

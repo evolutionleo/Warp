@@ -14,6 +14,10 @@ const common_config = {
     lobby: {
         max_players: 100
     },
+
+    // WebSockets?
+    ws_enabled: true,
+    
     tps: 60,
     db_enabled: true,
     starting_room: 'Test Room',
@@ -28,6 +32,7 @@ const prod_config = {
     },
     env_name: 'prod',
     port: args.port || 1337,
+    ws_port: args.ws_port || 3000,
     db: args.db || 'mongodb://127.0.0.1:27017/resource-mmo',
     // you can add a postfix at the end of the name to separate them
     shell_enabled: false
@@ -39,6 +44,7 @@ const dev_config = {
     },
     env_name: 'dev',
     port: args.port || 1338,
+    ws_port: args.ws_port || 3001,
     db: args.db || 'mongodb://127.0.0.1:27017/resource-mmo',
     shell_enabled: true
 };

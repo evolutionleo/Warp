@@ -2,16 +2,47 @@ import packet from '#internal/packet';
 
 
 export default class SendStuff {
-    // basic send
+    type; // 'ws' or 'tcp'
+    socket; // WebSocket or net.Socket
+
+    /**
+     * 
+     * @param {ws|net.Socket} socket
+     * @param {string} type
+     */
+     constructor(socket, type) {
+        this.socket = socket;
+        this.type = type.toLowerCase();
+    }
+
+    /** 
+     * basic send
+     * @param {object} data 
+     */
     write(data) {
-        return this.socket.write(packet.build(data));
+        if (this.type === 'ws') {
+            this.socket.send(packet.ws_build(data));
+        }
+        else {
+            this.socket.write(packet.build(data));
+        }
     }
     
+    /**
+     * same as .write()
+     * @param {object} data 
+     */
     send(data) {
         return this.write(data);
     }
     
     // different types of broadcast
+    /**
+     * 
+     * @param {any[]} clients 
+     * @param {object} pack 
+     * @param {boolean} [notme=true] 
+     */
     broadcastList(clients, pack, notme = true) {
         clients.forEach(function (c) {
             if (c === this && notme) { }
@@ -21,16 +52,28 @@ export default class SendStuff {
         });
     }
 
+    /**
+     * @param {object} pack 
+     * @param {boolean} [notme=true] 
+     */
     broadcastAll(pack, notme) {
         return this.broadcastList(global.clients, pack, notme);
     }
 
+    /**
+     * @param {object} pack 
+     * @param {boolean} [notme=true]
+     */
     broadcastLobby(pack, notme) {
         if (this.lobby === null)
             return -1;
         return this.broadcastList(this.lobby.players, pack, notme);
     }
 
+    /**
+     * @param {object} pack 
+     * @param {boolean} [notme=true]
+     */
     broadcastRoom(pack, notme) {
         if (this.room === null)
             return -1;
@@ -87,7 +130,7 @@ export default class SendStuff {
     }
     
     sendPlayerControls(data) {
-        let id = this.entity.uuid; // i know right?
+        let id = this.entity.uuid;
         this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
     }
     

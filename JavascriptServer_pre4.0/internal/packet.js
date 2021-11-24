@@ -4,8 +4,8 @@ const handlePacket       = require('./../custom/handlePacket.js');
 module.exports = global.packet = class packet {
     /**
      * 
-     * @param {Object} data 
-     * @returns {Buffer} pack
+     * @param {object} data 
+     * @returns {Uint8Array} pack
      */
     static build(data) {
         var dataBuff = encode(data);
@@ -20,8 +20,8 @@ module.exports = global.packet = class packet {
 
     /**
      * 
-     * @param {Object} data 
-     * @returns {Buffer} pack
+     * @param {object} data 
+     * @returns {Uint8Array} pack
      */
     static ws_build(data) {
         return encode(data);
@@ -31,7 +31,7 @@ module.exports = global.packet = class packet {
 
     /**
      * 
-     * @param {any} c 
+     * @param {Client} c 
      * @param {Buffer} data 
      */
     static parse(c, data) {
@@ -84,7 +84,7 @@ module.exports = global.packet = class packet {
 
     /**
      * 
-     * @param {any} c 
+     * @param {Client} c 
      * @param {Buffer} data 
      */
     static ws_parse(c, data) {

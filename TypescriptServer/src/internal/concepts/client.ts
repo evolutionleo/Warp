@@ -9,7 +9,7 @@ import Point from '#root/internal/types/point';
 import Lobby from '#concepts/lobby';
 import Room from '#concepts/room';
 import PlayerEntity from '#entities/entity_types/player';
-
+import { SockType, Sock } from '#types/socktype';
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
@@ -26,8 +26,10 @@ export default class Client extends SendStuff {
     // entity: PlayerEntity;
 
 
-    constructor(socket:Socket) {
-        super();
+    constructor(socket:Sock, type:SockType = 'tcp') {
+        super(socket, type);
+
+        this.type = type;
         
         this.socket = socket;
         this.lobby = null; // no lobby

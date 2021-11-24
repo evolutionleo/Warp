@@ -4,7 +4,12 @@ import handlePacket from '#custom/handlePacket';
 import Client from '#concepts/client';
 
 export default class packet {
-    static build(data:object) {
+    /**
+     * 
+     * @param {object} data 
+     * @returns {Uint8Array} pack
+     */
+    static build(data:object): Uint8Array {
         var dataBuff = encode(data);
         var sizeBuff = Buffer.alloc(2);
         sizeBuff.writeUInt16LE(dataBuff.length);
@@ -15,6 +20,22 @@ export default class packet {
         return buff;
     }
 
+    /**
+     * 
+     * @param {object} data 
+     * @returns {Uint8Array} pack
+     */
+    static ws_build(data:object): Uint8Array {
+        return encode(data);
+    }
+    
+
+
+    /**
+     * 
+     * @param {any} c 
+     * @param {Buffer} data 
+     */
     static parse(c:Client, data:Buffer) {
         if (c.halfpack === undefined)
             c.halfpack = null;
@@ -55,6 +76,21 @@ export default class packet {
             catch(e) {
                 trace('An error occurred while parsing the packet: ' + e.message);
             }
+        }
+    }
+    
+    /**
+     * 
+     * @param {Client} c 
+     * @param {Buffer} data 
+     */
+     static ws_parse(c: Client, data: Buffer) {
+        try {
+            // pass the decoded data to handlePacket()
+            handlePacket(c, decode(data));
+        }
+        catch(e) {
+            trace('An error occurred while parsing the packet: ' + e.message);
         }
     }
 };

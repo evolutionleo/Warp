@@ -2,11 +2,11 @@ const { findLobby, getLobbies } = require('./../internal/lobbyFunctions.js');
 const { make_match } = require('./../internal/matchmaker.js');
 const Profile = require('../internal/schemas/profile.js');
 const Account = require('../internal/schemas/account.js');
-// const Client = require('../internal/concepts/client.js');
+const Client = require('../internal/concepts/client.js');
 
 /**
- * @param {any} c
- * @param {Object} data
+ * @param {Client} c
+ * @param {object} data
  */
 module.exports = async function handlePacket(c, data) {
     var cmd = data.cmd.toLowerCase();

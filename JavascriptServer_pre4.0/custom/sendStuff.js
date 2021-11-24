@@ -24,10 +24,10 @@ module.exports = class SendStuff {
 
     /** 
      * basic send
-     * @param {Object} data 
+     * @param {object} data 
      */
     write(data) {
-        console.log(Object.keys(packet));
+        // console.log(Object.keys(packet));
 
         if (this.type === 'ws') {
             this.socket.send(packet.ws_build(data));
@@ -39,7 +39,7 @@ module.exports = class SendStuff {
 
     /**
      * same as .write()
-     * @param {Object} data 
+     * @param {object} data 
      */
     send(data) { // just another name
         return this.write(data);
@@ -49,7 +49,7 @@ module.exports = class SendStuff {
     /**
      * 
      * @param {any[]} clients 
-     * @param {Object} pack 
+     * @param {object} pack 
      * @param {boolean} [notme=true] 
      */
     broadcastList(clients, pack, notme = true) {
@@ -64,7 +64,7 @@ module.exports = class SendStuff {
     }
 
     /**
-     * @param {Object} pack 
+     * @param {object} pack 
      * @param {boolean} [notme=true] 
      */
     broadcastAll(pack, notme) {
@@ -72,7 +72,7 @@ module.exports = class SendStuff {
     }
 
     /**
-     * @param {Object} pack 
+     * @param {object} pack 
      * @param {boolean} [notme=true]
      */
     broadcastLobby(pack, notme) {

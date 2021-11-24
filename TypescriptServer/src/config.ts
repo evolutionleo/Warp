@@ -5,7 +5,7 @@ const args = minimist(process.argv.slice(2));
 
 const common_config = {
     meta: {
-        game_name: 'ResourceMMO',
+        game_name: 'OnlineGame',
         version: 'v0.1',
         framework_version: 'v3.0',
         server: 'unknown'
@@ -14,6 +14,9 @@ const common_config = {
     lobby: {
         max_players: 100
     },
+
+    // websocket server?
+    ws_enabled: true,
 
     tps: 60, // tickrate
     db_enabled: true,
@@ -28,7 +31,8 @@ const prod_config = {
     },
     env_name: 'prod',
     port: args.port || 1337,
-    db: args.db || 'mongodb://127.0.0.1:27017/resource-mmo', // by default it uses the same db for dev/prod, but
+    ws_port: args.port || 3000,
+    db: args.db || 'mongodb://127.0.0.1:27017/online-game', // by default it uses the same db for dev/prod, but
                                                              // you can add a postfix at the end of the name to separate them
     shell_enabled: false
 }
@@ -40,7 +44,8 @@ const dev_config = {
     },
     env_name: 'dev',
     port: args.port || 1338,
-    db: args.db || 'mongodb://127.0.0.1:27017/resource-mmo',
+    ws_port: args.port || 3001,
+    db: args.db || 'mongodb://127.0.0.1:27017/online-game',
     shell_enabled: true
 }
 

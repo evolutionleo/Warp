@@ -1,5 +1,5 @@
 {
-    "name": "ponk",
+    "name": "gmof-typescript-server",
     "version": "0.0.1",
     "private": true,
     "description": "kappa",
@@ -15,13 +15,17 @@
         "@ef-carbon/tspm": "^2.2.5",
         "@msgpack/msgpack": "^2.3.0",
         "extend": "^3.0.2",
+        "gulp": "^4.0.2",
+        "gulp-typescript": "^6.0.0-alpha.1",
         "minimist": "^1.2.5",
         "module-alias": "^2.2.2",
         "mongoose": "^5.12.12",
         "node": "^16.0.0",
         "performance-now": "^2.1.0",
         "rbush": "^3.0.1",
-        "uuid": "^8.3.2"
+        "through2": "^4.0.2",
+        "uuid": "^8.3.2",
+        "ws": "^8.3.0"
     },
     "devDependencies": {
         "@types/node": "^15.12.1",

@@ -95,7 +95,7 @@ class Lobby {
     }
 
     /**
-     * @param {Object} data 
+     * @param {object} data 
      */
     broadcast(data) {
         this.players.forEach(function(player) {

@@ -10,33 +10,41 @@ export default class Client extends SendStuff {
     // profile: IProfile;
     // halfpack: Buffer; // used internally in packet.ts
     // entity: PlayerEntity;
-    constructor(socket) {
-        super();
-        this.socket = socket;
+    constructor(socket, type = 'tcp') {
+        super(socket, type);
+        
         this.lobby = null; // no lobby
         // these are the objects that contain all the meaningful data
         this.account = null; // account info
         this.profile = null; // gameplay info
     }
+
     // some events
     onJoinLobby(lobby) {
         this.sendJoinLobby(lobby);
     }
+
     onRejectLobby(lobby, reason) {
         if (!reason)
             reason = 'lobby is full!';
+        
         this.sendRejectLobby(lobby, reason);
     }
+
     onLeaveLobby(lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
+
     onKickLobby(lobby, reason, forced) {
         if (!reason)
             reason = '';
+        
         if (forced === null || forced === undefined)
             forced = true;
+        
         this.sendKickLobby(lobby, reason, forced);
     }
+
     onPlay() {
         if (!this.profile) {
             if (!global.config.necessary_login) {
@@ -54,14 +62,17 @@ export default class Client extends SendStuff {
                 return room.map.name === this.profile.room;
             });
         }
+
         room.addPlayer(this);
         this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
     }
+
     onDisconnect() {
         this.save();
         if (this.lobby !== null)
             this.lobby.kickPlayer(this, 'disconnected', true);
     }
+
     // preset functions
     // this one saves everything
     save() {

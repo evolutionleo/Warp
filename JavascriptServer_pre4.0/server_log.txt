@@ -583,3 +583,13 @@
 [03.10.2021, 16:43:56] Socket violently disconnected.
 [03.10.2021, 16:43:56] Error! Error: read ECONNRESET
 [03.10.2021, 16:43:56] Socket closed.
+[24.11.2021, 20:31:41] Config loaded! environment: prod
+[24.11.2021, 20:31:43] loaded initializers!
+[24.11.2021, 20:31:43] Server running on port 1337!
+[24.11.2021, 20:31:43] WebSocket Server running on port 3000!
+[24.11.2021, 20:31:43] Database connected: mongodb://127.0.0.1:27017/online-game
+[24.11.2021, 20:32:02] Config loaded! environment: prod
+[24.11.2021, 20:32:03] loaded initializers!
+[24.11.2021, 20:32:03] Server running on port 1337!
+[24.11.2021, 20:32:03] WebSocket Server running on port 3000!
+[24.11.2021, 20:32:03] Database connected: mongodb://127.0.0.1:27017/online-game

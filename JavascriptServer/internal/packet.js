@@ -3,6 +3,11 @@ import { encode, decode } from '@msgpack/msgpack';
 import handlePacket from '#custom/handlePacket';
 
 export default class packet {
+    /**
+     * 
+     * @param {object} data 
+     * @returns {Uint8Array} pack
+     */
     static build(data) {
         var dataBuff = encode(data);
         var sizeBuff = Buffer.alloc(2);
@@ -13,6 +18,21 @@ export default class packet {
         return buff;
     }
 
+    /**
+     * 
+     * @param {object} data 
+     * @returns {Uint8Array} pack
+     */
+     static ws_build(data) {
+        return encode(data);
+    }
+
+
+    /**
+     * 
+     * @param {Client} c 
+     * @param {Buffer} data 
+     */
     static parse(c, data) {
         if (c.halfpack === undefined)
             c.halfpack = null;
@@ -50,5 +70,19 @@ export default class packet {
             }
         }
     }
-}
-;
+
+    /**
+     * 
+     * @param {Client} c 
+     * @param {Buffer} data 
+     */
+     static ws_parse(c, data) {
+        try {
+            // pass the decoded data to handlePacket()
+            handlePacket(c, decode(data));
+        }
+        catch(e) {
+            trace('An error occurred while parsing the packet: ' + e.message);
+        }
+    }
+};

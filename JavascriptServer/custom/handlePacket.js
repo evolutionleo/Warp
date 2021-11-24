@@ -1,6 +1,7 @@
 import trace from '#util/logging';
 import { findLobby } from '#util/lobby_functions';
-import { make_match } from '#util/matchmaker';
+import MatchMaker from '#util/matchmaker';
+const { make_match } = MatchMaker;
 import { Account } from '#schemas/account';
 
 export default async function handlePacket(c, data) {
