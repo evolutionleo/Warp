@@ -16,10 +16,12 @@ export function createLobby() {
     }
     return lobby;
 }
+
 export function findLobby(lobbyid) {
     // changed the implementation to objects/structs instead of arrays
     return global.lobbies[lobbyid];
 }
+
 export function deleteLobby(lobbyid) {
     var lobby = global.lobbies[lobbyid];
     lobby.close();

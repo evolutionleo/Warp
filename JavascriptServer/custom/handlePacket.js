@@ -1,8 +1,8 @@
 import trace from '#util/logging';
 import { findLobby } from '#util/lobby_functions';
-import MatchMaker from '#util/matchmaker';
+import { make_match } from '#util/matchmaker';
 import { Account } from '#schemas/account';
-const { make_match } = MatchMaker;
+
 export default async function handlePacket(c, data) {
     var cmd = data.cmd.toLowerCase();
     // trace('received command: ' + cmd);

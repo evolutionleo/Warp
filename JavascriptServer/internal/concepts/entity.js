@@ -2,18 +2,19 @@ import { EventEmitter } from "events";
 import { v4 as uuidv4 } from 'uuid';
 // a thing
 class Entity extends EventEmitter {
+    isSolid = false;
+    base_size = { x: 64, y: 64 };
+    scale = { x: 1, y: 1 };
+    type = Entity.type; // non-static variable
+    object_name = Entity.object_name;
+    tags = [];
+    sendEveryTick = false; // either send every frame or only on change
+    id = uuidv4();
+    
     constructor(room, x = 0, y = 0) {
         super();
-        this.isSolid = false;
-        this.base_size = { x: 64, y: 64 };
-        this.scale = { x: 1, y: 1 };
-        this.type = Entity.type; // non-static variable
-        this.object_name = Entity.object_name;
-        this.tags = [];
-        this.sendEveryTick = false; // either send every frame or only on change
-        this.id = uuidv4();
-        this.room = room;
         // this.create(x, y); // moved to room.spawnEntity
+        this.room = room;
         this.pos = { x, y };
         this.spd = { x: 0, y: 0 };
     }
@@ -24,9 +25,8 @@ class Entity extends EventEmitter {
         };
     }
     get uuid() { return this.id; }
-    ;
     set uuid(_uuid) { this.id = _uuid; }
-    ;
+    
     create() {
         if (this.tags.includes('solid') || this.isSolid) {
             this.tree.insert(this);

@@ -3,13 +3,14 @@ import Room from '#concepts/room';
 import { EventEmitter } from 'events';
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
+    lobbyid = "-1"; // assigned when created
+    status = 'open';
+    players = [];
+    rooms = [];
+    max_players = global.config.lobby.max_players || undefined; // smells like Java
+
     constructor() {
         super();
-        this.lobbyid = "-1"; // assigned when created
-        this.status = 'open';
-        this.players = [];
-        this.rooms = [];
-        this.max_players = global.config.lobby.max_players || undefined; // smells like Java
         for (let i = 0; i < global.maps.length; i++) {
             let map = global.maps[i];
             let room = new Room(map, this);

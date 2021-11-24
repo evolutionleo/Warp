@@ -6,18 +6,19 @@ export var GAME_MODE;
 })(GAME_MODE || (GAME_MODE = {}));
 // Map is a blueprint for a room
 export default class GameMap {
+    name = ''; // map's display name
+    room_name = ''; // room name in GMS2
+    description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+    preview = ''; // maybe implement preview images
+    max_players = 99;
+    width = 1344;
+    height = 768;
+    mode = GAME_MODE.MMO; // either 'mmo' or 'pvp'
+    start_pos = [{ x: 0, y: 0 }]; // if 'mmo', it picks a random starting pos, otherwise - in order
+    contents = '[]';
+
     // content: string; // a JSON string containing all the contents of the room
     constructor(options) {
-        this.name = ''; // map's display name
-        this.room_name = ''; // room name in GMS2
-        this.description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-        this.preview = ''; // maybe implement preview images
-        this.max_players = 99;
-        this.width = 1344;
-        this.height = 768;
-        this.mode = GAME_MODE.MMO; // either 'mmo' or 'pvp'
-        this.start_pos = [{ x: 0, y: 0 }]; // if 'mmo', it picks a random starting pos, otherwise - in order
-        this.contents = '[]';
         Object.assign(this, options);
         Object.assign(this, LoadRoom('./rooms/' + this.room_name + '.yy'));
         // trace(this.contents);

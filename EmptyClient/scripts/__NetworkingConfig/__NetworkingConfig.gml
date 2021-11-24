@@ -1,6 +1,9 @@
 // All the macro/config definitions go here
 
+#macro GMOF_VERSION "v4.0.1"
 #macro GAME_VERSION "v0.1"
+
+trace("Welcome to GMOF % by Evoleo!", GMOF_VERSION)
 
 // These are config-dependant macros.
 // Choose configs in GameMaker in the top-right corner

@@ -1,13 +1,16 @@
 import UnknownEntity from '#entity/unknown';
 import * as fs from 'fs';
+
 export default function LoadRoom(path = './rooms/rTest.yy') {
     let json = fs.readFileSync('./rooms/rTest.yy').toString();
     let regex = /\,(?=\s*?[\}\]])/g; // remove trailing commans
     json = json.replace(regex, '');
+
     const data = JSON.parse(json);
     const width = data.roomSettings.Width;
     const height = data.roomSettings.Height;
     const contents = [];
+
     data.layers.forEach((layer) => {
         if (layer.instances) {
             layer.instances.forEach((inst) => {
@@ -23,6 +26,7 @@ export default function LoadRoom(path = './rooms/rTest.yy') {
             });
         }
     });
+    
     return {
         width,
         height,

@@ -2,9 +2,11 @@
 import trace from '#util/logging';
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
+
+
 const common_config = {
     meta: {
-        game_name: 'ResourceMMO',
+        game_name: 'OnlineGame',
         version: 'v0.1',
         framework_version: 'v3.0',
         server: 'unknown'
@@ -18,6 +20,8 @@ const common_config = {
     // start_pos: { x: 100, y: 100 }, // moved to map definitions
     necessary_login: false
 };
+
+
 const prod_config = {
     meta: {
         server: 'production'
@@ -28,6 +32,7 @@ const prod_config = {
     // you can add a postfix at the end of the name to separate them
     shell_enabled: false
 };
+
 const dev_config = {
     meta: {
         server: 'development'
@@ -37,10 +42,16 @@ const dev_config = {
     db: args.db || 'mongodb://127.0.0.1:27017/resource-mmo',
     shell_enabled: true
 };
+
+
+
 const default_config = dev_config;
 const env = args.env || 'dev';
+/** @type {typeof common_config | typeof dev_config } */
 const config = {};
 Object.assign(config, common_config);
+
+
 if (env === 'production' || env === 'prod' || args.prod) {
     Object.assign(config, prod_config);
 }
@@ -50,6 +61,8 @@ else if (env === 'development' || env === 'dev' || args.dev) {
 else {
     Object.assign(config, default_config);
 }
+
 trace('Config loaded! environment: ' + config.env_name);
+
 global.config = config;
 export default config;

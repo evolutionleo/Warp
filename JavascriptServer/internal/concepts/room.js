@@ -2,36 +2,49 @@ import trace from '#util/logging';
 import PlayerEntity from '#entities/entity_types/player';
 import { EventEmitter } from 'events';
 import RBush from 'rbush';
+
 class MyRBush extends RBush {
     toBBox(e) { return e.bbox; }
     compareMinX(a, b) { return a.bbox.left - b.bbox.left; }
     compareMinY(a, b) { return a.bbox.top - b.bbox.top; }
 }
+
 const tickrate = global.config.tps || 60;
+
 export class EntityList extends Array {
     filterByType(type) {
         return this.filter(e => e.type === type);
     }
+
     ofType(type) {
         return this.filterByType(type);
     }
+
     // returns only the solid 
     solid() {
         return this.filter(e => e.isSolid);
     }
+
     withTag(tag) {
         return this.filter(e => e.hasTag(tag));
     }
 }
+
+
 class Room extends EventEmitter {
+    tickrate = tickrate;
+
+    entities = new EntityList();
+    players = [];
+
+    recentlyJoined = [];
+    recentlyJoinedTimer = 120; // 2 seconds?
+
+
     constructor(map, lobby) {
         super();
-        this.tickrate = tickrate;
-        this.entities = new EntityList();
-        this.players = [];
-        this.recentlyJoined = [];
-        this.recentlyJoinedTimer = 120; // 2 seconds?
         this.lobby = lobby;
+
         // if provided a string -
         if (typeof map === 'string') {
             // find a map with the name
@@ -47,12 +60,17 @@ class Room extends EventEmitter {
         else { // otherwise - just set the map
             this.map = map;
         }
+
+
         this.width = this.map.width;
         this.height = this.map.height;
+
         this.tree = new MyRBush();
+
         setInterval(this.tick.bind(this), 1000 / this.tickrate);
         this.unwrap(this.map.contents); // || '[]');
     }
+
     // create entities from the contents string
     unwrap(contents = '[]') {
         if (typeof contents === 'string') {
@@ -78,6 +96,7 @@ class Room extends EventEmitter {
         // bulk load all the entities
         this.tree.load(this.entities.filter(e => e.isSolid));
     }
+
     tick() {
         this.entities.forEach(entity => {
             entity.update();
@@ -90,6 +109,7 @@ class Room extends EventEmitter {
             return timer > 0;
         });
     }
+
     spawnEntity(etype, x, y, client) {
         if (client === null) {
             var entity = new etype(this, x, y);
@@ -97,31 +117,42 @@ class Room extends EventEmitter {
         else {
             var entity = new etype(this, x, y, client);
         }
-        entity.create();
-        this.entities.push(entity);
+
         entity.on('death', () => {
             this.broadcast({ cmd: 'entity death', id: entity.uuid });
         });
+
         entity.on('remove', () => {
             this.broadcast({ cmd: 'entity remove', id: entity.uuid });
         });
+
         this.emit('spawn', entity);
+        this.entities.push(entity);
+
+        entity.create();
+
+
         return entity;
     }
+
     // player manipulation
     removePlayer(player) {
         this.players.splice(this.players.indexOf(player));
         player.room = null;
+
         // var player_entity = this.entities.find((entity) => {
         //     return (entity instanceof PlayerEntity) && (entity as PlayerEntity).client === player;
         // });
+
         player.entity.remove();
         this.emit('player leave', player);
         // this.broadcast({ cmd: 'player leave', player: player });
     }
+
     addPlayer(player) {
         this.players.push(player);
         player.room = this;
+        
         let x, y;
         // if (player.profile) {
         //     x = player.profile.x;
@@ -132,32 +163,40 @@ class Room extends EventEmitter {
         const p = this.map.getStartPos(this.players.length - 1);
         x = p.x;
         y = p.y;
+
         const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
         player.entity = player_entity;
+
         // send all the existing entities
         this.entities.forEach(entity => {
             entity.send(player);
         });
+
         this.recentlyJoined.push([player, this.recentlyJoinedTimer]);
         this.emit('player join', player);
     }
+
     // move between rooms
     movePlayer(player, new_room) {
         this.removePlayer(player);
         new_room.addPlayer(player);
     }
+
     broadcast(packet) {
         this.players.forEach(player => {
             player.write(packet);
         });
     }
+
     close() {
         this.emit('close');
         this.broadcast({ cmd: 'room kick', message: 'Room is closing' });
+        
         while (this.players.length > 0) {
             this.removePlayer(this.players[0]);
         }
     }
+
     serialize() {
         return {
             player_count: this.players.length,
@@ -166,4 +205,5 @@ class Room extends EventEmitter {
         };
     }
 }
+
 export default Room;

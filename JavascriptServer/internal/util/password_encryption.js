@@ -3,9 +3,10 @@ import * as crypto from 'crypto'; // encrypt our passwords!
 export async function hash_password(password) {
     return new Promise((resolve, reject) => {
         const salt = crypto.randomBytes(8).toString('hex');
+
         crypto.scrypt(password, salt, 16, (err, derivedKey) => {
-            if (err)
-                reject(err);
+            if (err) reject(err);
+            
             resolve(salt + ":" + derivedKey.toString('hex'));
         });
     });
@@ -14,9 +15,10 @@ export async function verify_password(password, _hash) {
     return new Promise((resolve, reject) => {
         const [salt, hash] = _hash.split(':');
         const hashBuffer = Buffer.from(hash, 'hex');
+
         crypto.scrypt(password, salt, 16, (err, derivedKey) => {
-            if (err)
-                reject(err);
+            if (err) reject(err);
+            
             resolve(crypto.timingSafeEqual(hashBuffer, derivedKey));
         });
     });

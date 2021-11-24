@@ -36,7 +36,6 @@
         "#entity/*": "./internal/entities/entity_types/*.js",
         "#entities/*": "./internal/entities/*.js",
         "#initializers/*": "./internal/initializers/*.js",
-        "#util/*": "./internal/util/*.js",
-        "#types/*": "./internal/types/*.js"
+        "#util/*": "./internal/util/*.js"
     }
 }
