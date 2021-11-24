@@ -84,7 +84,7 @@ inquirer.prompt(questions).then(answers => {
             client_fname = 'GMClient.zip';
             break;
         case 'JavaScript (experimental)':
-            client_fname = 'JSClient.zip';
+            client_fname = 'WebClient.zip';
             break;
         default:
             throw new Error('Unknown Client Template: ' + serverTemplate);

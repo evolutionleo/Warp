@@ -1,6 +1,6 @@
 {
-  "name": "create-gmof-project",
-  "version": "1.0.1",
+  "name": "create-gmof-app",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "bin": "index.js",
