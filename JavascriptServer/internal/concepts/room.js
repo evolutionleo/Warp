@@ -118,6 +118,10 @@ class Room extends EventEmitter {
             var entity = new etype(this, x, y, client);
         }
 
+        
+        entity.create();
+        this.entities.push(entity);
+
         entity.on('death', () => {
             this.broadcast({ cmd: 'entity death', id: entity.uuid });
         });
@@ -127,9 +131,6 @@ class Room extends EventEmitter {
         });
 
         this.emit('spawn', entity);
-        this.entities.push(entity);
-
-        entity.create();
 
 
         return entity;
