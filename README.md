@@ -2,6 +2,8 @@
 #### A simple yet feature-rich framework for multiplayer games, written in GMS2.3 and NodeJS
 #### Maintained by [@evolutionleo](https://github.com/evolutionleo)
 #### If you have any questions, please join my [Discord](https://discord.gg/WRsgumM2T6)
+
+
 # Features
 - **Simple one-line calls** to send/process packages on both server and client sides
 - **No need to deal with buffers** whatsoever
@@ -15,6 +17,13 @@
 - [Platformer Example](https://github.com/evolutionleo/StreamGame)
 
 # Installing
+### \[New!\] Client + Server
+- You need to have [NodeJS](https://nodejs.org/en/) and [npm](https://npmjs.org) installed
+- Run `npx create-gmof-app` in the console
+- Follow the instructions, select the templates for the Client and the Server
+- Done! It will automatically pull everything from the [latest release](https://github.com/evolutionleo/GM-Online-Framework/releases/latest)
+
+
 ### Client-side
 - Install .yymps from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases/latest)
 - Import it to your project using Local Package system *(you can also choose to include the Demo)*
@@ -41,11 +50,11 @@ Congratulations if you've completed the Installation step!
 
 Anyways. You see, many other networking frameworks might seem a bit overwhelming (even to people who are somewhat experienced in the topic).
 
-And even though v3.0 of this framework did add some advanced features, I still tried my best to provide the simplest interface:
+And even though versions from v3.0 and above of the framework did add some advanced features, I still tried my best to provide the simplest interface for the basic packet sending/receiving:
 ### Sending a packet (JS and GML)
 Sending a message to the server might be as easy as:
 ```gml
-network_write({ cmd: "Hello", str: "Hello, Server!" })
+send({ cmd: "Hello", str: "Hello, Server!" })
 ```
 or even:
 ```gml
@@ -62,10 +71,10 @@ if you write a wrapper
 
 ### (Advanced) Using lobbies and maps:
 - Add new maps in the `maps/` folder
-- Choose how many lobbies you need in `initializers/03_lobbies.js`
+- Choose how many lobbies you need in `initializers/04_lobbies.js`
 - Use `"lobby list"`, `"lobby join"`, `"lobby leave"` to work with lobbies
 - Most of the generic logic is already coded, but you can add in features that you personally need
-- You can extend the `Lobby` class in `entities/lobby.js`, the `Map` class in `entities/map.js` and
+- You can extend the `Lobby` class in `concepts/lobby.js`, the `Map` class in `concepts/map.js`
 
 ### (Advanced) Using accounts and saving:
 - Make sure you installed MongoDB (instructions in the Installing section)
@@ -82,7 +91,7 @@ if you write a wrapper
 - Edit the server configs inside `config.js`
 - Edit the client configs inside `__NetworkingConfig.gml`
 - Select the server config by adding `--env=prod` or `--env=dev` parameter to the classic `node .` command
-- Select the client config by clicking the 'target' button in the top-right corner of IDE
+- **Select the client config by clicking the 'target' button in the top-right corner of IDE**
 
 ## Typescript Server
 ### Installing
@@ -97,7 +106,7 @@ if you write a wrapper
 | Recieve command | Add a case in `custom/handlePacket.ts` |
 
 ### Running
-- Compile the project by running `tsc` or run `tsc -w` to avoid recompiling after every change
+- Compile the project by running `npx tsc` or run `npx tsc -w` to avoid recompiling after every change
 - Run `node .` or `node out/server.js`
 
 
@@ -105,6 +114,6 @@ if you write a wrapper
 - [Messagepack](https://msgpack.org/) serialization format 
 - [@jujuadams](https://github.com/jujuadams)'s [SNAP](https://github.com/jujuadams/snap) library, which enables Messagepack's encoding/decoding inside GameMaker
 - [NodeJS Messagepack](https://github.com/msgpack/msgpack) encoder/decoder
-- [rm2kdev's ancient series that inspired this](https://www.youtube.com/watch?v=EyNVeTzhC1w&list=PLLUWsMtogf9jQGzn3nAjAw2_aq3PM08pC)
+- [rm2kdev's ancient series that inspired all this](https://www.youtube.com/watch?v=EyNVeTzhC1w&list=PLLUWsMtogf9jQGzn3nAjAw2_aq3PM08pC)
 - Pull request for the first TypeScript version: [@davawen](https://github.com/davawen)
 - Framework by: [@evolutionleo](https://github.com/evolutionleo) (me)
