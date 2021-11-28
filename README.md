@@ -7,7 +7,7 @@
 # Features
 - **Simple one-line calls** to send/process packages on both server and client sides
 - **No need to deal with buffers** whatsoever
-- **Advanced features:** lobbies, account/profile system, saving/loading data, dev/prod configurations
+- **Advanced features:** server-side physics, entities, lobbies, account/profile system, saving/loading data with MongoDB
 - **Well-commented code** if you decide to dive into the sources
 - **NodeJS server** can run on a Linux hosting/dedicated server, as opposed to servers in GML
 - **MIT license** (you can use this framework in commercial projects and modify/contribute in any way)
