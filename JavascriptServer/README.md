@@ -1,8 +1,7 @@
 # What is this?
-This is a feature-rich TypeScript server
+This is a feature-rich JavaScript server, compiled from TypeScript with a couple things improved by hand
 
 # How do I run this?
-Well, first you'll need to compile the TypeScript code to JavaScript.
 - Run `npm i` to install all the dependencies
-- Run `npx tsc` to compile the whole project or `npx tsc -w` to start the compiler in watch mode
-- After that, just run the server normally via `node .` (or `node out/server.js`)
+- Run the server via `node .` (or `node server.js`)
+- PROFIT!
