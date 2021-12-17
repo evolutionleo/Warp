@@ -18,6 +18,7 @@ const js_zip = new AdmZip();
 js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/custom'), '/custom');
 js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/internal'), '/internal');
 js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/maps'), '/maps');
+js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/rooms'), '/rooms');
 js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/package.json'));
 js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/.gitignore'));
 js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/server.js'));
