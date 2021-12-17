@@ -12,7 +12,6 @@
         "postbuild": "ef-tspm"
     },
     "dependencies": {
-        "@ef-carbon/tspm": "^2.2.5",
         "@msgpack/msgpack": "^2.3.0",
         "extend": "^3.0.2",
         "minimist": "^1.2.5",

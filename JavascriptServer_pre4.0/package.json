@@ -1,6 +1,6 @@
 {
-    "name": "ponk",
-    "version": "0.0.1",
+    "name": "gmof",
+    "version": "4.1.1",
     "private": true,
     "description": "kappa",
     "main": "server.js",
