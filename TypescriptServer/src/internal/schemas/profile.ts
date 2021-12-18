@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 import { Model, Document } from 'mongoose';
 const { Schema, model } = mongoose;
 
-import { Account, IAccount } from '#schemas/Account';
+import { Account, IAccount } from '#schemas/account';
 
 export interface IProfile extends Document {
     account_id: string,
