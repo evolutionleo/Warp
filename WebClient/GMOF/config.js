@@ -1,4 +1,6 @@
-const common_config = {}
+const common_config = {
+    tickrate: 60
+}
 
 const dev_config = {
     server_ip: "127.0.0.1",
