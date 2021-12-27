@@ -26,10 +26,10 @@ export default class PhysicsEntity extends Entity {
 
 
     isOutsideRoom(x = this.x, y = this.y):boolean {
-        return this.bbox.left > this.room.width
-            || this.bbox.right < 0
-            || this.bbox.bottom < 0
-            || this.bbox.top > this.room.height;
+        return this.bbox.left - this.x + x > this.room.width
+            || this.bbox.right - this.x + x < 0
+            || this.bbox.bottom - this.y + y < 0
+            || this.bbox.top - this.y + y > this.room.height;
     }
 
     move(xspd:number = undefined, yspd:number = 0):void {
