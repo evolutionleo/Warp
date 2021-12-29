@@ -29,11 +29,11 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "Login",
-    "path": "folders/GMOF/Demo/Objects/UI/Login.yy",
+    "name": "UI",
+    "path": "folders/Objects/UI.yy",
   },
   "resourceVersion": "1.0",
-  "name": "btnRegister",
+  "name": "btnToLogin",
   "tags": [],
   "resourceType": "GMObject",
 }

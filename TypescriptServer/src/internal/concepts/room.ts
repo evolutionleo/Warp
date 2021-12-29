@@ -2,6 +2,11 @@ import trace from '#util/logging';
 import Client from '#concepts/client';
 import Entity, { SerializedEntity } from '#concepts/entity';
 import { EntityConstructor, PlayerEntityConstructor } from '#concepts/entity';
+import { System, Circle, Polygon } from 'detect-collisions';
+
+// let sys = new System();
+// let s = new Polygon({ x: 0, y: 0}, [{x: 0, y: 0}, {x: 10, y: 0 }, {x: 10, y: 10}, {x: 0, y: 10}])
+// sys.insert(s);
 
 import PlayerEntity from '#entities/entity_types/player';
 import GameMap from '#concepts/map';
@@ -9,11 +14,10 @@ import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
 import RBush from 'rbush';
 
-class MyRBush extends RBush<Entity> {
+export class MyRBush extends RBush<Entity> {
     toBBox(e:Entity) { return e.bbox; }
     compareMinX(a:Entity, b:Entity) { return a.bbox.left - b.bbox.left; }
     compareMinY(a:Entity, b:Entity) { return a.bbox.top - b.bbox.top; }
-    
 }
 
 
@@ -46,10 +50,6 @@ export class EntityList extends Array<Entity> {
     withTag(tag:string) {
         return this.filter(e => e.hasTag(tag));
     }
-
-    // floor() {
-    //     return this.filter(e => e.isFloor);
-    // }
 }
 
 
@@ -61,8 +61,7 @@ class Room extends EventEmitter {
     lobby:Lobby;
     tickrate:number = tickrate;
     entities:EntityList/*Entity[]*/ = new EntityList();
-    // entity_chunks:Chunk[][] = [];
-    tree:MyRBush;
+    tree:System;
     players:Client[] = [];
     recentlyJoined:[Client, number][] = [];
     recentlyJoinedTimer = 120; // 2 seconds?
@@ -96,7 +95,8 @@ class Room extends EventEmitter {
         this.width = this.map.width;
         this.height = this.map.height;
         
-        this.tree = new MyRBush();
+        // this.tree = new MyRBush(7);
+        this.tree = new System();
 
 
         setInterval(this.tick.bind(this), 1000 / this.tickrate);
@@ -111,7 +111,11 @@ class Room extends EventEmitter {
             entities.forEach(entity => {
                 const etype = global.entityNames[entity.type];
                 // trace(etype);
-                this.spawnEntity(etype, entity.x, entity.y);
+                const e = this.spawnEntity(etype, entity.x, entity.y);
+                e.xscale = entity.xscale;
+                e.yscale = entity.yscale;
+
+                e.regenerateCollider();
             });
             
         }
@@ -122,6 +126,8 @@ class Room extends EventEmitter {
                 const e = this.spawnEntity(etype, entity.x, entity.y);
                 e.xscale = entity.xscale;
                 e.yscale = entity.yscale;
+
+                e.regenerateCollider();
             });
         }
         else {
@@ -130,7 +136,7 @@ class Room extends EventEmitter {
 
 
         // bulk load all the entities
-        this.tree.load(this.entities.filter(e => e.isSolid));
+        // this.tree.load(this.entities.filter(e => e.isSolid).map(e => e.shape));
     }
     
     tick():void {
@@ -156,15 +162,20 @@ class Room extends EventEmitter {
         else {
             var entity = new (etype as PlayerEntityConstructor)(this, x, y, client);
         }
+
         entity.create();
         this.entities.push(entity);
+
         entity.on('death', () => {
             this.broadcast({ cmd: 'entity death', id: entity.uuid });
         });
+
         entity.on('remove', () => {
             this.broadcast({ cmd: 'entity remove', id: entity.uuid });
         });
+
         this.emit('spawn', entity);
+
         return entity;
     }
 
@@ -185,6 +196,8 @@ class Room extends EventEmitter {
         player.room = this;
         
         let x:number, y:number;
+
+        // load the position from the db - uncomment if you want persistent position
         // if (player.profile) {
         //     x = player.profile.x;
         //     y = player.profile.y;
@@ -197,7 +210,7 @@ class Room extends EventEmitter {
         y = p.y;
         const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
         player.entity = player_entity;
-        // send all the existing entities
+        // send all the existing entities to the player
         this.entities.forEach(entity => {
             entity.send(player);
         });

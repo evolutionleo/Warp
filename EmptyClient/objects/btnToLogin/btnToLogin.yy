@@ -29,8 +29,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "UI",
-    "path": "folders/GMOF/Demo/Objects/UI.yy",
+    "name": "Main Menu",
+    "path": "folders/GMOF/Demo/Objects/UI/Main Menu.yy",
   },
   "resourceVersion": "1.0",
   "name": "btnToLogin",

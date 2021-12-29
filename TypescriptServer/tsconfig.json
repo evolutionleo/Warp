@@ -7,6 +7,7 @@
         "rootDir": "src/",
         "module": "ESNext",
         "target": "ESNext",
+        "allowSyntheticDefaultImports": true,
         "paths": {
             "#schemas/*": ["internal/schemas/*"],
             "#entity/*": ["internal/entities/entity_types/*"],

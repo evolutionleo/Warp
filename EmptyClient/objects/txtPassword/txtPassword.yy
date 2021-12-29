@@ -29,8 +29,8 @@
   "properties": [],
   "overriddenProperties": [],
   "parent": {
-    "name": "UI",
-    "path": "folders/GMOF/Demo/Objects/UI.yy",
+    "name": "Login",
+    "path": "folders/GMOF/Demo/Objects/UI/Login.yy",
   },
   "resourceVersion": "1.0",
   "name": "txtPassword",
