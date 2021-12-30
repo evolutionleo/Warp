@@ -18,23 +18,21 @@ import { delayReceive } from '#util/artificial_delay';
 
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import chalk from 'chalk';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
 // load some init scripts (to not put everything in this file)
 const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
-// init_files.forEach(function(file) {
-//     import("file://" + __dirname + '/internal/initializers/' + file);
-// })
 
 // because sync/order matters
 for(var i = 0; i < init_files.length; i++) {
     var file = init_files[i];
-    trace('loading initializer:', file);
+    trace(chalk.cyan('loading initializer:', file));
     await import("file://" + __dirname + '/internal/initializers/' + file);
 }
-trace('loaded initializers!');
+trace(chalk.blueBright('loaded initializers!'));
 
 
 // The Actual Server

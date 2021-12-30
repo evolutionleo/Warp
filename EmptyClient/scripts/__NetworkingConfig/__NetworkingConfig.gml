@@ -5,9 +5,23 @@
 
 trace("Welcome to GMOF % by Evoleo!", GMOF_VERSION)
 
-// These are config-dependant macros.
-// Choose configs in GameMaker in the top-right corner
 
+// purges all entities from the room (so that there aren't any local duplicates when loading everything from the server)
+// toggle this off if you have some specific case where you need to keep the entities that are in the room locally
+#macro PURGE_ENTITIES_ON_ROOM_START true
+
+// a value between 0 and 1 
+#macro POS_INTERPOLATION .5
+// instantly teleports if the distance is > than this
+#macro POS_INTERP_THRESH 300
+
+// makes GMOF ignore any older "entity" packets
+// very useful for reducing jittering in real-time games
+#macro TIMESTAMPS_ENABLED true
+
+
+// Below are config-dependant macros.
+// Choose configs in GameMaker in the top-right corner
 
 // Default (just mirrors debug)
 #macro Default:IP "127.0.0.1"

@@ -32,6 +32,8 @@
   },
   "resourceVersion": "1.0",
   "name": "oWall",
-  "tags": [],
+  "tags": [
+    "solid",
+  ],
   "resourceType": "GMObject",
 }

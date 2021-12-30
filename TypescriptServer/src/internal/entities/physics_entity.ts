@@ -26,10 +26,12 @@ export default class PhysicsEntity extends Entity {
 
 
     isOutsideRoom(x = this.x, y = this.y):boolean {
-        return this.bbox.left - this.x + x > this.room.width
-            || this.bbox.right - this.x + x < 0
-            || this.bbox.bottom - this.y + y < 0
-            || this.bbox.top - this.y + y > this.room.height;
+        let bbox = this.bbox; // this is an optimization btw
+
+        return bbox.left - this.x + x > this.room.width
+            || bbox.right - this.x + x < 0
+            || bbox.bottom - this.y + y < 0
+            || bbox.top - this.y + y > this.room.height;
     }
 
     move(xspd:number = undefined, yspd:number = 0):void {
@@ -109,18 +111,20 @@ export default class PhysicsEntity extends Entity {
             }
         }
         
-        if (this.bbox.left > this.room.width) {
-            tryWrap(this.x - this.bbox.right + 0, this.y);
+        let bbox = this.bbox; // this is an optimization btw
+
+        if (bbox.left > this.room.width) {
+            tryWrap(this.x - bbox.right + 0, this.y);
         }
-        else if (this.bbox.right < 0) {
-            tryWrap(this.bbox.left - this.x + this.room.width, this.y);
+        else if (bbox.right < 0) {
+            tryWrap(bbox.left - this.x + this.room.width, this.y);
         }
 
-        if (this.bbox.bottom < 0) {
-            tryWrap(this.x, this.bbox.bottom - this.y + this.room.height);
+        if (bbox.bottom < 0) {
+            tryWrap(this.x, bbox.bottom - this.y + this.room.height);
         }
-        else if (this.bbox.top > this.room.height) {
-            tryWrap(this.x, this.y - this.bbox.top + 0);
+        else if (bbox.top > this.room.height) {
+            tryWrap(this.x, this.y - bbox.top + 0);
         }
     }
 

@@ -111,15 +111,15 @@ export default class SendStuff {
     // in handlePacket.js or wherever else where you have client objects
     // !!!
     sendHello():void {
-        this.write({cmd: 'hello', str: 'Hello, client!'})
-        this.write({cmd: 'hello2', str: 'Hello again, client!'})
+        this.send({cmd: 'hello', str: 'Hello, client!'})
+        this.send({cmd: 'hello2', str: 'Hello again, client!'})
     }
 
     /**
      * @param {string} msg 
      */
     sendMessage(msg:string):void {
-        this.write({cmd: 'message', msg: msg})
+        this.send({cmd: 'message', msg: msg})
     }
 
     // these are some preset functions
@@ -128,7 +128,7 @@ export default class SendStuff {
      * @param {string} [reason='']
      */
     sendRegister(status:string, reason:string = ''):void {
-        this.write({cmd: 'register', status: status, reason: reason});
+        this.send({cmd: 'register', status: status, reason: reason});
     }
 
     /**
@@ -137,7 +137,7 @@ export default class SendStuff {
      * @param {string} [reason=''] 
      */
     sendLogin(status:string, reason:string = ''):void {
-        this.write({cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON()});
+        this.send({cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON()});
     }
 
     /**
@@ -145,7 +145,7 @@ export default class SendStuff {
      * @param {Lobby} lobby 
      */
     sendJoinLobby(lobby:Lobby):void {
-        this.write({ cmd: 'lobby join', lobby: lobby.serialize() });
+        this.send({ cmd: 'lobby join', lobby: lobby.serialize() });
     }
 
     /**
@@ -154,7 +154,7 @@ export default class SendStuff {
      * @param {string} [reason='']
      */
     sendRejectLobby(lobby:Lobby, reason:string = ''):void {
-        this.write({ cmd: 'lobby reject', lobby: lobby.serialize(), reason: reason });
+        this.send({ cmd: 'lobby reject', lobby: lobby.serialize(), reason: reason });
     }
 
     /**
@@ -164,7 +164,7 @@ export default class SendStuff {
      * @param {boolean} [forced=true]
      */
     sendKickLobby(lobby:Lobby, reason:string = '', forced:boolean = true):void {
-        this.write({ cmd: 'lobby leave', lobby: lobby.serialize(), reason: reason, forced: forced });
+        this.send({ cmd: 'lobby leave', lobby: lobby.serialize(), reason: reason, forced: forced });
     }
 
     /**
@@ -172,11 +172,11 @@ export default class SendStuff {
      * @param {Lobby} lobby 
      */
     sendUpdateLobby(lobby:Lobby):void { // some data changed
-        this.write({ cmd: 'lobby update', lobby: lobby.serialize() });
+        this.send({ cmd: 'lobby update', lobby: lobby.serialize() });
     }
 
     sendLobbyList():void {
-        this.write({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.serialize()) }); // lobbies as an array
+        this.send({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.serialize()) }); // lobbies as an array
     }
 
     /**
@@ -184,7 +184,7 @@ export default class SendStuff {
      * @param {string} lobbyid 
      */
     sendLobbyInfo(lobbyid:string):void {
-        this.write({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].serialize()})
+        this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].serialize()})
     }
 
     /**
@@ -195,7 +195,11 @@ export default class SendStuff {
      * @param {string} [uuid=undefined]
      */
     sendPlay(lobby:Lobby, room:Room, start_pos:Point, uuid?:string):void {
-        this.write({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos, uuid });
+        this.send({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos, uuid });
+    }
+
+    sendRoomTransition(room_to:Room):void {
+        this.send({});
     }
 
     /**
@@ -212,6 +216,6 @@ export default class SendStuff {
 
     // for example:
     sendSomething(greeting:string) {
-        this.write({ cmd: 'something', greeting: greeting });
+        this.send({ cmd: 'something', greeting: greeting });
     }
 }

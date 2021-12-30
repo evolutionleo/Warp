@@ -1,0 +1,5 @@
+/// @desc PURGE ALL LOCAL ENTITIES FROM THE ROOM
+
+if (PURGE_ENTITIES_ON_ROOM_START) {
+	instance_destroy()
+}

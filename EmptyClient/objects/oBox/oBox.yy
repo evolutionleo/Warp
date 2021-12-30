@@ -34,6 +34,8 @@
   },
   "resourceVersion": "1.0",
   "name": "oBox",
-  "tags": [],
+  "tags": [
+    "solid",
+  ],
   "resourceType": "GMObject",
 }

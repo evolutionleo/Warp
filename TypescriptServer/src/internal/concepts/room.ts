@@ -13,12 +13,13 @@ import GameMap from '#concepts/map';
 import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
 import RBush from 'rbush';
+import chalk from 'chalk';
 
-export class MyRBush extends RBush<Entity> {
-    toBBox(e:Entity) { return e.bbox; }
-    compareMinX(a:Entity, b:Entity) { return a.bbox.left - b.bbox.left; }
-    compareMinY(a:Entity, b:Entity) { return a.bbox.top - b.bbox.top; }
-}
+// export class MyRBush extends RBush<Entity> {
+//     toBBox(e:Entity) { return e.bbox; }
+//     compareMinX(a:Entity, b:Entity) { return a.bbox.left - b.bbox.left; }
+//     compareMinY(a:Entity, b:Entity) { return a.bbox.top - b.bbox.top; }
+// }
 
 
 // import { entityNames } from '#entities/_entities';
@@ -140,11 +141,20 @@ class Room extends EventEmitter {
     }
     
     tick():void {
+        let t_beforeTick = new Date().getTime();
+
         this.entities.forEach(entity => {
             entity.update();
             this.recentlyJoined.forEach(([player, _]) => entity.send(player));
         });
         this.emit('tick');
+
+        let t_afterTick = new Date().getTime();
+        let t_tick = t_afterTick - t_beforeTick;
+
+        if (t_tick > 1000 / this.tickrate) {
+            trace(chalk.red('lag detected: this tick took ' + t_tick + ' milliseconds.'));
+        }
 
         // we will send everything every frame to those who joined recently (so that they 100% get it)
         this.recentlyJoined.map((player, timer) => [player, timer-1]);
@@ -183,9 +193,6 @@ class Room extends EventEmitter {
     removePlayer(player:Client):void {
         this.players.splice(this.players.indexOf(player));
         player.room = null;
-        // var player_entity = this.entities.find((entity) => {
-        //     return (entity instanceof PlayerEntity) && (entity as PlayerEntity).client === player;
-        // });
         player.entity.remove();
         this.emit('player leave', player);
         // this.broadcast({ cmd: 'player leave', player: player });

@@ -6,7 +6,7 @@ import { System, Circle, Polygon, ICollider, Types as ColliderTypes } from 'dete
 import * as SAT from 'sat';
 import Collider from '#concepts/collider';
 
-import { v4 as uuidv4, v4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 import Client from "./client";
 import Room from "./room";
 
@@ -33,7 +33,10 @@ export type SerializedEntity = {
     y: number,
     xscale: number,
     yscale: number,
-    spd?: Point
+    spd?: Point,
+    props?: { // custom variables
+        [name: string]: any
+    }
 }
 
 export type EntityType = typeof Entity | typeof PlayerEntity;
@@ -59,6 +62,17 @@ class Entity extends EventEmitter {
 
     base_size:Point = { x: 64, y: 64 };
     scale:Point = { x: 1, y: 1 };
+
+    // propNames:string[] = [];
+    // e.x. propNames = [ 'hp', 'mana', 'jumpHeight' ];
+
+    get propNames() { return Object.getOwnPropertyNames(this); }
+
+    get props() {
+        let _props = {};
+        this.propNames.forEach(propName => _props[propName] = this[propName]);
+        return _props;
+    }
 
 
     collider:Collider; // a polygon
@@ -197,35 +211,28 @@ class Entity extends EventEmitter {
     public placeMeeting(x:number = this.x, y:number = this.y, type?:EntityType|string):boolean {
         this.regenerateCollider(x, y);
 
-        if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y) {
-            trace('changed scale - regenerating the collider');
-            this.regenerateCollider(x, y);
-        }
-        else {
-            this.collider.pos.x = x;
-            this.collider.pos.y = y;
-            this.collider.setAngle(this.angle);
-            this.collider.setPoints([
-                {x: 0, y: this.height},
-                {x: this.width, y: this.height},
-                {x: this.width, y: 0},
-                {x: 0, y: 0}
-            ]);
-            this.tree.updateBody(this.collider);
-        }
+        // if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y) {
+        //     trace('changed scale - regenerating the collider');
+        //     this.regenerateCollider(x, y);
+        // }
+        // else {
+        //     this.collider.pos.x = x;
+        //     this.collider.pos.y = y;
+        //     this.collider.setAngle(this.angle);
+        //     this.collider.setPoints([
+        //         {x: 0, y: this.height},
+        //         {x: this.width, y: this.height},
+        //         {x: this.width, y: 0},
+        //         {x: 0, y: 0}
+        //     ]);
+        //     this.tree.updateBody(this.collider);
+        // }
 
         this.prev_size = {x: this.size.x, y: this.size.y}
 
         // the broad-phase
         let arr = this.tree.getPotentials(this.collider) as Collider[];
         // let arr = this.tree.all() as Collider[];
-
-        if (this.type === 'Player') {
-            // console.log(this.collider.collider);
-            // console.log('all:', this.tree.all().length);
-            // console.log('potentials: ' + arr.length);
-            // console.log('colliding: ' + arr.filter(c => c !== this.collider && this.tree.checkCollision(this.collider, c)).length)
-        }
 
         // the narrow-phase
         return arr.some(
@@ -240,7 +247,6 @@ class Entity extends EventEmitter {
         // let bbox = this.getBBox(x, y);
         this.collider.pos.x = x;
         this.collider.pos.y = y;
-        // this.collider
 
         let candidates = this.tree.getPotentials(this.collider) as Collider[];
         return candidates.filter(
@@ -257,8 +263,7 @@ class Entity extends EventEmitter {
         this.remove();
     }
 
-    // removed from the room
-    // mostly handled
+    // removes the entity from the room (and triggers the 'remove' event)
     remove() {
         this.emit('remove');
         var pos = this.room.entities.indexOf(this);
@@ -282,7 +287,11 @@ class Entity extends EventEmitter {
     }
 
     send(client?:Client) {
-        const data = { cmd: 'entity', ...(this.serialize()) };
+        const data:any = { cmd: 'entity', ...(this.serialize()) };
+        if (global.config.timestamps_enabled) {
+            data.t = new Date().getTime();
+        }
+
         if (client === undefined) {
             this.room.broadcast(data);
         }

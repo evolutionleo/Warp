@@ -74,7 +74,7 @@ export default class Client extends SendStuff {
                 return -1;
             }
         }
-        else if (this.profile) {
+        else if (this.profile) { // load the room from profile
             var room = this.lobby.rooms.find(room => {
                 return room.map.name === this.profile.room;
             });

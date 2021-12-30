@@ -1,5 +1,6 @@
 // get the command line arguments
 import trace from '#util/logging';
+import chalk from 'chalk';
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
 
@@ -15,13 +16,12 @@ const common_config = {
         max_players: 100
     },
 
-    // websocket server?
-    ws_enabled: true,
+    timestamps_enabled: true, // there is a client-side config as well
+    ws_enabled: true, // websocket server?
 
     tps: 60, // tickrate
     db_enabled: true,
-    starting_room: 'Test Room',
-    // start_pos: { x: 100, y: 100 }, // moved to map definitions
+    starting_room: 'Stress Test',
     necessary_login: false
 }
 
@@ -79,7 +79,7 @@ else {
 }
 
 
-trace('Config loaded! environment: ' + config.env_name);
+trace(chalk.blueBright('Config loaded! environment: ' + config.env_name));
 
 global.config = config;
 export default config;

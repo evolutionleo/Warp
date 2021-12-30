@@ -37,6 +37,8 @@
   },
   "resourceVersion": "1.0",
   "name": "oPlayer",
-  "tags": [],
+  "tags": [
+    "solid",
+  ],
   "resourceType": "GMObject",
 }

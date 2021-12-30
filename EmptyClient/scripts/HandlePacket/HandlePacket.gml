@@ -106,6 +106,11 @@ function handlePacket(pack) {
 			
 			room_goto(rm)
 			break
+		case "room transition":
+			var _room = data.room
+			
+			
+			break
 		
 		// data about the entity
 		case "entity":
@@ -122,18 +127,44 @@ function handlePacket(pack) {
 			
 			
 			// if it was just created - it's remote
-			if (!existed)
+			if (!existed) {
 				inst.remote = true
-			//else inst.remote = inst.remote
+				inst.x = data.x
+				inst.y = data.y
+			}
 			
-			if (uuid == global.player_uuid)
+			if (uuid == global.player_uuid) {
 				inst.remote = false
+			}
+			
+			if (TIMESTAMPS_ENABLED) {
+				var timestamp = data.t
+				
+				if (!variable_instance_exists(inst, "__last_timestamp"))
+					inst.__last_timestamp = -1
+				
+				if (timestamp > inst.__last_timestamp) { // a newer packet
+					inst.__last_timestamp = timestamp
+				}
+				else { break } // old
+			}
 			
 			// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
-			inst.x = data.x
-			inst.y = data.y
 			inst.image_xscale = data.xscale
 			inst.image_yscale = data.yscale
+			
+			// position interpolation
+			if (POS_INTERPOLATION <= 0 or POS_INTERPOLATION > 1							// interpolation disabled
+			or point_distance(inst.x, inst.y, data.x, data.y) > POS_INTERP_THRESH) {	// or hit the interpolation threshold
+				inst.x = data.x
+				inst.y = data.y
+			}
+			else {
+				inst.x = lerp(inst.x, data.x, POS_INTERPOLATION)
+				inst.y = lerp(inst.y, data.y, POS_INTERPOLATION)
+			}
+			
+			// set the speed
 			if (variable_struct_exists(data, "spd")) {
 				if (!variable_instance_exists(inst, "spd")) {
 					inst.spd = {x: 0, y: 0}
@@ -147,6 +178,7 @@ function handlePacket(pack) {
 			var uuid = data.id
 			var inst = find_by_uuid(uuid)
 			// use this for death effects
+			
 			break
 		case "entity remove":
 			var uuid = data.id
