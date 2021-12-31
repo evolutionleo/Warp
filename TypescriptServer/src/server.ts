@@ -40,14 +40,14 @@ const server = createServer(function(socket) {
     global.clients.push(c); // add the client to clients list (unnecessary)
     
     // Bind functions on events
-    
+
     socket.on('error', function(err) {
         if (err.message.includes('ECONNRESET')) { // this is a disconnect
             trace(chalk.redBright('Socket violently disconnected.'));
-            // handle disconnect here
         }
-        
-        trace(`Error! ${err}`);
+        else {
+            trace(chalk.redBright(`Error! ${err}`));
+        }
     });
     
     // When data arrived
@@ -66,7 +66,7 @@ const server = createServer(function(socket) {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        trace(chalk.yellowBright('Socket closed.'));
+        trace(chalk.red('Socket closed.'));
     })
 });
 
