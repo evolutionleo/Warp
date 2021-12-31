@@ -11,10 +11,10 @@ export default class packet {
      */
     static build(data:object): Uint8Array {
         var dataBuff = encode(data);
-        var sizeBuff = Buffer.alloc(2);
-        sizeBuff.writeUInt16LE(dataBuff.length);
+        var sizeBuff = Buffer.alloc(4);
+        sizeBuff.writeUInt32LE(dataBuff.length);
 
-        var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 2);
+        var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 4);
         // trace(buff);
 
         return buff;
@@ -54,12 +54,19 @@ export default class packet {
         // trace('global packet size: ' + dataSize);
 
         for(var i = 0; i < dataSize;) {
-            var packSize = data.readUInt16LE(i); // unpack the size
-            i += 2;
+            if (i + 4 > dataSize) { // a split in the size bits
+                c.halfpack = Buffer.alloc(dataSize - i);
+                data.copy(c.halfpack, 0, i, dataSize);
+                break;
+            }
+
+            var packSize = data.readUInt32LE(i); // unpack the size
+            i += 4;
 
             if (i + packSize > dataSize) {
-                c.halfpack = Buffer.alloc(dataSize - (i - 2));
-                data.copy(c.halfpack, 0, i - 2, dataSize);
+                i -= 4;
+                c.halfpack = Buffer.alloc(dataSize - i);
+                data.copy(c.halfpack, 0, i, dataSize);
                 // trace('one in-');
                 break;
             }

@@ -34,7 +34,10 @@ const prod_config = {
     ws_port: args.port || 3000,
     db: args.db || 'mongodb://127.0.0.1:27017/online-game', // by default it uses the same db for dev/prod, but
                                                              // you can add a postfix at the end of the name to separate them
-    shell_enabled: false
+    shell_enabled: false,
+    verbose_lag: false,
+
+    initial_lobbies: 3
 }
 
 
@@ -46,7 +49,11 @@ const dev_config = {
     port: args.port || 1338,
     ws_port: args.port || 3001,
     db: args.db || 'mongodb://127.0.0.1:27017/online-game',
-    shell_enabled: true
+    
+    shell_enabled: true,
+    verbose_lag: false,
+
+    initial_lobbies: 1
 }
 
 

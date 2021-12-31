@@ -111,6 +111,7 @@ class Entity extends EventEmitter {
         // this.create(x, y); // moved to room.spawnEntity
         this.pos = { x, y };
         this.spd = { x: 0, y: 0};
+        this.prev_pos = { x, y };
 
         // create the collider
         switch(this.collider_type) {
@@ -139,6 +140,8 @@ class Entity extends EventEmitter {
         }
 
         this.collider.entity = this;
+
+        // trace(this.propNames)
     }
 
     public create() {
@@ -209,24 +212,24 @@ class Entity extends EventEmitter {
     }
     
     public placeMeeting(x:number = this.x, y:number = this.y, type?:EntityType|string):boolean {
-        this.regenerateCollider(x, y);
+        // this.regenerateCollider(x, y);
 
-        // if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y) {
-        //     trace('changed scale - regenerating the collider');
-        //     this.regenerateCollider(x, y);
-        // }
-        // else {
-        //     this.collider.pos.x = x;
-        //     this.collider.pos.y = y;
-        //     this.collider.setAngle(this.angle);
-        //     this.collider.setPoints([
-        //         {x: 0, y: this.height},
-        //         {x: this.width, y: this.height},
-        //         {x: this.width, y: 0},
-        //         {x: 0, y: 0}
-        //     ]);
-        //     this.tree.updateBody(this.collider);
-        // }
+        if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y || this.pos.x != this.prev_pos.x || this.pos.y != this.prev_pos.y) {
+            // trace('changed scale or position - regenerating the collider');
+            this.regenerateCollider(x, y);
+        }
+        else {
+            this.collider.pos.x = x;
+            this.collider.pos.y = y;
+            this.collider.setAngle(this.angle);
+            this.collider.setPoints([
+                {x: 0, y: this.height},
+                {x: this.width, y: this.height},
+                {x: this.width, y: 0},
+                {x: 0, y: 0}
+            ]);
+            this.tree.updateBody(this.collider);
+        }
 
         this.prev_size = {x: this.size.x, y: this.size.y}
 

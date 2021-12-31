@@ -5,9 +5,6 @@ const port = global.config.port;
 import * as ws from 'ws';
 const ws_port = global.config.ws_port;
 
-import { SockType, Sock } from '#types/socktype';
-
-
 import * as fs from 'fs';
 
 import trace from '#util/logging';
@@ -29,7 +26,7 @@ const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
 // because sync/order matters
 for(var i = 0; i < init_files.length; i++) {
     var file = init_files[i];
-    trace(chalk.cyan('loading initializer:', file));
+    trace(chalk.blueBright('loading initializer:', file));
     await import("file://" + __dirname + '/internal/initializers/' + file);
 }
 trace(chalk.blueBright('loaded initializers!'));
@@ -37,7 +34,7 @@ trace(chalk.blueBright('loaded initializers!'));
 
 // The Actual Server
 const server = createServer(function(socket) {
-    trace("Socket connected!");
+    trace(chalk.blueBright("Socket connected!"));
     
     var c = new Client(socket);
     global.clients.push(c); // add the client to clients list (unnecessary)
@@ -46,7 +43,7 @@ const server = createServer(function(socket) {
     
     socket.on('error', function(err) {
         if (err.message.includes('ECONNRESET')) { // this is a disconnect
-            trace('Socket violently disconnected.');
+            trace(chalk.redBright('Socket violently disconnected.'));
             // handle disconnect here
         }
         
@@ -69,13 +66,13 @@ const server = createServer(function(socket) {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        trace('Socket closed.');
+        trace(chalk.yellowBright('Socket closed.'));
     })
 });
 
 
 server.listen(port);
-trace("Server running on port " + port + "!");
+trace(chalk.bold.blueBright(`Server running on port ${port}!`));
 
 
 
@@ -86,11 +83,11 @@ const ws_server = new ws.WebSocketServer({
     host: '127.0.0.1',
     port: ws_port
 }, function() {
-    trace('WebSocket Server running on port ' + ws_port + '!');
+    trace(chalk.bold.blueBright(`WebSocket Server running on port ${ws_port}!`));
 });
 
 ws_server.on('connection', (socket) => {
-    trace("WebSocket connected!");
+    trace(chalk.blueBright("WebSocket connected!"));
 
     var c = new Client(socket, 'ws');
     global.clients.push(c); // add the client to clients list (unnecessary)
@@ -99,7 +96,7 @@ ws_server.on('connection', (socket) => {
 
     socket.on('error', function(err) {
         if (err.message.includes('ECONNRESET')) { // this is a disconnect
-            trace('WebSocket violently disconnected.');
+            trace(chalk.redBright('WebSocket violently disconnected.'));
             // handle disconnect here
         }
 
@@ -122,7 +119,7 @@ ws_server.on('connection', (socket) => {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        trace('Socket closed.');
+        trace(chalk.yellowBright('WebSocket closed.'));
     });
 });
 }

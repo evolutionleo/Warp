@@ -22,6 +22,16 @@ type MapData = {
     max_players?: number
 }
 
+export type MapInfo = {
+    name: string,
+    room_name: string,
+    description?: string,
+
+    mode: 'mmo' | 'pvp',
+    start_pos: Point|Point[],
+    max_players?: number
+}
+
 // Map is a blueprint for a room
 export default class GameMap { // represents a game map
     name:string = ''; // map's display name
@@ -64,6 +74,17 @@ export default class GameMap { // represents a game map
         }
         else { // it's a single object
             return this.start_pos;
+        }
+    }
+
+    getInfo():MapInfo {
+        return {
+            name: this.name,
+            room_name: this.room_name,
+            description: this.description,
+            mode: this.mode,
+            max_players: this.max_players,
+            start_pos: this.start_pos
         }
     }
 }

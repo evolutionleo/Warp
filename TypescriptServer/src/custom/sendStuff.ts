@@ -145,7 +145,7 @@ export default class SendStuff {
      * @param {Lobby} lobby 
      */
     sendJoinLobby(lobby:Lobby):void {
-        this.send({ cmd: 'lobby join', lobby: lobby.serialize() });
+        this.send({ cmd: 'lobby join', lobby: lobby.getInfo() });
     }
 
     /**
@@ -154,7 +154,7 @@ export default class SendStuff {
      * @param {string} [reason='']
      */
     sendRejectLobby(lobby:Lobby, reason:string = ''):void {
-        this.send({ cmd: 'lobby reject', lobby: lobby.serialize(), reason: reason });
+        this.send({ cmd: 'lobby reject', lobby: lobby.getInfo(), reason: reason });
     }
 
     /**
@@ -164,7 +164,7 @@ export default class SendStuff {
      * @param {boolean} [forced=true]
      */
     sendKickLobby(lobby:Lobby, reason:string = '', forced:boolean = true):void {
-        this.send({ cmd: 'lobby leave', lobby: lobby.serialize(), reason: reason, forced: forced });
+        this.send({ cmd: 'lobby leave', lobby: lobby.getInfo(), reason: reason, forced: forced });
     }
 
     /**
@@ -172,11 +172,11 @@ export default class SendStuff {
      * @param {Lobby} lobby 
      */
     sendUpdateLobby(lobby:Lobby):void { // some data changed
-        this.send({ cmd: 'lobby update', lobby: lobby.serialize() });
+        this.send({ cmd: 'lobby update', lobby: lobby.getInfo() });
     }
 
     sendLobbyList():void {
-        this.send({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.serialize()) }); // lobbies as an array
+        this.send({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.getInfo()) }); // lobbies as an array
     }
 
     /**
@@ -184,7 +184,7 @@ export default class SendStuff {
      * @param {string} lobbyid 
      */
     sendLobbyInfo(lobbyid:string):void {
-        this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].serialize()})
+        this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].getInfo()})
     }
 
     /**
@@ -195,7 +195,7 @@ export default class SendStuff {
      * @param {string} [uuid=undefined]
      */
     sendPlay(lobby:Lobby, room:Room, start_pos:Point, uuid?:string):void {
-        this.send({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos, uuid });
+        this.send({ cmd: 'play', room: room.serialize(), lobby: lobby.getInfo(), start_pos: start_pos, uuid });
     }
 
     sendRoomTransition(room_to:Room):void {

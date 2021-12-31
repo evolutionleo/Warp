@@ -4,16 +4,13 @@ import Entity, { SerializedEntity } from '#concepts/entity';
 import { EntityConstructor, PlayerEntityConstructor } from '#concepts/entity';
 import { System, Circle, Polygon } from 'detect-collisions';
 
-// let sys = new System();
-// let s = new Polygon({ x: 0, y: 0}, [{x: 0, y: 0}, {x: 10, y: 0 }, {x: 10, y: 10}, {x: 0, y: 10}])
-// sys.insert(s);
-
 import PlayerEntity from '#entities/entity_types/player';
-import GameMap from '#concepts/map';
+import GameMap, { MapInfo } from '#concepts/map';
 import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
 import RBush from 'rbush';
 import chalk from 'chalk';
+import { appendFile } from 'fs';
 
 // export class MyRBush extends RBush<Entity> {
 //     toBBox(e:Entity) { return e.bbox; }
@@ -31,6 +28,11 @@ export type SerializedRoom = {
     map: GameMap,
     player_count: number
 };
+
+export type RoomInfo = {
+    map: MapInfo,
+    player_count: number
+}
 
 const tickrate = global.config.tps || 60;
 
@@ -134,10 +136,6 @@ class Room extends EventEmitter {
         else {
             console.error('error unwrapping room contents - unknown type');
         }
-
-
-        // bulk load all the entities
-        // this.tree.load(this.entities.filter(e => e.isSolid).map(e => e.shape));
     }
     
     tick():void {
@@ -152,7 +150,8 @@ class Room extends EventEmitter {
         let t_afterTick = new Date().getTime();
         let t_tick = t_afterTick - t_beforeTick;
 
-        if (t_tick > 1000 / this.tickrate) {
+        // we are lagging!
+        if (global.config.verbose_lag && t_tick > (1000 / this.tickrate)) {
             trace(chalk.red('lag detected: this tick took ' + t_tick + ' milliseconds.'));
         }
 
@@ -252,6 +251,13 @@ class Room extends EventEmitter {
             map: this.map,
             entities: this.entities.map(e => e.serialize())
         };
+    }
+
+    getInfo():RoomInfo {
+        return {
+            player_count: this.players.length,
+            map: this.map.getInfo()
+        }
     }
 }
 

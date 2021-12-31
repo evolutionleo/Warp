@@ -33,7 +33,7 @@ trace("Welcome to GMOF % by Evoleo!", GMOF_VERSION)
 
 // Debug/Development
 #macro Dev:IP   "127.0.0.1"	// localhost
-//#macro IP "192.168.1.224" // LAN (replace with your local IP)
+//#macro IP "192.168.1.1" // LAN (replace with your local IP)
 #macro Dev:PORT "1338"
 
 

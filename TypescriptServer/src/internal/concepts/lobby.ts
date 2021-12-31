@@ -1,7 +1,7 @@
 import trace from '#util/logging';
 import GameMap from '#concepts/map';
 import Client from '#concepts/client';
-import Room, { SerializedRoom }  from '#concepts/room';
+import Room, { SerializedRoom, RoomInfo }  from '#concepts/room';
 import { EventEmitter } from 'events';
 
 export type LobbyStatus = 'open' | 'closed';
@@ -15,6 +15,15 @@ export type SerializedLobby = {
     max_players: number,
     player_count: number,
     rooms: SerializedRoom[],
+    full: boolean
+}
+
+export type LobbyInfo = {
+    lobbyid: string,
+    status: LobbyStatus,
+    max_players: number,
+    player_count: number,
+    rooms: RoomInfo[],
     full: boolean
 }
 
@@ -107,6 +116,17 @@ export default class Lobby extends EventEmitter {
         return {
             lobbyid: this.lobbyid,
             rooms: this.rooms.map(r => r.serialize()),
+            status: this.status,
+            max_players: this.max_players,
+            player_count: this.player_count,
+            full: this.full
+        }
+    }
+
+    getInfo():LobbyInfo {
+        return {
+            lobbyid: this.lobbyid,
+            rooms: this.rooms.map(r => r.getInfo()),
             status: this.status,
             max_players: this.max_players,
             player_count: this.player_count,

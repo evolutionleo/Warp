@@ -1,3 +1,5 @@
+import trace from '#util/logging'
+import chalk from 'chalk';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -14,10 +16,7 @@ const maps_dir = path.join(__dirname, '/../../maps/');
 global.maps = [];
 const filenames = fs.readdirSync(maps_dir); // sync because CommonJS
 
-// filenames.forEach(async (filename:string) => {        // basically (a, b) => {} is equivallent to function(a, b) {}
-//     var this_map = await import("file://" + maps_dir + filename);
-//     global.maps.push(this_map);
-// })
+trace(chalk.blueBright(`found maps: [${filenames.join(', ')}]`))
 
 // load everything async/at the same time,
 // but still waits until everything is loaded
@@ -32,10 +31,5 @@ await Promise.all(filenames.map((filename:string) => {
     })
 }))
 
-// // because sync
-// for(var i = 0; i < filenames.length; i++) {
-//     var this_map = await import("file://" + maps_dir + filenames[i]);
-//     global.maps.push(this_map);
-// }
 
 export default global.maps

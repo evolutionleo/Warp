@@ -1,15 +1,11 @@
 // This schema is for profiles. The idea is that
 // multiple profiles can be linked to the same account
-// import { Schema, model } from 'mongoose';
-// const { Model, Document } = require('mongoose');
 
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
-// import * as mongoose from 'mongoose';
 const mongoose = require('mongoose');
 
-// import { Schema, model, connect, Document, Model } from 'mongoose';
 import { Model, Document } from 'mongoose';
 const { Schema, model } = mongoose;
 
@@ -55,7 +51,5 @@ export function freshProfile(account:IAccount):IProfile { // for when just regis
 
         x: 0,
         y: 0
-        // x: global.config.start_pos.x,
-        // y: global.config.start_pos.y,
     });
 }

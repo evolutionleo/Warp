@@ -11,12 +11,12 @@ function network_write(data, sock = oClient.sock) {
 	var size = buffer_get_size(buff)
 	
 	// concat the size at the beginning to tell stuck packets apart
-	var new_buff = buffer_create(size + buffer_u16, buffer_fixed, 1)
-	buffer_write(new_buff, buffer_u16, size)
-	buffer_copy(buff, 0, size, new_buff, 2)
+	var new_buff = buffer_create(size + 4, buffer_fixed, 1)
+	buffer_write(new_buff, buffer_u32, size)
+	buffer_copy(buff, 0, size, new_buff, 4)
 	
 	// send!
-	network_send_raw(sock, new_buff, size+2)
+	network_send_raw(sock, new_buff, size+4)
 	
 	// Clean up
 	buffer_delete(buff)
@@ -35,3 +35,5 @@ function send(data, sock = oClient.socket) {
 // You might need to change "_u16" and "2" everywhere to a higher power of 2
 // if you're sending something more than 65535 bytes in size
 // (that's because packet size is represented by a uint16)
+
+// jk already changed it to _u32 because entities weight a ton

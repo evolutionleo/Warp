@@ -5,8 +5,8 @@ import * as crypto from 'crypto';
 export class delaySend {
     static enabled = false;
 
-    static min = 280;
-    static max = 300;
+    static min = 100;
+    static max = 200;
 
     static get():number {
         if (!this.enabled)
@@ -18,8 +18,8 @@ export class delaySend {
 export class delayReceive {
     static enabled = false;
 
-    static min = 280;
-    static max = 300;
+    static min = 100;
+    static max = 200;
     
     static get():number {
         if (!this.enabled)

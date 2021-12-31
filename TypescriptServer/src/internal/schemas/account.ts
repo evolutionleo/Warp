@@ -1,24 +1,13 @@
 // this section contains a schema for saving players' account info
 import trace from '#util/logging';
+
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
-// import { Schema, model } from 'mongoose';
-// const { Model, Document } = require('mongoose');
-// import * as mongoose from 'mongoose';
 const mongoose = require('mongoose');
-
-// import { Schema, model, connect, Document, Model } from 'mongoose';
 import { Model, Document } from 'mongoose';
 const { Schema, model } = mongoose;
 
-// const mongoose = require('mongoose');
-// const Model = mongoose.Model;
-// const Schema = mongoose.Schema;
-
-// import * as mongoose from 'mongoose';
-// const { Schema, model } = mongoose; // because it doesn't have a named export
-// import { Model, Document } from 'mongoose';
 import { hash_password, verify_password } from '#util/password_encryption';
 import { Profile } from '#schemas/profile';
 
