@@ -1,7 +1,10 @@
 /// @desc
 
-if (os_get_config() == "Prod")
+// a macro set in the config file
+if (!DUAL_INSTANCE) {
+	instance_destroy()
 	exit
+}
 
 window_set_fullscreen(false)
 

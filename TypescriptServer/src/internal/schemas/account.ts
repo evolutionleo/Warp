@@ -32,7 +32,7 @@ const accountSchema = new Schema({
 
 
 // logging in/registering stuff
-accountSchema.statics.register = function(username:string, password:string):Promise<string|IAccount> {
+accountSchema.statics.register = function accountRegister(username:string, password:string):Promise<string|IAccount> {
     // Promises: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
     // TL;DR: you can use .then() and .catch() to handle the result of the register
     
@@ -65,7 +65,7 @@ accountSchema.statics.register = function(username:string, password:string):Prom
     })
 }
 
-accountSchema.statics.login = function(username:string, password:string):Promise<string|IAccount> {
+accountSchema.statics.login = function accountLogin(username:string, password:string):Promise<string|IAccount> {
     return new Promise(async (resolve, reject) => {
         Account.findOne({username: username}, async (err:Error, account:IAccount) => {
             if (!account) {

@@ -289,18 +289,19 @@ class Entity extends EventEmitter {
         }
     }
 
-    send(client?:Client) {
-        const data:any = { cmd: 'entity', ...(this.serialize()) };
-        if (global.config.timestamps_enabled) {
-            data.t = new Date().getTime();
-        }
+    bundle() {
+        return this.serialize();
+    }
 
-        if (client === undefined) {
-            this.room.broadcast(data);
-        }
-        else {
-            client.send(data);
-        }
+    send() {
+        const data = this.bundle();
+        this.room.bundle.push(data);
+        // if (client === undefined) {
+        //     this.room.broadcast(data);
+        // }
+        // else {
+        //     client.send(data);
+        // }
     }
 
 

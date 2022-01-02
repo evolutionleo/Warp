@@ -49,5 +49,7 @@ export default class WarpPortal extends Entity {
                 this.teleport(player.client);
             })
         }
+
+        super.update();
     }
 }

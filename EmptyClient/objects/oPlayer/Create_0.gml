@@ -16,7 +16,7 @@ jump = function() {
 }
 
 grounded = function() {
-	return place_meeting(x, y+1, oWall)
+	return meetingSolid(x, y+1, oWall)
 }
 
 

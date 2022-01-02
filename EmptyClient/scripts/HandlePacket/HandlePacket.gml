@@ -116,66 +116,63 @@ function handlePacket(pack) {
 			break
 		
 		// data about the entity
-		case "entity":
+		case "entities":
 			// don't spawn in entities if we're not playing (e.x in menus)
 			if (!global.playing) {
 				trace("Warning: received entity, but not playing yet (or already)!")
 				break
 			}
+			//trace("entities received")
 			
-			var uuid = data.id
-			var type = asset_get_index(data.object_name)
-			var existed = instance_exists(find_by_uuid(uuid, type))
-			var inst = find_or_create(uuid, type)
+			var entities = data.entities
+			var l = array_length(entities)
 			
-			
-			// if it was just created - it's remote
-			if (!existed) {
-				inst.remote = true
-				inst.x = data.x
-				inst.y = data.y
-			}
-			
-			if (uuid == global.player_uuid) {
-				inst.remote = false
-			}
-			
-			if (TIMESTAMPS_ENABLED) {
-				var timestamp = data.t
+			for(var i = 0; i < l; i++) {
+				var entity = entities[i]
 				
-				if (!variable_instance_exists(inst, "__last_timestamp"))
-					inst.__last_timestamp = -1
+				//trace("entity: %", entity)
 				
-				if (timestamp > inst.__last_timestamp) { // a newer packet
-					inst.__last_timestamp = timestamp
+				var uuid = entity.id
+				var type = asset_get_index(entity.object_name)
+				var existed = instance_exists(find_by_uuid(uuid, type))
+				var inst = find_or_create(uuid, type)
+			
+			
+				// if it was just created - it's remote
+				if (!existed) {
+					inst.remote = true
+					inst.x = entity.x
+					inst.y = entity.y
 				}
-				else { break } // old
-			}
 			
-			// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
-			inst.image_xscale = data.xscale
-			inst.image_yscale = data.yscale
-			
-			// position interpolation
-			if (POS_INTERPOLATION <= 0 or POS_INTERPOLATION > 1							// interpolation disabled
-			or point_distance(inst.x, inst.y, data.x, data.y) > POS_INTERP_THRESH) {	// or hit the interpolation threshold
-				inst.x = data.x
-				inst.y = data.y
-			}
-			else {
-				inst.x = lerp(inst.x, data.x, POS_INTERPOLATION)
-				inst.y = lerp(inst.y, data.y, POS_INTERPOLATION)
-			}
-			
-			// set the speed
-			if (variable_struct_exists(data, "spd")) {
-				if (!variable_instance_exists(inst, "spd")) {
-					inst.spd = {x: 0, y: 0}
+				if (uuid == global.player_uuid) {
+					inst.remote = false
 				}
-				inst.spd.x = data.spd.x
-				inst.spd.y = data.spd.y
-			}
 			
+				// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
+				inst.image_xscale = entity.xscale
+				inst.image_yscale = entity.yscale
+			
+				// position interpolation
+				if (POS_INTERPOLATION <= 0 or POS_INTERPOLATION > 1							// interpolation disabled
+				or point_distance(inst.x, inst.y, entity.x, entity.y) > POS_INTERP_THRESH) {	// or hit the interpolation threshold
+					inst.x = entity.x
+					inst.y = entity.y
+				}
+				else {
+					inst.x = lerp(inst.x, entity.x, POS_INTERPOLATION)
+					inst.y = lerp(inst.y, entity.y, POS_INTERPOLATION)
+				}
+			
+				// set the speed
+				if (variable_struct_exists(entity, "spd")) {
+					if (!variable_instance_exists(inst, "spd")) {
+						inst.spd = {x: 0, y: 0}
+					}
+					inst.spd.x = entity.spd.x
+					inst.spd.y = entity.spd.y
+				}
+			}
 			break
 		case "entity death": // also triggers remove
 			var uuid = data.id

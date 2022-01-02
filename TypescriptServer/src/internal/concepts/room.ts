@@ -10,7 +10,6 @@ import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
 import RBush from 'rbush';
 import chalk from 'chalk';
-import { appendFile } from 'fs';
 
 // export class MyRBush extends RBush<Entity> {
 //     toBBox(e:Entity) { return e.bbox; }
@@ -66,13 +65,16 @@ class Room extends EventEmitter {
     entities:EntityList/*Entity[]*/ = new EntityList();
     tree:System;
     players:Client[] = [];
-    recentlyJoined:[Client, number][] = [];
+    recentlyJoined:Client[] = [];
     recentlyJoinedTimer = 120; // 2 seconds?
 
     width:number;
     height:number;
 
     map:GameMap;
+
+    full_bundle:any[]; // all the entities packed
+    bundle:any[]; // updated entities that need sending
 
     constructor(map:GameMap|string, lobby:Lobby) {
         super();
@@ -138,28 +140,39 @@ class Room extends EventEmitter {
         }
     }
     
+    // TODO: bundle all the entities to send this frame
     tick():void {
-        let t_beforeTick = new Date().getTime();
+        let t_beforeTick = new Date().getTime(); // measure the tick time
+
+        this.bundle = []; // the updated ones
+        this.full_bundle = []; // all the entities in the room
 
         this.entities.forEach(entity => {
             entity.update();
-            this.recentlyJoined.forEach(([player, _]) => entity.send(player));
+            this.full_bundle.push(entity.bundle());
         });
         this.emit('tick');
 
-        let t_afterTick = new Date().getTime();
+        // broadcast the min bundle (only changed entities)
+        if (this.bundle.length > 0)
+            this.broadcast({ cmd: 'entities', t: t_beforeTick, entities: this.bundle });
+
+        let t_afterTick = new Date().getTime(); // measure the tick time in ms
         let t_tick = t_afterTick - t_beforeTick;
+
+        // trace('tick:', t_tick);
 
         // we are lagging!
         if (global.config.verbose_lag && t_tick > (1000 / this.tickrate)) {
             trace(chalk.red('lag detected: this tick took ' + t_tick + ' milliseconds.'));
         }
 
+
         // we will send everything every frame to those who joined recently (so that they 100% get it)
-        this.recentlyJoined.map((player, timer) => [player, timer-1]);
-        this.recentlyJoined.filter(([player, timer]) => {
-            return timer > 0;
+        this.recentlyJoined.forEach((player) => {
+            player.send({ cmd: 'entities', t: t_beforeTick, entities: this.full_bundle });
         });
+        this.recentlyJoined = [];
     }
 
     // entity stuff
@@ -191,6 +204,7 @@ class Room extends EventEmitter {
     // player manipulation
     removePlayer(player:Client):void {
         this.players.splice(this.players.indexOf(player));
+        this.recentlyJoined.splice(this.recentlyJoined.findIndex(v => v[0] === player));
         player.room = null;
         player.entity.remove();
         this.emit('player leave', player);
@@ -216,11 +230,8 @@ class Room extends EventEmitter {
         y = p.y;
         const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
         player.entity = player_entity;
-        // send all the existing entities to the player
-        this.entities.forEach(entity => {
-            entity.send(player);
-        });
-        this.recentlyJoined.push([ player, this.recentlyJoinedTimer ]);
+        // add to the recently joined list to receive the old entities
+        this.recentlyJoined.push(player);
         
         this.emit('player join', player);
     }

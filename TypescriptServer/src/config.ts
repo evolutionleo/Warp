@@ -51,7 +51,7 @@ const dev_config = {
     db: args.db || 'mongodb://127.0.0.1:27017/online-game',
     
     shell_enabled: true,
-    verbose_lag: false,
+    verbose_lag: true,
 
     initial_lobbies: 1
 }
