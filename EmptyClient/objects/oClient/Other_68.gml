@@ -55,8 +55,9 @@ switch(type) {
 			i += packSize;
 			
 			try {
+				var data = snap_from_messagepack(pack)
 				// Handle the packet
-				handlePacket(pack);
+				handlePacket(data);
 			}
 			catch(e) {
 				trace("an error occured while parsing the packet: " + e.message)
@@ -73,6 +74,10 @@ switch(type) {
 		buffer_delete(buff);
 		break
 	case network_type_non_blocking_connect:
+		if (!async_load[? "succeeded"]) {
+			trace("Non-blocking connect failed.")
+			break
+		} // otherwise fall into the connect case
 	case network_type_connect:
 		trace("Connected to the server!")
 		connected = true

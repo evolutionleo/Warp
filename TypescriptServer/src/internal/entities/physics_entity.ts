@@ -113,18 +113,20 @@ export default class PhysicsEntity extends Entity {
         
         let bbox = this.bbox; // this is an optimization btw
 
-        if (bbox.left > this.room.width) {
+        // if outside the right bound and moving right
+        if (bbox.left > this.room.width + 1 && Math.sign(this.spd.x) == 1) {
             tryWrap(this.x - bbox.right + 0, this.y);
-        }
-        else if (bbox.right < 0) {
+        } // if outside the left bound and moving left
+        else if (bbox.right < 0 - 1 && Math.sign(this.spd.x) == -1) {
             tryWrap(bbox.left - this.x + this.room.width, this.y);
         }
 
-        if (bbox.bottom < 0) {
+        // etc. etc.
+        if (bbox.bottom < 0 && Math.sign(this.spd.y) == -1) {
             tryWrap(this.x, bbox.bottom - this.y + this.room.height);
         }
-        else if (bbox.top > this.room.height) {
-            tryWrap(this.x, this.y - bbox.top + 0);
+        else if (bbox.top > this.room.height && Math.sign(this.spd.y) == 1) {
+            tryWrap(this.x, this.y - bbox.bottom + 0);
         }
     }
 

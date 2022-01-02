@@ -73,17 +73,17 @@ export default async function handlePacket(c:Client, data:any) {
                 lobby.kickPlayer(c, 'you left the lobby', false);
             }
             break;
-
-        // #######################
-        // Add your commands here:
+        
         case 'room transition':
             if (!c.room) { return; }
 
             var room_to_name:string = data.room_to;
             var room_to = c.lobby.rooms.find(room => room.map.name === room_to_name || room.map.room_name === room_to_name);
             c.room.movePlayer(c, room_to);
-            c.sendRoomTransition(room_to);
             break;
+
+        // #######################
+        // Add your commands here:
         
         case 'player controls':
             c.entity.inputs = {

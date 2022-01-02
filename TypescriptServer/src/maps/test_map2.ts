@@ -1,9 +1,9 @@
 import GameMap from '#internal/concepts/map';
 
 export default new GameMap({
-    name: 'Stress Test',
-    room_name: 'rStressTest',
-    description: 'A stress test map',
+    name: 'Test Room 2',
+    room_name: 'rTest2',
+    description: 'A second test map, a placeholder if you will',
 
     width: 1366,
     height: 768,

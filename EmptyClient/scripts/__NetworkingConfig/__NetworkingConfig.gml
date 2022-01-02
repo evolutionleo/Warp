@@ -6,6 +6,9 @@
 trace("Welcome to GMOF % by Evoleo!", GMOF_VERSION)
 
 
+
+network_set_config(network_config_use_non_blocking_socket, true)
+
 // purges all entities from the room (so that there aren't any local duplicates when loading everything from the server)
 // toggle this off if you have some specific case where you need to keep the entities that are in the room locally
 #macro PURGE_ENTITIES_ON_ROOM_START true

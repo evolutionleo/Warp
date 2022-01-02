@@ -47,6 +47,8 @@ export default class PlayerEntity extends PhysicsEntity {
     preciseCollisions = true;
     outsideRoomAction:OutsideRoomAction = 'wrap';
 
+    sendEveryTick = true;
+
     base_size = {
         x: 32,
         y: 32

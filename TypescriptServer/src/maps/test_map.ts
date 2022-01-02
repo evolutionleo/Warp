@@ -1,5 +1,4 @@
 import GameMap from '#internal/concepts/map';
-import * as fs from 'fs';
 
 export default new GameMap({
     name: 'Test Room',

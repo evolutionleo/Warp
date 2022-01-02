@@ -10,6 +10,7 @@ import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
 import RBush from 'rbush';
 import chalk from 'chalk';
+import PhysicsEntity from '#entities/physics_entity';
 
 // export class MyRBush extends RBush<Entity> {
 //     toBBox(e:Entity) { return e.bbox; }
@@ -76,6 +77,8 @@ class Room extends EventEmitter {
     full_bundle:any[]; // all the entities packed
     bundle:any[]; // updated entities that need sending
 
+    rest_timeout:number = 0; // disables processing entities when no players are present for config.room_rest_timeout seconds
+
     constructor(map:GameMap|string, lobby:Lobby) {
         super();
         this.lobby = lobby;
@@ -110,39 +113,55 @@ class Room extends EventEmitter {
 
     // create entities from the contents string
     unwrap(contents:string|SerializedEntity[] = '[]'):void {
+        let entities:SerializedEntity[];
         if (typeof contents === 'string') {
-            const entities:SerializedEntity[] = JSON.parse(contents);
-    
-            entities.forEach(entity => {
-                const etype = global.entityNames[entity.type];
-                // trace(etype);
-                const e = this.spawnEntity(etype, entity.x, entity.y);
-                e.xscale = entity.xscale;
-                e.yscale = entity.yscale;
-
-                e.regenerateCollider();
-            });
-            
+            entities = JSON.parse(contents);
         }
         else if (Array.isArray(contents)) {
-            contents.forEach(entity => {
-                const etype = global.entityNames[entity.type];
-                // trace(etype);
-                const e = this.spawnEntity(etype, entity.x, entity.y);
-                e.xscale = entity.xscale;
-                e.yscale = entity.yscale;
-
-                e.regenerateCollider();
-            });
+            entities = contents;
         }
         else {
-            console.error('error unwrapping room contents - unknown type');
+            console.error('error unwrapping room contents - unknown type ' + typeof contents + " (string or array expected)");
+            return;
         }
+
+        entities.forEach(entity => {
+            const etype = global.entityNames[entity.type];
+            const e = this.spawnEntity(etype, entity.x, entity.y);
+            e.xscale = entity.xscale;
+            e.yscale = entity.yscale;
+
+            e.regenerateCollider();
+            for (let key in entity.props) {
+                let value = entity.props[key];
+                // warn about name collisions
+                // if (e[key] !== undefined) {
+                // if (key in Object.getOwnPropertyNames(PhysicsEntity)) {
+                    // throw "Collision in props: entity of type " + e.type + " already has a variable called " + key + "!";
+                // }
+                if (!e.propNames.includes(key))
+                    e.propNames.push(key);
+                e[key] = value;
+                trace(key + ": " + value);
+            }
+        });
     }
     
-    // TODO: bundle all the entities to send this frame
     tick():void {
         let t_beforeTick = new Date().getTime(); // measure the tick time
+
+        // don't process entities
+        if (this.players.length === 0) {
+            this.rest_timeout += 1 / this.tickrate;
+            if (global.config.room_rest_timeout > 0 // if this is enabled
+                && this.rest_timeout > global.config.room_rest_timeout) {
+                // do nothing - don't update the entities
+                return;
+            }
+        }
+        else { // reset the timer and wake up
+            this.rest_timeout = 0;
+        }
 
         this.bundle = []; // the updated ones
         this.full_bundle = []; // all the entities in the room
@@ -155,7 +174,7 @@ class Room extends EventEmitter {
 
         // broadcast the min bundle (only changed entities)
         if (this.bundle.length > 0)
-            this.broadcast({ cmd: 'entities', t: t_beforeTick, entities: this.bundle });
+            this.broadcast({ cmd: 'entities', room: this.map.room_name, entities: this.bundle });
 
         let t_afterTick = new Date().getTime(); // measure the tick time in ms
         let t_tick = t_afterTick - t_beforeTick;
@@ -170,7 +189,7 @@ class Room extends EventEmitter {
 
         // we will send everything every frame to those who joined recently (so that they 100% get it)
         this.recentlyJoined.forEach((player) => {
-            player.send({ cmd: 'entities', t: t_beforeTick, entities: this.full_bundle });
+            player.send({ cmd: 'entities', room: this.map.room_name, entities: this.full_bundle });
         });
         this.recentlyJoined = [];
     }
@@ -203,10 +222,20 @@ class Room extends EventEmitter {
 
     // player manipulation
     removePlayer(player:Client):void {
-        this.players.splice(this.players.indexOf(player));
-        this.recentlyJoined.splice(this.recentlyJoined.findIndex(v => v[0] === player));
+        // remove from this.players
+        let idx = this.players.indexOf(player);
+        if (idx !== -1)
+            this.players.splice(idx);
+        
+        // remove from this.recentlyJoined
+        idx = this.recentlyJoined.indexOf(player);
+        if (idx !== -1)
+            this.recentlyJoined.splice(idx);
+        
+        
         player.room = null;
         player.entity.remove();
+        player.entity = null;
         this.emit('player leave', player);
         // this.broadcast({ cmd: 'player leave', player: player });
     }
@@ -240,6 +269,8 @@ class Room extends EventEmitter {
     movePlayer(player:Client, new_room:Room):void {
         this.removePlayer(player);
         new_room.addPlayer(player);
+
+        player.sendRoomTransition(new_room, player.entity.pos, player.entity.uuid);
     }
 
     broadcast(packet:object) {

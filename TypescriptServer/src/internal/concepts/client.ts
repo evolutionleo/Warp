@@ -89,7 +89,8 @@ export default class Client extends SendStuff {
             this.lobby.kickPlayer(this, 'disconnected', true);
     }
 
-    // preset functions
+
+    // preset functions below
 
     // this one saves everything
     save() {
@@ -140,4 +141,5 @@ export default class Client extends SendStuff {
     }
 
     // you can also add methods/functions below
+    
 }

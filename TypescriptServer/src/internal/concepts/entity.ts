@@ -63,10 +63,10 @@ class Entity extends EventEmitter {
     base_size:Point = { x: 64, y: 64 };
     scale:Point = { x: 1, y: 1 };
 
-    // propNames:string[] = [];
-    // e.x. propNames = [ 'hp', 'mana', 'jumpHeight' ];
 
-    get propNames() { return Object.getOwnPropertyNames(this); }
+    // the custom variables that need sending with the entitiy
+    propNames:string[] = []; // automatically loaded in load_room, but ideally should be manually set as well
+    // e.x. propNames = [ 'hp', 'mana', 'jumpHeight' ];
 
     get props() {
         let _props = {};
@@ -76,9 +76,10 @@ class Entity extends EventEmitter {
 
 
     collider:Collider; // a polygon
-    collider_type:ColliderType = 'polygon';
-    collider_radius:number = this.width; // only relevant when collider_type is 'circle'
+    collider_type:ColliderType|string = 'polygon';
+    collider_radius:number = this.width/2; // only relevant when collider_type is 'circle'
     collider_vertices:Point[] = []; // if this is not overridden, a default rectangle collider will be used
+    private polygon_set:boolean = false;
 
     get size():Point { // for collisions
         return {
@@ -123,12 +124,16 @@ class Entity extends EventEmitter {
             case 'polygon':
                 // the default 
                 if (this.collider_vertices.length == 0) {
+                    this.polygon_set = false;
                     this.collider_vertices = [
-                        {x: 0, y: this.height},
+                        {x: 1, y: this.height},
                         {x: this.width, y: this.height},
-                        {x: this.width, y: 0},
-                        {x: 0, y: 0}
+                        {x: this.width, y: 1},
+                        {x: 1, y: 1}
                     ]
+                }
+                else {
+                    this.polygon_set = true;
                 }
 
                 this.collider = new Collider(
@@ -154,11 +159,13 @@ class Entity extends EventEmitter {
     public update() {
         this.emit('update');
 
+        this.roundPos();
+
         // if something changed - send again
         const serialized = JSON.stringify(this.serialize());
         if (serialized != this.prev_serialized || this.sendEveryTick) {
             this.prev_serialized = serialized;
-            this.send();
+            this.send(); // add to the bundle
         }
     }
 
@@ -195,19 +202,36 @@ class Entity extends EventEmitter {
     }
 
     public regenerateCollider(x = this.x, y = this.y) {
-        this.tree.remove(this.collider);
+        if (this.tags.includes('solid') || this.isSolid)
+            this.tree.remove(this.collider);
         
-        this.collider = new Collider(
-            new Polygon({x, y}, [
-                {x: 0, y: this.height},
-                {x: this.width, y: this.height},
-                {x: this.width, y: 0},
-                {x: 0, y: 0}
-            ])
-        );
+        if (this.collider_type === 'polygon') {
+            if (!this.polygon_set) {
+                this.collider = new Collider(
+                    new Polygon({x, y}, [
+                        {x: 1, y: this.height},
+                        {x: this.width, y: this.height},
+                        {x: this.width, y: 1},
+                        {x: 1, y: 1}
+                    ])
+                );
+            }
+            else {
+                this.collider = new Collider(
+                    new Polygon(this.pos, this.collider_vertices)
+                );
+            }
+        }
+        else if (this.collider_type === 'circle') {
+            this.collider = new Collider(
+                new Circle(this.pos, this.collider_radius)
+            );
+        }
 
         this.collider.entity = this;
-        this.tree.insert(this.collider);
+
+        if (this.tags.includes('solid') || this.isSolid)
+            this.tree.insert(this.collider);
         // this.tree.updateBody(this.collider);
     }
     
@@ -218,16 +242,18 @@ class Entity extends EventEmitter {
             // trace('changed scale or position - regenerating the collider');
             this.regenerateCollider(x, y);
         }
-        else {
+        else { // try to update the existing collider?
             this.collider.pos.x = x;
             this.collider.pos.y = y;
             this.collider.setAngle(this.angle);
-            this.collider.setPoints([
-                {x: 0, y: this.height},
-                {x: this.width, y: this.height},
-                {x: this.width, y: 0},
-                {x: 0, y: 0}
-            ]);
+            if (!this.polygon_set) {
+                this.collider.setPoints([
+                    {x: 1, y: this.height},
+                    {x: this.width, y: this.height},
+                    {x: this.width, y: 1},
+                    {x: 1, y: 1}
+                ]);
+            }
             this.tree.updateBody(this.collider);
         }
 
@@ -246,7 +272,7 @@ class Entity extends EventEmitter {
         );
     }
 
-    placeMeetingAll(x:number = this.x, y:number = this.y, type?:EntityType|string):Entity[] {
+    public placeMeetingAll(x:number = this.x, y:number = this.y, type?:EntityType|string):Entity[] {
         // let bbox = this.getBBox(x, y);
         this.collider.pos.x = x;
         this.collider.pos.y = y;
@@ -260,14 +286,19 @@ class Entity extends EventEmitter {
         ).map(collider => collider.entity);
     }
 
+    private roundPos() { // round to 100ths
+        this.pos.x = Math.round(this.pos.x * 100) / 100;
+        this.pos.y = Math.round(this.pos.y * 100) / 100;
+    }
+
     // entity death
-    die() {
+    public die() {
         this.emit('death');
         this.remove();
     }
 
     // removes the entity from the room (and triggers the 'remove' event)
-    remove() {
+    public remove() {
         this.emit('remove');
         var pos = this.room.entities.indexOf(this);
         this.room.entities.splice(pos);
@@ -276,7 +307,7 @@ class Entity extends EventEmitter {
         }
     }
 
-    serialize():SerializedEntity {
+    public serialize():SerializedEntity {
         return {
             id: this.id,
             type: this.type,
@@ -285,15 +316,16 @@ class Entity extends EventEmitter {
             y: this.y,
             xscale: this.xscale,
             yscale: this.yscale,
-            spd: this.spd
+            spd: this.spd,
+            props: this.props // uses a getter for props
         }
     }
 
-    bundle() {
+    public bundle() {
         return this.serialize();
     }
 
-    send() {
+    public send() {
         const data = this.bundle();
         this.room.bundle.push(data);
         // if (client === undefined) {
@@ -305,26 +337,34 @@ class Entity extends EventEmitter {
     }
 
 
-    getBBox(x:number = this.x, y:number = this.y, w:number = this.width, h:number = this.height) {
-        return {
-            minX: x - w/2,
-            minY: y - h/2,
-            maxX: x + w/2 - 1, // because rbush is being weird about pixel-perfect stuff
-            maxY: y + h/2,
+    public getBBox() {
+        let x:number = this.x, y:number = this.y;
+        let w:number = this.width, h:number = this.height;
 
-            get left() { return this.minX },
-            get right() { return this.maxX },
-            get top() { return this.minY },
-            get bottom() { return this.maxY }
+        return {
+            // left: x - w/2,
+            // top: y - h/2,
+            // right: x + w/2,
+            // bottom: y + h/2,
+            
+            left: x,
+            top: y,
+            right: x + w,
+            bottom: y + h,
+
+            // get left() { return this.minX },
+            // get right() { return this.maxX },
+            // get top() { return this.minY },
+            // get bottom() { return this.maxY }
         }
     }
 
     // tags idk
-    hasTag(tag:string) {
+    public hasTag(tag:string) {
         return this.tags.includes(tag);
     }
 
-    addTag(tag:string) {
+    public addTag(tag:string) {
         return this.tags.push(tag);
     }
 

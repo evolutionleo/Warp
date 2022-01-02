@@ -1,5 +1,6 @@
 import { SerializedEntity } from '#concepts/entity';
 import UnknownEntity from '#entity/unknown';
+import trace from '#util/logging';
 import * as fs from 'fs';
 
 export type LoadedRoom = {
@@ -22,6 +23,13 @@ export default function LoadRoom(path:string = './rooms/rTest.yy'):LoadedRoom {
     data.layers.forEach((layer) => {
         if (layer.instances) {
             layer.instances.forEach((inst) => {
+                // let props = inst.properties.map(p => ({
+                //     name: p.propertyId.name,
+                //     value: p.value
+                // }));
+                let props = {};
+                inst.properties.forEach(p => props[p.propertyId.name] = p.value.replaceAll('\"', ''));
+
                 contents.push({
                     object_name: inst.objectId.name,
                     x: inst.x,
@@ -29,7 +37,8 @@ export default function LoadRoom(path:string = './rooms/rTest.yy'):LoadedRoom {
                     xscale: inst.scaleX,
                     yscale: inst.scaleY,
                     type: global.entityObjects[inst.objectId.name]?.type || UnknownEntity.type,
-                    spd: {x: 0, y: 0}
+                    spd: {x: 0, y: 0},
+                    props
                 });
             });
         }

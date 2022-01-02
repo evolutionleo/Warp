@@ -8,7 +8,7 @@ const common_config = {
     meta: {
         game_name: 'OnlineGame',
         version: 'v0.1',
-        framework_version: 'v3.0',
+        framework_version: 'v4.2',
         server: 'unknown'
     },
 
@@ -21,8 +21,11 @@ const common_config = {
 
     tps: 60, // tickrate
     db_enabled: true,
-    starting_room: 'Stress Test',
-    necessary_login: false
+    starting_room: 'Test Room',
+    necessary_login: false,
+    room_rest_timeout: 5    // (seconds) - prevents rooms from processing entities
+                            // when no players are present for a certain amount of time
+                            // set to -1 to disable this feature
 }
 
 const prod_config = {

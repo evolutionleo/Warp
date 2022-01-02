@@ -11,6 +11,9 @@ connect = function() {
 	
 	alarm[0] = CONNECT_TIMEOUT
 	
+	if (variable_instance_exists(id, "socket"))
+		network_destroy(socket)
+	
 	socket = network_create_socket(network_socket_tcp)
 	// Async = Don't crash the game if the server is down
 	network_connect_raw_async(socket, IP, real(PORT));
@@ -22,6 +25,7 @@ onDisconnect = global.onDisconnect
 
 #endregion
 
+packet_queue = []
 
 connecting = false
 connected = false

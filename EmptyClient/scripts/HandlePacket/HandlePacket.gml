@@ -1,8 +1,7 @@
-///@function	handlePacket(pack)
-///@param		{buffer} pack
-function handlePacket(pack) {
+///@function	handlePacket(data)
+///@param		{struct} data
+function handlePacket(data) {
 	// Deserialize/unpack msgpack into a struct
-	var data = snap_from_messagepack(pack)
 	var cmd = string_lower(data.cmd)	// you can get rid of the string_lower(),
 																		// i just like the commands being lowercase
 	
@@ -92,6 +91,7 @@ function handlePacket(pack) {
 			//room_goto(rMenu)
 			break
 		case "play":
+			//trace("playing!")
 			global.playing = true
 			
 			global.lobby = data.lobby // again, just to be safe + update the data
@@ -109,34 +109,67 @@ function handlePacket(pack) {
 			
 			room_goto(rm)
 			break
+		// changing rooms
 		case "room transition":
 			var _room = data.room
+			var _map = _room.map
 			
+			global.room = _room
+			global.start_pos = data.start_pos
+			global.game_map = _map
+			global.player_uuid = data.uuid
 			
+			var room_name = _map.room_name
+			//trace("room transition: % -> %", room_get_name(room), room_name)
+			
+			var rm = asset_get_index(room_name)
+			if (!room_exists(rm)) {
+				show_message_async("Error: Invalid room name!")
+			}
+			else {
+				room_goto(rm)
+			}
 			break
 		
 		// data about the entity
 		case "entities":
+			//trace("received entities from room %: %", data.room, array_length(data.entities))
+			
 			// don't spawn in entities if we're not playing (e.x in menus)
 			if (!global.playing) {
 				trace("Warning: received entity, but not playing yet (or already)!")
 				break
 			}
-			//trace("entities received")
+			
+			// don't spawn in entities from another room (can happen during room transitions)
+			var from_room = data.room // the room where the entities are from
+			var curr_room = room_get_name(room) // the current room
+			var target_room = global.game_map.room_name // the target room
+			
+			if (curr_room != target_room) { // in transition right now
+				queuePacket(data)
+				break
+			}
+			
+			if (from_room != curr_room) {
+				trace("Ignoring received entities from another room (%, we're in %)", from_room, curr_room)
+				break
+			}
+			
 			
 			var entities = data.entities
 			var l = array_length(entities)
 			
+			// for each entity
 			for(var i = 0; i < l; i++) {
 				var entity = entities[i]
 				
-				//trace("entity: %", entity)
-				
 				var uuid = entity.id
 				var type = asset_get_index(entity.object_name)
+				var props = entity.props
 				var existed = instance_exists(find_by_uuid(uuid, type))
 				var inst = find_or_create(uuid, type)
-			
+				
 			
 				// if it was just created - it's remote
 				if (!existed) {
@@ -144,7 +177,7 @@ function handlePacket(pack) {
 					inst.x = entity.x
 					inst.y = entity.y
 				}
-			
+				
 				if (uuid == global.player_uuid) {
 					inst.remote = false
 				}
@@ -171,6 +204,18 @@ function handlePacket(pack) {
 					}
 					inst.spd.x = entity.spd.x
 					inst.spd.y = entity.spd.y
+				}
+				
+				
+				// props
+				var propNames = variable_struct_get_names(props)
+				//trace(propNames)
+				//trace(array_length(propNames))
+				for(var j = 0; j < array_length(propNames); j++) {
+					var key = propNames[j]
+					var value = props[$ (key)]
+					
+					variable_instance_set(inst, key, value)
 				}
 			}
 			break

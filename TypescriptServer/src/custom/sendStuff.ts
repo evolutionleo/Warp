@@ -198,8 +198,15 @@ export default class SendStuff {
         this.send({ cmd: 'play', room: room.serialize(), lobby: lobby.getInfo(), start_pos: start_pos, uuid });
     }
 
-    sendRoomTransition(room_to:Room):void {
-        this.send({});
+    
+    /**
+     * 
+     * @param {Room} room_to
+     * @param {Point} start_pos
+     * @param {string} [uuid=undefined]
+     */
+    sendRoomTransition(room_to:Room, start_pos:Point, uuid?:string):void {
+        this.send({ cmd: 'room transition', room: room_to.serialize(), start_pos, uuid });
     }
 
     /**
