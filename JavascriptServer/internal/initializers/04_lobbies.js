@@ -1,5 +1,5 @@
 import { createLobby } from '#util/lobby_functions';
 
-for (var i = 0; i < 3; i++) {
+for (var i = 0; i < global.config.initial_lobbies; i++) {
     createLobby();
 }

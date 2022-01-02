@@ -1,50 +1,58 @@
 import trace from '#util/logging';
 import SendStuff from '#custom/sendStuff';
 import { Profile, freshProfile } from '#schemas/profile';
+
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
     // socket: Socket;
+    
     // lobby: Lobby;
     // room: Room;
+    
     // account: IAccount;
     // profile: IProfile;
+    
     // halfpack: Buffer; // used internally in packet.ts
+    
     // entity: PlayerEntity;
+    
+    
     constructor(socket, type = 'tcp') {
         super(socket, type);
         
+        this.type = type;
+        
+        this.socket = socket;
         this.lobby = null; // no lobby
+        
         // these are the objects that contain all the meaningful data
         this.account = null; // account info
         this.profile = null; // gameplay info
     }
-
+    
     // some events
     onJoinLobby(lobby) {
         this.sendJoinLobby(lobby);
     }
-
+    
     onRejectLobby(lobby, reason) {
         if (!reason)
             reason = 'lobby is full!';
-        
         this.sendRejectLobby(lobby, reason);
     }
-
+    
     onLeaveLobby(lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
-
+    
     onKickLobby(lobby, reason, forced) {
         if (!reason)
             reason = '';
-        
         if (forced === null || forced === undefined)
             forced = true;
-        
         this.sendKickLobby(lobby, reason, forced);
     }
-
+    
     onPlay() {
         if (!this.profile) {
             if (!global.config.necessary_login) {
@@ -57,23 +65,24 @@ export default class Client extends SendStuff {
                 return -1;
             }
         }
-        else if (this.profile) {
+        else if (this.profile) { // load the room from profile
             var room = this.lobby.rooms.find(room => {
                 return room.map.name === this.profile.room;
             });
         }
-
         room.addPlayer(this);
         this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
     }
-
+    
     onDisconnect() {
         this.save();
         if (this.lobby !== null)
             this.lobby.kickPlayer(this, 'disconnected', true);
     }
-
-    // preset functions
+    
+    
+    // preset functions below
+    
     // this one saves everything
     save() {
         if (this.account !== null) {
@@ -97,13 +106,16 @@ export default class Client extends SendStuff {
             });
         }
     }
+    
     register(account) {
         this.account = account;
         this.profile = freshProfile(account);
+        
         // this.save() returns a Promise
         this.save();
         this.sendRegister('success');
     }
+    
     login(account) {
         this.account = account;
         Profile.findOne({

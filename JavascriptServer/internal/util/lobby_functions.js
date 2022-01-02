@@ -1,7 +1,9 @@
 import Lobby from '#concepts/lobby';
 import * as crypto from 'crypto';
+
 export function createLobby() {
     var lobby = new Lobby();
+    
     while (true) {
         // a random 6-digit number
         var lobbyid = crypto.randomInt(100000, 999999).toString();
@@ -14,6 +16,7 @@ export function createLobby() {
             break;
         }
     }
+    
     return lobby;
 }
 
@@ -25,5 +28,6 @@ export function findLobby(lobbyid) {
 export function deleteLobby(lobbyid) {
     var lobby = global.lobbies[lobbyid];
     lobby.close();
+    
     delete global.lobbies[lobbyid];
 }

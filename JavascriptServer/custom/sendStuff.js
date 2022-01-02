@@ -1,25 +1,40 @@
 import packet from '#internal/packet';
+// import ClientProperties from '#types/clientProperties';
 
 
 export default class SendStuff {
-    type; // 'ws' or 'tcp'
-    socket; // WebSocket or net.Socket
-
+    socket;
+    type;
+    
+    lobby;
+    room;
+    
+    account;
+    profile;
+    
+    halfpack; // used internally in packet.ts
+    
+    entity;
+    
+    
     /**
-     * 
-     * @param {ws|net.Socket} socket
+     *
+     * @param {Sock} socket
      * @param {string} type
      */
-     constructor(socket, type) {
+    constructor(socket, type) {
         this.socket = socket;
         this.type = type.toLowerCase();
     }
-
-    /** 
+    
+    
+    /**
      * basic send
-     * @param {object} data 
+     * @param {object} data
      */
     write(data) {
+        // console.log(Object.keys(packet));
+        
         if (this.type === 'ws') {
             this.socket.send(packet.ws_build(data));
         }
@@ -30,7 +45,7 @@ export default class SendStuff {
     
     /**
      * same as .write()
-     * @param {object} data 
+     * @param {object} data
      */
     send(data) {
         return this.write(data);
@@ -38,10 +53,10 @@ export default class SendStuff {
     
     // different types of broadcast
     /**
-     * 
-     * @param {any[]} clients 
-     * @param {object} pack 
-     * @param {boolean} [notme=true] 
+     *
+     * @param {any[]} clients
+     * @param {object} pack
+     * @param {boolean} [notme=true]
      */
     broadcastList(clients, pack, notme = true) {
         clients.forEach(function (c) {
@@ -51,95 +66,150 @@ export default class SendStuff {
             }
         });
     }
-
+    
     /**
-     * @param {object} pack 
-     * @param {boolean} [notme=true] 
+     * @param {object} pack
+     * @param {boolean} [notme=true]
      */
     broadcastAll(pack, notme) {
         return this.broadcastList(global.clients, pack, notme);
     }
-
+    
     /**
-     * @param {object} pack 
+     * @param {object} pack
      * @param {boolean} [notme=true]
      */
     broadcastLobby(pack, notme) {
         if (this.lobby === null)
             return -1;
+        
         return this.broadcastList(this.lobby.players, pack, notme);
     }
-
-    /**
-     * @param {object} pack 
-     * @param {boolean} [notme=true]
-     */
+    
     broadcastRoom(pack, notme) {
         if (this.room === null)
             return -1;
+        
         return this.broadcastList(this.room.players, pack, notme);
     }
-
-
-    // these functions can be later called using %insert_client%.sendThing()
+    
+    // !!!
+    // these functions can be later called using some_client.sendThing()
     // in handlePacket.js or wherever else where you have client objects
+    // !!!
     sendHello() {
-        this.write({ cmd: 'hello', str: 'Hello, client!' });
-        this.write({ cmd: 'hello2', str: 'Hello again, client!' });
+        this.send({ cmd: 'hello', str: 'Hello, client!' });
+        this.send({ cmd: 'hello2', str: 'Hello again, client!' });
     }
-
+    
+    /**
+     * @param {string} msg
+     */
     sendMessage(msg) {
-        this.write({ cmd: 'message', msg: msg });
+        this.send({ cmd: 'message', msg: msg });
     }
-
+    
     // these are some preset functions
+    /**
+     * @param {string} status
+     * @param {string} [reason='']
+     */
     sendRegister(status, reason = '') {
-        this.write({ cmd: 'register', status: status, reason: reason });
+        this.send({ cmd: 'register', status: status, reason: reason });
     }
-
+    
+    /**
+     *
+     * @param {string} status
+     * @param {string} [reason='']
+     */
     sendLogin(status, reason = '') {
-        this.write({ cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON() });
+        this.send({ cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON() });
     }
     
+    /**
+     *
+     * @param {Lobby} lobby
+     */
     sendJoinLobby(lobby) {
-        this.write({ cmd: 'lobby join', lobby: lobby.serialize() });
-    }
-
-    sendRejectLobby(lobby, reason = '') {
-        this.write({ cmd: 'lobby reject', lobby: lobby.serialize(), reason: reason });
-    }
-
-    sendKickLobby(lobby, reason = '', forced = true) {
-        this.write({ cmd: 'lobby leave', lobby: lobby.serialize(), reason: reason, forced: forced });
-    }
-
-    sendUpdateLobby(lobby) {
-        this.write({ cmd: 'lobby update', lobby: lobby.serialize() });
-    }
-
-    sendLobbyList() {
-        this.write({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.serialize()) }); // lobbies as an array
-    }
-
-    sendLobbyInfo(lobbyid) {
-        this.write({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].serialize() });
-    }
-
-    sendPlay(lobby, room, start_pos, uuid) {
-        this.write({ cmd: 'play', room: room.serialize(), lobby: lobby.serialize(), start_pos: start_pos, uuid });
+        this.send({ cmd: 'lobby join', lobby: lobby.getInfo() });
     }
     
+    /**
+     *
+     * @param {Lobby} lobby
+     * @param {string} [reason='']
+     */
+    sendRejectLobby(lobby, reason = '') {
+        this.send({ cmd: 'lobby reject', lobby: lobby.getInfo(), reason: reason });
+    }
+    
+    /**
+     *
+     * @param {Lobby} lobby
+     * @param {string} [reason='']
+     * @param {boolean} [forced=true]
+     */
+    sendKickLobby(lobby, reason = '', forced = true) {
+        this.send({ cmd: 'lobby leave', lobby: lobby.getInfo(), reason: reason, forced: forced });
+    }
+    
+    /**
+     *
+     * @param {Lobby} lobby
+     */
+    sendUpdateLobby(lobby) {
+        this.send({ cmd: 'lobby update', lobby: lobby.getInfo() });
+    }
+    
+    sendLobbyList() {
+        this.send({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.getInfo()) }); // lobbies as an array
+    }
+    
+    /**
+     *
+     * @param {string} lobbyid
+     */
+    sendLobbyInfo(lobbyid) {
+        this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].getInfo() });
+    }
+    
+    /**
+     *
+     * @param {Lobby} lobby
+     * @param {Room} room
+     * @param {Point} start_pos
+     * @param {string} [uuid=undefined]
+     */
+    sendPlay(lobby, room, start_pos, uuid) {
+        this.send({ cmd: 'play', room: room.serialize(), lobby: lobby.getInfo(), start_pos: start_pos, uuid });
+    }
+    
+    
+    /**
+     *
+     * @param {Room} room_to
+     * @param {Point} start_pos
+     * @param {string} [uuid=undefined]
+     */
+    sendRoomTransition(room_to, start_pos, uuid) {
+        this.send({ cmd: 'room transition', room: room_to.serialize(), start_pos, uuid });
+    }
+    
+    /**
+     *
+     * @param {IPlayerInputs} data
+     */
     sendPlayerControls(data) {
-        let id = this.entity.uuid;
+        let id = this.entity.uuid; // i know right?
         this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
     }
     
     // #################################
-    // You can write your wrappers here
+    // You can write your wrappers here:
+    
     // for example:
     sendSomething(greeting) {
-        this.write({ cmd: 'something', greeting: greeting });
+        this.send({ cmd: 'something', greeting: greeting });
     }
-
-
 }

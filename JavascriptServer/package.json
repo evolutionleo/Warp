@@ -1,5 +1,5 @@
 {
-    "name": "ponk",
+    "name": "gmof-typescript-server",
     "version": "0.0.1",
     "private": true,
     "description": "kappa",
@@ -13,10 +13,13 @@
     },
     "dependencies": {
         "@msgpack/msgpack": "^2.3.0",
+        "chalk": "^5.0.0",
+        "detect-collisions": "^3.1.3",
         "extend": "^3.0.2",
         "minimist": "^1.2.5",
         "module-alias": "^2.2.2",
         "mongoose": "^5.12.12",
+        "node": "^16.0.0",
         "performance-now": "^2.1.0",
         "rbush": "^3.0.1",
         "uuid": "^8.3.2",
@@ -25,7 +28,9 @@
     "devDependencies": {
         "@types/node": "^15.12.1",
         "@types/rbush": "^3.0.0",
-        "@types/uuid": "^8.3.1"
+        "@types/uuid": "^8.3.1",
+        "0x": "^5.0.0",
+        "typescript": "^3.9.10"
     },
     "imports": {
         "#root/*": "./*.js",
@@ -36,6 +41,7 @@
         "#entity/*": "./internal/entities/entity_types/*.js",
         "#entities/*": "./internal/entities/*.js",
         "#initializers/*": "./internal/initializers/*.js",
-        "#util/*": "./internal/util/*.js"
+        "#util/*": "./internal/util/*.js",
+        "#types/*": "./internal/types/*.js"
     }
 }

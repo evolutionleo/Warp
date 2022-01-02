@@ -1,12 +1,12 @@
 export function clamp(val, min, max) {
     let _val = val;
-    
     if (_val < min) {
         _val = min;
     }
     else if (_val > max) {
         _val = max;
     }
+    
     return _val;
 }
 
@@ -32,8 +32,10 @@ export function radtodeg(rad) {
     return rad * 180 / Math.PI;
 }
 
+
 // purely for people who don't know that you can just use Math.your_function_here()
 // if you are one of them and are reading this right now - don't import the functions below, use Math.min(), etc. instead
+
 export const sign = Math.sign;
 export const abs = Math.abs;
 export const random = Math.random;

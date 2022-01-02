@@ -1,9 +1,12 @@
 import * as crypto from 'crypto';
+
 // this file is used to immitate delay/latency of the connection
+
 export class delaySend {
     static enabled = false;
-    static min = 280;
-    static max = 300;
+    
+    static min = 100;
+    static max = 200;
     
     static get() {
         if (!this.enabled)
@@ -14,9 +17,10 @@ export class delaySend {
 
 export class delayReceive {
     static enabled = false;
-    static min = 280;
-    static max = 300;
-
+    
+    static min = 100;
+    static max = 200;
+    
     static get() {
         if (!this.enabled)
             return -1;
