@@ -3,7 +3,7 @@ import Entity from '#concepts/entity';
 import Client from '#concepts/client';
 import Room from '#concepts/room';
 import Point from '#types/point';
-import PhysicsEntity, { OutsideRoomAction } from './../physics_entity.js';
+import PhysicsEntity, { OutsideRoomAction, CollisionType } from './../physics_entity.js';
 
 export interface IPlayerInputs {
     keys: {
@@ -44,6 +44,7 @@ export default class PlayerEntity extends PhysicsEntity {
     type = PlayerEntity.type;
     object_name = PlayerEntity.object_name;
 
+    collisionType = 'discrete' as CollisionType;
     preciseCollisions = true;
     outsideRoomAction:OutsideRoomAction = 'wrap';
 

@@ -1,4 +1,3 @@
-
 spd.x += grv.x
 spd.y += grv.y
 

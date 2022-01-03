@@ -23,6 +23,7 @@ const common_config = {
     db_enabled: true,
     starting_room: 'Test Room',
     necessary_login: false,
+    ping_interval: 5 * 1000,
     room_rest_timeout: 5    // (seconds) - prevents rooms from processing entities
     // when no players are present for a certain amount of time
     // set to -1 to disable this feature

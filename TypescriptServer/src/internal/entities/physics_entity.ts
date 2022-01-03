@@ -7,6 +7,7 @@ import { clamp, approach } from '#util/maths';
 // 'ignore' means the entity would just go outside bounds
 export type OutsideRoomAction = 'wrap' | 'stop' | 'ignore';
 export type CollisionType = 'discrete' | 'continuous';
+export type StuckAction = 'stop' | 'clip';
 
 export default class PhysicsEntity extends Entity {
     physicsEnabled:boolean = true;
@@ -15,10 +16,12 @@ export default class PhysicsEntity extends Entity {
     max_spd:Point = {x: 20, y: 20};
 
     outsideRoomAction: OutsideRoomAction = 'stop';
-    collisionType:CollisionType = 'discrete';
-    collisionPrecision:number = 5; // only works with collisionType = 'discrete'
+    collisionType:CollisionType = 'discrete'; // discrete or continuout
+    collisionPrecision:number = 5; // only works with collisionType != 'discrete'
 
     preciseCollisions = true; // pixel-perfect, but is slower
+
+    stuckAction:StuckAction = 'stop'; // or 'clip' to clip through walls
 
     constructor(room:Room, x: number = 0, y: number = 0) {
         super(room, x, y);
@@ -34,12 +37,27 @@ export default class PhysicsEntity extends Entity {
             || bbox.top - this.y + y > this.room.height;
     }
 
+    stuck(x = this.x, y = this.y) {
+        return this.placeMeeting(x, y);
+    }
+
     move(xspd:number = undefined, yspd:number = 0):void {
         // default move
         let def_move = xspd == undefined;
         if (def_move) {
             xspd = this.spd.x;
             yspd = this.spd.y;
+        }
+
+
+        // stuck in a solid object
+        if (this.stuck()) {
+            // just clip through everything?
+            if (this.stuckAction === 'clip') {
+                this.x += xspd;
+                this.y += yspd;
+            }
+            return; // help me im stuck
         }
 
 
@@ -78,6 +96,8 @@ export default class PhysicsEntity extends Entity {
             yspd = 0;
         }
         this.y += yspd;
+
+        this.updateCollider();
     }
 
     update() {
@@ -145,6 +165,7 @@ export default class PhysicsEntity extends Entity {
                 if (this.placeMeeting(curr_x, y)) {
                     return true;
                 }
+                if (step == 0) { return false; }
             }
             return false;
         }
@@ -166,6 +187,7 @@ export default class PhysicsEntity extends Entity {
                 if (this.placeMeeting(x, curr_y)) {
                     return true;
                 }
+                if (step == 0) { return false; }
             }
             return false;
         }

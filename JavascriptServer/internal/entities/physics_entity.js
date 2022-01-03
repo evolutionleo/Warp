@@ -1,6 +1,7 @@
 import Entity from '#concepts/entity';
 
 import { clamp, approach } from '#util/maths';
+import trace from '#util/logging';
 
 export default class PhysicsEntity extends Entity {
     physicsEnabled = true;
@@ -10,9 +11,12 @@ export default class PhysicsEntity extends Entity {
     
     outsideRoomAction = 'stop';
     collisionType = 'discrete';
-    collisionPrecision = 5; // only works with collisionType = 'discrete'
+    collisionPrecision = 5; // only works with collisionType != 'discrete'
     
     preciseCollisions = true; // pixel-perfect, but is slower
+
+    // stuckAction = 'clip';
+    stuckAction = 'stop';
     
     constructor(room, x = 0, y = 0) {
         super(room, x, y);
@@ -27,6 +31,10 @@ export default class PhysicsEntity extends Entity {
             || bbox.bottom - this.y + y < 0
             || bbox.top - this.y + y > this.room.height;
     }
+
+    stuck(x = this.x, y = this.y) {
+        return this.placeMeeting(x, y);
+    }
     
     move(xspd = undefined, yspd = 0) {
         // default move
@@ -35,8 +43,19 @@ export default class PhysicsEntity extends Entity {
             xspd = this.spd.x;
             yspd = this.spd.y;
         }
+
         
-        
+        // stuck in a solid object
+        if (this.stuck()) {
+            // just clip through everything?
+            if (this.stuckAction === 'clip') {
+                this.x += xspd;
+                this.y += yspd;
+            }
+            return; // help me im stuck
+        }
+
+
         if (this.isCollidingX(this.x, this.y, xspd)) {
             if (this.preciseCollisions && xspd != 0) {
                 while (!this.isCollidingX(this.x, this.y, Math.sign(xspd))) {
@@ -53,7 +72,6 @@ export default class PhysicsEntity extends Entity {
             xspd = 0;
         }
         this.x += xspd;
-        
         
         if (this.isCollidingY(this.x, this.y, yspd)) {
             if (this.preciseCollisions && yspd != 0) {
@@ -72,6 +90,8 @@ export default class PhysicsEntity extends Entity {
             yspd = 0;
         }
         this.y += yspd;
+
+        this.updateCollider();
     }
     
     update() {
@@ -139,6 +159,7 @@ export default class PhysicsEntity extends Entity {
                 if (this.placeMeeting(curr_x, y)) {
                     return true;
                 }
+                if (step == 0) { return false; }
             }
             return false;
         }
@@ -160,6 +181,7 @@ export default class PhysicsEntity extends Entity {
                 if (this.placeMeeting(x, curr_y)) {
                     return true;
                 }
+                if (step == 0) { return false; }
             }
             return false;
         }

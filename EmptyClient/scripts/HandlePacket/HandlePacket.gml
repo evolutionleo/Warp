@@ -17,6 +17,17 @@ function handlePacket(data) {
 		case "message":
 			show_message_async(data.msg+"\n (c) Server")
 			break
+		case "ping":
+			sendPong(data.t)
+			break
+		case "pong":
+			var t = data.t
+			//var new_t = current_time
+			var new_t = round(get_timer() / 1000)
+			var ping = new_t - t
+			
+			global.ping = ping
+			break
 		
 		// Predefined events:
 		case "login":

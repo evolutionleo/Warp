@@ -1,5 +1,5 @@
 {
-    "name": "gmof-typescript-server",
+    "name": "gmof-javascript-server",
     "version": "0.0.1",
     "private": true,
     "description": "kappa",
@@ -8,9 +8,7 @@
         "name": "Evoleo"
     },
     "type": "module",
-    "scripts": {
-        "postbuild": "ef-tspm"
-    },
+    "scripts": {},
     "dependencies": {
         "@msgpack/msgpack": "^2.3.0",
         "chalk": "^5.0.0",

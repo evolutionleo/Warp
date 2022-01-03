@@ -28,6 +28,8 @@ export default class Client extends SendStuff {
         // these are the objects that contain all the meaningful data
         this.account = null; // account info
         this.profile = null; // gameplay info
+        
+        this.ping = -1;
     }
     
     // some events

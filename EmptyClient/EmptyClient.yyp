@@ -33,6 +33,7 @@
     {"id":{"name":"oLobbiesDemo","path":"objects/oLobbiesDemo/oLobbiesDemo.yy",},"order":1,},
     {"id":{"name":"btnToMenu","path":"objects/btnToMenu/btnToMenu.yy",},"order":0,},
     {"id":{"name":"snap_from_messagepack","path":"scripts/snap_from_messagepack/snap_from_messagepack.yy",},"order":0,},
+    {"id":{"name":"oPing","path":"objects/oPing/oPing.yy",},"order":2,},
     {"id":{"name":"btnRegister","path":"objects/btnRegister/btnRegister.yy",},"order":1,},
     {"id":{"name":"buffer_visualize","path":"scripts/buffer_visualize/buffer_visualize.yy",},"order":0,},
     {"id":{"name":"sWarpPortal","path":"sprites/sWarpPortal/sWarpPortal.yy",},"order":3,},

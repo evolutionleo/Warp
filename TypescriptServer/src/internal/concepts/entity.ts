@@ -235,10 +235,10 @@ class Entity extends EventEmitter {
         // this.tree.updateBody(this.collider);
     }
     
-    public placeMeeting(x:number = this.x, y:number = this.y, type?:EntityType|string):boolean {
+    protected updateCollider(x = this.x, y = this.y) {
         // this.regenerateCollider(x, y);
 
-        if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y || this.pos.x != this.prev_pos.x || this.pos.y != this.prev_pos.y) {
+        if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y || x != this.prev_pos.x || y != this.prev_pos.y) {
             // trace('changed scale or position - regenerating the collider');
             this.regenerateCollider(x, y);
         }
@@ -248,14 +248,18 @@ class Entity extends EventEmitter {
             this.collider.setAngle(this.angle);
             if (!this.polygon_set) {
                 this.collider.setPoints([
-                    {x: 1, y: this.height},
-                    {x: this.width, y: this.height},
-                    {x: this.width, y: 1},
-                    {x: 1, y: 1}
+                    { x: 1, y: this.height },
+                    { x: this.width, y: this.height },
+                    { x: this.width, y: 1 },
+                    { x: 1, y: 1 }
                 ]);
             }
             this.tree.updateBody(this.collider);
         }
+    }
+
+    public placeMeeting(x:number = this.x, y:number = this.y, type?:EntityType|string):boolean {
+        this.updateCollider();
 
         this.prev_size = {x: this.size.x, y: this.size.y}
 

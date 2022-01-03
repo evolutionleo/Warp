@@ -22,6 +22,19 @@ export default async function handlePacket(c, data) {
             c.sendMessage(data.msg + ' indeed');
             break;
         
+        case 'ping':
+            c.sendPong(data.t);
+            break;
+        case 'pong':
+            let t = data.t;
+            let new_t = new Date().getTime();
+            let dt = new_t - t;
+
+            c.ping = dt;
+            c.sendPing(); // send ping again
+
+            break;
+        
         // preset commands
         case 'login':
             var { username, password } = data;

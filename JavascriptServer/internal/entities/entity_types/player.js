@@ -26,6 +26,7 @@ export default class PlayerEntity extends PhysicsEntity {
     type = PlayerEntity.type;
     object_name = PlayerEntity.object_name;
     
+    collisionType = 'discrete';
     preciseCollisions = true;
     outsideRoomAction = 'wrap';
     

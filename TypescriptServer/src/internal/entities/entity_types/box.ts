@@ -1,5 +1,5 @@
 import Room from "#concepts/room";
-import PhysicsEntity from "#entities/physics_entity"
+import PhysicsEntity, { StuckAction } from "#entities/physics_entity"
 
 export default class Box extends PhysicsEntity {
     static type = 'Box';
@@ -7,6 +7,8 @@ export default class Box extends PhysicsEntity {
     // non-static
     type = Box.type;
     object_name = Box.object_name;
+
+    stuckAction:StuckAction = 'clip';
 
     isSolid = true;
 

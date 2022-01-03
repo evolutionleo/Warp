@@ -11,6 +11,15 @@ function sendMessage(msg) {
 	send({cmd: "message", msg: msg})
 }
 
+function sendPing() {
+	//send({ cmd: "ping", t: current_time })
+	send({ cmd: "ping", t: round(get_timer() / 1000) })
+}
+
+function sendPong(t) {
+	send({ cmd: "pong", t: t })
+}
+
 // Preset functions:
 
 function sendJoinLobby(lobbyid) {

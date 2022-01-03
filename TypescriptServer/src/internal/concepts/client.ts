@@ -24,6 +24,7 @@ export default class Client extends SendStuff {
     // halfpack: Buffer; // used internally in packet.ts
 
     // entity: PlayerEntity;
+    ping: number;
 
 
     constructor(socket:Sock, type:SockType = 'tcp') {
@@ -37,6 +38,8 @@ export default class Client extends SendStuff {
         // these are the objects that contain all the meaningful data
         this.account = null; // account info
         this.profile = null; // gameplay info
+
+        this.ping = -1;
     }
 
     // some events
