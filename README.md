@@ -12,9 +12,9 @@
 - **NodeJS server** can run on a Linux hosting/dedicated server, as opposed to servers in GML
 - **MIT license** (you can use this framework in commercial projects and modify/contribute in any way)
 
-# Examples
-- [1v1 Pong Example](https://github.com/evolutionleo/GMOF-pong-example)
+# Examples (use old versions)
 - [Platformer Example](https://github.com/evolutionleo/StreamGame)
+- [1v1 Pong Example](https://github.com/evolutionleo/GMOF-pong-example)
 
 # Installing
 ### \[New!\] Client + Server
