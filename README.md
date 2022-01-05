@@ -1,5 +1,5 @@
-# GM-Online-Framework
-#### A simple yet feature-rich framework for multiplayer games, written in GMS2.3 and NodeJS
+# Warp (previously GM-Online-Framework)
+#### A feature-rich framework for multiplayer games, written in GMS2.3 and NodeJS
 #### Maintained by [@evolutionleo](https://github.com/evolutionleo)
 #### If you have any questions, please join my [Discord](https://discord.gg/WRsgumM2T6)
 
@@ -21,11 +21,11 @@
 - You need to have [NodeJS](https://nodejs.org/en/) and [npm](https://npmjs.org) installed
 - Run `npx create-gmof-app` in the console
 - Follow the instructions, select the templates for the Client and the Server
-- Done! It will automatically pull everything from the [latest release](https://github.com/evolutionleo/GM-Online-Framework/releases/latest)
+- Done! It will automatically pull everything from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
 
 
 ### Client-side
-- Install .yymps from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases/latest)
+- Install .yymps from the latest [release](https://github.com/evolutionleo/Warp/releases/latest)
 - Import it to your project using Local Package system *(you can also choose to include the Demo)*
 
  OR
@@ -33,7 +33,7 @@
 ### Server-side
 - Install [NodeJS](https://nodejs.org/en/)
 - I recommend using [VS Code](https://code.visualstudio.com/), as it's **very cool** (and in addition to that it provides a handy command line, embedded into the code editor)
-- Download EmptyServer.zip from the latest [release](https://github.com/evolutionleo/GM-Online-Framework/releases)
+- Download EmptyServer.zip from the latest [release](https://github.com/evolutionleo/Warp/releases)
 - Open up the clonned folder in command line (or open the folder in VS Code)
 - Run `npm install`
 
