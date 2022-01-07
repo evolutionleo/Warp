@@ -50,7 +50,7 @@ shell.cd(projectName); // actually navigates
 
 inquirer.prompt(questions).then(answers => {
     const { serverTemplate, clientTemplate } = answers;
-    const json = shell.exec('curl -s https://api.github.com/repos/evolutionleo/gm-online-framework/releases/latest');
+    const json = shell.exec('curl -s https://api.github.com/repos/evolutionleo/Warp/releases/latest');
     const data = JSON.parse(json);
     /** @type string[] */
     const assets = data.assets.map(asset => asset.browser_download_url);
