@@ -1,14 +1,13 @@
 import Entity from '#concepts/entity'
-import { ICollider } from 'detect-collisions'
+import { ICollider, TBody } from 'detect-collisions'
 
 
 // a wrapper around ICollider to get access to .entity
 export class Collider implements ICollider {
     entity:Entity; // this is what all of this is for
-    collider:ICollider;
+    collider:TBody;
 
     get type() { return this.collider.type }
-    set type(_type) { this.collider.type = _type }
 
     // get isStatic() { return this.collider.isStatic }
     // get isTrigger() { return this.collider.isTrigger }
@@ -47,6 +46,7 @@ export class Collider implements ICollider {
     setAngle(_angle: number) { this.angle = _angle; return this; }
     setPoints(_points) { this.points = _points; return this; }
     setOffset(_offset) { this.offset = _offset; return this; }
+    setPosition(_position) { this.setPosition(_position); return this; }
 
     getAABB() { return (this.collider as any).getAABB(); }
     getCentroid() { return (this.collider as any).getCentroid(); }

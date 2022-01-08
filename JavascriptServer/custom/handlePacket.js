@@ -21,7 +21,6 @@ export default async function handlePacket(c, data) {
             trace('Message from client: ' + data.msg);
             c.sendMessage(data.msg + ' indeed');
             break;
-        
         case 'ping':
             c.sendPong(data.t);
             break;
@@ -29,10 +28,10 @@ export default async function handlePacket(c, data) {
             let t = data.t;
             let new_t = new Date().getTime();
             let dt = new_t - t;
-
+            
             c.ping = dt;
             c.sendPing(); // send ping again
-
+            
             break;
         
         // preset commands

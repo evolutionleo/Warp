@@ -15,8 +15,6 @@ export default class SendStuff {
     halfpack; // used internally in packet.ts
     
     entity;
-
-    ping = -1;
     
     
     /**
@@ -110,21 +108,21 @@ export default class SendStuff {
     sendMessage(msg) {
         this.send({ cmd: 'message', msg });
     }
-
-
+    
+    
     sendPing() {
         let t = new Date().getTime();
         this.send({ cmd: 'ping', t });
     }
-
+    
     /**
-     * 
-     * @param {number} t 
+     *
+     * @param {number} t
      */
     sendPong(t) {
         this.send({ cmd: 'pong', t });
     }
-
+    
     
     // these are some preset functions
     /**

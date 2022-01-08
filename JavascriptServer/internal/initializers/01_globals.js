@@ -1,4 +1,5 @@
 
+
 global.clients = [];
 global.maps = [];           // loaded in 02_maps.js
 global.entities = [];       // loaded in 03_entities.js

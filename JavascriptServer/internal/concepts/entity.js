@@ -183,10 +183,10 @@ class Entity extends EventEmitter {
             this.tree.insert(this.collider);
         // this.tree.updateBody(this.collider);
     }
-
+    
     updateCollider(x = this.x, y = this.y) {
         // this.regenerateCollider(x, y);
-
+        
         if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y || x != this.prev_pos.x || y != this.prev_pos.y) {
             // trace('changed scale or position - regenerating the collider');
             this.regenerateCollider(x, y);
@@ -208,13 +208,13 @@ class Entity extends EventEmitter {
     }
     
     placeMeeting(x = this.x, y = this.y, type) {
-        this.updateCollider(x, y);
+        this.updateCollider();
         
         this.prev_size = { x: this.size.x, y: this.size.y };
         
         // the broad-phase
-        // let arr = this.tree.getPotentials(this.collider);
-        let arr = this.tree.all();
+        let arr = this.tree.getPotentials(this.collider);
+        // let arr = this.tree.all() as Collider[];
         
         // the narrow-phase
         return arr.some((c) => c !== this.collider

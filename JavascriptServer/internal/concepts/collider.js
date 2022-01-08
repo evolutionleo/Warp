@@ -6,7 +6,6 @@ export class Collider {
     collider;
     
     get type() { return this.collider.type; }
-    set type(_type) { this.collider.type = _type; }
     
     // get isStatic() { return this.collider.isStatic }
     // get isTrigger() { return this.collider.isTrigger }
@@ -45,6 +44,7 @@ export class Collider {
     setAngle(_angle) { this.angle = _angle; return this; }
     setPoints(_points) { this.points = _points; return this; }
     setOffset(_offset) { this.offset = _offset; return this; }
+    setPosition(_position) { this.setPosition(_position); return this; }
     
     getAABB() { return this.collider.getAABB(); }
     getCentroid() { return this.collider.getCentroid(); }

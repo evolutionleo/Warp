@@ -15,6 +15,7 @@ export default class Client extends SendStuff {
     // halfpack: Buffer; // used internally in packet.ts
     
     // entity: PlayerEntity;
+    ping;
     
     
     constructor(socket, type = 'tcp') {
