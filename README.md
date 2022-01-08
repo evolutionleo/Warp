@@ -19,7 +19,7 @@
 # Installing
 ### \[New!\] Client + Server
 - You need to have [NodeJS](https://nodejs.org/en/) and [npm](https://npmjs.org) installed
-- Run `npx create-gmof-app` in the console
+- Run `npx @evoleo/create-warp-app` in the console
 - Follow the instructions, select the templates for the Client and the Server
 - Done! It will automatically pull everything from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
 
