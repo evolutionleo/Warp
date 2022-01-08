@@ -1,10 +1,10 @@
 {
-  "name": "create-gmof-app",
+  "name": "@evoleo/create-warp-app",
   "version": "1.0.1",
   "description": "Bootstrap a Warp project with a single command!",
   "main": "index.js",
   "bin": {
-    "create-gmof-app": "index.js"
+    "create-warp-app": "index.js"
   },
   "scripts": {
     "start": "node index.js",
