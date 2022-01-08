@@ -19,7 +19,8 @@
 # Installing
 ### \[New!\] Client + Server
 - You need to have [NodeJS](https://nodejs.org/en/) and [npm](https://npmjs.org) installed
-- Run `npx @evoleo/create-warp-app` in the console
+- Install the packet with `npm i -g @evoleo/create-warp-app`
+- Run `npx create-warp-app`
 - Follow the instructions, select the templates for the Client and the Server
 - Done! It will automatically pull everything from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
 
