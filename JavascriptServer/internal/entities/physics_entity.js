@@ -20,20 +20,6 @@ export default class PhysicsEntity extends Entity {
         super(room, x, y);
     }
     
-    
-    isOutsideRoom(x = this.x, y = this.y) {
-        let bbox = this.bbox; // this is an optimization btw
-        
-        return bbox.left - this.x + x > this.room.width
-            || bbox.right - this.x + x < 0
-            || bbox.bottom - this.y + y < 0
-            || bbox.top - this.y + y > this.room.height;
-    }
-    
-    stuck(x = this.x, y = this.y) {
-        return this.placeMeeting(x, y);
-    }
-    
     move(xspd = undefined, yspd = 0) {
         // default move
         let def_move = xspd == undefined;
@@ -70,7 +56,7 @@ export default class PhysicsEntity extends Entity {
             xspd = 0;
         }
         this.x += xspd;
-        
+        this.updateCollider();
         
         if (this.isCollidingY(this.x, this.y, yspd)) {
             if (this.preciseCollisions && yspd != 0) {
@@ -89,7 +75,6 @@ export default class PhysicsEntity extends Entity {
             yspd = 0;
         }
         this.y += yspd;
-        
         this.updateCollider();
     }
     

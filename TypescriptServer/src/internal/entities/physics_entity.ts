@@ -3,6 +3,7 @@ import Entity from '#concepts/entity';
 import Room from '#concepts/room';
 
 import { clamp, approach } from '#util/maths';
+import trace from '#util/logging';
 
 // 'ignore' means the entity would just go outside bounds
 export type OutsideRoomAction = 'wrap' | 'stop' | 'ignore';
@@ -25,20 +26,6 @@ export default class PhysicsEntity extends Entity {
 
     constructor(room:Room, x: number = 0, y: number = 0) {
         super(room, x, y);
-    }
-
-
-    isOutsideRoom(x = this.x, y = this.y):boolean {
-        let bbox = this.bbox; // this is an optimization btw
-
-        return bbox.left - this.x + x > this.room.width
-            || bbox.right - this.x + x < 0
-            || bbox.bottom - this.y + y < 0
-            || bbox.top - this.y + y > this.room.height;
-    }
-
-    stuck(x = this.x, y = this.y) {
-        return this.placeMeeting(x, y);
     }
 
     move(xspd:number = undefined, yspd:number = 0):void {
@@ -77,7 +64,7 @@ export default class PhysicsEntity extends Entity {
             xspd = 0;
         }
         this.x += xspd;
-
+        this.updateCollider();
 
         if (this.isCollidingY(this.x, this.y, yspd)) {
             if (this.preciseCollisions && yspd != 0) {
@@ -96,7 +83,6 @@ export default class PhysicsEntity extends Entity {
             yspd = 0;
         }
         this.y += yspd;
-
         this.updateCollider();
     }
 

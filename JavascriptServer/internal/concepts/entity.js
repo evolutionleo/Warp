@@ -208,7 +208,7 @@ class Entity extends EventEmitter {
     }
     
     placeMeeting(x = this.x, y = this.y, type) {
-        this.updateCollider();
+        this.updateCollider(x, y);
         
         this.prev_size = { x: this.size.x, y: this.size.y };
         
@@ -233,9 +233,32 @@ class Entity extends EventEmitter {
             && this.tree.checkCollision(this.collider, c)).map(collider => collider.entity);
     }
     
+    isOutsideRoom(x = this.x, y = this.y) {
+        let bbox = this.bbox; // this is an optimization btw
+        
+        return bbox.left - this.x + x > this.room.width
+            || bbox.right - this.x + x < 0
+            || bbox.bottom - this.y + y < 0
+            || bbox.top - this.y + y > this.room.height;
+    }
+    
+    stuck(x = this.x, y = this.y) {
+        return this.placeMeeting(x, y);
+    }
+    
     roundPos() {
-        this.pos.x = Math.round(this.pos.x * 100) / 100;
-        this.pos.y = Math.round(this.pos.y * 100) / 100;
+        // let prev_x = this.pos.x;
+        // let prev_y = this.pos.y;
+        
+        // // round
+        // this.pos.x = Math.round(this.pos.x * 100) / 100;
+        // this.pos.y = Math.round(this.pos.y * 100) / 100;
+        
+        // // if we became stuck - go back
+        // if (this.stuck()) {
+        //     this.pos.x = prev_x;
+        //     this.pos.y = prev_y;
+        // }
     }
     
     // entity death

@@ -30,6 +30,8 @@ export default class PlayerEntity extends PhysicsEntity {
     preciseCollisions = true;
     outsideRoomAction = 'wrap';
     
+    stuckAction = 'stop';
+    
     sendEveryTick = true;
     
     base_size = {
