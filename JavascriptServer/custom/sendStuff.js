@@ -59,8 +59,9 @@ export default class SendStuff {
      * @param {boolean} [notme=true]
      */
     broadcastList(clients, pack, notme = true) {
+        let me = this;
         clients.forEach(function (c) {
-            if (c === this && notme) { }
+            if (c === me && notme) { }
             else {
                 c.write(pack);
             }

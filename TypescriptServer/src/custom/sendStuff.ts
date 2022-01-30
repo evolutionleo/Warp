@@ -72,8 +72,9 @@ export default class SendStuff {
      * @param {boolean} [notme=true] 
      */
     broadcastList(clients:SendStuff[], pack:object, notme:boolean = true) {
+        let me = this;
         clients.forEach(function(c) {
-            if (c === this && notme) {}
+            if (c === me && notme) {}
             else {
                 c.write(pack);
             }
