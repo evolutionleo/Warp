@@ -66,7 +66,7 @@ const server = createServer(function(socket) {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        global.clients.splice(global.clients.indexOf(c));
+        global.clients.splice(global.clients.indexOf(c), 1);
         trace(chalk.red('Socket closed.'));
     })
 });
@@ -120,7 +120,7 @@ ws_server.on('connection', (socket) => {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        global.clients.splice(global.clients.indexOf(c));
+        global.clients.splice(global.clients.indexOf(c), 1);
         trace(chalk.yellowBright('WebSocket closed.'));
     });
 });

@@ -271,7 +271,7 @@ class Entity extends EventEmitter {
     remove() {
         this.emit('remove');
         var pos = this.room.entities.indexOf(this);
-        this.room.entities.splice(pos);
+        this.room.entities.splice(pos, 1);
         if (this.isSolid) {
             this.tree.remove(this.collider);
         }

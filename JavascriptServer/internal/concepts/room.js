@@ -188,12 +188,12 @@ class Room extends EventEmitter {
         // remove from this.players
         let idx = this.players.indexOf(player);
         if (idx !== -1)
-            this.players.splice(idx);
+            this.players.splice(idx, 1);
         
         // remove from this.recentlyJoined
         idx = this.recentlyJoined.indexOf(player);
         if (idx !== -1)
-            this.recentlyJoined.splice(idx);
+            this.recentlyJoined.splice(idx, 1);
         
         
         player.room = null;
