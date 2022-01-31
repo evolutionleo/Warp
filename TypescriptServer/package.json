@@ -1,6 +1,6 @@
 {
-    "name": "gmof-typescript-server",
-    "version": "0.0.1",
+    "name": "warp-framework",
+    "version": "4.2.1",
     "private": true,
     "description": "kappa",
     "main": "out/server.js",
@@ -8,7 +8,12 @@
         "name": "Evoleo"
     },
     "type": "module",
-    "scripts": {},
+    "scripts": {
+        "dev": "node . --env=dev",
+        "development": "node . --env=dev",
+        "prod": "node . --env=prod",
+        "production": "node . --env=prod"
+    },
     "dependencies": {
         "@msgpack/msgpack": "^2.3.0",
         "chalk": "^5.0.0",
