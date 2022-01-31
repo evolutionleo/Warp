@@ -1,6 +1,6 @@
 // All the macro/config definitions go here
 
-#macro GMOF_VERSION "v4.0.1"
+#macro GMOF_VERSION "v4.2.1"
 #macro GAME_VERSION "v0.1"
 
 trace("Welcome to GMOF % by Evoleo!", GMOF_VERSION)
@@ -28,7 +28,8 @@ network_set_config(network_config_use_non_blocking_socket, true)
 #macro Default:DUAL_INSTANCE true
 
 // Production
-#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
+//#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
+#macro Prod:IP   "195.2.80.50" // your external server IP
 #macro Prod:PORT "1337"
 #macro Prod:DUAL_INSTANCE false
 

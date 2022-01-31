@@ -1,6 +1,7 @@
 import './config.js';
 import { createServer } from 'net';
 const port = global.config.port;
+const ip = global.config.ip;
 
 import * as ws from 'ws';
 const ws_port = global.config.ws_port;
@@ -72,7 +73,7 @@ const server = createServer(function (socket) {
 });
 
 
-server.listen(port);
+server.listen(port, ip);
 trace(chalk.bold.blueBright(`Server running on port ${port}!`));
 
 
@@ -81,7 +82,7 @@ trace(chalk.bold.blueBright(`Server running on port ${port}!`));
 if (global.config.ws_enabled) {
     
     const ws_server = new ws.WebSocketServer({
-        host: '127.0.0.1',
+        host: ip,
         port: ws_port
     }, function () {
         trace(chalk.bold.blueBright(`WebSocket Server running on port ${ws_port}!`));

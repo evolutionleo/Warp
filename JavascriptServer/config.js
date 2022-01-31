@@ -34,6 +34,7 @@ const prod_config = {
         server: 'production'
     },
     env_name: 'prod',
+    ip: '0.0.0.0',
     port: args.port || 1337,
     ws_port: args.ws_port || 3000,
     db: args.db || 'mongodb://127.0.0.1:27017/online-game',
@@ -50,6 +51,8 @@ const dev_config = {
         server: 'development'
     },
     env_name: 'dev',
+    ip: '127.0.0.1',
+    //ip: '192.168.1.1', // you can put your machine's local ip here for LAN play
     port: args.port || 1338,
     ws_port: args.ws_port || 3001,
     db: args.db || 'mongodb://127.0.0.1:27017/online-game',
