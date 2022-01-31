@@ -45,6 +45,8 @@
 - Choose the default settings, it should now run in background
 - Done!
 
+## If you don't need MongoDB - please disable it in the config file (it's under common_config.db_enabled), otherwise you will get an error!
+
 
 ## Usage/Workflow
 Congratulations if you've completed the Installation step!
