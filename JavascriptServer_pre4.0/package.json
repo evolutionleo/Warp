@@ -13,7 +13,7 @@
         "binary-parser": "^1.6.2",
         "crypto": "^1.0.1",
         "extend": "^3.0.2",
-        "minimist": "^1.2.5",
+        "minimist": "^1.2.6",
         "mongoose": "^5.12.12",
         "node": "^16.0.0",
         "performance-now": "^2.1.0",
