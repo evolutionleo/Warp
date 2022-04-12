@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sDemoButton","path":"sprites/sDemoButton/sDemoButton.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sDemoButton",
     "tags": [],
     "resourceType": "GMSequence",

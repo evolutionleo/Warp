@@ -30,7 +30,8 @@ export default async function handlePacket(c, data) {
             let dt = new_t - t;
             
             c.ping = dt;
-            c.sendPing(); // send ping again
+            // c.sendPing(); // send ping again
+            // jk don't send ping again that's a memory leak
             
             break;
         

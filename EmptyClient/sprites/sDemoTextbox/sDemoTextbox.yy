@@ -59,7 +59,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sDemoTextbox","path":"sprites/sDemoTextbox/sDemoTextbox.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sDemoTextbox",
     "tags": [],
     "resourceType": "GMSequence",

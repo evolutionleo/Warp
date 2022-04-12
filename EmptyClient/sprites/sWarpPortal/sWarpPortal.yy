@@ -67,7 +67,7 @@
     "eventToFunction": {},
     "eventStubScript": null,
     "parent": {"name":"sWarpPortal","path":"sprites/sWarpPortal/sWarpPortal.yy",},
-    "resourceVersion": "1.3",
+    "resourceVersion": "1.4",
     "name": "sWarpPortal",
     "tags": [],
     "resourceType": "GMSequence",

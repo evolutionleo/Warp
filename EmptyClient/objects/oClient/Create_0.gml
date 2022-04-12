@@ -14,9 +14,18 @@ connect = function() {
 	if (variable_instance_exists(id, "socket"))
 		network_destroy(socket)
 	
-	socket = network_create_socket(network_socket_tcp)
+	socket = network_create_socket(SOCKET_TYPE)
+	var port
+	
+	if (SOCKET_TYPE == SOCKET_TYPES.TCP) {
+		port = PORT
+	}
+	else {
+		port = WS_PORT
+	}
+	
 	// Async = Don't crash the game if the server is down
-	network_connect_raw_async(socket, IP, real(PORT));
+	network_connect_raw_async(socket, IP, real(port));
 }
 
 // connect/disconnect events defined in __NetworkingConfig.gml

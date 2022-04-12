@@ -12,7 +12,9 @@
         "dev": "node . --env=dev",
         "development": "node . --env=dev",
         "prod": "node . --env=prod",
-        "production": "node . --env=prod"
+        "production": "node . --env=prod",
+        "profile": "node --prof . --env=dev",
+        "postprofile": "node --profile"
     },
     "dependencies": {
         "@msgpack/msgpack": "^2.3.0",
