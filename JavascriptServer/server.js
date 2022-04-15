@@ -87,9 +87,10 @@ if (global.config.ws_enabled) {
     
     let http_server;
     if (ssl_enabled) {
+        trace(chalk.blueBright('ssl enabled.'));
         http_server = https.createServer({
-            key: fs.readFileSync(ssl_key_path),
-            cert: fs.readFileSync(ssl_cert_path)
+            key: fs.readFileSync(ssl_key_path).toString(),
+            cert: fs.readFileSync(ssl_cert_path).toString()
         });
     }
     else {
@@ -138,6 +139,10 @@ if (global.config.ws_enabled) {
             global.clients.splice(global.clients.indexOf(c), 1);
             trace(chalk.yellowBright('WebSocket closed.'));
         });
+    });
+    
+    ws_server.on('error', function (err) {
+        console.log(chalk.yellowBright('WebSocket error: ' + err.message));
     });
     
     http_server.listen(ws_port, ip, function () {
