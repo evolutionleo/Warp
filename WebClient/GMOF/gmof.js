@@ -17,7 +17,8 @@ class Client {
         this.cmdHandlers = {};
 
 
-        this.socket = new WebSocket(`ws://${config.server_ip}:${config.server_port}`);
+        let protocol = config.ssl_enabled ? 'wss' : 'ws';
+        this.socket = new WebSocket(`${protocol}://${config.server_ip}:${config.server_port}`, protocol);
 
         this.socket.onopen = () => {
             // this.sendHello();

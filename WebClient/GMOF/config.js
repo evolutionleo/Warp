@@ -4,12 +4,14 @@ const common_config = {
 
 const dev_config = {
     server_ip: "127.0.0.1",
-    server_port: 3001
+    server_port: 3001,
+    ssl_enabled: false
 }
 
 const prod_config = {
     server_ip: "xxxx",
-    server_port: 3000 // the WebSocket port
+    server_port: 3000, // the WebSocket port
+    ssl_enabled: true
 }
 
 

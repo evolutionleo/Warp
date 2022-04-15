@@ -8,7 +8,7 @@ const ws_port = global.config.ws_port;
 
 import * as http from 'http';
 import * as https from 'https';
-const { ssl_enabled, ssl_key_path, ssl_cert_path } = global.config
+const { ssl_enabled, ssl_key_path, ssl_cert_path } = global.config;
 
 import * as fs from 'fs';
 
@@ -87,9 +87,10 @@ if (global.config.ws_enabled) {
 
 let http_server: http.Server|https.Server;
 if (ssl_enabled) {
+    trace(chalk.blueBright('ssl enabled.'));
     http_server = https.createServer({
-        key: fs.readFileSync(ssl_key_path),
-        cert: fs.readFileSync(ssl_cert_path)
+        key: fs.readFileSync(ssl_key_path).toString(),
+        cert: fs.readFileSync(ssl_cert_path).toString()
     });
 }
 else {
@@ -138,6 +139,10 @@ ws_server.on('connection', (socket) => {
         global.clients.splice(global.clients.indexOf(c), 1);
         trace(chalk.yellowBright('WebSocket closed.'));
     });
+});
+
+ws_server.on('error', function (err) {
+    console.log(chalk.yellowBright('WebSocket error: ' + err.message));
 });
 
 http_server.listen(ws_port, ip, function() {

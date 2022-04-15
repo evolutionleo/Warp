@@ -34,7 +34,7 @@ const prod_config = {
         server: 'production'
     },
     env_name: 'prod',
-    ip: '0.0.0.0',
+    ip: '0.0.0.0', // you need to replace this with your domain if using ssl for it to work
     port: args.port || 1337,
     ws_port: args.ws_port || 3000,
 
