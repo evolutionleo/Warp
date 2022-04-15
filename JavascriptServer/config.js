@@ -37,6 +37,11 @@ const prod_config = {
     ip: '0.0.0.0',
     port: args.port || 1337,
     ws_port: args.ws_port || 3000,
+    
+    ssl_enabled: false,
+    ssl_cert_path: '/etc/letsencrypt/live/example.com/cert.pem',
+    ssl_key_path: '/etc/letsencrypt/live/example.com/privkey.pem',
+    
     db: args.db || 'mongodb://127.0.0.1:27017/online-game',
     // you can add a postfix at the end of the name to separate them
     shell_enabled: false,
@@ -55,6 +60,11 @@ const dev_config = {
     //ip: '192.168.1.1', // you can put your machine's local ip here for LAN play
     port: args.port || 1338,
     ws_port: args.ws_port || 3001,
+    
+    ssl_enabled: false,
+    ssl_cert_path: null,
+    ssl_key_path: null,
+    
     db: args.db || 'mongodb://127.0.0.1:27017/online-game',
     
     shell_enabled: true,

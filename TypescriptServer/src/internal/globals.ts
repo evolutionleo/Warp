@@ -14,7 +14,8 @@ declare global {
             entityNames:{[key: string]: EntityType}; // type -> EntityType
             entityObjects:{[key: string]: EntityType}; // object_name -> EntityType
 
-            ping_interval:Timeout
+            ping_interval:Timeout,
+            start_time:number
         }
     }
 }

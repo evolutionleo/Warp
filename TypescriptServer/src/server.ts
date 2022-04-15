@@ -6,6 +6,10 @@ const ip = global.config.ip;
 import * as ws from 'ws';
 const ws_port = global.config.ws_port;
 
+import * as http from 'http';
+import * as https from 'https';
+const { ssl_enabled, ssl_key_path, ssl_cert_path } = global.config
+
 import * as fs from 'fs';
 
 import trace from '#util/logging';
@@ -81,11 +85,21 @@ trace(chalk.bold.blueBright(`Server running on port ${port}!`));
 // The WS Server
 if (global.config.ws_enabled) {
 
+let http_server: http.Server|https.Server;
+if (ssl_enabled) {
+    http_server = https.createServer({
+        key: fs.readFileSync(ssl_key_path),
+        cert: fs.readFileSync(ssl_cert_path)
+    });
+}
+else {
+    http_server = http.createServer({
+
+    });
+}
+
 const ws_server = new ws.WebSocketServer({
-    host: ip,
-    port: ws_port
-}, function() {
-    trace(chalk.bold.blueBright(`WebSocket Server running on port ${ws_port}!`));
+    server: http_server,
 });
 
 ws_server.on('connection', (socket) => {
@@ -125,6 +139,11 @@ ws_server.on('connection', (socket) => {
         trace(chalk.yellowBright('WebSocket closed.'));
     });
 });
+
+http_server.listen(ws_port, ip, function() {
+    trace(chalk.bold.blueBright(`WebSocket Server running on port ${ws_port}!`));
+});
+
 }
 
 

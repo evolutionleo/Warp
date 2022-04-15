@@ -112,7 +112,7 @@ export default class SendStuff {
     
     
     sendPing() {
-        let t = new Date().getTime();
+        let t = new Date().getTime() - global.start_time;
         this.send({ cmd: 'ping', t });
     }
     
