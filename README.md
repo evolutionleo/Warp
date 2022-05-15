@@ -26,7 +26,7 @@
 
 
 ### Client-side
-- Install .yymps from the latest [release](https://github.com/evolutionleo/Warp/releases/latest)
+- Install .yymps from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
 - Import it to your project using Local Package system *(you can also choose to include the Demo)*
 
  OR
@@ -34,7 +34,7 @@
 ### Server-side
 - Install [NodeJS](https://nodejs.org/en/)
 - I recommend using [VS Code](https://code.visualstudio.com/), as it's **very cool** (and in addition to that it provides a handy command line, embedded into the code editor)
-- Download JSServer.zip from the latest [release](https://github.com/evolutionleo/Warp/releases)
+- Download JSServer.zip from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
 - Open up the clonned folder in command line (or open the folder in VS Code)
 - Run `npm install`
 
