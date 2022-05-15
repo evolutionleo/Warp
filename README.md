@@ -34,7 +34,7 @@
 ### Server-side
 - Install [NodeJS](https://nodejs.org/en/)
 - I recommend using [VS Code](https://code.visualstudio.com/), as it's **very cool** (and in addition to that it provides a handy command line, embedded into the code editor)
-- Download EmptyServer.zip from the latest [release](https://github.com/evolutionleo/Warp/releases)
+- Download JSServer.zip from the latest [release](https://github.com/evolutionleo/Warp/releases)
 - Open up the clonned folder in command line (or open the folder in VS Code)
 - Run `npm install`
 
@@ -98,7 +98,7 @@ if you write a wrapper
 
 ## Typescript Server
 ### Installing
-- Follow the original steps, but install TypescriptServer.zip instead of EmptyServer.zip
+- Follow the original steps, but install TSServer.zip instead of JSServer.zip
 - Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
 
 ### Networking
