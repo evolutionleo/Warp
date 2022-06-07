@@ -160,6 +160,12 @@ class Room extends EventEmitter {
         this.recentlyJoined = [];
     }
     spawnEntity(etype, x, y, client) {
+        if (!global.config.entities_enabled) {
+            console.error("Warning: Spawning entities is disabled globally! Room.spawnEntity() returning null. You can change this in config.js/ts");
+            return null;
+        }
+        
+        
         if (client === null) {
             var entity = new etype(this, x, y);
         }
@@ -197,8 +203,10 @@ class Room extends EventEmitter {
         
         
         player.room = null;
-        player.entity.remove();
-        player.entity = null;
+        if (player.entity !== null) {
+            player.entity.remove();
+            player.entity = null;
+        }
         this.emit('player leave', player);
         // this.broadcast({ cmd: 'player leave', player: player });
     }
@@ -217,11 +225,14 @@ class Room extends EventEmitter {
         // else {
         
         // }
-        const p = this.map.getStartPos(this.players.length - 1);
-        x = p.x;
-        y = p.y;
-        const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
-        player.entity = player_entity;
+        
+        if (global.config.entities_enabled) {
+            const p = this.map.getStartPos(this.players.length - 1);
+            x = p.x;
+            y = p.y;
+            const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
+            player.entity = player_entity;
+        }
         // add to the recently joined list to receive the old entities
         this.recentlyJoined.push(player);
         

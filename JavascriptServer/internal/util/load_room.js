@@ -12,6 +12,11 @@ export default function LoadRoom(path = './rooms/rTest.yy') {
     
     const contents = [];
     
+    // load an empty array
+    if (!global.config.entities_enabled) {
+        return { width, height, contents };
+    }
+    
     data.layers.forEach((layer) => {
         if (layer.instances) {
             layer.instances.forEach((inst) => {

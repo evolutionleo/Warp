@@ -8,21 +8,34 @@ const common_config = {
     meta: {
         game_name: 'OnlineGame',
         version: 'v0.1',
-        framework_version: 'v4.2',
+        framework_version: 'v4.3',
         server: 'unknown'
     },
     
+    // some fundamental lobby settings
     lobby: {
-        max_players: 100
+        max_players: 100,
+        addIntoPlayOnFull: false,
+        // false - add them one by one immediately as they join
+        closeOnLeave: false // close the lobby if a player leaves
     },
     
+    tps: 60,
+    
+    // Disable some of the features that you don't need in your game
+    // true = enabled, false = disabled
     timestamps_enabled: true,
     ws_enabled: true,
-    
-    tps: 60,
     db_enabled: true,
-    starting_room: 'Test Room',
+    shell_enabled: false,
+    rooms_enabled: true,
+    entities_enabled: true,
+    ssl_enabled: false,
+    
+    
     necessary_login: false,
+    
+    starting_room: 'Test Room',
     ping_interval: 5 * 1000,
     room_rest_timeout: 5    // (seconds) - prevents rooms from processing entities
     // when no players are present for a certain amount of time

@@ -1,6 +1,6 @@
 // All the macro/config definitions go here
 
-#macro GMOF_VERSION "v4.2.2"
+#macro GMOF_VERSION "v4.3.0"
 #macro GAME_VERSION "v0.1"
 
 trace("Welcome to GMOF % by Evoleo!", GMOF_VERSION)

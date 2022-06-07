@@ -1,4 +1,6 @@
+import trace from '#util/logging';
 import packet from '#internal/packet';
+import chalk from 'chalk';
 // import ClientProperties from '#types/clientProperties';
 
 
@@ -6,15 +8,15 @@ export default class SendStuff {
     socket;
     type;
     
-    lobby;
-    room;
+    lobby = null;
+    room = null;
     
-    account;
-    profile;
+    account = null;
+    profile = null;
     
     halfpack; // used internally in packet.ts
     
-    entity;
+    entity = null;
     
     
     /**
@@ -88,6 +90,10 @@ export default class SendStuff {
     }
     
     broadcastRoom(pack, notme) {
+        if (!global.config.rooms_enabled) {
+            trace(chalk.redBright('Can\'t use Client.broadcastRoom() - rooms are disabled in the config!!!'));
+            return -1;
+        }
         if (this.room === null)
             return -1;
         
@@ -198,7 +204,7 @@ export default class SendStuff {
      * @param {string} [uuid=undefined]
      */
     sendPlay(lobby, room, start_pos, uuid) {
-        this.send({ cmd: 'play', room: room.serialize(), lobby: lobby.getInfo(), start_pos: start_pos, uuid });
+        this.send({ cmd: 'play', lobby: lobby.getInfo(), room: (room !== null ? room.serialize() : undefined), start_pos, uuid });
     }
     
     

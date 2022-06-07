@@ -13,7 +13,7 @@ const profileSchema = new Schema({
     account_id: { type: Schema.Types.ObjectId },
     name: { type: String, required: false },
     
-    lobbyid: { type: Number, required: false },
+    lobbyid: { type: String, required: false },
     room: { type: String, required: false },
     
     x: { type: Number, required: false },
@@ -32,7 +32,7 @@ export function freshProfile(account) {
         account_id: account._id,
         name: account.username,
         
-        lobbyid: -1,
+        lobbyid: '-1',
         room: global.config.starting_room,
         
         x: 0,
