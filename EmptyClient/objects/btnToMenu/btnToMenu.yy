@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Other",
-    "path": "folders/GMOF/Demo/Objects/UI/Other.yy",
+    "path": "folders/Warp/Demo/Objects/UI/Other.yy",
   },
   "resourceVersion": "1.0",
   "name": "btnToMenu",

@@ -15,7 +15,7 @@ export interface IProfile extends Document {
     account_id: string,
     name: string,
 
-    lobbyid: number,
+    lobbyid: string,
     room: string, // room/map name
     x: number,
     y: number
@@ -27,7 +27,7 @@ const profileSchema = new Schema({
     account_id: { type: Schema.Types.ObjectId },
     name: {type:String, required: false},
 
-    lobbyid: {type:Number, required: false},
+    lobbyid: {type:String, required: false},
     room: {type:String, required: false},
 
     x: {type:Number, required: false},
@@ -46,7 +46,7 @@ export function freshProfile(account:IAccount):IProfile { // for when just regis
         account_id: account._id,
         name: account.username,
 
-        lobbyid: -1,
+        lobbyid: '-1',
         room: global.config.starting_room,
 
         x: 0,

@@ -28,7 +28,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Parents",
-    "path": "folders/GMOF/Objects/Parents.yy",
+    "path": "folders/Warp/Objects/Parents.yy",
   },
   "resourceVersion": "1.0",
   "name": "oPhysicsEntity",

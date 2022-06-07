@@ -70,7 +70,7 @@
   "nineSlice": null,
   "parent": {
     "name": "UI",
-    "path": "folders/GMOF/Demo/Sprites/UI.yy",
+    "path": "folders/Warp/Demo/Sprites/UI.yy",
   },
   "resourceVersion": "1.0",
   "name": "sDemoTextbox",

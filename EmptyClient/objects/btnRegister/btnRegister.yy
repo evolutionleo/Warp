@@ -30,7 +30,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Login",
-    "path": "folders/GMOF/Demo/Objects/UI/Login.yy",
+    "path": "folders/Warp/Demo/Objects/UI/Login.yy",
   },
   "resourceVersion": "1.0",
   "name": "btnRegister",

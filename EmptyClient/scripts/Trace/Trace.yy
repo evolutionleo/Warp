@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "lib",
-    "path": "folders/GMOF/Scripts/lib.yy",
+    "path": "folders/Warp/Scripts/lib.yy",
   },
   "resourceVersion": "1.0",
   "name": "Trace",

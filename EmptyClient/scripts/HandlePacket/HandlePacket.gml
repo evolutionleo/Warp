@@ -102,23 +102,34 @@ function handlePacket(data) {
 			//room_goto(rMenu)
 			break
 		case "play":
-			//trace("playing!")
+			trace("playing!")
 			global.playing = true
 			
 			global.lobby = data.lobby // again, just to be safe + update the data
-			global.room = data.room
-			global.game_map = data.room.map
-			if (variable_struct_exists(data, "uuid")) {
+			
+			if (!is_undefined(data.start_pos)) {
+				global.start_pos = data.start_pos
+			}
+			if (variable_struct_exists(data, "uuid") and !is_undefined(data.uuid)) {
 				global.player_uuid = data.uuid
 			}
-			var rm = asset_get_index(data.room.map.room_name)
-			global.start_pos = data.start_pos
-			if (!room_exists(rm)) {
-				show_message_async("Error: Invalid room name!")
-				break
-			}
 			
-			room_goto(rm)
+			if (!is_undefined(data.room)) {
+				global.room = data.room
+				global.game_map = data.room.map
+				
+				var rm = asset_get_index(data.room.map.room_name)
+				if (!room_exists(rm)) {
+					show_message_async("Error: Invalid room name!")
+					break
+				}
+			
+				room_goto(rm)
+			}
+			else {
+				// No rooms?
+				show_message_async("Rooms are disabled on the server. If this was intentional, please add custom logic to the \"play\" command inside HandlePacket.gml. If not - you can enable rooms in config.js")
+			}
 			break
 		// changing rooms
 		case "room transition":

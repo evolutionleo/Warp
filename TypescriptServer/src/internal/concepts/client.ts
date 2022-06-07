@@ -10,6 +10,7 @@ import Lobby from '#concepts/lobby';
 import Room from '#concepts/room';
 import PlayerEntity from '#entities/entity_types/player';
 import { SockType, Sock } from '#types/socktype';
+import chalk from 'chalk';
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
@@ -66,24 +67,35 @@ export default class Client extends SendStuff {
     }
 
     onPlay() {
-        if (!this.profile) {
-            if (!global.config.necessary_login) {
+        if (global.config.rooms_enabled) {
+            if (!this.profile) {
+                if (!global.config.necessary_login) {
+                    var room = this.lobby.rooms.find(room => {
+                        return room.map.name === global.config.starting_room;
+                    });
+                }
+                else {
+                    trace(chalk.redBright('non-logged in player entering the playing state! if it\'s intentional, please disable config.necessary_login'));
+                    return -1;
+                }
+            }
+            else if (this.profile) { // load the room from profile
                 var room = this.lobby.rooms.find(room => {
-                    return room.map.name === global.config.starting_room;
+                    return room.map.name === this.profile.room;
                 });
             }
+            room.addPlayer(this);
+
+            if (this.entity !== null) {
+                this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
+            }
             else {
-                console.error('non-logged in player entering the playing state! if it\'s intentional, please disable config.necessary_login');
-                return -1;
+                this.sendPlay(this.lobby, room);
             }
         }
-        else if (this.profile) { // load the room from profile
-            var room = this.lobby.rooms.find(room => {
-                return room.map.name === this.profile.room;
-            });
+        else { // not using rooms
+            this.sendPlay(this.lobby, null, null, null);
         }
-        room.addPlayer(this);
-        this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
     }
 
     onDisconnect() {
@@ -108,6 +120,12 @@ export default class Client extends SendStuff {
             })
         }
         if (this.profile !== null) {
+
+            if (this.lobby !== null) {
+                // save the current lobbyid
+                this.profile.lobbyid = this.lobby.lobbyid;
+            }
+
             this.profile.save(function(err) {
                 if (err) {
                     trace('Error while saving profile: ' + err);

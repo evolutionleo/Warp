@@ -12,6 +12,7 @@ import PlayerEntity, { IPlayerInputs } from '#entity/player';
 import { SockType, Sock } from '#types/socktype';
 import * as net from 'net';
 import * as ws from 'ws';
+import chalk from 'chalk';
 // import ClientProperties from '#types/clientProperties';
 
 
@@ -19,15 +20,15 @@ export default class SendStuff {
     socket: Sock;
     type: SockType;
     
-    lobby: Lobby;
-    room: Room;
+    lobby: Lobby = null;
+    room: Room = null;
 
-    account: IAccount;
-    profile: IProfile;
+    account: IAccount = null;
+    profile: IProfile = null;
 
     halfpack: Buffer; // used internally in packet.ts
 
-    entity: PlayerEntity;
+    entity: PlayerEntity = null;
 
     
     /**
@@ -101,6 +102,10 @@ export default class SendStuff {
     }
 
     broadcastRoom(pack:object, notme:boolean) {
+        if (!global.config.rooms_enabled) {
+            trace(chalk.redBright('Can\'t use Client.broadcastRoom() - rooms are disabled in the config!!!'));
+            return -1;
+        }
         if (this.room === null)
             return -1
         
@@ -210,8 +215,8 @@ export default class SendStuff {
      * @param {Point} start_pos 
      * @param {string} [uuid=undefined]
      */
-    sendPlay(lobby:Lobby, room:Room, start_pos:Point, uuid?:string):void {
-        this.send({ cmd: 'play', room: room.serialize(), lobby: lobby.getInfo(), start_pos: start_pos, uuid });
+    sendPlay(lobby:Lobby, room?:Room, start_pos?:Point, uuid?:string):void {
+        this.send({ cmd: 'play', lobby: lobby.getInfo(), room: (room !== null ? room.serialize() : undefined), start_pos, uuid });
     }
 
     
@@ -221,7 +226,7 @@ export default class SendStuff {
      * @param {Point} start_pos
      * @param {string} [uuid=undefined]
      */
-    sendRoomTransition(room_to:Room, start_pos:Point, uuid?:string):void {
+    sendRoomTransition(room_to:Room, start_pos?:Point, uuid?:string):void {
         this.send({ cmd: 'room transition', room: room_to.serialize(), start_pos, uuid });
     }
 

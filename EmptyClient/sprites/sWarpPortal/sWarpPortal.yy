@@ -78,7 +78,7 @@
   "nineSlice": null,
   "parent": {
     "name": "Gameplay",
-    "path": "folders/GMOF/Demo/Sprites/Gameplay.yy",
+    "path": "folders/Warp/Demo/Sprites/Gameplay.yy",
   },
   "resourceVersion": "1.0",
   "name": "sWarpPortal",

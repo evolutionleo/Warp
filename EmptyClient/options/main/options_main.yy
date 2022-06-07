@@ -1,4 +1,7 @@
 {
+  "ConfigValues": {
+    "Dev": {"option_collision_compatibility":"false","option_lastchanged":"01 June 2022 21:08:56","option_copy_on_write_enabled":"false","option_author":"Evoleo",},
+  },
   "option_gameguid": "35a08916-5ccb-4b43-a5cb-ccc32c4cf9b5",
   "option_gameid": "0",
   "option_game_speed": 60,

@@ -3,7 +3,7 @@
   "isCompatibility": false,
   "parent": {
     "name": "Messagepack",
-    "path": "folders/GMOF/Scripts/lib/Struct N' Array Parser/Messagepack.yy",
+    "path": "folders/Warp/Scripts/lib/Struct N' Array Parser/Messagepack.yy",
   },
   "resourceVersion": "1.0",
   "name": "snap_from_messagepack",

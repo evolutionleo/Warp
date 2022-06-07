@@ -111,7 +111,7 @@
   "tvosCocoaPodDependencies": "",
   "parent": {
     "name": "Extensions",
-    "path": "folders/GMOF/Extensions.yy",
+    "path": "folders/Warp/Extensions.yy",
   },
   "resourceVersion": "1.2",
   "name": "WinDev",

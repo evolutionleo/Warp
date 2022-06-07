@@ -40,7 +40,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Gameplay",
-    "path": "folders/GMOF/Demo/Objects/Gameplay.yy",
+    "path": "folders/Warp/Demo/Objects/Gameplay.yy",
   },
   "resourceVersion": "1.0",
   "name": "oWarpPortal",

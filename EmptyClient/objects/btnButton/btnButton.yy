@@ -29,7 +29,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "UI",
-    "path": "folders/GMOF/Demo/Objects/UI.yy",
+    "path": "folders/Warp/Demo/Objects/UI.yy",
   },
   "resourceVersion": "1.0",
   "name": "btnButton",

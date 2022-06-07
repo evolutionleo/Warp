@@ -27,7 +27,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Menu",
-    "path": "folders/GMOF/Demo/Objects/Menu.yy",
+    "path": "folders/Warp/Demo/Objects/Menu.yy",
   },
   "resourceVersion": "1.0",
   "name": "oLobbiesDemo",

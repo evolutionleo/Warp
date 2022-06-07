@@ -24,7 +24,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Objects",
-    "path": "folders/GMOF/Objects.yy",
+    "path": "folders/Warp/Objects.yy",
   },
   "resourceVersion": "1.0",
   "name": "oDualInstance",

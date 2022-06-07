@@ -38,10 +38,15 @@ export default class Lobby extends EventEmitter {
     constructor() {
         super();
 
-        for(let i = 0; i < global.maps.length; i++) {
-            let map = global.maps[i];
-            let room = new Room(map, this);
-            this.rooms.push(room);
+        if (global.config.rooms_enabled) {
+            for(let i = 0; i < global.maps.length; i++) {
+                let map = global.maps[i];
+                let room = new Room(map, this);
+                this.rooms.push(room);
+            }
+        }
+        else {
+            this.rooms = null;
         }
     }
 
@@ -69,16 +74,29 @@ export default class Lobby extends EventEmitter {
         player.lobby = this;
         player.onJoinLobby(this);
 
-        // immediately add into play
-        this.addIntoPlay(player);
+        
+        // lobby is now full - add everyone
+        if (global.config.lobby.addIntoPlayOnFull && this.players.length == this.max_players) {
+            this.players.forEach(p => this.addIntoPlay(p));
+        }
+        else if (!global.config.lobby.addIntoPlayOnFull) {
+            // immediately add into play
+            this.addIntoPlay(player);
+        }
     }
 
     kickPlayer(player:Client, reason?:string, forced?:boolean):void {
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
-        player.room?.removePlayer(player);
+        player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
         player.onKickLobby(this, reason, forced);
         player.lobby = null;
+
+
+        // close if a player leaves from the lobby?
+        if (global.config.lobby.closeOnLeave) {
+            this.close();
+        }
     }
 
     addIntoPlay(player:Client):void {
@@ -115,7 +133,9 @@ export default class Lobby extends EventEmitter {
     serialize():SerializedLobby {
         return {
             lobbyid: this.lobbyid,
-            rooms: this.rooms.map(r => r.serialize()),
+            rooms: global.config.rooms_enabled
+                ? this.rooms.map(r => r.serialize())
+                : undefined,
             status: this.status,
             max_players: this.max_players,
             player_count: this.player_count,
@@ -126,7 +146,9 @@ export default class Lobby extends EventEmitter {
     getInfo():LobbyInfo {
         return {
             lobbyid: this.lobbyid,
-            rooms: this.rooms.map(r => r.getInfo()),
+            rooms: global.config.rooms_enabled
+                ? this.rooms.map(r => r.getInfo())
+                : undefined,
             status: this.status,
             max_players: this.max_players,
             player_count: this.player_count,

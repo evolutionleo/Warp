@@ -51,7 +51,9 @@ export default class GameMap { // represents a game map
 
     constructor(options:MapData) {
         Object.assign(this, options);
-        Object.assign(this, LoadRoom('./rooms/' + this.room_name + '.yy'));
+        if (global.config.rooms_enabled) {
+            Object.assign(this, LoadRoom('./rooms/' + this.room_name + '.yy'));
+        }
 
         // trace(this.contents);
     }

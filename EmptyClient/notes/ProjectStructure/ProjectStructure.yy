@@ -1,7 +1,7 @@
 {
   "parent": {
-    "name": "GMOF",
-    "path": "folders/GMOF.yy",
+    "name": "Warp",
+    "path": "folders/Warp.yy",
   },
   "resourceVersion": "1.1",
   "name": "ProjectStructure",

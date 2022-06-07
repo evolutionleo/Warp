@@ -1,6 +1,6 @@
 {
     "name": "warp-framework",
-    "version": "4.2.1",
+    "version": "4.3.0",
     "private": true,
     "description": "kappa",
     "main": "out/server.js",
@@ -19,14 +19,14 @@
     "dependencies": {
         "@msgpack/msgpack": "^2.3.0",
         "chalk": "^5.0.0",
-        "detect-collisions": "^3.2.1",
+        "detect-collisions": "3.2.1",
         "extend": "^3.0.2",
         "minimist": "^1.2.6",
         "module-alias": "^2.2.2",
         "mongoose": "^5.12.12",
         "node": "^16.0.0",
         "performance-now": "^2.1.0",
-        "rbush": "^3.0.1",
+        "rbush": "3.0.1",
         "uuid": "^8.3.2",
         "ws": "^8.3.0"
     },

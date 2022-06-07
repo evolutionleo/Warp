@@ -8,21 +8,34 @@ const common_config = {
     meta: {
         game_name: 'OnlineGame',
         version: 'v0.1',
-        framework_version: 'v4.2',
+        framework_version: 'v4.3',
         server: 'unknown'
     },
 
+    // some fundamental lobby settings
     lobby: {
-        max_players: 100
+        max_players: 100,
+        addIntoPlayOnFull: false,    // true - add all the players into play at the same time once the lobby is filled,
+                                    // false - add them one by one immediately as they join
+        closeOnLeave: false // close the lobby if a player leaves
     },
 
-    timestamps_enabled: true, // there is a client-side config as well
-    ws_enabled: true, // websocket server?
-
     tps: 60, // tickrate
-    db_enabled: true,
-    starting_room: 'Test Room',
+
+    // Disable some of the features that you don't need in your game
+    // true = enabled, false = disabled
+    timestamps_enabled: true, // send timestamps with each packet (there is a client-side config as well)
+    ws_enabled: true, // websocket server?
+    db_enabled: true, // MongoDB support
+    shell_enabled: false, // console that allows code execution while running the game (best set in prod/dev configs)
+    rooms_enabled: true, // disables lobbies being split into rooms (sub-lobbies with entities)
+    entities_enabled: true, // disables loading/spawning entities
+    ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
+
+    
     necessary_login: false,
+
+    starting_room: 'Test Room',
     ping_interval: 5 * 1000,
     room_rest_timeout: 5    // (seconds) - prevents rooms from processing entities
                             // when no players are present for a certain amount of time
