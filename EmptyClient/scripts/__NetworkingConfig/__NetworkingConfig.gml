@@ -1,9 +1,9 @@
 // All the macro/config definitions go here
 
-#macro GMOF_VERSION "v4.3.0"
+#macro WARP_VERSION "v4.3.0"
 #macro GAME_VERSION "v0.1"
 
-trace("Welcome to GMOF % by Evoleo!", GMOF_VERSION)
+trace("Welcome to Warp % by Evoleo!", WARP_VERSION)
 
 
 
