@@ -12,9 +12,10 @@ if (!remote) {
 
 	move_x = kright - kleft
 	move_y = kdown - kup
+	
+	spd.x = move_x * walksp
 }
 
-spd.x = move_x * walksp
 
 if (kjump_press and grounded()) {
 	jump()

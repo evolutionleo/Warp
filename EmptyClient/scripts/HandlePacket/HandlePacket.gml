@@ -211,10 +211,10 @@ function handlePacket(data) {
 				// position interpolation
 				if (POS_INTERPOLATION <= 0 or POS_INTERPOLATION > 1							// interpolation disabled
 				or point_distance(inst.x, inst.y, entity.x, entity.y) > POS_INTERP_THRESH) {	// or hit the interpolation threshold
-					inst.x = entity.x
+					inst.x = entity.x // snap to just x and y
 					inst.y = entity.y
 				}
-				else {
+				else { // interpolate
 					inst.x = lerp(inst.x, entity.x, POS_INTERPOLATION)
 					inst.y = lerp(inst.y, entity.y, POS_INTERPOLATION)
 				}
