@@ -33,6 +33,7 @@ const gm_zip = new AdmZip();
 gm_zip.addLocalFolder(path.join(__dirname, '../EmptyClient'));
 
 gm_zip.writeZip('../Release/GMClient.zip');
+gm_zip.writeZip('../Release/Warp.yymps');
 
 
 // JavaScript client
