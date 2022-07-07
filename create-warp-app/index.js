@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const https = require('follow-redirects').https;
 const fs = require('fs');
 const unzipper = require('unzipper');
+const path = require('path');
 
 shell.config.silent = true;
 
@@ -125,6 +126,17 @@ inquirer.prompt(questions).then(answers => {
         fs.createReadStream(client_fname)
         .pipe(unzipper.Extract({ path: 'Client/' })
         .on('close', () => {
+            if (clientTemplate === 'GameMaker') { // rename the .yyp
+                const project_file = 'EmptyClient.yyp';
+                const project_path = 'Client/' + project_file;
+                const content = fs.readFileSync(project_path, 'utf8');
+                
+                fs.rmSync(project_path);
+
+                const new_project_path = project_path.replace(project_file, projectName + '.yyp');
+                fs.writeFileSync(new_project_path, content.replace('EmptyClient', projectName));
+            }
+
             console.log(chalk.white('Done.'));
             shell.rm('-rf', client_fname);
         }));
