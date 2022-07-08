@@ -32,9 +32,21 @@ export function radtodeg(rad:number) {
     return rad * 180 / Math.PI;
 }
 
+export function lengthdir_x(len:number, dir:number) {
+    return Math.cos(degtorad(dir)) * len;
+}
+
+export function lengthdir_y(len:number, dir:number) {
+    return Math.sin(degtorad(dir)) * len;
+}
+
+export function lengthdir(len:number, dir:number) {
+    return { x: lengthdir_x(len, dir), y: lengthdir_y(len, dir) };
+}
+
 
 // purely for people who don't know that you can just use Math.your_function_here()
-// if you are one of them and are reading this right now - don't import the functions below, use Math.min(), etc. instead
+// if you are one of them and are reading this right now - please don't import the functions below, use Math.min(), etc. instead
 
 export const sign = Math.sign;
 export const abs = Math.abs;
