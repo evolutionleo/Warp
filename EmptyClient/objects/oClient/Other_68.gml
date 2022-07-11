@@ -6,6 +6,23 @@ var buff = async_load[? "buffer"]
 
 switch(type) {
 	case network_type_data:
+		// we don't have size bits in WS/WSS, so just read the packet
+		if (SOCKET_TYPE == SOCKET_TYPES.WS or SOCKET_TYPE == SOCKET_TYPES.WSS) {
+			try {
+				var data = snap_from_messagepack(buff)
+				// Handle the packet
+				handlePacket(data);
+			}
+			catch(e) {
+				trace("an error occured while parsing the packet: " + e.message)
+			}
+			
+			buffer_delete(buff);
+			break
+		}
+		// everything below is for TCP (splitting stuck packets, etc., which we don't have to do with WebSocket)
+		
+		
 		// if this is the second half of a packet
 		if (buffer_exists(halfpack)) {
 			// concat the half packet with the freshly arrived buffer
