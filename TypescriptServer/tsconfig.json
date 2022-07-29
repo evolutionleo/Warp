@@ -22,7 +22,7 @@
 
             "#root/*": ["./*"],
 
-            "*": ["node_moduls/*", "src/*"]
+            "*": ["node_modules/*", "src/*"]
         }
     }
 }
