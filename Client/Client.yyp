@@ -114,7 +114,7 @@
     "IDEVersion": "2022.3.0.625",
   },
   "resourceVersion": "1.5",
-  "name": "EmptyClient",
+  "name": "Client",
   "tags": [],
   "resourceType": "GMProject",
 }

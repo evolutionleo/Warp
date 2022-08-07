@@ -47,7 +47,7 @@ export function freshProfile(account:IAccount):IProfile { // for when just regis
         name: account.username,
 
         lobbyid: '-1',
-        room: global.config.starting_room,
+        room: global.config.room.starting_room,
 
         x: 0,
         y: 0

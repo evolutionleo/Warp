@@ -1,6 +1,6 @@
 // All the macro/config definitions go here
 
-#macro WARP_VERSION "v4.3.1"
+#macro WARP_VERSION "v4.4.1"
 #macro GAME_VERSION "v0.1"
 
 trace("Welcome to Warp % by Evoleo!", WARP_VERSION)
@@ -13,13 +13,13 @@ network_set_config(network_config_use_non_blocking_socket, true)
 // toggle this off if you have some specific case where you need to keep the entities that are in the room locally
 #macro PURGE_ENTITIES_ON_ROOM_START true
 
-// a value between 0 and 1 
+// a value between 0 and 1
 #macro POS_INTERPOLATION .5
 // instantly teleports if the distance is > than this
 #macro POS_INTERP_THRESH 300
 
 
-#macro SOCKET_TYPE SOCKET_TYPES.TCP
+#macro SOCKET_TYPE SOCKET_TYPES.WS
 
 enum SOCKET_TYPES {
 	TCP = network_socket_tcp,

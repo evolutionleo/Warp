@@ -8,7 +8,7 @@ const common_config = {
     meta: {
         game_name: 'OnlineGame',
         version: 'v0.1',
-        framework_version: 'v4.3',
+        framework_version: 'v4.4',
         server: 'unknown'
     },
 
@@ -18,6 +18,17 @@ const common_config = {
         addIntoPlayOnFull: false,    // true - add all the players into play at the same time once the lobby is filled,
                                     // false - add them one by one immediately as they join
         closeOnLeave: false // close the lobby if a player leaves
+    },
+
+    room: {
+        // .yy room loading
+        rooms_path: '../Client/rooms',
+        warn_on_unknown_entity: true,
+
+        starting_room: 'Test Room',
+        rest_timeout: 5    // (seconds) - prevents rooms from processing entities
+                            // when no players are present for a certain amount of time
+                            // set to -1 to disable this feature
     },
 
     tps: 60, // tickrate
@@ -35,11 +46,7 @@ const common_config = {
     
     necessary_login: false,
 
-    starting_room: 'Test Room',
-    ping_interval: 5 * 1000,
-    room_rest_timeout: 5    // (seconds) - prevents rooms from processing entities
-                            // when no players are present for a certain amount of time
-                            // set to -1 to disable this feature
+    ping_interval: 5 * 1000
 }
 
 const prod_config = {
