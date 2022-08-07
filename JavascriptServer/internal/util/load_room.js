@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 export default function LoadRoom(path = './rooms/rTest.yy') {
     let json = fs.readFileSync(path).toString();
-    let regex = /\,(?=\s*?[\}\]])/g; // remove trailing commans
+    let regex = /\,(?=\s*?[\}\]])/g; // remove trailing commas
     json = json.replace(regex, '');
     
     const data = JSON.parse(json);

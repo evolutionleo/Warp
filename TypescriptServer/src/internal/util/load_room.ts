@@ -11,7 +11,7 @@ export type LoadedRoom = {
 
 export default function LoadRoom(path:string = './rooms/rTest.yy'):LoadedRoom {
     let json = fs.readFileSync(path).toString();
-    let regex = /\,(?=\s*?[\}\]])/g; // remove trailing commans
+    let regex = /\,(?=\s*?[\}\]])/g; // remove trailing commas
     json = json.replace(regex, '');
 
     const data = JSON.parse(json);
