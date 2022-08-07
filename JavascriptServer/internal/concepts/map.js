@@ -26,7 +26,7 @@ export default class GameMap {
     constructor(options) {
         Object.assign(this, options);
         if (global.config.rooms_enabled) {
-            Object.assign(this, LoadRoom('./rooms/' + this.room_name + '.yy'));
+            Object.assign(this, LoadRoom(this.room_name));
         }
         
         // trace(this.contents);

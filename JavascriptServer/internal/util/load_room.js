@@ -1,7 +1,41 @@
 import UnknownEntity from '#entity/unknown';
+import trace from '#util/logging';
+import chalk from 'chalk';
 import * as fs from 'fs';
+import * as p from 'path';
 
-export default function LoadRoom(path = './rooms/rTest.yy') {
+// a couple utility functions
+function isDir(path) {
+    return fs.existsSync(path) && fs.statSync(path).isDirectory();
+}
+
+function isFile(path) {
+    return fs.existsSync(path) && fs.statSync(path).isFile();
+}
+
+// the function
+export default function LoadRoom(room_name) {
+    let rooms_path = p.resolve(global.config.room.rooms_path) + '/';
+    
+    if (!isDir(rooms_path)) {
+        trace(chalk.redBright('ERROR: config.room.rooms_path is not a directory! - ', rooms_path));
+        return undefined;
+    }
+    
+    let path = rooms_path + room_name;
+    if (isDir(path)) { // if it's a gm project's "rooms" folder then there's an additional layer
+        // check the uppercase variant, if it doesn't exist - use .toLowerCase()
+        let new_path = path + '/' + room_name + '.yy';
+        if (!fs.existsSync(new_path)) {
+            new_path = path + '/' + room_name.toLowerCase() + '.yy';
+        }
+        
+        path = new_path;
+    }
+    else {
+        path += '.yy';
+    }
+    
     let json = fs.readFileSync(path).toString();
     let regex = /\,(?=\s*?[\}\]])/g; // remove trailing commas
     json = json.replace(regex, '');

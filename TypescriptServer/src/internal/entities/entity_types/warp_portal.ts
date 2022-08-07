@@ -65,7 +65,6 @@ export default class WarpPortal extends Entity {
         }
 
         // player.room should be the same as this.room
-        trace('room transition:', this.room.map.room_name + " -> " + this.Room_to.map.room_name);
         this.room.movePlayer(player, this.Room_to);
 
         player.entity.x = this.exit_portal.x;

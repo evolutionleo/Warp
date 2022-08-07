@@ -62,7 +62,7 @@ export default class Client extends SendStuff {
             if (!this.profile) {
                 if (!global.config.necessary_login) {
                     var room = this.lobby.rooms.find(room => {
-                        return room.map.name === global.config.starting_room;
+                        return room.map.name === global.config.room.starting_room;
                     });
                 }
                 else {

@@ -93,6 +93,11 @@ class Room extends EventEmitter {
         
         entities.forEach(entity => {
             const etype = global.entityNames[entity.type];
+            if (etype.type == 'Unknown') { // entity type doesn't exist
+                trace(chalk.yellowBright('Warning: Entity of object type "' + entity.object_name + '" not found!'));
+                return;
+            }
+            
             const e = this.spawnEntity(etype, entity.x, entity.y);
             e.xscale = entity.xscale;
             e.yscale = entity.yscale;
@@ -119,8 +124,8 @@ class Room extends EventEmitter {
         // don't process entities
         if (this.players.length === 0) {
             this.rest_timeout += 1 / this.tickrate;
-            if (global.config.room_rest_timeout > 0 // if this is enabled
-                && this.rest_timeout > global.config.room_rest_timeout) {
+            if (global.config.room.rest_timeout >= 0 // if this is enabled
+                && this.rest_timeout > global.config.room.rest_timeout) {
                 // do nothing - don't update the entities
                 return;
             }
