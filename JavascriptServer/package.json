@@ -21,7 +21,7 @@
         "extend": "^3.0.2",
         "minimist": "^1.2.6",
         "module-alias": "^2.2.2",
-        "mongoose": "^5.12.12",
+        "mongoose": "^6.4.6",
         "node": "^16.0.0",
         "performance-now": "^2.1.0",
         "rbush": "^3.0.1",
