@@ -10,7 +10,7 @@ const url = global.config.db;
 var _export;
 
 if (global.config.db_enabled) {
-    connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true });
+    connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
     const db = connection;
 
