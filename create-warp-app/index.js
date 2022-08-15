@@ -127,14 +127,14 @@ inquirer.prompt(questions).then(answers => {
         .pipe(unzipper.Extract({ path: 'Client/' })
         .on('close', () => {
             if (clientTemplate === 'GameMaker') { // rename the .yyp
-                const project_file = 'EmptyClient.yyp';
+                const project_file = 'Client.yyp';
                 const project_path = 'Client/' + project_file;
                 const content = fs.readFileSync(project_path, 'utf8');
                 
                 fs.rmSync(project_path);
 
                 const new_project_path = project_path.replace(project_file, projectName + '.yyp');
-                fs.writeFileSync(new_project_path, content.replace('EmptyClient', projectName));
+                fs.writeFileSync(new_project_path, content.replace('Client', projectName));
             }
 
             console.log(chalk.white('Done.'));
