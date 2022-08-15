@@ -1,4 +1,5 @@
 // get the command line arguments
+import { mergeDeep } from '#util/deep_merge';
 import trace from '#util/logging';
 import chalk from 'chalk';
 import minimist from 'minimist';
@@ -22,7 +23,7 @@ const common_config = {
 
     room: {
         // .yy room loading
-        rooms_path: '../Client/rooms',
+        rooms_path: '../Client/rooms', // (overriden in prod config)
         warn_on_unknown_entity: true,
 
         starting_room: 'Test Room',
@@ -57,6 +58,11 @@ const prod_config = {
     ip: '0.0.0.0', // you need to replace this with your domain if using ssl for it to work
     port: args.port || 1337,
     ws_port: args.ws_port || 3000,
+
+
+    room: {
+        rooms_path: './rooms'
+    },
 
     ssl_enabled: false,
     ssl_cert_path: '/etc/letsencrypt/live/example.com/cert.pem',
@@ -110,16 +116,16 @@ const env = args.env || 'dev'
 
 
 const config:any = {};
-Object.assign(config, common_config);
+mergeDeep(config, common_config);
 
 if (env === 'production' || env === 'prod' || args.prod) {
-    Object.assign(config, prod_config);
+    mergeDeep(config, prod_config);
 }
 else if (env === 'development' || env === 'dev' || args.dev) {
-    Object.assign(config, dev_config);
+    mergeDeep(config, dev_config);
 }
 else {
-    Object.assign(config, default_config);
+    mergeDeep(config, default_config);
 }
 
 
