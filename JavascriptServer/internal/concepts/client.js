@@ -128,37 +128,23 @@ export default class Client extends SendStuff {
         }
     }
 
-    // Update evrything
-    update() {
-        this.updateAccount();
-        this.updateProfile();
+    // Sync evrything
+    sync() {
+        this.syncAccount();
+        this.syncProfile();
     }
 
-    updateAccount() {
+    syncAccount() {
         if (this.account !== null) {
-            this.account.updateOne((error) => {
-                if (error) {
-                    trace(`Error while update account: ${error}`);
-                    return
-                }
-
-                trace('Update the account successfully');
-                this.sendAccount();
-            });
+            trace('Update the account successfully');
+            this.sendAccount(); 
         }
     }
 
-    updateProfile() {
+    syncProfile() {
         if (this.profile !== null) {
-            this.profile.updateOne((error) => {
-                if (error) {
-                    trace(`Error while update profile: ${error}`);
-                    return
-                }
-
-                trace('Update the profile successfully');
-                this.sendProfile();
-            });
+            trace('Update the profile successfully');
+            this.sendProfile();
         }
     }
     

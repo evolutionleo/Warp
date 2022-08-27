@@ -137,6 +137,26 @@ export default class Client extends SendStuff {
         }
     }
     
+    // Sync evrything
+    sync() {
+        this.syncAccount();
+        this.syncProfile();
+    }
+
+    syncAccount() {
+        if (this.account !== null) {
+            trace('Update the account successfully');
+            this.sendAccount(); 
+        }
+    }
+
+    syncProfile() {
+        if (this.profile !== null) {
+            trace('Update the profile successfully');
+            this.sendProfile();
+        }
+    }
+
     register(account:IAccount) {
         this.account = account;
         this.profile = freshProfile(account);
