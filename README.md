@@ -113,6 +113,17 @@ if you write a wrapper
 - Run `node .` or `node out/server.js`
 
 
+## Contributing
+### I accept pull requests with bug fixes/new features that make sense for the framework. Here are some rules for submitting a PR:
+- Please try to keep the coding style consistent with the rest of the project (e.x. use tabs instead of spaces, etc.)
+- When modifying the server code - *please only edit the TypeScript version*, as it can be then automatically translated to JS, but not the other way around
+- After you've made your changes to the TS server, go to /autorelease/ and run `npm run release` to compile everything to JS and create the .zip files in /Release/
+- If you want to introduce a brand new feature, please lmk first (create a new issue) because it could be either something that I don't want to be a part of Warp, or it already has an alternative, or it's just something that I'd want to implement myself
+### Feature requests/typos/bug reports:
+- Check if someone has already made an issue about your bug/feature on the [issues tab](https://github.com/evolutionleo/Warp/issues)
+- If not, [open a new issue](https://github.com/evolutionleo/Warp/issues/new) detailing the bug that you found in Warp/the feature that you want to be implemented
+- If it's a feature request, please write why it makes sense to include it/what problem it solves
+
 # Credits
 - [Messagepack](https://msgpack.org/) serialization format 
 - [@jujuadams](https://github.com/jujuadams)'s [SNAP](https://github.com/jujuadams/snap) library, which enables Messagepack's encoding/decoding inside GameMaker
