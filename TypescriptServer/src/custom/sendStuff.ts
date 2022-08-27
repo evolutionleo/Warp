@@ -115,21 +115,21 @@ export default class SendStuff {
     // in handlePacket.js or wherever else where you have client objects
     // !!!
     sendHello():void {
-        this.send({ cmd: 'hello', str: 'Hello, client!' })
-        this.send({ cmd: 'hello2', str: 'Hello again, client!' })
+        this.send({cmd: 'hello', str: 'Hello, client!' })
+        this.send({cmd: 'hello2', str: 'Hello again, client!' })
     }
 
     /**
      * @param {string} msg 
      */
     sendMessage(msg:string):void {
-        this.send({ cmd: 'message', msg })
+        this.send({cmd: 'message', msg })
     }
 
 
     sendPing() {
         let t = new Date().getTime() - global.start_time;
-        this.send({ cmd: 'ping', t });
+        this.send({cmd: 'ping', t});
     }
 
     /**
@@ -137,7 +137,7 @@ export default class SendStuff {
      * @param {number} t 
      */
     sendPong(t) {
-        this.send({ cmd: 'pong', t });
+        this.send({cmd: 'pong', t});
     }
 
     // these are some preset functions
@@ -146,7 +146,7 @@ export default class SendStuff {
      * @param {string} [reason='']
      */
     sendRegister(status:string, reason:string = ''):void {
-        this.send({ cmd: 'register', status: status, reason: reason });
+        this.send({cmd: 'register', status: status, reason: reason});
     }
 
     /**
@@ -155,21 +155,21 @@ export default class SendStuff {
      * @param {string} [reason=''] 
      */
     sendLogin(status:string, reason:string = ''):void {
-        this.send({ cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON() });
+        this.send({cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON()});
     }
 
     /**
      * Send new account information when updated
      */
     sendAccount() {
-        this.send({ cmd: 'account', account: this.account?.toJSON() });
+        this.send({cmd: 'account', account: this.account?.toJSON()});
     }
 
     /**
      * Send new profile information when updated
      */
     sendProfile() {
-        this.send({ cmd: 'profile', profile: this.profile?.toJSON() });
+        this.send({cmd: 'profile', profile: this.profile?.toJSON()});
     }
 
     /**
@@ -177,7 +177,7 @@ export default class SendStuff {
      * @param {Lobby} lobby 
      */
     sendJoinLobby(lobby:Lobby):void {
-        this.send({ cmd: 'lobby join', lobby: lobby.getInfo() });
+        this.send({cmd: 'lobby join', lobby: lobby.getInfo()});
     }
 
     /**
@@ -186,7 +186,7 @@ export default class SendStuff {
      * @param {string} [reason='']
      */
     sendRejectLobby(lobby:Lobby, reason:string = ''):void {
-        this.send({ cmd: 'lobby reject', lobby: lobby.getInfo(), reason: reason });
+        this.send({cmd: 'lobby reject', lobby: lobby.getInfo(), reason: reason});
     }
 
     /**
@@ -196,7 +196,7 @@ export default class SendStuff {
      * @param {boolean} [forced=true]
      */
     sendKickLobby(lobby:Lobby, reason:string = '', forced:boolean = true):void {
-        this.send({ cmd: 'lobby leave', lobby: lobby.getInfo(), reason: reason, forced: forced });
+        this.send({cmd: 'lobby leave', lobby: lobby.getInfo(), reason: reason, forced: forced});
     }
 
     /**
@@ -204,11 +204,11 @@ export default class SendStuff {
      * @param {Lobby} lobby 
      */
     sendUpdateLobby(lobby:Lobby):void { // some data changed
-        this.send({ cmd: 'lobby update', lobby: lobby.getInfo() });
+        this.send({cmd: 'lobby update', lobby: lobby.getInfo()});
     }
 
     sendLobbyList():void {
-        this.send({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.getInfo()) }); // lobbies as an array
+        this.send({cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.getInfo())}); // lobbies as an array
     }
 
     /**
@@ -216,7 +216,7 @@ export default class SendStuff {
      * @param {string} lobbyid 
      */
     sendLobbyInfo(lobbyid:string):void {
-        this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].getInfo() })
+        this.send({cmd: 'lobby info', lobby: global.lobbies[lobbyid].getInfo() })
     }
 
     /**
@@ -227,7 +227,7 @@ export default class SendStuff {
      * @param {string} [uuid=undefined]
      */
     sendPlay(lobby:Lobby, room?:Room, start_pos?:Point, uuid?:string):void {
-        this.send({ cmd: 'play', lobby: lobby.getInfo(), room: (room !== null ? room.serialize() : undefined), start_pos, uuid });
+        this.send({cmd: 'play', lobby: lobby.getInfo(), room: (room !== null ? room.serialize() : undefined), start_pos, uuid});
     }
 
 
@@ -238,7 +238,7 @@ export default class SendStuff {
      * @param {string} [uuid=undefined]
      */
     sendRoomTransition(room_to:Room, start_pos?:Point, uuid?:string):void {
-        this.send({ cmd: 'room transition', room: room_to.serialize(), start_pos, uuid });
+        this.send({cmd: 'room transition', room: room_to.serialize(), start_pos, uuid});
     }
 
     /**
@@ -247,7 +247,7 @@ export default class SendStuff {
      */
     sendPlayerControls(data:IPlayerInputs) {
         let id = (this as unknown as Client).entity.uuid; // i know right?
-        this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
+        this.broadcastRoom({cmd: 'player controls', id, ...data }, true);
     }
 
     // #################################
@@ -255,6 +255,6 @@ export default class SendStuff {
 
     // for example:
     sendSomething(greeting:string) {
-        this.send({ cmd: 'something', greeting: greeting });
+        this.send({cmd: 'something', greeting: greeting});
     }
 }
