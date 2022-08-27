@@ -30,23 +30,21 @@ export default class SendStuff {
 
     entity: PlayerEntity = null;
 
-
     /**
      * 
      * @param {Sock} socket
      * @param {string} type
      */
-    constructor(socket: Sock, type: string) {
+    constructor(socket:Sock, type:string) {
         this.socket = socket;
         this.type = type.toLowerCase() as SockType;
     }
-
 
     /** 
      * basic send
      * @param {object} data 
      */
-    write(data: object) {
+    write(data:object) {
         // console.log(Object.keys(packet));
 
         if (this.type === 'ws') {
@@ -61,7 +59,7 @@ export default class SendStuff {
      * same as .write()
      * @param {object} data 
      */
-    send(data: object) { // just another name
+    send(data:object) { // just another name
         return this.write(data);
     }
 
@@ -72,7 +70,7 @@ export default class SendStuff {
      * @param {object} pack 
      * @param {boolean} [notme=true] 
      */
-    broadcastList(clients: SendStuff[], pack: object, notme: boolean = true) {
+    broadcastList(clients:SendStuff[], pack:object, notme:boolean = true) {
         let me = this;
         clients.forEach(function (c) {
             if (c === me && notme) { }
@@ -86,7 +84,7 @@ export default class SendStuff {
      * @param {object} pack 
      * @param {boolean} [notme=true] 
      */
-    broadcastAll(pack: object, notme?: boolean) {
+    broadcastAll(pack:object, notme?:boolean) {
         return this.broadcastList(global.clients, pack, notme);
     }
 
@@ -94,14 +92,14 @@ export default class SendStuff {
      * @param {object} pack 
      * @param {boolean} [notme=true]
      */
-    broadcastLobby(pack: object, notme?: boolean) {
+    broadcastLobby(pack:object, notme?:boolean) {
         if (this.lobby === null)
             return -1
 
         return this.broadcastList(this.lobby.players, pack, notme);
     }
 
-    broadcastRoom(pack: object, notme: boolean) {
+    broadcastRoom(pack:object, notme:boolean) {
         if (!global.config.rooms_enabled) {
             trace(chalk.redBright('Can\'t use Client.broadcastRoom() - rooms are disabled in the config!!!'));
             return -1;
@@ -116,7 +114,7 @@ export default class SendStuff {
     // these functions can be later called using some_client.sendThing()
     // in handlePacket.js or wherever else where you have client objects
     // !!!
-    sendHello(): void {
+    sendHello():void {
         this.send({ cmd: 'hello', str: 'Hello, client!' })
         this.send({ cmd: 'hello2', str: 'Hello again, client!' })
     }
@@ -124,7 +122,7 @@ export default class SendStuff {
     /**
      * @param {string} msg 
      */
-    sendMessage(msg: string): void {
+    sendMessage(msg:string):void {
         this.send({ cmd: 'message', msg })
     }
 
@@ -142,13 +140,12 @@ export default class SendStuff {
         this.send({ cmd: 'pong', t });
     }
 
-
     // these are some preset functions
     /**
      * @param {string} status 
      * @param {string} [reason='']
      */
-    sendRegister(status: string, reason: string = ''): void {
+    sendRegister(status:string, reason:string = ''):void {
         this.send({ cmd: 'register', status: status, reason: reason });
     }
 
@@ -157,7 +154,7 @@ export default class SendStuff {
      * @param {string} status 
      * @param {string} [reason=''] 
      */
-    sendLogin(status: string, reason: string = ''): void {
+    sendLogin(status:string, reason:string = ''):void {
         this.send({ cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON() });
     }
 
@@ -179,7 +176,7 @@ export default class SendStuff {
      * 
      * @param {Lobby} lobby 
      */
-    sendJoinLobby(lobby: Lobby): void {
+    sendJoinLobby(lobby:Lobby):void {
         this.send({ cmd: 'lobby join', lobby: lobby.getInfo() });
     }
 
@@ -188,7 +185,7 @@ export default class SendStuff {
      * @param {Lobby} lobby 
      * @param {string} [reason='']
      */
-    sendRejectLobby(lobby: Lobby, reason: string = ''): void {
+    sendRejectLobby(lobby:Lobby, reason:string = ''):void {
         this.send({ cmd: 'lobby reject', lobby: lobby.getInfo(), reason: reason });
     }
 
@@ -198,7 +195,7 @@ export default class SendStuff {
      * @param {string} [reason=''] 
      * @param {boolean} [forced=true]
      */
-    sendKickLobby(lobby: Lobby, reason: string = '', forced: boolean = true): void {
+    sendKickLobby(lobby:Lobby, reason:string = '', forced:boolean = true):void {
         this.send({ cmd: 'lobby leave', lobby: lobby.getInfo(), reason: reason, forced: forced });
     }
 
@@ -206,11 +203,11 @@ export default class SendStuff {
      * 
      * @param {Lobby} lobby 
      */
-    sendUpdateLobby(lobby: Lobby): void { // some data changed
+    sendUpdateLobby(lobby:Lobby):void { // some data changed
         this.send({ cmd: 'lobby update', lobby: lobby.getInfo() });
     }
 
-    sendLobbyList(): void {
+    sendLobbyList():void {
         this.send({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.getInfo()) }); // lobbies as an array
     }
 
@@ -218,7 +215,7 @@ export default class SendStuff {
      * 
      * @param {string} lobbyid 
      */
-    sendLobbyInfo(lobbyid: string): void {
+    sendLobbyInfo(lobbyid:string):void {
         this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].getInfo() })
     }
 
@@ -229,7 +226,7 @@ export default class SendStuff {
      * @param {Point} start_pos 
      * @param {string} [uuid=undefined]
      */
-    sendPlay(lobby: Lobby, room?: Room, start_pos?: Point, uuid?: string): void {
+    sendPlay(lobby:Lobby, room?:Room, start_pos?:Point, uuid?:string):void {
         this.send({ cmd: 'play', lobby: lobby.getInfo(), room: (room !== null ? room.serialize() : undefined), start_pos, uuid });
     }
 
@@ -240,7 +237,7 @@ export default class SendStuff {
      * @param {Point} start_pos
      * @param {string} [uuid=undefined]
      */
-    sendRoomTransition(room_to: Room, start_pos?: Point, uuid?: string): void {
+    sendRoomTransition(room_to:Room, start_pos?:Point, uuid?:string):void {
         this.send({ cmd: 'room transition', room: room_to.serialize(), start_pos, uuid });
     }
 
@@ -248,7 +245,7 @@ export default class SendStuff {
      * 
      * @param {IPlayerInputs} data 
      */
-    sendPlayerControls(data: IPlayerInputs) {
+    sendPlayerControls(data:IPlayerInputs) {
         let id = (this as unknown as Client).entity.uuid; // i know right?
         this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
     }
@@ -257,7 +254,7 @@ export default class SendStuff {
     // You can write your wrappers here:
 
     // for example:
-    sendSomething(greeting: string) {
+    sendSomething(greeting:string) {
         this.send({ cmd: 'something', greeting: greeting });
     }
 }
