@@ -59,6 +59,12 @@ function handlePacket(data) {
 			}
 			
 			break
+		case "account":
+			global.account = data.account
+			break
+		case "profile":
+			global.profile = data.profile
+			break
 		case "lobby list":
 			var lobbies = data.lobbies
 			global.lobbies = lobbies

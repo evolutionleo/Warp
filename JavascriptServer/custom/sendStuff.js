@@ -150,6 +150,20 @@ export default class SendStuff {
     }
     
     /**
+     * Send new account information when updated
+     */
+    sendAccount() {
+        this.send({ cmd: 'account', account: this.account?.toJSON() });
+    }
+
+    /**
+     * Send new profile information when updated
+     */
+    sendProfile() {
+        this.send({ cmd: 'profile', profile: this.profile?.toJSON() });
+    }
+
+    /**
      *
      * @param {Lobby} lobby
      */
