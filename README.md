@@ -1,5 +1,5 @@
 # Warp (previously GM-Online-Framework)
-#### A feature-rich framework for multiplayer games, written in GMS2.3 and NodeJS
+#### A feature-rich framework for multiplayer games, written in GameMaker and NodeJS
 #### Maintained by [@evolutionleo](https://github.com/evolutionleo)
 #### If you have any questions, please join my [Discord](https://discord.gg/WRsgumM2T6)
 
