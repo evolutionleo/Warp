@@ -32,7 +32,8 @@ const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
 for(var i = 0; i < init_files.length; i++) {
     var file = init_files[i];
     trace(chalk.blueBright('loading initializer:', file));
-    await import("file://" + __dirname + '/internal/initializers/' + file);
+    const res = await import("file://" + __dirname + '/internal/initializers/' + file);
+    await res.default;
 }
 trace(chalk.blueBright('loaded initializers!'));
 
