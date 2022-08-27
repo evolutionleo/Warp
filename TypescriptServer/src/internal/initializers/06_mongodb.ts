@@ -7,24 +7,28 @@ const mongoose = require('mongoose');
 const { connect, connection } = mongoose;
 const url = global.config.db;
 
+var _export;
 
-export default new Promise((resolve, reject) => {
-    if (!global.config.db_enabled) {
-        trace('Database is disabled');
-        reject('Database is disabled');
-    }
-
+if (global.config.db_enabled) {
     connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
     const db = connection;
 
-    db.once('open', () => {
-        trace('Database connected:', url);
-        resolve(db);
+    _export = new Promise((resolve, reject) => {
+        db.once('open', () => {
+            trace('Database connected:', url);
+            resolve(db);
+        })
+        
+        db.on('error', (err) => {
+            console.error('connection error:', err);
+            reject(err);
+        })
     })
-    
-    db.on('error', (err) => {
-        console.error('connection error:', err);
-        reject(err);
-    })
-})
+}
+else {
+    trace('Database is disabled');
+    _export = null;
+}
+
+export default _export;
