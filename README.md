@@ -130,5 +130,5 @@ if you write a wrapper
 - [NodeJS Messagepack](https://github.com/msgpack/msgpack) encoder/decoder
 - [rm2kdev's ancient series that inspired all this](https://www.youtube.com/watch?v=EyNVeTzhC1w&list=PLLUWsMtogf9jQGzn3nAjAw2_aq3PM08pC)
 - Pull request for the first TypeScript version: [@davawen](https://github.com/davawen)
-- @YellowAfterLife's [execute_shell_simple](https://yellowafterlife.itch.io/gamemaker-execute-shell-simple) extension
+- @YellowAfterlife's [execute_shell_simple](https://yellowafterlife.itch.io/gamemaker-execute-shell-simple) extension
 - Framework by: [@evolutionleo](https://github.com/evolutionleo) (me)
