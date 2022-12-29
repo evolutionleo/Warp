@@ -69,13 +69,18 @@ network_set_config(network_config_connect_timeout, 4000)
 
 // This can be used to initiate the server interaction
 // (send the first packet)
-onConnect = function() {
+function onConnect() {
 	sendHello()
-	sendHello2()
+	sendClientInfo()
 }
 
-onDisconnect = function() {
+function onDisconnect() {
 	trace("Warning: Unhandled disconnect event!")
+}
+
+function onIncompatible(server_game_version) {
+	show_message(stf("Incompatible client version - %! (Server version is %)", GAME_VERSION,  server_game_version))
+	game_end()
 }
 
 

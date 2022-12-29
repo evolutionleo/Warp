@@ -1,10 +1,6 @@
 // All send* functions go here
 function sendHello() {
-	send({cmd: "hello", kappa: "Kappa Pepega"})
-}
-
-function sendHello2() {
-	send({cmd: "hello2", kappa: "Second Kappa"})
+	send({cmd: "hello", greeting: "hello there!"})
 }
 
 function sendMessage(msg) {
@@ -44,6 +40,10 @@ function sendLogin(username, password) {
 
 function sendRegister(username, password) {
 	send({cmd: "register", username: username, password: password})
+}
+
+function sendClientInfo() {
+	send({cmd: "client info", game_version: GAME_VERSION, warp_version: WARP_VERSION })
 }
 
 // ##################################

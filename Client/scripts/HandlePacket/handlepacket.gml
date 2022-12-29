@@ -11,12 +11,18 @@ function handlePacket(data) {
 		case "hello":
 			trace(data.str)
 			break
-		case "hello2":
-			trace(data.str)
-			break
 		case "message":
 			show_message_async(data.msg+"\n (c) Server")
 			break
+		case "server info":
+			var compatible = data.compatible
+			var meta = data.meta
+			trace("Info about server: %", meta)
+			
+			if (!compatible) {
+				onIncompatible(meta.game_version)
+			}
+			break;
 		case "ping":
 			sendPong(data.t)
 			break
@@ -285,7 +291,7 @@ function handlePacket(data) {
 			break
 		
 		default:
-			throw ("Error: Unknown command: " + string(data.cmd))
+			trace("Warning: Unknown cmd type: " + string(data.cmd))
 			break
 	}
 }

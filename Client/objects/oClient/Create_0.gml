@@ -28,9 +28,9 @@ connect = function() {
 	network_connect_raw_async(socket, IP, real(port));
 }
 
-// connect/disconnect events defined in __NetworkingConfig.gml
-onConnect = global.onConnect
-onDisconnect = global.onDisconnect
+// connect/disconnect events are defined in __NetworkingConfig.gml
+//onConnect = global.onConnect
+//onDisconnect = global.onDisconnect
 
 #endregion
 
