@@ -5,11 +5,15 @@ import chalk from 'chalk';
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
 
+
 const common_config = {
     meta: {
         game_name: 'OnlineGame',
-        version: 'v0.1',
-        framework_version: 'v4.4',
+        game_version: 'v1.0.0',
+        warp_version: 'v4.4.2',
+        
+        compatible_game_versions: '>=1.0.0',
+        
         server: 'unknown'
     },
     

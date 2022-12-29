@@ -32,10 +32,15 @@ const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
 for (var i = 0; i < init_files.length; i++) {
     var file = init_files[i];
     trace(chalk.blueBright('loading initializer:', file));
-    const res = await import("file://" + __dirname + '/internal/initializers/' + file);
-    await res.default;
+    await import("file://" + __dirname + '/internal/initializers/' + file);
 }
 trace(chalk.blueBright('loaded initializers!'));
+
+
+// "Welcome to Warp" message
+let config = global.config;
+trace(chalk.greenBright(`Welcome to Warp ${config.meta.warp_version}`));
+trace(chalk.greenBright(`Running ${config.meta.game_name} ${config.meta.game_version} (compatible versions: ${config.meta.compatible_game_versions})`));
 
 
 // The Actual Server
@@ -78,9 +83,9 @@ const server = createServer(function (socket) {
 });
 
 
-server.listen(port, ip);
-trace(chalk.bold.blueBright(`Server running on port ${port}!`));
-
+server.listen(port, ip, () => {
+    trace(chalk.bold.blueBright(`Server running on port ${port}!`));
+});
 
 
 // The WS Server

@@ -2,6 +2,8 @@ import trace from '#util/logging';
 import { findLobby } from '#util/lobby_functions';
 import MatchMaker from '#util/matchmaker';
 import { Account } from '#schemas/account';
+import semver from 'semver';
+import chalk from 'chalk';
 
 const { make_match } = MatchMaker;
 
@@ -11,11 +13,43 @@ export default async function handlePacket(c, data) {
     
     switch (cmd) {
         case 'hello':
-            trace("Hello from client: " + data.kappa);
+            trace('Hello from client: "' + data.greeting + '"');
             c.sendHello();
             break;
-        case 'hello2':
-            trace('Second hello from client: ' + data.kappa);
+        case 'client info':
+            let info = data;
+            delete info.cmd;
+            trace('info about client: ' + JSON.stringify(info));
+            
+            const client_game_version = data.game_version;
+            const client_warp_version = data.warp_version;
+            const compatible_versions = global.config.meta.compatible_game_versions;
+            const warp_version = global.config.meta.warp_version;
+            
+            const warp_version_match = semver.cmp(client_warp_version, '=', warp_version);
+            const version_compatible = semver.satisfies(client_game_version, compatible_versions);
+            
+            const compatible = warp_version_match && version_compatible;
+            
+            c.sendServerInfo(compatible);
+            
+            // not compatible - disconnect the client
+            if (!compatible) {
+                trace(chalk.yellowBright(`Kicking incompatible client! (client version ${client_game_version}, server version ${global.config.meta.game_version})`));
+                
+                // immediately close the socket after 1 last packet
+                setImmediate(() => {
+                    // close the socket
+                    if (c.type == 'tcp') {
+                        const s = c.socket;
+                        s.destroy();
+                    }
+                    else {
+                        const s = c.socket;
+                        s.close();
+                    }
+                });
+            }
             break;
         case 'message':
             trace('Message from client: ' + data.msg);
@@ -30,9 +64,9 @@ export default async function handlePacket(c, data) {
             let dt = new_t - t;
             
             c.ping = dt;
+            
             // c.sendPing(); // send ping again
             // jk don't send ping again that's a memory leak
-            
             break;
         
         // preset commands
@@ -113,6 +147,11 @@ export default async function handlePacket(c, data) {
             };
             c.entity.send();
             // c.sendPlayerControls(data);
+            break;
+        
+        
+        default:
+            trace(chalk.yellowBright(`Warning! Unhandled cmd type: '${data.cmd}'`));
             break;
     }
 }

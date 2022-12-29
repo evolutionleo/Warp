@@ -55,7 +55,6 @@ export default class SendStuff {
     
     // different types of broadcast
     /**
-     *
      * @param {any[]} clients
      * @param {object} pack
      * @param {boolean} [notme=true]
@@ -106,7 +105,6 @@ export default class SendStuff {
     // !!!
     sendHello() {
         this.send({ cmd: 'hello', str: 'Hello, client!' });
-        this.send({ cmd: 'hello2', str: 'Hello again, client!' });
     }
     
     /**
@@ -116,6 +114,13 @@ export default class SendStuff {
         this.send({ cmd: 'message', msg });
     }
     
+    /**
+     * @param {boolean} compatible
+     */
+    sendServerInfo(compatible = true) {
+        this.send({ cmd: 'server info', meta: global.config.meta, compatible });
+    }
+    
     
     sendPing() {
         let t = new Date().getTime() - global.start_time;
@@ -123,7 +128,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {number} t
      */
     sendPong(t) {
@@ -141,7 +145,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {string} status
      * @param {string} [reason='']
      */
@@ -150,7 +153,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {Lobby} lobby
      */
     sendJoinLobby(lobby) {
@@ -158,7 +160,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {Lobby} lobby
      * @param {string} [reason='']
      */
@@ -167,7 +168,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {Lobby} lobby
      * @param {string} [reason='']
      * @param {boolean} [forced=true]
@@ -177,7 +177,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {Lobby} lobby
      */
     sendUpdateLobby(lobby) {
@@ -189,7 +188,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {string} lobbyid
      */
     sendLobbyInfo(lobbyid) {
@@ -197,7 +195,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {Lobby} lobby
      * @param {Room} room
      * @param {Point} start_pos
@@ -209,7 +206,6 @@ export default class SendStuff {
     
     
     /**
-     *
      * @param {Room} room_to
      * @param {Point} start_pos
      * @param {string} [uuid=undefined]
@@ -219,7 +215,6 @@ export default class SendStuff {
     }
     
     /**
-     *
      * @param {IPlayerInputs} data
      */
     sendPlayerControls(data) {
@@ -227,8 +222,9 @@ export default class SendStuff {
         this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
     }
     
+    
     // #################################
-    // You can write your wrappers here:
+    // You can write your custom wrappers here:
     
     // for example:
     sendSomething(greeting) {
