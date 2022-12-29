@@ -10,7 +10,7 @@ const common_config = {
     meta: {
         game_name: 'OnlineGame',
         game_version: 'v1.0.0',
-        warp_version: 'v4.4.2',
+        warp_version: 'v4.4.3',
         
         compatible_game_versions: '>=1.0.0',
         

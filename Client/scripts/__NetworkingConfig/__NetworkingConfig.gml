@@ -1,6 +1,6 @@
 // All the macro/config definitions go here
 
-#macro WARP_VERSION "v4.4.2"
+#macro WARP_VERSION "v4.4.3"
 #macro GAME_VERSION "v1.0.0"
 
 trace("Welcome to Warp % by Evoleo!", WARP_VERSION)
