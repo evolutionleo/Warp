@@ -2,14 +2,16 @@
 import { mergeDeep } from '#util/deep_merge';
 import trace from '#util/logging';
 import chalk from 'chalk';
+import semver from 'semver';
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
+
 
 const common_config = {
     meta: {
         game_name: 'OnlineGame',
-        version: 'v0.1',
-        framework_version: 'v4.4',
+        version: 'v1.0.0',
+        warp_version: 'v4.4.2',
         server: 'unknown'
     },
 

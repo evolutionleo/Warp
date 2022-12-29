@@ -1,6 +1,6 @@
 {
     "name": "warp-framework",
-    "version": "4.4.1",
+    "version": "4.4.2",
     "private": true,
     "description": "kappa",
     "main": "out/server.js",
@@ -31,8 +31,10 @@
         "ws": "^8.3.0"
     },
     "devDependencies": {
+        "@types/minimist": "^1.2.2",
         "@types/node": "^15.12.1",
         "@types/rbush": "^3.0.0",
+        "@types/semver": "^7.3.13",
         "@types/uuid": "^8.3.1",
         "@types/ws": "^8.5.3",
         "0x": "^5.0.0",
