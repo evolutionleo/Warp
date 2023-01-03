@@ -5,20 +5,6 @@ import chalk from 'chalk';
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
-    // socket: Socket;
-    
-    // lobby: Lobby;
-    // room: Room;
-    
-    // account: IAccount;
-    // profile: IProfile;
-    
-    // halfpack: Buffer; // used internally in packet.ts
-    
-    // entity: PlayerEntity;
-    ping;
-    
-    
     constructor(socket, type = 'tcp') {
         super(socket, type);
         
@@ -34,21 +20,36 @@ export default class Client extends SendStuff {
         this.ping = -1;
     }
     
+    /**
+     * @param {Lobby} lobby
+     */
     // some events
     onJoinLobby(lobby) {
         this.sendJoinLobby(lobby);
     }
     
+    /**
+     * @param {Lobby} lobby
+     * @param {string=} reason
+     */
     onRejectLobby(lobby, reason) {
         if (!reason)
             reason = 'lobby is full!';
         this.sendRejectLobby(lobby, reason);
     }
     
+    /**
+     * @param {Lobby} lobby
+     */
     onLeaveLobby(lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
     
+    /**
+     * @param {Lobby} lobby
+     * @param {string=} reason
+     * @param {boolean=} forced
+     */
     onKickLobby(lobby, reason, forced) {
         if (!reason)
             reason = '';
@@ -96,9 +97,9 @@ export default class Client extends SendStuff {
     }
     
     
-    // preset functions below
+    // preset functions below (you probably don't want to change them)
     
-    // this one saves everything
+    // this one saves everything to the DB
     save() {
         if (this.account !== null) {
             this.account.save(function (err) {
@@ -128,15 +129,20 @@ export default class Client extends SendStuff {
         }
     }
     
+    /**
+     * @param {Account} account
+     */
     register(account) {
         this.account = account;
         this.profile = freshProfile(account);
         
-        // this.save() returns a Promise
         this.save();
         this.sendRegister('success');
     }
     
+    /**
+     * @param {Account} account
+     */
     login(account) {
         this.account = account;
         Profile.findOne({

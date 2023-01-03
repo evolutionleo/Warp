@@ -5,12 +5,58 @@ import chalk from 'chalk';
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
 
+/**
+ * @typedef {Object} Config
+ * @property {object} meta
+ * @property {string} meta.game_name
+ * @property {string} meta.game_version
+ * @property {string} meta.warp_version
+ * @property {string} meta.compatible_game_versions
+ * @property {string} meta.server
+ *
+ * @property {object} lobby
+ * @property {number} lobby.max_players
+ * @property {boolean} lobby.addIntoPlayOnFull
+ * @property {boolean} lobby.closeOnLeave
+ *
+ * @property {object} room
+ * @property {string} room.rooms_path
+ * @property {boolean} room.warn_on_unknown_entity
+ * @property {string} room.starting_room
+ * @property {number} room.rest_timeout
+ *
+ * @property {number} tps
+ *
+ * @property {boolean} timestamps_enabled
+ * @property {boolean} ws_enabled
+ * @property {boolean} db_enabled
+ * @property {boolean} shell_enabled
+ * @property {boolean} rooms_enabled
+ * @property {boolean} entities_enabled
+ * @property {boolean} ssl_enabled
+ *
+ * @property {string} ssl_cert_path
+ * @property {string} ssl_key_path
+ *
+ * @property {string} env_name
+ * @property {boolean} necessary_login
+ * @property {boolean} verbose_lag
+ *
+ * @property {number} ping_interval
+ * @property {number} mm_process_interval
+ *
+ * @property {string} db
+ *
+ * @property {string} ip
+ * @property {number} port
+ * @property {number} ws_port
+ */
 
 const common_config = {
     meta: {
         game_name: 'OnlineGame',
         game_version: 'v1.0.0',
-        warp_version: 'v4.4.3',
+        warp_version: 'v5.0.0',
         
         compatible_game_versions: '>=1.0.0',
         
@@ -47,11 +93,12 @@ const common_config = {
     rooms_enabled: true,
     entities_enabled: true,
     ssl_enabled: false,
-    
+    verbose_lag: false,
     
     necessary_login: false,
     
-    ping_interval: 5 * 1000
+    ping_interval: 5 * 1000,
+    mm_process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms
 };
 
 const prod_config = {
@@ -60,8 +107,8 @@ const prod_config = {
     },
     env_name: 'prod',
     ip: '0.0.0.0',
-    port: args.port || 1337,
-    ws_port: args.ws_port || 3000,
+    port: parseInt(args.port) || 1337,
+    ws_port: parseInt(args.ws_port) || 3000,
     
     
     room: {
@@ -77,7 +124,7 @@ const prod_config = {
     shell_enabled: false,
     verbose_lag: false,
     
-    initial_lobbies: 3
+    initial_lobbies: 3 // number of lobbies to create on start
 };
 
 
@@ -88,12 +135,12 @@ const dev_config = {
     env_name: 'dev',
     ip: '127.0.0.1',
     //ip: '192.168.1.1', // you can put your machine's local ip here for LAN play
-    port: args.port || 1338,
-    ws_port: args.ws_port || 3001,
+    port: parseInt(args.port) || 1338,
+    ws_port: parseInt(args.ws_port) || 3001,
     
     ssl_enabled: false,
-    ssl_cert_path: null,
-    ssl_key_path: null,
+    ssl_cert_path: '',
+    ssl_key_path: '',
     
     db: args.db || 'mongodb://127.0.0.1:27017/online-game',
     
@@ -108,8 +155,10 @@ const default_config = dev_config;
 const env = args.env || 'dev';
 
 
-const config = {};
-mergeDeep(config, common_config);
+/**
+ * @type {Config}
+ */
+const config = mergeDeep({}, common_config);
 
 if (env === 'production' || env === 'prod' || args.prod) {
     mergeDeep(config, prod_config);

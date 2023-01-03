@@ -1,30 +1,16 @@
 import trace from '#util/logging';
 import packet from '#internal/packet';
 import chalk from 'chalk';
-// import ClientProperties from '#types/clientProperties';
+import ClientProperties from '#types/clientProperties';
 
 
-export default class SendStuff {
-    socket;
-    type;
-    
-    lobby = null;
-    room = null;
-    
-    account = null;
-    profile = null;
-    
-    halfpack; // used internally in packet.ts
-    
-    entity = null;
-    
-    
+export default class SendStuff extends ClientProperties {
     /**
-     *
      * @param {Sock} socket
      * @param {string} type
      */
     constructor(socket, type) {
+        super();
         this.socket = socket;
         this.type = type.toLowerCase();
     }
@@ -55,7 +41,7 @@ export default class SendStuff {
     
     // different types of broadcast
     /**
-     * @param {any[]} clients
+     * @param {Client[]} clients
      * @param {object} pack
      * @param {boolean} [notme=true]
      */

@@ -4,7 +4,6 @@ import handlePacket from '#custom/handlePacket';
 
 export default class packet {
     /**
-     *
      * @param {object} data
      * @returns {Uint8Array} pack
      */
@@ -20,7 +19,6 @@ export default class packet {
     }
     
     /**
-     *
      * @param {object} data
      * @returns {Uint8Array} pack
      */
@@ -31,7 +29,6 @@ export default class packet {
     
     
     /**
-     *
      * @param {any} c
      * @param {Buffer} data
      */
@@ -86,7 +83,6 @@ export default class packet {
     }
     
     /**
-     *
      * @param {Client} c
      * @param {Buffer} data
      */

@@ -10,7 +10,7 @@ export default new GameMap({
     
     // content_string: '',
     
-    mode: 'mmo',
+    spawn_type: 'random',
     start_pos: [
         { x: 100, y: 100 }
     ],

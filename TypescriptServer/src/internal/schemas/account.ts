@@ -5,7 +5,7 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 
 const mongoose = require('mongoose');
-import { Model, Document } from 'mongoose';
+import { Model, Document, ObjectId } from 'mongoose';
 const { Schema, model } = mongoose;
 
 import { hash_password, verify_password } from '#util/password_encryption';
@@ -14,7 +14,12 @@ import { Profile } from '#schemas/profile';
 
 export interface IAccount extends Document {
     username: string,
-    password: string
+    password: string,
+
+    online: boolean,
+
+    friends: ObjectId[],
+    mmr: number
 }
 
 export interface IAccountModel extends Model<IAccount> {
@@ -25,7 +30,12 @@ export interface IAccountModel extends Model<IAccount> {
 // you can edit this schema!
 const accountSchema = new Schema({
     username: { type: String, required: true, unique: true },
-    password: { type:String, required: true },
+    password: { type: String, required: true },
+
+    online: { type: Boolean, required: true },
+
+    friends: [{ type: Schema.Types.ObjectId }],
+    mmr: { type: Number, required: false } // matchmaking rating
 
     // you can add additional properties to the schema here:
 }, {collection: 'Accounts'});
@@ -33,22 +43,13 @@ const accountSchema = new Schema({
 
 // logging in/registering stuff
 accountSchema.statics.register = function accountRegister(username:string, password:string):Promise<string|IAccount> {
-    // Promises: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
-    // TL;DR: you can use .then() and .catch() to handle the result of the register
-    
-    /* for example:
-
-        Account.register('steve', '1234').then(function() {
-            trace('success!');
-        }).catch(function() {
-            trace('fail!');
-        })
-    
-    */
     return new Promise(async (resolve, reject) => {
         var account = new Account({
             username: username,
             password: await hash_password(password),
+
+            friends: [],
+            mmr: 1000
 
             // add more stuff below that is defined in the Account Schema above
         })

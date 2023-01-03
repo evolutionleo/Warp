@@ -10,8 +10,10 @@ import chalk from 'chalk';
 import { Socket as TCPSocket } from 'net';
 import { WebSocket as WSSocket } from 'ws';
 
-const { make_match } = MatchMaker;
-
+/**
+ * @param {Client} c
+ * @param data {{ cmd: string }} Data
+ */
 export default async function handlePacket(c:Client, data:any) {
     var cmd = data.cmd.toLowerCase();
     // trace('received command: ' + cmd);
@@ -110,7 +112,7 @@ export default async function handlePacket(c:Client, data:any) {
                 lobby = findLobby(lobbyid);
             }
             else {
-                lobby = make_match(c);
+                lobby = MatchMaker.find_nonfull_lobby(c);
             }
 
             // it also sends the response

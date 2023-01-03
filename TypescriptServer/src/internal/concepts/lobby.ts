@@ -8,7 +8,6 @@ export type LobbyStatus = 'open' | 'closed';
 
 // note: only create lobbies with createLobby(), don't call the constructor directly
 
-
 export type SerializedLobby = {
     lobbyid: string,
     status: LobbyStatus,

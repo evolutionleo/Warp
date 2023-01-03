@@ -5,8 +5,10 @@ import { Account } from '#schemas/account';
 import semver from 'semver';
 import chalk from 'chalk';
 
-const { make_match } = MatchMaker;
-
+/**
+ * @param {Client} c
+ * @param data {{ cmd: string }} Data
+ */
 export default async function handlePacket(c, data) {
     var cmd = data.cmd.toLowerCase();
     // trace('received command: ' + cmd);
@@ -105,7 +107,7 @@ export default async function handlePacket(c, data) {
                 lobby = findLobby(lobbyid);
             }
             else {
-                lobby = make_match(c);
+                lobby = MatchMaker.find_nonfull_lobby(c);
             }
             
             // it also sends the response

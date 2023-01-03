@@ -1,8 +1,8 @@
 {
     "name": "warp-framework",
-    "version": "4.4.3",
+    "version": "5.0.0",
     "private": true,
-    "description": "kappa",
+    "description": "",
     "main": "out/server.js",
     "author": {
         "name": "Evoleo"

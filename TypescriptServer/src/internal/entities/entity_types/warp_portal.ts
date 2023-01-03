@@ -4,11 +4,7 @@ import Room from "#concepts/room";
 import trace from "#util/logging";
 import PlayerEntity from "./player";
 
-enum WarpPortalType {
-    Entrance = 'Entrance',
-    Exit = 'Exit',
-    Both = 'Both'
-}
+type WarpPortalType = 'Entrance' | 'Exit' | 'Both';
 
 export default class WarpPortal extends Entity {
     isStatic = true;
@@ -29,7 +25,7 @@ export default class WarpPortal extends Entity {
 
 
     exit_portal:WarpPortal = null;
-    portal_type:WarpPortalType|string = WarpPortalType.Entrance;
+    portal_type:WarpPortalType|string = 'Entrance';
     room_to:string = undefined;
     warp_id:number = undefined; // to link the exit portal with an entrance
     continuous_collision:PlayerEntity[] = [];
@@ -39,13 +35,13 @@ export default class WarpPortal extends Entity {
     Room_to:Room = null; // with the Capital letter
 
     get enterable() {
-        return (this.portal_type === WarpPortalType.Entrance
-            || this.portal_type === WarpPortalType.Both)
+        return (this.portal_type === 'Entrance'
+            || this.portal_type === 'Both')
     }
 
     get exitable() {
-        return (this.portal_type === WarpPortalType.Exit
-            || this.portal_type === WarpPortalType.Both)
+        return (this.portal_type === 'Exit'
+            || this.portal_type === 'Both')
     }
 
     private findExitPortal():WarpPortal {

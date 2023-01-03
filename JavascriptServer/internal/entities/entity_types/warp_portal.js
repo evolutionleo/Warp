@@ -1,12 +1,5 @@
 import Entity from "#concepts/entity";
 
-var WarpPortalType;
-(function (WarpPortalType) {
-    WarpPortalType["Entrance"] = "Entrance";
-    WarpPortalType["Exit"] = "Exit";
-    WarpPortalType["Both"] = "Both";
-})(WarpPortalType || (WarpPortalType = {}));
-
 export default class WarpPortal extends Entity {
     isStatic = true;
     isSolid = false;
@@ -26,7 +19,7 @@ export default class WarpPortal extends Entity {
     
     
     exit_portal = null;
-    portal_type = WarpPortalType.Entrance;
+    portal_type = 'Entrance';
     room_to = undefined;
     warp_id = undefined; // to link the exit portal with an entrance
     continuous_collision = [];
@@ -36,13 +29,13 @@ export default class WarpPortal extends Entity {
     Room_to = null; // with the Capital letter
     
     get enterable() {
-        return (this.portal_type === WarpPortalType.Entrance
-            || this.portal_type === WarpPortalType.Both);
+        return (this.portal_type === 'Entrance'
+            || this.portal_type === 'Both');
     }
     
     get exitable() {
-        return (this.portal_type === WarpPortalType.Exit
-            || this.portal_type === WarpPortalType.Both);
+        return (this.portal_type === 'Exit'
+            || this.portal_type === 'Both');
     }
     
     findExitPortal() {

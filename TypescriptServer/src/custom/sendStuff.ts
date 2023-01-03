@@ -13,30 +13,17 @@ import { SockType, Sock } from '#types/socktype';
 import * as net from 'net';
 import * as ws from 'ws';
 import chalk from 'chalk';
-// import ClientProperties from '#types/clientProperties';
+import Party from '#concepts/party';
+import ClientProperties from '#types/clientProperties';
 
 
-export default class SendStuff {
-    socket: Sock;
-    type: SockType;
-    
-    lobby: Lobby = null;
-    room: Room = null;
-
-    account: IAccount = null;
-    profile: IProfile = null;
-
-    halfpack: Buffer; // used internally in packet.ts
-
-    entity: PlayerEntity = null;
-
-    
+export default class SendStuff extends ClientProperties {
     /**
-     * 
      * @param {Sock} socket
      * @param {string} type
      */
     constructor(socket: Sock, type: string) {
+        super();
         this.socket = socket;
         this.type = type.toLowerCase() as SockType;
     }
@@ -67,7 +54,7 @@ export default class SendStuff {
     
     // different types of broadcast
     /**
-     * @param {any[]} clients 
+     * @param {Client[]} clients 
      * @param {object} pack 
      * @param {boolean} [notme=true] 
      */

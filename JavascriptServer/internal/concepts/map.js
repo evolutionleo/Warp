@@ -1,10 +1,10 @@
 import LoadRoom from '#util/load_room';
+/**
+ * @enum {string}
+ */
+export const GAME_MODES = {
 
-export var GAME_MODE;
-(function (GAME_MODE) {
-    GAME_MODE["MMO"] = "mmo";
-    GAME_MODE["PVP"] = "pvp";
-})(GAME_MODE || (GAME_MODE = {}));
+};
 
 // Map is a blueprint for a room
 export default class GameMap {
@@ -17,8 +17,8 @@ export default class GameMap {
     width = 1344;
     height = 768;
     
-    mode = GAME_MODE.MMO; // either 'mmo' or 'pvp'
-    start_pos = [{ x: 0, y: 0 }]; // if 'mmo', it picks a random starting pos, otherwise - in order
+    spawn_type = 'random'; // either 'random' or 'distributed'
+    start_pos = [{ x: 0, y: 0 }]; // if 'random', it picks a random starting pos for everyone, otherwise - goes in order from 0 to *length*
     
     contents = '[]';
     // content: string; // a JSON string containing all the contents of the room
@@ -34,17 +34,17 @@ export default class GameMap {
     
     getStartPos(idx) {
         if (Array.isArray(this.start_pos)) { // it's an array of positions
-            switch (this.mode) {
-                case 'mmo':
+            switch (this.spawn_type) {
+                case 'random':
                     // a random number between 0 and start_pos.length
                     var index = Math.round(Math.random() * (this.start_pos.length - 1));
                     return this.start_pos[index];
-                case 'pvp':
+                case 'distributed':
                     // just index clamped to start_pos.length
                     var index = idx % this.start_pos.length;
                     return this.start_pos[index];
                 default:
-                    console.error('Error: Invalid map mode');
+                    console.error('Error: Invalid map type');
                     return undefined;
             }
         }
@@ -58,7 +58,7 @@ export default class GameMap {
             name: this.name,
             room_name: this.room_name,
             description: this.description,
-            mode: this.mode,
+            spawn_type: this.spawn_type,
             max_players: this.max_players,
             start_pos: this.start_pos
         };

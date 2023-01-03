@@ -114,7 +114,7 @@ class Entity extends EventEmitter {
     update() {
         this.emit('update');
         
-        this.roundPos();
+        // this.roundPos();
         
         // if something changed - send again
         const serialized = JSON.stringify(this.serialize());
@@ -247,18 +247,18 @@ class Entity extends EventEmitter {
     }
     
     roundPos() {
-        // let prev_x = this.pos.x;
-        // let prev_y = this.pos.y;
+        let prev_x = this.pos.x;
+        let prev_y = this.pos.y;
         
-        // // round
-        // this.pos.x = Math.round(this.pos.x * 100) / 100;
-        // this.pos.y = Math.round(this.pos.y * 100) / 100;
+        // round
+        this.pos.x = Math.round(this.pos.x * 100) / 100;
+        this.pos.y = Math.round(this.pos.y * 100) / 100;
         
-        // // if we became stuck - go back
-        // if (this.stuck()) {
-        //     this.pos.x = prev_x;
-        //     this.pos.y = prev_y;
-        // }
+        // if we became stuck - go back
+        if (this.stuck()) {
+            this.pos.x = prev_x;
+            this.pos.y = prev_y;
+        }
     }
     
     // entity death

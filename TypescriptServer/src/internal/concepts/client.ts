@@ -14,20 +14,6 @@ import chalk from 'chalk';
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
-    // socket: Socket;
-    
-    // lobby: Lobby;
-    // room: Room;
-
-    // account: IAccount;
-    // profile: IProfile;
-
-    // halfpack: Buffer; // used internally in packet.ts
-
-    // entity: PlayerEntity;
-    ping: number;
-
-
     constructor(socket:Sock, type:SockType = 'tcp') {
         super(socket, type);
 
@@ -43,21 +29,36 @@ export default class Client extends SendStuff {
         this.ping = -1;
     }
 
+    /**
+     * @param {Lobby} lobby
+     */
     // some events
     onJoinLobby(lobby:Lobby) {
         this.sendJoinLobby(lobby);
     }
 
+    /**
+     * @param {Lobby} lobby
+     * @param {string=} reason
+     */
     onRejectLobby(lobby:Lobby, reason?:string) {
         if (!reason)
             reason = 'lobby is full!';
         this.sendRejectLobby(lobby, reason);
     }
 
+    /**
+     * @param {Lobby} lobby
+     */
     onLeaveLobby(lobby:Lobby) {
         this.sendKickLobby(lobby, 'you left the lobby!', false);
     }
     
+    /**
+     * @param {Lobby} lobby
+     * @param {string=} reason
+     * @param {boolean=} forced
+     */
     onKickLobby(lobby:Lobby, reason?:string, forced?:boolean) {
         if (!reason)
             reason = '';
@@ -105,9 +106,9 @@ export default class Client extends SendStuff {
     }
 
 
-    // preset functions below
+    // preset functions below (you probably don't want to change them)
 
-    // this one saves everything
+    // this one saves everything to the DB
     save() {
         if (this.account !== null) {
             this.account.save(function(err) {
@@ -137,15 +138,20 @@ export default class Client extends SendStuff {
         }
     }
     
+    /**
+     * @param {Account} account
+     */
     register(account:IAccount) {
         this.account = account;
         this.profile = freshProfile(account);
 
-        // this.save() returns a Promise
         this.save();
         this.sendRegister('success');
     }
 
+    /**
+     * @param {Account} account
+     */
     login(account:IAccount) {
         this.account = account;
         Profile.findOne({
@@ -161,6 +167,6 @@ export default class Client extends SendStuff {
         })
     }
 
-    // you can also add methods/functions below
-    
+
+    // add any new methods/functions below
 }
