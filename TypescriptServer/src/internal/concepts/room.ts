@@ -77,7 +77,7 @@ class Room extends EventEmitter {
     full_bundle:any[]; // all the entities packed
     bundle:any[]; // updated entities that need sending
 
-    rest_timeout:number = 0; // disables processing entities when no players are present for config.room_rest_timeout seconds
+    rest_timeout:number = 0; // disables processing entities when no players are present for config.room_rest_timeout *seconds*
 
     constructor(map:GameMap|string, lobby:Lobby) {
         super();
@@ -153,7 +153,7 @@ class Room extends EventEmitter {
     }
     
     tick():void {
-        let t_beforeTick = new Date().getTime(); // measure the tick time
+        let t_beforeTick = Date.now(); // measure the tick time
 
         // don't process entities
         if (this.players.length === 0) {
@@ -181,7 +181,7 @@ class Room extends EventEmitter {
         if (this.bundle.length > 0)
             this.broadcast({ cmd: 'entities', room: this.map.room_name, entities: this.bundle });
 
-        let t_afterTick = new Date().getTime(); // measure the tick time in ms
+        let t_afterTick = Date.now(); // measure the tick time in ms
         let t_tick = t_afterTick - t_beforeTick;
 
         // trace('tick:', t_tick);

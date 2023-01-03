@@ -3,14 +3,18 @@ import Party from "./party";
 
 
 export type MatchRequirements = {
-    gamemode: string;
+    game_mode: string;
 }
 
 export default abstract class Ticket {
     created: number; // timestamp
-    by: Party|Client;
+    by: Party|Client; // who created this Ticket (either a single player or a Party)
+    is_party: boolean; // true if this is a PartyTicket
+    
+    get avg_mmr() { return this.by.mmr; }
+
     requirements: MatchRequirements = {
-        gamemode: 'any'
+        game_mode: 'any'
     };
 
     constructor(by:Party|Client, requirements:MatchRequirements) {
@@ -23,6 +27,7 @@ export default abstract class Ticket {
 export class SingleTicket extends Ticket {
     constructor(by:Client, requirements:MatchRequirements) {
         super(by, requirements);
+        this.is_party = false;
         this.by = this.by as Client;
     }
 }
@@ -30,6 +35,7 @@ export class SingleTicket extends Ticket {
 export class PartyTicket extends Ticket {
     constructor(by:Party, requirements:MatchRequirements) {
         super(by, requirements);
+        this.is_party = true;
         this.by = this.by as Party;
     }
 }

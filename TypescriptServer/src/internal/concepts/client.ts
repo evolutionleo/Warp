@@ -201,10 +201,5 @@ export default class Client extends SendStuff {
         })
     }
 
-    get logged_in() {
-        return this.profile !== null;
-    }
-
-
     // add any new methods/functions below
 }

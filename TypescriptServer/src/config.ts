@@ -82,7 +82,7 @@ const common_config = {
         use_persistent_position: false, // load the last x/y from the profile on room join and save them on room leave
 
         starting_room: 'Test Room',
-        rest_timeout: 5    // (seconds) - prevents rooms from processing entities
+        rest_timeout: 0    // (seconds) - prevents rooms from processing entities
                             // when no players are present for a certain amount of time
                             // set to -1 to disable this feature
     },

@@ -52,4 +52,8 @@ k
         if (this.members.length == 0) return 0;
         return this.members.reduce((v, m) => v + m.mmr, 0) / this.members.length;
     }
+
+    get mmr() {
+        return this.getAvgMMR();
+    }
 };

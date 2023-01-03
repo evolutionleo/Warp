@@ -38,18 +38,26 @@ export default class ClientProperties {
     /** @type {number} */
     ping: number;
 
+
+    get logged_in() {
+        return this.profile !== null;
+    }
+
     /** @type {number} */
     get mmr() {
-        return this.account ? this.account.mmr : 0;
+        return this.logged_in ? this.profile.mmr : 0;
     }
 
     set mmr(_mmr) {
         if (this.account)
-            this.account.mmr = _mmr;
+            this.profile.mmr = _mmr;
     }
 
     /** @type {Client[]} */
     get friends() {
-        return this.account ? this.account.friends : [];
+        return this.logged_in ? this.profile.friends : [];
     }
+
+
+    
 }
