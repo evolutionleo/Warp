@@ -16,10 +16,6 @@ export interface IAccount extends Document {
     username: string,
     password: string,
 
-    online: boolean,
-
-    friends: ObjectId[],
-    mmr: number
 }
 
 export interface IAccountModel extends Model<IAccount> {
@@ -31,12 +27,6 @@ export interface IAccountModel extends Model<IAccount> {
 const accountSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-
-    online: { type: Boolean, required: true },
-
-    friends: [{ type: Schema.Types.ObjectId }],
-    mmr: { type: Number, required: false } // matchmaking rating
-
     // you can add additional properties to the schema here:
 }, {collection: 'Accounts'});
 
@@ -48,10 +38,7 @@ accountSchema.statics.register = function accountRegister(username:string, passw
             username: username,
             password: await hash_password(password),
 
-            friends: [],
-            mmr: 1000
-
-            // add more stuff below that is defined in the Account Schema above
+            // you can add more stuff below (you'll also need to define it in the Account Schema above)
         })
 
         account.save(function(err) {

@@ -77,6 +77,10 @@ const common_config = {
         rooms_path: '../Client/rooms', // (overriden in prod config)
         warn_on_unknown_entity: true,
 
+        use_starting_room: true, // join config.room.starting_room on start
+        use_last_profile_room: false, // join client.profile.state.room on start if logged in
+        use_persistent_position: false, // load the last x/y from the profile on room join and save them on room leave
+
         starting_room: 'Test Room',
         rest_timeout: 5    // (seconds) - prevents rooms from processing entities
                             // when no players are present for a certain amount of time
@@ -90,13 +94,13 @@ const common_config = {
     timestamps_enabled: true, // send timestamps with each packet (there is a client-side config as well)
     ws_enabled: true, // websocket server?
     db_enabled: true, // MongoDB support
-    shell_enabled: false, // console that allows code execution while running the game (best set in prod/dev configs)
-    rooms_enabled: true, // disables lobbies being split into rooms (sub-lobbies with entities)
-    entities_enabled: true, // disables loading/spawning entities
+    shell_enabled: false, // toggles a console that allows code execution while running the game (better to change this in prod/dev configs rather than here)
+    rooms_enabled: true, // toggles lobbies being split into rooms (sub-lobbies with entities)
+    entities_enabled: true, // toggles loading/spawning entities
     ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
-    verbose_lag: false,
+    verbose_lag: false, // logs warning messages to chat when a game tick is taking longer than expected
     
-    necessary_login: false,
+    necessary_login: false, // if true, won't allow a client to join any lobby before logging in
 
     ping_interval: 5 * 1000,
     mm_process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms

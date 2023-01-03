@@ -63,7 +63,7 @@ export default class Lobby extends EventEmitter {
         else if (player.lobby !== null) {
             player.lobby.kickPlayer(player, 'changing lobbies', false);
         }
-        else if (global.config.necessary_login && player.profile === null) {
+        else if (global.config.necessary_login && !player.logged_in) {
             trace('warning: can\'t add a player who\'s not logged in');
             player.onRejectLobby(this, 'login to join a lobby!');
             return -1;
@@ -105,6 +105,10 @@ export default class Lobby extends EventEmitter {
         else {
             trace('something went wrong - trying to add into play a player not from this lobby');
         }
+    }
+
+    findRoomByMapName(room_name:string) {
+        return this.rooms.find(r => r.map.name === room_name);
     }
 
     broadcast(data:object):void {

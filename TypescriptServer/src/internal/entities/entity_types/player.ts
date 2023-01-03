@@ -100,8 +100,8 @@ export default class PlayerEntity extends PhysicsEntity {
         super.update();
         let p = this.client.profile;
         if (p) {
-            p.x = this.x;
-            p.y = this.y;
+            p.state.x = this.x;
+            p.state.y = this.y;
         }
     }
 

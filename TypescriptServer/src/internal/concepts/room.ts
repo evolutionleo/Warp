@@ -256,22 +256,27 @@ class Room extends EventEmitter {
     addPlayer(player:Client):void {
         this.players.push(player);
         player.room = this;
-        
-        let x:number, y:number;
 
-        // load the position from the db - uncomment if you want persistent position
-        // if (player.profile) {
-        //     x = player.profile.x;
-        //     y = player.profile.y;
-        // }
-        // else {
+        if (player.logged_in) player.profile.state.room = this.map.name;
 
-        // }
-
+        // create a player entity
         if (global.config.entities_enabled) {
-            const p = this.map.getStartPos(this.players.length-1);
-            x = p.x;
-            y = p.y;
+            // determine the coords
+            let x:number, y:number;
+        
+            // load the last recorded position from the db
+            if (global.config.room.use_persistent_position && player.logged_in) {
+                x = player.profile.state.x;
+                y = player.profile.state.y;
+            }
+            // find a new start position
+            else {
+                const p = this.map.getStartPos(this.players.length-1);
+                x = p.x;
+                y = p.y;
+            }
+
+            // spawn the entity
             const player_entity = this.spawnEntity(PlayerEntity, x, y, player);
             player.entity = player_entity;
         }

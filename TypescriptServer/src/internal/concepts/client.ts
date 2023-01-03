@@ -67,40 +67,72 @@ export default class Client extends SendStuff {
         this.sendKickLobby(lobby, reason, forced);
     }
 
-    onPlay() {
-        if (global.config.rooms_enabled) {
-            if (!this.profile) {
-                if (!global.config.necessary_login) {
-                    var room = this.lobby.rooms.find(room => {
-                        return room.map.name === global.config.room.starting_room;
-                    });
-                }
-                else {
-                    trace(chalk.redBright('non-logged in player entering the playing state! if it\'s intentional, please disable config.necessary_login'));
-                    return -1;
-                }
-            }
-            else if (this.profile) { // load the room from profile
-                var room = this.lobby.rooms.find(room => {
-                    return room.map.name === this.profile.room;
-                });
-            }
-            room.addPlayer(this);
+    onLogin() { // this.account and this.profile are now defined
+        this.profile.online = true;
+        this.profile.last_online = new Date();
 
-            if (this.entity !== null) {
-                this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
+        this.save();
+    }
+
+    onPlay() {
+        // if not using rooms
+        if (!global.config.rooms_enabled) {
+            this.sendPlay(this.lobby, null, null, null);
+            return;
+        }
+
+        // login necessary AND we're not logged in
+        if (global.config.necessary_login && !this.logged_in) {
+            trace(chalk.redBright('non-logged in player entering the playing state! if it\'s intentional, please disable config.necessary_login'));
+            return -1;
+        }
+
+        // find a room to join
+        var room:Room = null;
+
+        // join the room last visited (saved in profile)
+        if (global.config.room.use_last_profile_room && this.logged_in && this.profile.state.room) {
+            room = this.lobby.findRoomByMapName(this.profile.state.room);
+        }
+        // join the default starting room (from config)
+        else if (global.config.room.use_starting_room) {
+            room = this.lobby.findRoomByMapName(global.config.room.starting_room);
+        }
+        // join the first room in the lobby that isn't the current room?
+        else {
+            let c = this;
+            room = this.lobby.rooms.find(r => r !== c.room);
+        }
+
+        // if we found a room to join in the end
+        if (room) {
+            if (this.room !== null) {
+                this.room.movePlayer(this, room);
             }
             else {
-                this.sendPlay(this.lobby, room);
+                room.addPlayer(this);
             }
         }
-        else { // not using rooms
-            this.sendPlay(this.lobby, null, null, null);
+
+        if (this.entity !== null) {
+            this.sendPlay(this.lobby, room, this.entity.pos, this.entity.uuid);
+        }
+        else {
+            this.sendPlay(this.lobby, room);
         }
     }
 
     onDisconnect() {
+        // go offline
+        if (this.logged_in) {
+            this.profile.online = false;
+            this.profile.last_online = new Date();
+        }
+
+        // save everything to the DB
         this.save();
+        
+        // leave the lobby (if we're currently in one)
         if (this.lobby !== null)
             this.lobby.kickPlayer(this, 'disconnected', true);
     }
@@ -122,9 +154,9 @@ export default class Client extends SendStuff {
         }
         if (this.profile !== null) {
 
+            // save the current lobbyid
             if (this.lobby !== null) {
-                // save the current lobbyid
-                this.profile.lobbyid = this.lobby.lobbyid;
+                this.profile.state.lobbyid = this.lobby.lobbyid;
             }
 
             this.profile.save(function(err) {
@@ -145,7 +177,7 @@ export default class Client extends SendStuff {
         this.account = account;
         this.profile = freshProfile(account);
 
-        this.save();
+        this.onLogin();
         this.sendRegister('success');
     }
 
@@ -159,12 +191,18 @@ export default class Client extends SendStuff {
         }).then((profile) => {
             if (profile) {
                 this.profile = profile;
+                this.onLogin();
+
                 this.sendLogin('success');
             }
             else {
                 trace('Error: Couldn\'t find a profile with these credentials!');
             }
         })
+    }
+
+    get logged_in() {
+        return this.profile !== null;
     }
 
 
