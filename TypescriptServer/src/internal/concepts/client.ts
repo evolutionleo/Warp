@@ -1,21 +1,62 @@
 import trace from '#util/logging';
+import chalk from 'chalk';
 import SendStuff from '#custom/sendStuff';
+
+import mongoose from 'mongoose';
+const ObjectId = mongoose.Types.ObjectId;
 import { Profile, IProfile, freshProfile } from '#schemas/profile';
 import { Account, IAccount } from '#schemas/account';
+import { FriendRequest, IFriendRequest } from '#schemas/friend_request';
 
-import { Socket } from 'net';
-import Point from '#root/internal/types/point';
+import Point from '#types/point';
+import IClient from '#types/client_properties';
 
 import Lobby from '#concepts/lobby';
 import Room from '#concepts/room';
+import Party from '#concepts/party';
+
 import PlayerEntity from '#entities/entity_types/player';
 import { SockType, Sock } from '#types/socktype';
-import chalk from 'chalk';
 
 // this is a wrapper around sockets
-export default class Client extends SendStuff {
+export default class Client extends SendStuff implements IClient {
+    socket: Sock = null; /** @type {import('ws').WebSocket | import('net').Socket} */
+    type: SockType; /** @type {'ws' | 'tcp'} */
+    
+    lobby: Lobby = null; /** @type {Lobby} */
+    room: Room = null; /** @type {Room} */
+    party: Party = null; /** @type {Party} */
+
+    account: IAccount = null; /** @type {Account} */
+    profile: IProfile = null; /** @type {Profile} */
+
+    // used internally in packet.ts
+    halfpack: Buffer; /** @type {Buffer} */
+
+    entity: PlayerEntity = null; /** @type {PlayerEntity} */
+
+    ping: number; /** @type {number} */
+
+    /** @type {boolean} */
+    get logged_in() {
+        return this.profile !== null;
+    }
+
+    /** @type {number} */
+    get mmr() {
+        return this.logged_in ? this.profile.mmr : 0;
+    }
+
+    set mmr(_mmr) {
+        if (this.account)
+            this.profile.mmr = _mmr;
+    }
+
     constructor(socket:Sock, type:SockType = 'tcp') {
-        super(socket, type);
+        super();
+        
+        this.socket = socket;
+        this.type = type.toLowerCase() as SockType;
 
         this.type = type;
         
@@ -138,9 +179,124 @@ export default class Client extends SendStuff {
     }
 
 
-    // preset functions below (you probably don't want to change them)
 
-    // this one saves everything to the DB
+    // below are some preset functions (you probably don't want to change them)
+
+    async getFriends():Promise<IProfile[]> {
+        if (!this.logged_in)
+            return [];
+
+        return (await Profile.findById(this.profile._id).populate<{ friends: IProfile[] }>('friends')).friends;
+    }
+
+    async getFriendIds() {
+        if (!this.logged_in)
+            return [];
+        
+        return this.profile.friends;
+    }
+
+    /**
+     * Send a new friend request or accept an existing one from the user
+     * @param friend {IProfile|Client}
+     */
+    async friendAdd(friend: Client | IProfile): Promise<boolean> {
+        friend = friend instanceof Client ? friend.profile : friend;
+        if (!this.logged_in) return false;
+
+        let sender_id = this.profile._id;
+        let receiver_id = friend._id;
+
+        let friend_exists = this.profile.friends.includes(receiver_id);
+        if (friend_exists) { // already friends
+            trace('already friends');
+            return false;
+        }
+
+        let out_request_exists = await FriendRequest.requestExists(sender_id, receiver_id);
+        let inc_request_exists = await FriendRequest.requestExists(receiver_id, sender_id);
+
+        if (inc_request_exists) { // there is already an incoming request - accept it
+            await this.friendRequestAccept(friend);
+            trace('request accepted');
+            return true;
+        }
+        else if (out_request_exists) { // we already sent a request
+            trace('request already exists');
+            return false;
+        }
+        else { // send a new request
+            let req = await this.friendRequestSend(friend);
+            trace('request sent');
+            return !!req;
+        }
+    }
+
+    async friendRequestSend(user_to:Client|IProfile):Promise<IFriendRequest> {
+        user_to = user_to instanceof Client ? user_to.profile : user_to;
+        if (!this.logged_in) return null;
+
+        let sender_id = this.profile._id;
+        let receiver_id = user_to._id;
+
+        return await FriendRequest.create({ sender_id, receiver_id });
+    }
+
+    private async friendRequestFind(user_from:Client|IProfile, user_to:Client|IProfile) {
+        user_from = user_from instanceof Client ? user_from.profile : user_from;
+        user_to = user_to instanceof Client ? user_to.profile : user_to;
+
+        return await FriendRequest.findRequestId(user_from._id, user_to._id);
+    }
+
+    async friendRequestAccept(user_from:Client|IProfile) {
+        user_from = user_from instanceof Client ? user_from.profile : user_from;
+        if (!this.logged_in) return;
+
+        // find a request FROM the user
+        let inc_request_id = await this.friendRequestFind(user_from, this);
+        if (inc_request_id) {
+            await FriendRequest.accept(inc_request_id); // this method also updates the .friends arrays
+        }
+    }
+
+    async friendRequestReject(user_from:Client|IProfile) {
+        user_from = user_from instanceof Client ? user_from.profile : user_from;
+        if (!this.logged_in) return;
+
+        // find a request FROM the user
+        let inc_request_id = await this.friendRequestFind(user_from, this);
+        if (inc_request_id) {
+            await FriendRequest.reject(inc_request_id);
+        }
+    }
+
+    async friendRequestCancel(user_to:Client|IProfile) {
+        user_to = user_to instanceof Client ? user_to.profile : user_to;
+        if (!this.logged_in) return null;
+
+        // find a request from us TO the user
+        let req_id = await this.friendRequestFind(this, user_to);
+        if (req_id) {
+            await FriendRequest.cancel(req_id);
+        }
+    }
+
+    async friendRemove(friend:Client|IProfile) {
+        friend = friend instanceof Client ? friend.profile : friend;
+        if (!this.logged_in) return;
+
+        let my_id = this.profile._id;
+        let friend_id = friend._id;
+
+        // delete from each others' profiles
+        await Profile.findByIdAndUpdate(my_id, { $pull: { friends: friend_id }});
+        await Profile.findByIdAndUpdate(friend_id, { $pull: { friends: my_id }});
+    }
+
+    /**
+     * Save account and profile data to the DB
+     */
     save() {
         if (this.account !== null) {
             this.account.save(function(err) {

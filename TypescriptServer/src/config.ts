@@ -2,7 +2,6 @@
 import { mergeDeep } from '#util/deep_merge';
 import trace from '#util/logging';
 import chalk from 'chalk';
-import semver from 'semver';
 import minimist from 'minimist';
 const args = minimist(process.argv.slice(2));
 

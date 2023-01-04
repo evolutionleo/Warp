@@ -8,56 +8,35 @@ import Party from '#concepts/party';
 import PlayerEntity from '#entities/entity_types/player';
 import { Sock, SockType } from './socktype';
 
-export default class ClientProperties {
+export default interface IClient {
     /** @type {import('ws').WebSocket | import('net').Socket} */
     socket: Sock;
     /** @type {'ws' | 'tcp'} */
     type: SockType;
     
     /** @type {Lobby} */
-    lobby: Lobby = null;
+    lobby: Lobby;
 
     /** @type {Room} */
-    room: Room = null;
+    room: Room;
 
     /** @type {Party} */
-    party: Party = null;
+    party: Party;
 
 
     /** @type {Account} */
-    account: IAccount = null;
+    account: IAccount;
     /** @type {Profile} */
-    profile: IProfile = null;
+    profile: IProfile;
 
     /** @type {Buffer} */
     halfpack: Buffer; // used internally in packet.ts
 
     /** @type {PlayerEntity} */
-    entity: PlayerEntity = null;
+    entity: PlayerEntity;
 
     /** @type {number} */
     ping: number;
 
-
-    get logged_in() {
-        return this.profile !== null;
-    }
-
-    /** @type {number} */
-    get mmr() {
-        return this.logged_in ? this.profile.mmr : 0;
-    }
-
-    set mmr(_mmr) {
-        if (this.account)
-            this.profile.mmr = _mmr;
-    }
-
-    /** @type {Client[]} */
-    get friends() {
-        return this.logged_in ? this.profile.friends : [];
-    }
-
-
-    
+    logged_in: boolean;
 }

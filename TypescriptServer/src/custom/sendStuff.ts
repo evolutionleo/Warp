@@ -14,20 +14,26 @@ import * as net from 'net';
 import * as ws from 'ws';
 import chalk from 'chalk';
 import Party from '#concepts/party';
-import ClientProperties from '#types/clientProperties';
+import IClient from '#types/client_properties';
 
+export default abstract class SendStuff implements IClient {
+    abstract socket: Sock; /** @type {import('ws').WebSocket | import('net').Socket} */
+    abstract type: SockType; /** @type {'ws' | 'tcp'} */
+    
+    abstract lobby: Lobby; /** @type {Lobby} */
+    abstract room: Room; /** @type {Room} */
+    abstract party: Party; /** @type {Party} */
 
-export default class SendStuff extends ClientProperties {
-    /**
-     * @param {Sock} socket
-     * @param {string} type
-     */
-    constructor(socket: Sock, type: string) {
-        super();
-        this.socket = socket;
-        this.type = type.toLowerCase() as SockType;
-    }
+    abstract account: IAccount; /** @type {Account} */
+    abstract profile: IProfile; /** @type {Profile} */
 
+    abstract halfpack: Buffer; /** @type {Buffer} */
+    abstract entity: PlayerEntity; /** @type {PlayerEntity} */
+
+    
+    abstract ping: number; /** @type {number} */
+
+    abstract logged_in: boolean; /** @type {boolean} */
 
     /** 
      * basic send
