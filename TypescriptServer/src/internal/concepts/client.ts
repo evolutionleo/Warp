@@ -4,7 +4,7 @@ import SendStuff from '#custom/sendStuff';
 
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;
-import { Profile, IProfile, freshProfile } from '#schemas/profile';
+import { Profile, IProfile, freshProfile, getProfileInfo } from '#schemas/profile';
 import { Account, IAccount } from '#schemas/account';
 import { FriendRequest, IFriendRequest } from '#schemas/friend_request';
 
@@ -18,8 +18,16 @@ import Party from '#concepts/party';
 import PlayerEntity from '#entities/entity_types/player';
 import { SockType, Sock } from '#types/socktype';
 
+export type ClientInfo = {
+    name: string;
+    partyid: string;
+    lobbyid: string;
+    room_name: string;
+};
+
 // this is a wrapper around sockets
 export default class Client extends SendStuff implements IClient {
+    name: string = '';
     socket: Sock = null; /** @type {import('ws').WebSocket | import('net').Socket} */
     type: SockType; /** @type {'ws' | 'tcp'} */
     
@@ -74,25 +82,25 @@ export default class Client extends SendStuff implements IClient {
      * @param {Lobby} lobby
      */
     // some events
-    onJoinLobby(lobby:Lobby) {
-        this.sendJoinLobby(lobby);
+    onLobbyJoin(lobby:Lobby) {
+        this.sendLobbyJoin(lobby);
     }
 
     /**
      * @param {Lobby} lobby
      * @param {string=} reason
      */
-    onRejectLobby(lobby:Lobby, reason?:string) {
+    onLobbyReject(lobby:Lobby, reason?:string) {
         if (!reason)
             reason = 'lobby is full!';
-        this.sendRejectLobby(lobby, reason);
+        this.sendLobbyReject(lobby, reason);
     }
 
     /**
      * @param {Lobby} lobby
      */
-    onLeaveLobby(lobby:Lobby) {
-        this.sendKickLobby(lobby, 'you left the lobby!', false);
+    onLobbyLeave(lobby:Lobby) {
+        this.sendLobbyKick(lobby, 'you left the lobby!', false);
     }
     
     /**
@@ -100,12 +108,20 @@ export default class Client extends SendStuff implements IClient {
      * @param {string=} reason
      * @param {boolean=} forced
      */
-    onKickLobby(lobby:Lobby, reason?:string, forced?:boolean) {
+    onLobbyKick(lobby:Lobby, reason?:string, forced?:boolean) {
         if (!reason)
             reason = '';
         if (forced === null || forced === undefined)
             forced = true;
-        this.sendKickLobby(lobby, reason, forced);
+        this.sendLobbyKick(lobby, reason, forced);
+    }
+
+    onPartyLeave(party:Party) {
+        this.sendPartyLeave(party);
+    }
+
+    onPartyJoin(party:Party) {
+        this.sendPartyJoin(party);
     }
 
     onLogin() { // this.account and this.profile are now defined
@@ -179,8 +195,16 @@ export default class Client extends SendStuff implements IClient {
     }
 
 
+    getInfo():ClientInfo {
+        return {
+            name: this.name,
+            partyid: this.party?.partyid,
+            lobbyid: this.lobby?.lobbyid,
+            room_name: this.room?.map.name
+        };
+    }
 
-    // below are some preset functions (you probably don't want to change them)
+    // Below are some preset functions (you probably don't want to change them
 
     async getFriends():Promise<IProfile[]> {
         if (!this.logged_in)
@@ -194,6 +218,16 @@ export default class Client extends SendStuff implements IClient {
             return [];
         
         return this.profile.friends;
+    }
+
+    async getIncomingFriendRequests():Promise<IProfile[]> {
+        if (!this.logged_in) return [];
+        return await FriendRequest.findIncoming(this.profile._id);
+    }
+
+    async getOutgoingFriendRequests():Promise<IProfile[]> {
+        if (!this.logged_in) return [];
+        return await FriendRequest.findOutgoing(this.profile._id);
     }
 
     /**
@@ -293,6 +327,20 @@ export default class Client extends SendStuff implements IClient {
         await Profile.findByIdAndUpdate(my_id, { $pull: { friends: friend_id }});
         await Profile.findByIdAndUpdate(friend_id, { $pull: { friends: my_id }});
     }
+
+
+    partyCreate() {
+        if (this.party)
+            this.partyLeave();
+        this.party = new Party(this);
+        return this.party;
+    }
+
+    partyLeave() {
+
+    }
+
+    
 
     /**
      * Save account and profile data to the DB

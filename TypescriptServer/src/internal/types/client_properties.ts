@@ -9,6 +9,9 @@ import PlayerEntity from '#entities/entity_types/player';
 import { Sock, SockType } from './socktype';
 
 export default interface IClient {
+    /** @type {string} */
+    name: string;
+
     /** @type {import('ws').WebSocket | import('net').Socket} */
     socket: Sock;
     /** @type {'ws' | 'tcp'} */
@@ -39,4 +42,6 @@ export default interface IClient {
     ping: number;
 
     logged_in: boolean;
+
+    getFriends():Promise<IProfile[]>;
 }

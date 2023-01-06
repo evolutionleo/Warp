@@ -2,20 +2,22 @@ import Client from '#concepts/client'
 import GameMap from '#concepts/map'
 import Lobby from '#concepts/lobby'
 import { EntityType } from '#concepts/entity'
+import Party from '#concepts/party';
 
 declare global {
     namespace NodeJS {
         interface Global {
             clients:Client[];
             maps:GameMap[];
-            lobbies:{[index: string]: Lobby};
+            lobbies:{[key: string]: Lobby};
+            parties:{[key: string]: Party};
             entities:EntityType[];
 
             entityNames:{[key: string]: EntityType}; // type -> EntityType
             entityObjects:{[key: string]: EntityType}; // object_name -> EntityType
 
-            ping_interval:Timeout,
-            start_time:number
+            ping_interval:Timeout;
+            start_time:number;
         }
     }
 }

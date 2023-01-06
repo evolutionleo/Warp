@@ -32,7 +32,7 @@ export interface IProfile extends Document {
 // you can edit this schema!
 const profileSchema = new Schema({
     account_id: { type: Schema.Types.ObjectId, ref: 'Account' },
-    name: String,
+    name: { type: String, unique: true },
 
     online: { type: Boolean, default: false },
     last_online: { type: Date, default: Date.now },
@@ -71,4 +71,29 @@ export function freshProfile(account:IAccount):IProfile { // for when just regis
             y: 0
         }
     });
+}
+
+
+
+export type ProfileInfo = {
+    id: string,
+    name: string,
+
+    online: boolean,
+    last_online: Date,
+
+    mmr: number
+};
+
+// like profile, but only the data that is useful for sending
+export function getProfileInfo(p: IProfile):ProfileInfo {
+    if (p === null) return null;
+
+    return {
+        id: p.id,
+        name: p.name,
+        online: p.online,
+        last_online: p.last_online,
+        mmr: p.mmr
+    };
 }

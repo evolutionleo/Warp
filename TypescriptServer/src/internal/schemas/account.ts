@@ -9,13 +9,11 @@ import { Model, Document, ObjectId } from 'mongoose';
 const { Schema, model } = mongoose;
 
 import { hash_password, verify_password } from '#util/password_encryption';
-import { Profile } from '#schemas/profile';
 
 
 export interface IAccount extends Document {
     username: string,
     password: string,
-
 }
 
 export interface IAccountModel extends Model<IAccount> {
@@ -77,6 +75,17 @@ accountSchema.statics.login = function accountLogin(username:string, password:st
 
 // export const Account:IAccountModel = model<IAccount, IAccountModel>('Account', accountSchema);
 export const Account:IAccountModel = model('Account', accountSchema);
-
-
 export default Account;
+
+
+export type AccountInfo = {
+    username: string
+}
+
+export function getAccountInfo(a:IAccount):AccountInfo {
+    if (a === null) return null;
+
+    return {
+        username: a.username
+    };
+}

@@ -3,6 +3,7 @@ import GameMap from '#concepts/map';
 import Client from '#concepts/client';
 import Room, { SerializedRoom, RoomInfo }  from '#concepts/room';
 import { EventEmitter } from 'events';
+import * as crypto from 'crypto';
 
 export type LobbyStatus = 'open' | 'closed';
 
@@ -25,6 +26,38 @@ export type LobbyInfo = {
     rooms: RoomInfo[],
     full: boolean
 }
+
+
+export function createLobby() { // returns the lobby instance
+    var lobby = new Lobby();
+
+    while(true) {
+        // a random 6-digit number
+        var lobbyid = crypto.randomInt(100000, 999999).toString();
+        if (lobbyid in global.lobbies) { // just in case of a collision
+            continue;
+        }
+        else {
+            global.lobbies[lobbyid] = lobby;
+            lobby.lobbyid = lobbyid;
+            break;
+        }
+    }
+    
+    return lobby;
+}
+
+export function findLobby(lobbyid:string) {
+    return global.lobbies[lobbyid];
+}
+
+export function deleteLobby(lobbyid:string) {
+    var lobby = global.lobbies[lobbyid];
+    lobby.close();
+
+    delete global.lobbies[lobbyid];
+}
+
 
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
@@ -52,12 +85,12 @@ export default class Lobby extends EventEmitter {
     addPlayer(player:Client):void|-1 {
         if (this.full) {
             trace('warning: can\'t add a player - the lobby is full!');
-            player.onRejectLobby(this, 'lobby is full!');
+            player.onLobbyReject(this, 'lobby is full!');
             return -1;
         }
         else if (this.players.indexOf(player) !== -1) {
             trace('warning: can\'t add a player who\'s already in the lobby');
-            player.onRejectLobby(this, 'already in the lobby');
+            player.onLobbyReject(this, 'already in the lobby');
             return -1;
         }
         else if (player.lobby !== null) {
@@ -65,13 +98,13 @@ export default class Lobby extends EventEmitter {
         }
         else if (global.config.necessary_login && !player.logged_in) {
             trace('warning: can\'t add a player who\'s not logged in');
-            player.onRejectLobby(this, 'login to join a lobby!');
+            player.onLobbyReject(this, 'login to join a lobby!');
             return -1;
         }
 
         this.players.push(player);
         player.lobby = this;
-        player.onJoinLobby(this);
+        player.onLobbyJoin(this);
 
         
         // lobby is now full - add everyone
@@ -88,7 +121,7 @@ export default class Lobby extends EventEmitter {
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
         player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
-        player.onKickLobby(this, reason, forced);
+        player.onLobbyKick(this, reason, forced);
         player.lobby = null;
 
 

@@ -2,8 +2,8 @@ import trace from '#util/logging';
 import packet from '#internal/packet';
 import { Socket } from 'net';
 import Lobby from '#concepts/lobby';
-import { Account, IAccount } from '#schemas/account';
-import { Profile, IProfile } from '#schemas/profile'
+import { Account, getAccountInfo, IAccount } from '#schemas/account';
+import { Profile, IProfile, getProfileInfo, ProfileInfo } from '#schemas/profile'
 import Point from '#types/point';
 import Entity from '#concepts/entity';
 import Room from '#concepts/room';
@@ -17,23 +17,26 @@ import Party from '#concepts/party';
 import IClient from '#types/client_properties';
 
 export default abstract class SendStuff implements IClient {
-    abstract socket: Sock; /** @type {import('ws').WebSocket | import('net').Socket} */
-    abstract type: SockType; /** @type {'ws' | 'tcp'} */
+    abstract name: string;
+    abstract socket: Sock;
+    abstract type: SockType;
+     
+    abstract lobby: Lobby;
+    abstract room: Room;
+    abstract party: Party;
+
+    abstract account: IAccount;
+    abstract profile: IProfile;
+
+    abstract halfpack: Buffer;
+    abstract entity: PlayerEntity;
+
     
-    abstract lobby: Lobby; /** @type {Lobby} */
-    abstract room: Room; /** @type {Room} */
-    abstract party: Party; /** @type {Party} */
+    abstract ping: number;
 
-    abstract account: IAccount; /** @type {Account} */
-    abstract profile: IProfile; /** @type {Profile} */
+    abstract logged_in: boolean;
 
-    abstract halfpack: Buffer; /** @type {Buffer} */
-    abstract entity: PlayerEntity; /** @type {PlayerEntity} */
-
-    
-    abstract ping: number; /** @type {number} */
-
-    abstract logged_in: boolean; /** @type {boolean} */
+    abstract getFriends():Promise<IProfile[]>;
 
     /** 
      * basic send
@@ -154,13 +157,29 @@ export default abstract class SendStuff implements IClient {
      * @param {string} [reason=''] 
      */
     sendLogin(status:string, reason:string = ''):void {
-        this.send({cmd: 'login', status: status, reason: reason, account: this.account?.toJSON(), profile: this.profile?.toJSON()});
+        this.send({cmd: 'login', status, reason, account: getAccountInfo(this.account), profile: getProfileInfo(this.profile)});
+    }
+
+    sendPartyInvite(party:Party) {
+        this.send({ cmd: 'party invite', party: party.getInfo() });
+    }
+
+    sendPartyLeave(party:Party, forced:boolean = true, reason:string = '') {
+        this.send({ cmd: 'party leave', party: party.getInfo(), forced, reason });
+    }
+
+    sendPartyJoin(party:Party) {
+        this.send({ cmd: 'party join', party: party.getInfo() });
+    }
+
+    sendPartyReject(party?:Party, reason:string = 'Unable to join party') {
+        this.send({ cmd: 'party reject', party: party?.getInfo(), reason });
     }
 
     /**
      * @param {Lobby} lobby 
      */
-    sendJoinLobby(lobby:Lobby):void {
+    sendLobbyJoin(lobby:Lobby):void {
         this.send({ cmd: 'lobby join', lobby: lobby.getInfo() });
     }
 
@@ -168,7 +187,7 @@ export default abstract class SendStuff implements IClient {
      * @param {Lobby} lobby 
      * @param {string} [reason='']
      */
-    sendRejectLobby(lobby:Lobby, reason:string = ''):void {
+    sendLobbyReject(lobby:Lobby, reason:string = ''):void {
         this.send({ cmd: 'lobby reject', lobby: lobby.getInfo(), reason: reason });
     }
 
@@ -177,14 +196,14 @@ export default abstract class SendStuff implements IClient {
      * @param {string} [reason=''] 
      * @param {boolean} [forced=true]
      */
-    sendKickLobby(lobby:Lobby, reason:string = '', forced:boolean = true):void {
+    sendLobbyKick(lobby:Lobby, reason:string = '', forced:boolean = true):void {
         this.send({ cmd: 'lobby leave', lobby: lobby.getInfo(), reason: reason, forced: forced });
     }
 
     /**
      * @param {Lobby} lobby 
      */
-    sendUpdateLobby(lobby:Lobby):void { // some data changed
+    sendLobbyUpdate(lobby:Lobby):void { // some data changed
         this.send({ cmd: 'lobby update', lobby: lobby.getInfo() });
     }
 
@@ -217,6 +236,14 @@ export default abstract class SendStuff implements IClient {
      */
     sendRoomTransition(room_to:Room, start_pos?:Point, uuid?:string):void {
         this.send({ cmd: 'room transition', room: room_to.serialize(), start_pos, uuid });
+    }
+
+    sendFriends(friends:IProfile[]) {
+        this.send({ cmd: 'friends', friends: friends.map(f => getProfileInfo(f)) });
+    }
+
+    sendIncomingFriendRequests(from_profiles:ProfileInfo[]) {
+        this.send({ cmd: 'friend req inc', from_profiles });
     }
 
     /**

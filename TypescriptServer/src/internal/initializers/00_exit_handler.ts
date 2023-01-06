@@ -1,35 +1,44 @@
-import Profile from '#schemas/profile';
 import trace from '#util/logging';
+import chalk from 'chalk';
 
-async function cleanup() {
-    await Profile.updateMany({}, { online: false, lastOnline: Date.now() });
+function cleanup() {
+    // note: only synchronous operations here!
 }
 
-async function onProcessExit(exitCode) {
+function onProcessExit(exitCode:number = undefined) {
     trace('Running onProcessExit()');
 
     if (exitCode !== undefined)
         trace('Exit code:', exitCode);
 
     trace('Running cleanup...');
-    await cleanup();
-    trace('Cleanup finished');
+    cleanup();
+    trace('Cleanup finished.');
     
-    trace('Exiting the process.');
-
-    if (!this.noexit)
+    
+    trace('Exiting the process...');
+    if (!this.noexit) {
         process.exit();
+    }
 }
 
-//do something when app is closing
-process.on('exit', onProcessExit.bind({ noexit: true }));
+// do something when app is closing
+// process.on('exit', onProcessExit.bind({ noexit: true }));
 
 //catches ctrl+c event
 process.on('SIGINT', onProcessExit);
+process.on('SIGTERM', onProcessExit);
+process.on('SIGHUP', onProcessExit);
 
 // catches "kill pid" (for example: nodemon restart)
 process.on('SIGUSR1', onProcessExit);
 process.on('SIGUSR2', onProcessExit);
 
 // catches uncaught exceptions
-process.on('uncaughtException', onProcessExit);
+process.on('uncaughtException', function(e) {
+    trace(chalk.redBright(e));
+    onProcessExit();
+});
+
+
+process.stdin.resume();

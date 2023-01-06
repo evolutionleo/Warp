@@ -1,6 +1,49 @@
 import Client from "./client";
+import * as crypto from 'crypto';
+import { ProfileInfo } from "#schemas/profile";
+
+
+export type PartyInfo = {
+    partyid: string;
+    members: string[];
+    leader: string;
+};
+
+// use this instead of calling the new Party() contructor directly
+export function createParty(leader:Client):Party {
+    const party = new Party(leader);
+
+    while(true) {
+        // a random 6-digit number
+        let partyid = crypto.randomInt(100000, 999999).toString();
+        if (partyid in global.parties) { // just in case of a collision
+            continue;
+        }
+        else {
+            global.parties[partyid] = party;
+            party.partyid = partyid;
+            break;
+        }
+    }
+
+    return party;
+}
+
+export function findParty(partyid: string):Party {
+    return global.parties[partyid];
+}
+
+export function deleteParty(partyid:string):void {
+    let party = global.parties[partyid];
+    party.disband();
+
+    delete global.parties[partyid];
+}
+
+
 
 export default class Party {
+    partyid: string;
     members: Client[];
     leader: Client;
 
@@ -18,7 +61,7 @@ export default class Party {
         }
     }
 
-    kick(member: Client): void {
+    kickMember(member: Client): void {
         if (this.isLeader(member)) {
             if (this.members.length == 1) { // if no one else left
                 this.leader = null;
@@ -33,7 +76,7 @@ export default class Party {
     }
 
     disband() {
-        this.members.forEach(member => this.kick(member));
+        this.members.forEach(member => this.kickMember(member));
     }
 
     setLeader(leader: Client): void {
@@ -55,5 +98,14 @@ k
 
     get mmr() {
         return this.getAvgMMR();
+    }
+
+
+    getInfo():PartyInfo {
+        return {
+            partyid: this.partyid,
+            members: this.members.map(m => m.name),
+            leader: this.leader.name
+        };
     }
 };

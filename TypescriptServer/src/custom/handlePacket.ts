@@ -1,9 +1,8 @@
 import trace from '#util/logging';
-import { findLobby } from '#util/lobby_functions';
 import MatchMaker from '#util/matchmaker';
 import { Account, IAccount } from '#schemas/account';
 import Client from '#concepts/client';
-import Lobby from '#concepts/lobby';
+import Lobby, { findLobby } from '#concepts/lobby';
 import Point from '#types/point';
 import semver from 'semver';
 import chalk from 'chalk';
@@ -126,7 +125,7 @@ export default async function handlePacket(c:Client, data:any) {
             break;
         
         case 'room transition':
-            if (!c.room) { return; }
+            if (!c.room) return;
 
             var room_to_name:string = data.room_to;
             var room_to = c.lobby.rooms.find(room => room.map.name === room_to_name || room.map.room_name === room_to_name);
