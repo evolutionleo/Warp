@@ -107,6 +107,11 @@ function handlePacket(data) {
 			// add your handle for lobby kick/leave logic here
 			//room_goto(rMenu)
 			break
+		
+		case "party join":
+			
+			break
+		
 		case "play":
 			trace("playing!")
 			global.playing = true

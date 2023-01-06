@@ -164,7 +164,7 @@ export default abstract class SendStuff implements IClient {
         this.send({ cmd: 'party invite', party: party.getInfo() });
     }
 
-    sendPartyLeave(party:Party, forced:boolean = true, reason:string = '') {
+    sendPartyLeave(party:Party, reason:string, forced:boolean) {
         this.send({ cmd: 'party leave', party: party.getInfo(), forced, reason });
     }
 
@@ -174,6 +174,10 @@ export default abstract class SendStuff implements IClient {
 
     sendPartyReject(party?:Party, reason:string = 'Unable to join party') {
         this.send({ cmd: 'party reject', party: party?.getInfo(), reason });
+    }
+
+    sendPartyInviteSent() {
+        
     }
 
     /**
@@ -196,7 +200,7 @@ export default abstract class SendStuff implements IClient {
      * @param {string} [reason=''] 
      * @param {boolean} [forced=true]
      */
-    sendLobbyKick(lobby:Lobby, reason:string = '', forced:boolean = true):void {
+    sendLobbyLeave(lobby:Lobby, reason:string = '', forced:boolean = true):void {
         this.send({ cmd: 'lobby leave', lobby: lobby.getInfo(), reason: reason, forced: forced });
     }
 

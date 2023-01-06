@@ -11,12 +11,13 @@ import { FriendRequest, IFriendRequest } from '#schemas/friend_request';
 import Point from '#types/point';
 import IClient from '#types/client_properties';
 
-import Lobby from '#concepts/lobby';
+import Lobby, { lobbyGet } from '#concepts/lobby';
 import Room from '#concepts/room';
-import Party from '#concepts/party';
+import Party, { partyCreate, partyGet } from '#concepts/party';
 
 import PlayerEntity from '#entities/entity_types/player';
 import { SockType, Sock } from '#types/socktype';
+import MatchMaker from '#util/matchmaker';
 
 export type ClientInfo = {
     name: string;
@@ -34,6 +35,8 @@ export default class Client extends SendStuff implements IClient {
     lobby: Lobby = null; /** @type {Lobby} */
     room: Room = null; /** @type {Room} */
     party: Party = null; /** @type {Party} */
+
+    party_invites: string[] = [];
 
     account: IAccount = null; /** @type {Account} */
     profile: IProfile = null; /** @type {Profile} */
@@ -78,10 +81,11 @@ export default class Client extends SendStuff implements IClient {
         this.ping = -1;
     }
 
+    // some events
+
     /**
      * @param {Lobby} lobby
      */
-    // some events
     onLobbyJoin(lobby:Lobby) {
         this.sendLobbyJoin(lobby);
     }
@@ -91,37 +95,30 @@ export default class Client extends SendStuff implements IClient {
      * @param {string=} reason
      */
     onLobbyReject(lobby:Lobby, reason?:string) {
-        if (!reason)
-            reason = 'lobby is full!';
+        reason ??= 'lobby is full!';
         this.sendLobbyReject(lobby, reason);
     }
 
     /**
      * @param {Lobby} lobby
-     */
-    onLobbyLeave(lobby:Lobby) {
-        this.sendLobbyKick(lobby, 'you left the lobby!', false);
-    }
-    
-    /**
-     * @param {Lobby} lobby
      * @param {string=} reason
      * @param {boolean=} forced
      */
-    onLobbyKick(lobby:Lobby, reason?:string, forced?:boolean) {
-        if (!reason)
-            reason = '';
-        if (forced === null || forced === undefined)
-            forced = true;
-        this.sendLobbyKick(lobby, reason, forced);
+    onLobbyLeave(lobby:Lobby, reason:string, forced:boolean) {
+        this.sendLobbyLeave(lobby, reason, forced);
     }
 
-    onPartyLeave(party:Party) {
-        this.sendPartyLeave(party);
-    }
 
     onPartyJoin(party:Party) {
         this.sendPartyJoin(party);
+    }
+
+    onPartyReject(party:Party, reason:string = '') { // unable to join the party for some reason
+        this.sendPartyReject(party, reason);
+    }
+
+    onPartyLeave(party:Party, reason:string, forced:boolean) {
+        this.sendPartyLeave(party, reason, forced);
     }
 
     onLogin() { // this.account and this.profile are now defined
@@ -163,10 +160,10 @@ export default class Client extends SendStuff implements IClient {
 
         // if we found a room to join in the end
         if (room) {
-            if (this.room !== null) {
+            if (this.room !== null) { // either change rooms or
                 this.room.movePlayer(this, room);
             }
-            else {
+            else { // just join the new room
                 room.addPlayer(this);
             }
         }
@@ -190,8 +187,10 @@ export default class Client extends SendStuff implements IClient {
         this.save();
         
         // leave the lobby (if we're currently in one)
-        if (this.lobby !== null)
+        if (this.lobby)
             this.lobby.kickPlayer(this, 'disconnected', true);
+        if  (this.party)
+            this.party.kickMember(this, 'disconnected', true);
     }
 
 
@@ -205,6 +204,20 @@ export default class Client extends SendStuff implements IClient {
     }
 
     // Below are some preset functions (you probably don't want to change them
+
+
+    lobbyJoin(lobbyid?:string) {
+        var lobby:Lobby;
+        if (lobbyid) {
+            lobby = lobbyGet(lobbyid);
+        }
+        else {
+            lobby = MatchMaker.find_nonfull_lobby(this);
+        }
+
+        // it also sends the response
+        lobby.addPlayer(this);
+    }
 
     async getFriends():Promise<IProfile[]> {
         if (!this.logged_in)
@@ -329,6 +342,7 @@ export default class Client extends SendStuff implements IClient {
     }
 
 
+
     partyCreate() {
         if (this.party)
             this.partyLeave();
@@ -337,10 +351,22 @@ export default class Client extends SendStuff implements IClient {
     }
 
     partyLeave() {
+        if (!this.party) return;
 
+        this.party.kickMember(this);
     }
 
-    
+    partyInvite(user: Client) {
+        if (!this.party) return;
+
+        user.sendPartyInvite(this.party);
+        this.sendPartyInviteSent();
+    }
+
+    partyJoin(partyid: string) {
+        let party = partyGet(partyid);
+        party.addMember(this);
+    }
 
     /**
      * Save account and profile data to the DB
@@ -385,19 +411,55 @@ export default class Client extends SendStuff implements IClient {
         this.sendRegister('success');
     }
 
+
+    /**
+     * @param {string} username
+     * @param {string} password
+     */
+    tryLogin(username:string, password:string) {
+        let c = this;
+
+        Account.login(username, password)
+        .then(function(account:IAccount) {
+            // this also sends the message
+            c.login(account);
+        }).catch(function(reason) {
+            c.sendLogin('fail', reason);
+        });
+    }
+
+    /**
+     * @param {string} username
+     * @param {string} password
+     */
+    tryRegister(username:string, password:string) {
+        let c = this;
+
+        Account.register(username, password)
+        .then(function(account:IAccount) {
+            // this also sends the message
+            c.register(account);
+        }).catch(function(reason:Error) {
+            trace('error: ' + reason);
+            c.sendRegister('fail', reason.toString());
+        });
+    }
+
     /**
      * @param {Account} account
      */
     login(account:IAccount) {
+        let c = this;
         this.account = account;
+
         Profile.findOne({
             account_id: this.account._id
         }).then((profile) => {
             if (profile) {
                 this.profile = profile;
-                this.onLogin();
+                c.onLogin();
 
-                this.sendLogin('success');
+                c.sendLogin('success');
             }
             else {
                 trace('Error: Couldn\'t find a profile with these credentials!');

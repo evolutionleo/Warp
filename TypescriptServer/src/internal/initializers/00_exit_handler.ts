@@ -17,9 +17,7 @@ function onProcessExit(exitCode:number = undefined) {
     
     
     trace('Exiting the process...');
-    if (!this.noexit) {
-        process.exit();
-    }
+    process.exit();
 }
 
 // do something when app is closing

@@ -80,7 +80,7 @@ export type ProfileInfo = {
     name: string,
 
     online: boolean,
-    last_online: Date,
+    last_online: string,
 
     mmr: number
 };
@@ -93,7 +93,7 @@ export function getProfileInfo(p: IProfile):ProfileInfo {
         id: p.id,
         name: p.name,
         online: p.online,
-        last_online: p.last_online,
+        last_online: p.last_online.toISOString(),
         mmr: p.mmr
     };
 }

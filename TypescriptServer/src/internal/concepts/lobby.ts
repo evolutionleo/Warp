@@ -28,7 +28,7 @@ export type LobbyInfo = {
 }
 
 
-export function createLobby() { // returns the lobby instance
+export function lobbyCreate() { // returns the lobby instance
     var lobby = new Lobby();
 
     while(true) {
@@ -47,11 +47,15 @@ export function createLobby() { // returns the lobby instance
     return lobby;
 }
 
-export function findLobby(lobbyid:string) {
+export function lobbyGet(lobbyid:string) {
     return global.lobbies[lobbyid];
 }
 
-export function deleteLobby(lobbyid:string) {
+export function lobbyExists(lobbyid:string) {
+    return global.lobbies.hasOwnProperty(lobbyid);
+}
+
+export function lobbyDelete(lobbyid:string) {
     var lobby = global.lobbies[lobbyid];
     lobby.close();
 
@@ -121,7 +125,7 @@ export default class Lobby extends EventEmitter {
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
         player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
-        player.onLobbyKick(this, reason, forced);
+        player.onLobbyLeave(this, reason, forced);
         player.lobby = null;
 
 

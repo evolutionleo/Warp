@@ -10,7 +10,7 @@ export type PartyInfo = {
 };
 
 // use this instead of calling the new Party() contructor directly
-export function createParty(leader:Client):Party {
+export function partyCreate(leader:Client):Party {
     const party = new Party(leader);
 
     while(true) {
@@ -29,39 +29,51 @@ export function createParty(leader:Client):Party {
     return party;
 }
 
-export function findParty(partyid: string):Party {
+export function partyGet(partyid: string):Party {
     return global.parties[partyid];
 }
 
-export function deleteParty(partyid:string):void {
-    let party = global.parties[partyid];
-    party.disband();
-
-    delete global.parties[partyid];
+export function partyExists(partyid: string) {
+    return global.parties.hasOwnProperty(partyid);
 }
 
+export function partyDelete(partyid: string):void {
+    let party = global.parties[partyid];
+    party.disband();
+}
 
 
 export default class Party {
     partyid: string;
     members: Client[];
     leader: Client;
+    max_members: number; // inherited from config.party.max_members
 
     constructor(leader:Client) {
-        this.leader = leader;
         this.members = [];
+        this.max_members = global.config.party.max_members;
 
         this.addMember(leader);
+        this.leader = leader;
     }
 
     addMember(member: Client): void {
+        if (member.party === this) return;
+        else if (this.members.length >= this.max_members) {
+            member.onPartyReject(this, 'party full');
+            return;
+        }
+        else if (member.party) {
+            member.party.kickMember(member, 'changing parties', true);
+        }
+
         if (!this.isMember(member)) {
             this.members.push(member);
             member.party = this;
         }
     }
 
-    kickMember(member: Client): void {
+    kickMember(member: Client, reason: string = '', forced: boolean = true): void {
         if (this.isLeader(member)) {
             if (this.members.length == 1) { // if no one else left
                 this.leader = null;
@@ -72,11 +84,20 @@ export default class Party {
             }
         }
         this.members.splice(this.members.indexOf(member), 1);
+        member.onPartyLeave(this, reason, forced);
         member.party = null;
+
+        // delete the party ID if everyone left
+        if (this.members.length == 0)
+            this.delete();
     }
 
     disband() {
-        this.members.forEach(member => this.kickMember(member));
+        this.members.forEach(member => this.kickMember(member, 'party disbanded', true));
+    }
+
+    private delete() {
+        delete global.parties[this.partyid];
     }
 
     setLeader(leader: Client): void {

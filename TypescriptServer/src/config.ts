@@ -25,6 +25,9 @@ const args = minimist(process.argv.slice(2));
  * @property {string} room.starting_room
  * @property {number} room.rest_timeout
  * 
+ * @property {object} party
+ * @property {number} party.max_members
+ * 
  * @property {number} tps
  * 
  * @property {boolean} timestamps_enabled
@@ -84,6 +87,10 @@ const common_config = {
         rest_timeout: 0    // (seconds) - prevents rooms from processing entities
                             // when no players are present for a certain amount of time
                             // set to -1 to disable this feature
+    },
+
+    party: {
+        max_members: 5 // max party size
     },
 
     tps: 60, // tickrate

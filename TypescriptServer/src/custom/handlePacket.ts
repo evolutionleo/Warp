@@ -2,7 +2,7 @@ import trace from '#util/logging';
 import MatchMaker from '#util/matchmaker';
 import { Account, IAccount } from '#schemas/account';
 import Client from '#concepts/client';
-import Lobby, { findLobby } from '#concepts/lobby';
+import Lobby, { lobbyGet } from '#concepts/lobby';
 import Point from '#types/point';
 import semver from 'semver';
 import chalk from 'chalk';
@@ -78,25 +78,13 @@ export default async function handlePacket(c:Client, data:any) {
         // preset commands
         case 'login':
             var { username, password } = data;
-            Account.login(username, password)
-            .then(function(account:IAccount) {
-                // this also sends the message
-                c.login(account);
-            }).catch(function(reason) {
-                c.sendLogin('fail', reason);
-            });
+            c.tryLogin(username, password);
             break;
         case 'register':
             var { username, password } = data;
-            Account.register(username, password)
-            .then(function(account:IAccount) {
-                // this also sends the message
-                c.register(account);
-            }).catch(function(reason:Error) {
-                trace('error: ' + reason);
-                c.sendRegister('fail', reason.toString());
-            });
+            c.tryRegister(username, password);
             break;
+        
         case 'lobby list':
             c.sendLobbyList();
             break;
@@ -105,23 +93,35 @@ export default async function handlePacket(c:Client, data:any) {
             c.sendLobbyInfo(lobbyid);
             break;
         case 'lobby join':
-            var lobbyid = data.lobbyid;
-            var lobby:Lobby;
-            if (lobbyid) {
-                lobby = findLobby(lobbyid);
-            }
-            else {
-                lobby = MatchMaker.find_nonfull_lobby(c);
-            }
-
-            // it also sends the response
-            lobby.addPlayer(c);
+            c.lobbyJoin(data.lobbyid);
             break;
         case 'lobby leave':
             var lobby:Lobby = c.lobby;
             if (lobby !== null) {
                 lobby.kickPlayer(c, 'you left the lobby', false);
             }
+            break;
+        
+        case 'party join':
+            var partyid = data.partyid;
+            c.partyJoin(partyid);
+            break;
+        case 'party leave':
+            if (!c.party) return;
+            c.partyLeave();
+            break;
+        case 'party disband':
+            if (!c.party) return;
+            if (!c.party.isLeader(c)) return;
+
+            c.party.disband();
+            break;
+        case 'party invite':
+            var profileid = data.profileid;
+            var user = global.clients.find(u => u.profile.id === profileid);
+
+            if (user)
+                c.partyInvite(user);
             break;
         
         case 'room transition':
