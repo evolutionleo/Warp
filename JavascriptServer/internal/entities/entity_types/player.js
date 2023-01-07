@@ -26,11 +26,11 @@ export default class PlayerEntity extends PhysicsEntity {
     type = PlayerEntity.type;
     object_name = PlayerEntity.object_name;
     
-    collisionType = 'discrete';
+    collisionType = PhysicsEntity.collisionType.discrete;
     preciseCollisions = true;
-    outsideRoomAction = 'wrap';
+    outsideRoomAction = PhysicsEntity.outsideRoomAction.wrap;
     
-    stuckAction = 'stop';
+    stuckAction = PhysicsEntity.stuckAction.stop;
     
     sendEveryTick = true;
     

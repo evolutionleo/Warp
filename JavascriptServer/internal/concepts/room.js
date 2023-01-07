@@ -93,7 +93,7 @@ class Room extends EventEmitter {
         
         entities.forEach(entity => {
             const etype = global.entityNames[entity.type];
-            if (etype.type == 'Unknown') { // entity type doesn't exist
+            if (etype.type === 'Unknown') { // entity type doesn't exist
                 trace(chalk.yellowBright('Warning: Entity of object type "' + entity.object_name + '" not found!'));
                 return;
             }

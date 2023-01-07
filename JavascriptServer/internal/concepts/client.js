@@ -5,7 +5,12 @@ import chalk from 'chalk';
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
-    constructor(socket, type = 'tcp') {
+    static type = {
+        tcp: 'tcp',
+        ws: 'ws',
+    };
+
+    constructor(socket, type = Client.tcp) {
         super(socket, type);
         
         this.type = type;

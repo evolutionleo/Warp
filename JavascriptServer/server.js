@@ -29,8 +29,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
 
 // because sync/order matters
-for (var i = 0; i < init_files.length; i++) {
-    var file = init_files[i];
+for (let i = 0; i < init_files.length; i++) {
+    const file = init_files[i];
     trace(chalk.blueBright('loading initializer:', file));
     await import("file://" + __dirname + '/internal/initializers/' + file);
 }
@@ -47,7 +47,7 @@ trace(chalk.greenBright(`Running ${config.meta.game_name} ${config.meta.game_ver
 const server = createServer(function (socket) {
     trace(chalk.blueBright("Socket connected!"));
     
-    var c = new Client(socket);
+    const c = new Client(socket);
     global.clients.push(c); // add the client to clients list (unnecessary)
     
     // Bind functions on events
@@ -112,7 +112,7 @@ if (global.config.ws_enabled) {
     ws_server.on('connection', (socket) => {
         trace(chalk.blueBright("WebSocket connected!"));
         
-        var c = new Client(socket, 'ws');
+        var c = new Client(socket, Client.type.ws);
         global.clients.push(c); // add the client to clients list (unnecessary)
         
         // Bind functions on events

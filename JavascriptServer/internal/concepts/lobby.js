@@ -4,7 +4,7 @@ import { EventEmitter } from 'events';
 
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
-    lobbyid = "-1"; // assigned when created
+    lobbyid = '-1'; // assigned when created
     status = 'open';
     players = [];
     rooms = [];

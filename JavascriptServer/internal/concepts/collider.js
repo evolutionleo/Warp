@@ -2,6 +2,12 @@
 
 // a wrapper around ICollider to get access to .entity
 export class Collider {
+    // list of all types of collisions used
+    static type = {
+        polygon: 'polygon',
+        circle: 'circle',
+    };
+    
     entity; // this is what all of this is for
     collider;
     

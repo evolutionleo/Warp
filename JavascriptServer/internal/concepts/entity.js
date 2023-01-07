@@ -33,7 +33,7 @@ class Entity extends EventEmitter {
     
     
     collider; // a polygon
-    collider_type = 'polygon';
+    collider_type = Collider.type.polygon;
     collider_radius = this.width / 2; // only relevant when collider_type is 'circle'
     collider_vertices = []; // if this is not overridden, a default rectangle collider will be used
     polygon_set = false;

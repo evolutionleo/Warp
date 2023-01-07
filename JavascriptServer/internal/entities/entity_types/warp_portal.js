@@ -1,6 +1,13 @@
-import Entity from "#concepts/entity";
+import Entity from '#concepts/entity';
+import Collider from '#concepts/collider';
 
 export default class WarpPortal extends Entity {
+    static direction = {
+        entrance: 'Entrance',
+        exit: 'Exit',
+        both: 'Both'
+    };
+
     isStatic = true;
     isSolid = false;
     // isTrigger = true;
@@ -15,7 +22,7 @@ export default class WarpPortal extends Entity {
         y: 32
     };
     
-    collider_type = 'polygon';
+    collider_type = Collider.type.polygon;
     
     
     exit_portal = null;
@@ -29,13 +36,13 @@ export default class WarpPortal extends Entity {
     Room_to = null; // with the Capital letter
     
     get enterable() {
-        return (this.portal_type === 'Entrance'
-            || this.portal_type === 'Both');
+        return (this.portal_type === WarpPortal.direction.entrance
+            || this.portal_type === WarpPortal.direction.both);
     }
     
     get exitable() {
-        return (this.portal_type === 'Exit'
-            || this.portal_type === 'Both');
+        return (this.portal_type === WarpPortal.direction.exit
+            || this.portal_type === WarpPortal.direction.both);
     }
     
     findExitPortal() {
