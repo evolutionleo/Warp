@@ -34,7 +34,8 @@ process.on('SIGUSR2', onProcessExit);
 
 // catches uncaught exceptions
 process.on('uncaughtException', function(e) {
-    trace(chalk.redBright(e));
+    trace(chalk.redBright(e.message));
+    trace(chalk.redBright(e.stack ?? '(no callstack)'));
     onProcessExit();
 });
 
