@@ -1,10 +1,14 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "oWarpPortal",
   "spriteId": {
     "name": "sWarpPortal",
     "path": "sprites/sWarpPortal/sWarpPortal.yy",
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -24,26 +28,22 @@
   "physicsKinematic": false,
   "physicsShapePoints": [],
   "eventList": [
-    {"isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,"resourceVersion":"1.0","name":"","tags":[],"resourceType":"GMEvent",},
+    {"resourceType":"GMEvent","resourceVersion":"1.0","name":"","isDnD":false,"eventNum":0,"eventType":3,"collisionObjectId":null,},
   ],
   "properties": [
-    {"varType":6,"value":"\"Entrance\"","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"portal_type","varType":6,"value":"\"Entrance\"","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[
         "\"Entrance\"",
         "\"Exit\"",
         "\"Both\"",
-      ],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"portal_type","tags":[],"resourceType":"GMObjectProperty",},
-    {"varType":1,"value":"0","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],"resourceVersion":"1.0","name":"warp_id","tags":[],"resourceType":"GMObjectProperty",},
-    {"varType":5,"value":"undefined","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[
+      ],"multiselect":false,"filters":[],},
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"warp_id","varType":1,"value":"0","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[],},
+    {"resourceType":"GMObjectProperty","resourceVersion":"1.0","name":"room_to","varType":5,"value":"undefined","rangeEnabled":false,"rangeMin":0.0,"rangeMax":10.0,"listItems":[],"multiselect":false,"filters":[
         "GMRoom",
-      ],"resourceVersion":"1.0","name":"room_to","tags":[],"resourceType":"GMObjectProperty",},
+      ],},
   ],
   "overriddenProperties": [],
   "parent": {
     "name": "Gameplay",
     "path": "folders/Warp/Demo/Objects/Gameplay.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "oWarpPortal",
-  "tags": [],
-  "resourceType": "GMObject",
 }

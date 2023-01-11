@@ -1,10 +1,14 @@
 {
+  "resourceType": "GMObject",
+  "resourceVersion": "1.0",
+  "name": "oWall",
   "spriteId": {
     "name": "sWall",
     "path": "sprites/sWall/sWall.yy",
   },
   "solid": false,
   "visible": true,
+  "managed": true,
   "spriteMaskId": null,
   "persistent": false,
   "parentObjectId": {
@@ -30,10 +34,7 @@
     "name": "Gameplay",
     "path": "folders/Warp/Demo/Objects/Gameplay.yy",
   },
-  "resourceVersion": "1.0",
-  "name": "oWall",
   "tags": [
     "solid",
   ],
-  "resourceType": "GMObject",
 }
