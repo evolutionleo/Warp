@@ -9,11 +9,11 @@
     },
     "type": "module",
     "scripts": {
-        "dev": "node . --env=dev",
-        "development": "node . --env=dev",
+        "dev": "node --inspect . --env=dev",
+        "development": "node --inspect . --env=dev",
         "prod": "node . --env=prod",
         "production": "node . --env=prod",
-        "profile": "node --prof . --env=dev",
+        "profile": "node --prof --inspect . --env=dev",
         "postprofile": "node --profile"
     },
     "dependencies": {
