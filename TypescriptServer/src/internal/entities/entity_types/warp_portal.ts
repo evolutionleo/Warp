@@ -28,7 +28,7 @@ export default class WarpPortal extends Entity {
     portal_type:WarpPortalType|string = 'Entrance';
     room_to:string = undefined;
     warp_id:number = undefined; // to link the exit portal with an entrance
-    continuous_collision:PlayerEntity[] = [];
+    continuous_collision:{ e: PlayerEntity, t: number }[] = [];
 
     propNames = [ 'portal_type', 'room_to', 'warp_id' ];
 
@@ -65,16 +65,21 @@ export default class WarpPortal extends Entity {
 
         player.entity.x = this.exit_portal.x;
         player.entity.y = this.exit_portal.y;
-        this.exit_portal.continuous_collision.push(player.entity);
+        this.exit_portal.continuous_collision.push({e: player.entity, t: 1 });
     }
 
     update() {
         if (this.enterable) {
             let players = this.placeMeetingAll(this.x, this.y, 'Player') as PlayerEntity[];
-            this.continuous_collision = this.continuous_collision.filter(c => players.includes(c));
+            // this.continuous_collision = this.continuous_collision.filter(c => players.includes(c));
+            this.continuous_collision = this.continuous_collision.filter(c => {
+                if (!this.checkCollision(this.x, this.y, c.e)) c.t--;
+                return c.t >= 0;
+            });
+
             // teleport
             players.forEach(player => {
-                if (!this.continuous_collision.includes(player))
+                if (this.continuous_collision.findIndex(c => (c.e == player)) == -1)
                     this.teleport(player.client);
             })
         }
