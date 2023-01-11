@@ -86,7 +86,7 @@ if you write a wrapper
 - You can access the gameplay data of each client in `c.profile.%insert_variable%`, it will save automatically
 - If you want to add new properties, extend the schemas in the `schemas/` folder
 
-## Runnning
+## Running
 - Client runs as a usual GMS2 project
 - To start the server - navigate to the folder and execute `node .` 
 
