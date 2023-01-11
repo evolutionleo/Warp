@@ -7,8 +7,8 @@ import * as SAT from 'sat';
 import Collider from '#concepts/collider';
 
 import { v4 as uuidv4 } from 'uuid';
-import Client from "./client";
-import Room from "./room";
+import Client from "#concepts/client";
+import Room from "#concepts/room";
 
 
 import PlayerEntity from "#entity/player";
@@ -150,7 +150,7 @@ class Entity extends EventEmitter {
     }
 
     public create() {
-        if (this.tags.includes('solid') || this.isSolid) {
+        if (this.isSolid) {
             this.tree.insert(this.collider);
         }
     }
@@ -202,7 +202,7 @@ class Entity extends EventEmitter {
     }
 
     public regenerateCollider(x = this.x, y = this.y) {
-        if (this.tags.includes('solid') || this.isSolid)
+        if (this.isSolid)
             this.tree.remove(this.collider);
         
         if (this.collider_type === 'polygon') {
@@ -230,7 +230,7 @@ class Entity extends EventEmitter {
 
         this.collider.entity = this;
 
-        if (this.tags.includes('solid') || this.isSolid)
+        if (this.isSolid)
             this.tree.insert(this.collider);
         // this.tree.updateBody(this.collider);
     }
@@ -254,8 +254,14 @@ class Entity extends EventEmitter {
                     { x: 1, y: 1 }
                 ]);
             }
-            this.tree.updateBody(this.collider);
+            if (this.isSolid)
+                this.tree.updateBody(this.collider);
         }
+    }
+
+    public checkCollision(x: number = this.x, y: number = this.y, e:Entity):boolean {
+        this.updateCollider(x, y);
+        return this.tree.checkCollision(this.collider, e.collider);
     }
 
     public placeMeeting(x:number = this.x, y:number = this.y, type?:EntityType|string):boolean {
@@ -278,8 +284,7 @@ class Entity extends EventEmitter {
 
     public placeMeetingAll(x:number = this.x, y:number = this.y, type?:EntityType|string):Entity[] {
         // let bbox = this.getBBox(x, y);
-        this.collider.pos.x = x;
-        this.collider.pos.y = y;
+        this.updateCollider(x, y);
 
         let candidates = this.tree.getPotentials(this.collider) as Collider[];
         return candidates.filter(
@@ -355,12 +360,6 @@ class Entity extends EventEmitter {
     public send() {
         const data = this.bundle();
         this.room.bundle.push(data);
-        // if (client === undefined) {
-        //     this.room.broadcast(data);
-        // }
-        // else {
-        //     client.send(data);
-        // }
     }
 
 
@@ -392,6 +391,9 @@ class Entity extends EventEmitter {
     }
 
     public addTag(tag:string) {
+        if (tag == 'solid')
+            this.isSolid = true;
+        
         return this.tags.push(tag);
     }
 
