@@ -74,8 +74,8 @@ class Room extends EventEmitter {
 
     map:GameMap;
 
-    full_bundle:any[]; // all the entities packed
-    bundle:any[]; // updated entities that need sending
+    full_bundle:any[] = []; // all the entities packed
+    bundle:any[] = []; // updated entities that need sending
 
     rest_timeout:number = 0; // disables processing entities when no players are present for config.room_rest_timeout *seconds*
 
