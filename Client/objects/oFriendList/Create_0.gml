@@ -1,0 +1,3 @@
+/// @desc
+
+canvas = new SUICanvas()

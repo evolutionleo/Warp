@@ -5,6 +5,8 @@ password = ""
 
 canvas = new SUICanvas()
 
+canvas.appendChild(new SUIBackButton())
+
 txt_title = canvas.appendChild(new SUITitle(0, room_height/2 - 120, "Login"))
 txt_title.set("center", room_width/2)
 

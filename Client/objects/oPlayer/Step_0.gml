@@ -17,14 +17,14 @@ if (!remote) {
 }
 
 
-if (kjump_press and grounded()) {
-	jump()
-}
+//if (kjump_press and grounded()) {
+//	jump()
+//}
 
-if (!kjump and !cutJump and !grounded() and spd.y <= -1) {
-	spd.y *= .5
-	cutJump = true
-}
+//if (!kjump and !cutJump and !grounded() and spd.y <= -1) {
+//	spd.y *= .5
+//	cutJump = true
+//}
 
 
 // Inherit the parent event
