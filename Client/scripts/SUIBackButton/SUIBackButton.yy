@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Custom",
-    "path": "folders/Warp/Demo/SimpleUI/Scripts/SimpleUI Elements/Custom.yy",
+    "path": "folders/Warp Demo/SimpleUI/Scripts/SimpleUI Elements/Custom.yy",
   },
 }

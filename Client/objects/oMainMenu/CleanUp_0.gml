@@ -1,3 +1,3 @@
 /// @desc
 
-canvas.deleteCanvas()
+global.canvas.deleteCanvas()

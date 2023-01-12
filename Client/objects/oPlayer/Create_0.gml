@@ -4,6 +4,7 @@
 event_inherited();
 
 
+name = ""
 
 walksp = 7
 jumpHeight = 12.5

@@ -94,6 +94,6 @@
   },
   "parent": {
     "name": "Gameplay",
-    "path": "folders/Warp/Demo/Rooms/Gameplay.yy",
+    "path": "folders/Warp Demo/Rooms/Gameplay.yy",
   },
 }

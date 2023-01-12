@@ -72,6 +72,6 @@
   "nineSlice": null,
   "parent": {
     "name": "SimpleUI",
-    "path": "folders/Warp/Demo/SimpleUI.yy",
+    "path": "folders/Warp Demo/SimpleUI.yy",
   },
 }

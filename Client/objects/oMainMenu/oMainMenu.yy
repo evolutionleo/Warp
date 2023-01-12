@@ -29,6 +29,6 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Menu",
-    "path": "folders/Warp/Demo/Objects/Menu.yy",
+    "path": "folders/Warp Demo/Objects/Menu.yy",
   },
 }

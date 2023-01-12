@@ -37,7 +37,7 @@
   "overriddenProperties": [],
   "parent": {
     "name": "Gameplay",
-    "path": "folders/Warp/Demo/Objects/Gameplay.yy",
+    "path": "folders/Warp Demo/Objects/Gameplay.yy",
   },
   "tags": [
     "solid",

@@ -73,6 +73,6 @@
   "nineSlice": null,
   "parent": {
     "name": "Gameplay",
-    "path": "folders/Warp/Demo/Sprites/Gameplay.yy",
+    "path": "folders/Warp Demo/Sprites/Gameplay.yy",
   },
 }

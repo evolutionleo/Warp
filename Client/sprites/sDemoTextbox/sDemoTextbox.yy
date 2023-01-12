@@ -69,6 +69,6 @@
   "nineSlice": null,
   "parent": {
     "name": "UI",
-    "path": "folders/Warp/Demo/Sprites/UI.yy",
+    "path": "folders/Warp Demo/Sprites/UI.yy",
   },
 }

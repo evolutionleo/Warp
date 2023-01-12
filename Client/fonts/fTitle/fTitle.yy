@@ -253,6 +253,6 @@
   "maintainGms1Font": false,
   "parent": {
     "name": "Fonts",
-    "path": "folders/Warp/Demo/Fonts.yy",
+    "path": "folders/Warp Demo/Fonts.yy",
   },
 }

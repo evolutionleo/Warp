@@ -13,8 +13,8 @@ network_set_config(network_config_use_non_blocking_socket, true)
 // toggle this off if you have some specific case where you need to keep the entities that are in the room locally
 #macro PURGE_ENTITIES_ON_ROOM_START true
 
-// a value between 0 and 1
-#macro POS_INTERPOLATION .5
+// a value between 0 and 1, bigger number = less smooth, but more accurate
+#macro POS_INTERPOLATION .2
 // instantly teleports if the distance is > than this
 #macro POS_INTERP_THRESH 300
 
@@ -37,10 +37,12 @@ enum SOCKET_TYPES {
 #macro Default:DUAL_INSTANCE true
 
 // Production
-#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
+//#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
+#macro Prod:IP   "195.2.80.50" // your external server IP
 #macro Prod:PORT "1337"
 #macro Prod:WS_PORT "3000"
-#macro Prod:DUAL_INSTANCE false
+#macro Prod:DUAL_INSTANCE true
+//#macro Prod:DUAL_INSTANCE false
 
 // Debug/Development
 #macro Dev:IP   "127.0.0.1"	// localhost

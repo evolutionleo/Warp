@@ -50,7 +50,7 @@
   },
   "parent": {
     "name": "Menus",
-    "path": "folders/Warp/Demo/Rooms/Menus.yy",
+    "path": "folders/Warp Demo/Rooms/Menus.yy",
   },
   "tags": [
     "menu",

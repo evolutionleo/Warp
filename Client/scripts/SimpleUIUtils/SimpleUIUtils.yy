@@ -6,6 +6,6 @@
   "isCompatibility": false,
   "parent": {
     "name": "Scripts",
-    "path": "folders/Warp/Demo/SimpleUI/Scripts.yy",
+    "path": "folders/Warp Demo/SimpleUI/Scripts.yy",
   },
 }
