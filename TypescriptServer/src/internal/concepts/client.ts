@@ -124,6 +124,7 @@ export default class Client extends SendStuff implements IClient {
     onLogin() { // this.account and this.profile are now defined
         this.profile.online = true;
         this.profile.last_online = new Date();
+        this.name = this.profile.name;
 
         this.save();
     }

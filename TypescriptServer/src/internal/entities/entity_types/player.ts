@@ -63,6 +63,9 @@ export default class PlayerEntity extends PhysicsEntity {
     }
 
     client:Client;
+    
+    get name() { return this.client.name; }
+    propNames = ['name'];
 
     inputs:IPlayerInputs = defaultInputs;
 
