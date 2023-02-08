@@ -1,11 +1,11 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "SimpleUIBinding",
+  "name": "unix_timestamp",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Warp Demo/SimpleUI/Scripts.yy",
+    "name": "util",
+    "path": "folders/Warp/Scripts/util.yy",
   },
 }

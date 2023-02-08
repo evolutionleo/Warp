@@ -2,6 +2,7 @@
 
 username = ""
 password = ""
+global.login_status = ""
 
 global.canvas = new SUICanvas()
 
@@ -9,6 +10,9 @@ global.canvas.appendChild(new SUIBackButton())
 
 txt_title = global.canvas.appendChild(new SUITitle(0, room_height/2 - 120, "Login"))
 txt_title.set("center", room_width/2)
+
+txt_status = global.canvas.appendChild(new SUIText(0, 100, SUIBind("global.login_result"), { halign: fa_center }))
+txt_status.set("center", room_width/2)
 
 var tb_w = 192 * 1.5
 var tb_h = 48 * 1.5
