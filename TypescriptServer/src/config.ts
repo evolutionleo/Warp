@@ -57,7 +57,7 @@ const args = minimist(process.argv.slice(2));
 
 const common_config = {
     meta: {
-        game_name: 'OnlineGame',
+        game_name: 'Warp Game',
         game_version: 'v1.0.0',
         warp_version: 'v5.0.0',
 
@@ -131,7 +131,7 @@ const prod_config = {
     ssl_cert_path: '/etc/letsencrypt/live/example.com/cert.pem',
     ssl_key_path: '/etc/letsencrypt/live/example.com/privkey.pem',
 
-    db: args.db || 'mongodb://127.0.0.1:27017/online-game', // by default it uses the same db name for dev/prod, but
+    db: args.db || 'mongodb://127.0.0.1:27017/warp-game', // by default it uses the same db name for dev/prod, but
                                                              // you can add a postfix at the end of the name to separate them
     shell_enabled: false,
     verbose_lag: false,
@@ -154,7 +154,7 @@ const dev_config = {
     ssl_cert_path: '',
     ssl_key_path: '',
 
-    db: args.db || 'mongodb://127.0.0.1:27017/online-game',
+    db: args.db || 'mongodb://127.0.0.1:27017/warp-game',
     
     shell_enabled: true,
     verbose_lag: true,
