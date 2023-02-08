@@ -3,6 +3,10 @@
 ///@arg *socket
 // most of the time you just want to send the data to oClient.socket
 function network_write(data, sock = oClient.sock) {
+	if (TIMESTAMPS_ENABLED) {
+		data.t = (get_timer() / 1000) // ms since the client started
+	}
+	
 	// the data buffer
 	var buff = snap_to_messagepack(data)
 	// size of the data

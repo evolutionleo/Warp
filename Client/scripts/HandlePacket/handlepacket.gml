@@ -24,10 +24,10 @@ function handlePacket(data) {
 			}
 			break;
 		case "ping":
-			sendPong(data.t)
+			sendPong(data.T)
 			break
 		case "pong":
-			var t = data.t
+			var t = data.T
 			//var new_t = current_time
 			var new_t = round(get_timer() / 1000)
 			var ping = new_t - t
@@ -40,29 +40,33 @@ function handlePacket(data) {
 			var status = data.status
 			if (status == "fail") {
 				var reason = data.reason
-				show_message_async("Login failed. Reason: " + reason)
+				global.login_status = ("Login failed. Reason: " + reason)
 			}
 			else if (status == "success") {
 				global.profile = data.profile
 				global.account = data.account
-				show_message_async("Login success!")
+				global.login_result = ("Login success!")
 			}
 			else {
-				show_message("Error: invalid login status")
+				global.login_result = ("Error: invalid login status")
 			}
+			
+			//show_message_async(global.login_result)
 			
 			break
 		case "register":
 			var status = data.status
 			if (status == "fail") {
-				show_message_async("Registration failed.")
+				global.login_result = ("Registration failed.")
 			}
 			else if (status == "success") {
-				show_message_async("Registration successful! You can now login.")
+				global.login_result = ("Registration successful! You can now login.")
 			}
 			else {
-				show_message("Error: invalid registration status")
+				global.login_result = ("Error: invalid registration status")
 			}
+			
+			//show_message_async(global.login_result)
 			
 			break
 		case "lobby list":
@@ -202,6 +206,11 @@ function handlePacket(data) {
 				var props = entity.props
 				var existed = instance_exists(find_by_uuid(uuid, type))
 				var inst = find_or_create(uuid, type)
+				
+				if (inst.last_t > data.t) {
+					continue
+				}
+				inst.last_t = data.t
 				
 			
 				// if it was just created - it's remote

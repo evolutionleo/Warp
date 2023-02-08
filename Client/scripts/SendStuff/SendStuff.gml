@@ -9,11 +9,11 @@ function sendMessage(msg) {
 
 function sendPing() {
 	//send({ cmd: "ping", t: current_time })
-	send({ cmd: "ping", t: round(get_timer() / 1000) })
+	send({ cmd: "ping", T: round(get_timer() / 1000) })
 }
 
-function sendPong(t) {
-	send({ cmd: "pong", t: t })
+function sendPong(T) {
+	send({ cmd: "pong", T: T })
 }
 
 // Preset functions:

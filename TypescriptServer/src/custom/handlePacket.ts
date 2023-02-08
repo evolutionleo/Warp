@@ -62,12 +62,12 @@ export default async function handlePacket(c:Client, data:any) {
             c.sendMessage(data.msg+' indeed');
             break;
         case 'ping':
-            c.sendPong(data.t);
+            c.sendPong(data.T);
             break;
         case 'pong':
-            let t = data.t;
+            let t = data.T;
             let new_t = new Date().getTime();
-            let dt = new_t - t;
+            let dt = new_t - t - global.start_time;
 
             c.ping = dt;
 

@@ -40,10 +40,12 @@ export default abstract class SendStuff implements IClient {
 
     /** 
      * basic send
-     * @param {object} data 
+     * @param {any} data 
      */
-    write(data:object) {
-        // console.log(Object.keys(packet));
+    write(data:any) {
+        if (global.config.timestamps_enabled) { // { t: ms passed since the server started }
+            data.t = Date.now() - global.start_time;
+        }
 
         if (this.type === 'ws') {
             (this.socket as ws).send(packet.ws_build(data));
@@ -131,15 +133,15 @@ export default abstract class SendStuff implements IClient {
 
 
     sendPing() {
-        let t = new Date().getTime() - global.start_time;
-        this.send({ cmd: 'ping', t });
+        let T = new Date().getTime() - global.start_time;
+        this.send({ cmd: 'ping', T });
     }
 
     /**
-     * @param {number} t 
+     * @param {number} T
      */
-    sendPong(t) {
-        this.send({ cmd: 'pong', t });
+    sendPong(T) {
+        this.send({ cmd: 'pong', T });
     }
 
 

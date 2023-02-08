@@ -18,6 +18,8 @@ network_set_config(network_config_use_non_blocking_socket, true)
 // instantly teleports if the distance is > than this
 #macro POS_INTERP_THRESH 300
 
+#macro TIMESTAMPS_ENABLED true
+
 
 #macro SOCKET_TYPE SOCKET_TYPES.WS
 
