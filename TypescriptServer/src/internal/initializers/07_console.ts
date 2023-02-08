@@ -5,9 +5,13 @@ if (global.config.shell_enabled) {
     trace('starting the eval console...');
 
     const rl = readline.createInterface(process.stdin, process.stdout);
-    rl.on('line', (line) => {
+    rl.on('line', async (line) => {
         try {
-            console.log(eval(line));
+            let result = eval(line);
+            while (result instanceof Promise) {
+                result = await result;
+            }
+            console.log(result);
         }
         catch(error) {
             console.error(error);
