@@ -31,6 +31,7 @@ export default class Client extends SendStuff implements IClient {
     name: string = '';
     socket: Sock = null; /** @type {import('ws').WebSocket | import('net').Socket} */
     type: SockType; /** @type {'ws' | 'tcp'} */
+    ip: string;
     
     lobby: Lobby = null; /** @type {Lobby} */
     room: Room = null; /** @type {Room} */
@@ -284,10 +285,10 @@ export default class Client extends SendStuff implements IClient {
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         if (!this.logged_in) return null;
 
-        let sender_id = this.profile._id;
-        let receiver_id = user_to._id;
+        let sender = this.profile._id;
+        let receiver = user_to._id;
 
-        return await FriendRequest.create({ sender_id, receiver_id });
+        return await FriendRequest.create({ sender, receiver });
     }
 
     private async friendRequestFind(user_from:Client|IProfile, user_to:Client|IProfile) {

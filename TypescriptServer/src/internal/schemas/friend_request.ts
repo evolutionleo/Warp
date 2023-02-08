@@ -44,10 +44,10 @@ friendRequestSchema.statics.requestExists = async function(sender:string, receiv
     return !!await FriendRequest.exists({ sender, receiver });
 }
 
-friendRequestSchema.statics.accept = async function(_id:ObjectId|string):Promise<void> {
-    let req:IFriendRequest = await FriendRequest.findById(_id);
+friendRequestSchema.statics.accept = async function(req_id:ObjectId|string):Promise<void> {
+    let req:IFriendRequest = await FriendRequest.findById(req_id);
     await Profile.findByIdAndUpdate(req.sender, { $push: { friends: req.receiver } });
-    await Profile.findByIdAndUpdate(req.receiver, { $push: { friends: req.sender  } });
+    await Profile.findByIdAndUpdate(req.receiver, { $push: { friends: req.sender } });
     await req.deleteOne();
 }
 
