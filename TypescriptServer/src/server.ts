@@ -49,6 +49,7 @@ const server = createServer(function(socket) {
     
     var c = new Client(socket);
     global.clients.push(c); // add the client to clients list (unnecessary)
+    c.ip = socket.remoteAddress;
     
     // Bind functions on events
 
@@ -109,11 +110,12 @@ const ws_server = new ws.WebSocketServer({
     server: http_server,
 });
 
-ws_server.on('connection', (socket) => {
+ws_server.on('connection', (socket, r) => {
     trace(chalk.blueBright("WebSocket connected!"));
 
     var c = new Client(socket, 'ws');
     global.clients.push(c); // add the client to clients list (unnecessary)
+    c.ip = r.socket.remoteAddress;
 
     // Bind functions on events
 
