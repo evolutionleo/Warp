@@ -66,8 +66,7 @@ class Room extends EventEmitter {
     entities:EntityList/*Entity[]*/ = new EntityList();
     tree:System;
     players:Client[] = [];
-    recentlyJoined:Client[] = [];
-    recentlyJoinedTimer = 120; // 2 seconds?
+    recentlyJoinedTimer:number = this.tickrate * 2; // 2 seconds?
 
     tick_counter:number = 0; // counts 
 
@@ -181,26 +180,30 @@ class Room extends EventEmitter {
         });
         this.emit('tick');
 
-        // broadcast the min bundle (only changed entities)
-        if (this.bundle.length > 0)
-            this.broadcast({ cmd: 'entities', room: this.map.room_name, entities: this.bundle });
+        // broadcast
+        let bundle = { cmd: 'entities', room: this.map.room_name, full: false, entities: this.bundle };
+        let full_bundle = { cmd: 'entities', room: this.map.room_name, full: true, entities: this.full_bundle };
+
+        this.players.forEach(player => {
+            // we will send everything every frame to those who joined recently (so that they 100% get it)
+            if (player.roomJoinTimer > 0) {
+                player.send(full_bundle);
+                player.roomJoinTimer--;
+            }
+            // broadcast the min bundle (only changed entities) to everyone else
+            else if (this.bundle.length > 0)
+                player.send(bundle);
+
+        });
+
 
         let t_afterTick = Date.now(); // measure the tick time in ms
         let t_tick = t_afterTick - t_beforeTick;
-
-        // trace('tick:', t_tick);
 
         // we are lagging!
         if (global.config.verbose_lag && t_tick > (1000 / this.tickrate)) {
             trace(chalk.red('lag detected: this tick took ' + t_tick + ' milliseconds.'));
         }
-
-
-        // we will send everything every frame to those who joined recently (so that they 100% get it)
-        this.recentlyJoined.forEach((player) => {
-            player.send({ cmd: 'entities', room: this.map.room_name, entities: this.full_bundle });
-        });
-        this.recentlyJoined = [];
     }
 
     // entity stuff
@@ -242,12 +245,6 @@ class Room extends EventEmitter {
         if (idx !== -1)
             this.players.splice(idx, 1);
         
-        // remove from this.recentlyJoined
-        idx = this.recentlyJoined.indexOf(player);
-        if (idx !== -1)
-            this.recentlyJoined.splice(idx, 1);
-        
-        
         player.room = null;
         if (player.entity !== null) {
             player.entity.remove();
@@ -285,7 +282,7 @@ class Room extends EventEmitter {
             player.entity = player_entity;
         }
         // add to the recently joined list to receive the old entities
-        this.recentlyJoined.push(player);
+        player.roomJoinTimer = this.recentlyJoinedTimer;
         
         this.emit('player join', player);
     }

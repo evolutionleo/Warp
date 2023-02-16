@@ -92,6 +92,7 @@
     {"id":{"name":"oPing","path":"objects/oPing/oPing.yy",},"order":1,},
     {"id":{"name":"buffer_visualize","path":"scripts/buffer_visualize/buffer_visualize.yy",},"order":0,},
     {"id":{"name":"sWarpPortal","path":"sprites/sWarpPortal/sWarpPortal.yy",},"order":3,},
+    {"id":{"name":"oEntityManager","path":"objects/oEntityManager/oEntityManager.yy",},"order":0,},
     {"id":{"name":"SUIBox","path":"scripts/SUIBox/SUIBox.yy",},"order":1,},
     {"id":{"name":"oPhysicsEntity","path":"objects/oPhysicsEntity/oPhysicsEntity.yy",},"order":1,},
     {"id":{"name":"SimpleUIUtils","path":"scripts/SimpleUIUtils/SimpleUIUtils.yy",},"order":5,},

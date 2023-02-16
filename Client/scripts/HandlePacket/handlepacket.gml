@@ -184,9 +184,7 @@ function handlePacket(data) {
 		
 		// a list of entities
 		case "entities":
-			if (use_timestamps(data)) break;
-		
-			//trace("received entities from room %: %", data.room, array_length(data.entities))
+			//if (use_timestamps(data)) break;
 			
 			// don't spawn in entities if we're not playing (e.x in menus)
 			if (!global.playing) {
@@ -208,78 +206,24 @@ function handlePacket(data) {
 				break
 			}
 			
+			if (!instance_exists(oEntityManager))
+				instance_create_depth(0, 0, 0, oEntityManager)
 			
-			var entities = data.entities
-			var l = array_length(entities)
-			
-			// for each entity
-			for(var i = 0; i < l; i++) {
-				var entity = entities[i]
-				
-				var uuid = entity.id
-				var type = asset_get_index(entity.object_name)
-				var props = entity.props
-				var existed = instance_exists(find_by_uuid(uuid, type))
-				var inst = find_or_create(uuid, type)
-
-				inst.last_t = data.t
-				
-			
-				// if it was just created - it's remote
-				if (!existed) {
-					inst.remote = true
-					inst.x = entity.x
-					inst.y = entity.y
-				}
-				
-				if (uuid == global.player_uuid) {
-					inst.remote = false
-				}
-			
-				// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
-				inst.image_xscale = entity.xscale
-				inst.image_yscale = entity.yscale
-			
-				// position interpolation
-				if (POS_INTERPOLATION <= 0 or POS_INTERPOLATION > 1							// interpolation disabled
-				or point_distance(inst.x, inst.y, entity.x, entity.y) > POS_INTERP_THRESH) {	// or hit the interpolation threshold
-					inst.x = entity.x // snap to just x and y
-					inst.y = entity.y
-				}
-				else { // interpolate
-					inst.x = lerp(inst.x, entity.x, POS_INTERPOLATION)
-					inst.y = lerp(inst.y, entity.y, POS_INTERPOLATION)
-				}
-			
-				// set the speed
-				if (variable_struct_exists(entity, "spd")) {
-					if (!variable_instance_exists(inst, "spd")) {
-						inst.spd = {x: 0, y: 0}
-					}
-					inst.spd.x = entity.spd.x
-					inst.spd.y = entity.spd.y
-				}
-				
-				
-				// props
-				var propNames = variable_struct_get_names(props)
-				//trace(propNames)
-				//trace(array_length(propNames))
-				for(var j = 0; j < array_length(propNames); j++) {
-					var key = propNames[j]
-					var value = props[$ (key)]
-					
-					variable_instance_set(inst, key, value)
-				}
-			}
+			array_push(oEntityManager.entity_updates, data)
 			break
 		case "entity death": // also triggers remove
+			//if (use_timestamps(data))
+			//	break
+			
 			var uuid = data.id
 			var inst = find_by_uuid(uuid)
 			// use this for death effects
 			
 			break
 		case "entity remove":
+			//if (use_timestamps(data))
+			//	break
+			
 			var uuid = data.id
 			var inst = find_by_uuid(uuid, all)
 			if (instance_exists(inst))
@@ -290,6 +234,9 @@ function handlePacket(data) {
 		// Add your custom commands here:
 		
 		case "player controls":
+			//if (use_timestamps(data))
+			//	break
+			
 			if (!global.playing)
 				break
 			

@@ -55,6 +55,7 @@
     {"name":"SUIBackButton","order":1,"path":"scripts/SUIBackButton/SUIBackButton.yy",},
     {"name":"oPing","order":1,"path":"objects/oPing/oPing.yy",},
     {"name":"sWarpPortal","order":3,"path":"sprites/sWarpPortal/sWarpPortal.yy",},
+    {"name":"oEntityManager","order":5,"path":"objects/oEntityManager/oEntityManager.yy",},
     {"name":"SUIBox","order":1,"path":"scripts/SUIBox/SUIBox.yy",},
     {"name":"oPhysicsEntity","order":1,"path":"objects/oPhysicsEntity/oPhysicsEntity.yy",},
     {"name":"SimpleUIUtils","order":5,"path":"scripts/SimpleUIUtils/SimpleUIUtils.yy",},

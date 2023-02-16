@@ -140,6 +140,8 @@ export default async function handlePacket(c:Client, data:any) {
         // Add your commands here:
         
         case 'player controls':
+            if (!c.entity) break;
+
             c.entity.inputs = {
                 move: data.move as Point,
                 keys: {
