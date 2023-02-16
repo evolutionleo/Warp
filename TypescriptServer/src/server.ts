@@ -83,6 +83,8 @@ const server = createServer(function(socket) {
     })
 });
 
+server.maxConnections = config.server.max_connections;
+
 
 server.listen(port, ip, () => {
     trace(chalk.bold.blueBright(`Server running on port ${port}!`));
@@ -106,6 +108,8 @@ else {
 
 const ws_server = new ws.WebSocketServer({
     server: http_server,
+    clientTracking: true,
+    maxPayload: config.server.max_ws_payload,
 });
 
 ws_server.on('connection', (socket, r) => {

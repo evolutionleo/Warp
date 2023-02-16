@@ -10,6 +10,8 @@ declare global {
 }
 
 const dummy_function = () => {};
+const styling_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g
+
 function trace(...strs:any[]):void {
     var str = '';
     
@@ -31,9 +33,11 @@ function trace(...strs:any[]):void {
 
     // console log
     console.log(str);
-    // append to the log file, without any styling special characters
-    let styling_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g
-    appendFile('./server_log.txt', str.replace(styling_regex, '') + '\n', dummy_function);
+
+    if (global.config.logging_enabled) {
+        // append to the log file, without any styling special characters
+        appendFile('./server_log.txt', str.replace(styling_regex, '') + '\n', dummy_function);
+    }
 }
 
 global.trace = trace;

@@ -14,6 +14,10 @@ const args = minimist(process.argv.slice(2));
  * @property {string} meta.compatible_game_versions
  * @property {string} meta.server
  * 
+ * @property {Object} server
+ * @property {number} server.max_connections
+ * @property {number} server.max_ws_payload
+ * 
  * @property {object} lobby
  * @property {number} lobby.max_players
  * @property {boolean} lobby.addIntoPlayOnFull
@@ -37,6 +41,7 @@ const args = minimist(process.argv.slice(2));
  * @property {boolean} rooms_enabled
  * @property {boolean} entities_enabled
  * @property {boolean} ssl_enabled
+ * @property  {boolean} logging_enabled
  * 
  * @property {string} ssl_cert_path
  * @property {string} ssl_key_path
@@ -64,6 +69,11 @@ const common_config = {
         compatible_game_versions: '>=1.0.0',
 
         server: 'unknown'
+    },
+
+    server: {
+        max_connections: 1000,
+        max_ws_payload: 2 * 1024 * 1024 // 2 MB
     },
 
     // some fundamental lobby settings
@@ -105,6 +115,7 @@ const common_config = {
     rooms_enabled: true, // toggles lobbies being split into rooms (sub-lobbies with entities)
     entities_enabled: true, // toggles loading/spawning entities
     ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
+    logging_enabled: true, // whether or not to log trace()'d messages to server_log.txt
     verbose_lag: false, // logs warning messages to chat when a game tick is taking longer than expected
     
     necessary_login: false, // if true, won't allow a client to join any lobby before logging in
@@ -194,7 +205,7 @@ else {
 }
 
 
-trace(chalk.blueBright('Config loaded! environment: ' + config.env_name));
-
 global.config = config;
 export default config;
+
+trace(chalk.blueBright('Config loaded! environment: ' + config.env_name));
