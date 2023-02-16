@@ -29,9 +29,9 @@ function handlePacket(data) {
 		case "server timestamp":
 			var old_t = data.ct
 			var new_t = local_timestamp()
-			var ping = new_t - old_t
+			var ping = round(new_t - old_t)
 			
-			global.start_server_time = data.t + ping/2
+			global.start_server_time = data.t + round(ping/2)
 			global.start_local_time = new_t
 			
 			trace("server time: %; client time: %", global.start_server_time, global.start_local_time)
