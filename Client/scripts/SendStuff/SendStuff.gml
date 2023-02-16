@@ -9,7 +9,7 @@ function sendMessage(msg) {
 
 function sendPing() {
 	//send({ cmd: "ping", t: current_time })
-	send({ cmd: "ping", T: round(get_timer() / 1000) })
+	send({ cmd: "ping", T: round(local_timestamp()) })
 }
 
 function sendPong(T) {
@@ -44,6 +44,10 @@ function sendRegister(username, password) {
 
 function sendClientInfo() {
 	send({cmd: "client info", game_version: GAME_VERSION, warp_version: WARP_VERSION })
+}
+
+function sendRequestTime() {
+	send({ cmd: "server timestamp", local_time: local_timestamp() })
 }
 
 // ##################################

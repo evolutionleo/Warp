@@ -249,7 +249,11 @@ export default abstract class SendStuff implements IClient {
     }
 
     sendIncomingFriendRequests(from_profiles:ProfileInfo[]) {
-        this.send({ cmd: 'friend req inc', from_profiles });
+        this.send({ cmd: 'friend request inc', from: from_profiles });
+    }
+
+    sendServerTime(client_t: number) {
+        this.send({ cmd: 'server timestamp', ct: client_t }); // data.t will be appended automatically if timestamps are enabled
     }
 
     /**

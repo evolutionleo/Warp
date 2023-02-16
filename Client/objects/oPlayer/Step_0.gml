@@ -13,7 +13,9 @@ if (!remote) {
 	move_x = kright - kleft
 	move_y = kdown - kup
 	
-	spd.x = move_x * walksp
+	sendPlayerControls()
+	
+	//spd.x = move_x * walksp
 }
 
 
@@ -29,8 +31,3 @@ if (!remote) {
 
 // Inherit the parent event
 event_inherited();
-
-
-
-if (!remote)
-	sendPlayerControls()

@@ -69,7 +69,7 @@ class Room extends EventEmitter {
     recentlyJoined:Client[] = [];
     recentlyJoinedTimer = 120; // 2 seconds?
 
-    current_tick:number = 0;
+    tick_counter:number = 0; // counts 
 
     width:number;
     height:number;
@@ -173,7 +173,7 @@ class Room extends EventEmitter {
         this.bundle = []; // the updated ones
         this.full_bundle = []; // all the entities in the room
 
-        this.current_tick++; // increment the current tick/frame
+        this.tick_counter++; // increment the current tick/frame counter
 
         this.entities.forEach(entity => {
             entity.update();

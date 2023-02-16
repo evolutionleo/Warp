@@ -131,6 +131,10 @@ export default async function handlePacket(c:Client, data:any) {
             var room_to = c.lobby.rooms.find(room => room.map.name === room_to_name || room.map.room_name === room_to_name);
             c.room.movePlayer(c, room_to);
             break;
+        
+        case 'server timestamp':
+            c.sendServerTime(data.t);
+            break;
 
         // #######################
         // Add your commands here:

@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "unix_timestamp",
+  "name": "Timestamps",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {

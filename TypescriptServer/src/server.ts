@@ -101,9 +101,7 @@ if (ssl_enabled) {
     });
 }
 else {
-    http_server = http.createServer({
-
-    });
+    http_server = http.createServer({});
 }
 
 const ws_server = new ws.WebSocketServer({

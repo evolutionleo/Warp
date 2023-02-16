@@ -14,11 +14,15 @@ network_set_config(network_config_use_non_blocking_socket, true)
 #macro PURGE_ENTITIES_ON_ROOM_START true
 
 // a value between 0 and 1, bigger number = less smooth, but more accurate
-#macro POS_INTERPOLATION .2
+#macro POS_INTERPOLATION 1
 // instantly teleports if the distance is > than this
-#macro POS_INTERP_THRESH 300
+#macro POS_INTERP_THRESH 1
 
 #macro TIMESTAMPS_ENABLED true
+
+// offset in ms, a buffer between server and client time to allow for network latency & inconsistency
+global.time_delay = 100
+#macro TIME_DELAY global.time_delay
 
 
 #macro SOCKET_TYPE SOCKET_TYPES.WS
@@ -39,10 +43,12 @@ enum SOCKET_TYPES {
 #macro Default:DUAL_INSTANCE true
 
 // Production
-//#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
-#macro Prod:IP   "195.2.80.50" // your external server IP
+#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
+//#macro Prod:IP   "195.2.80.50" // your external server IP
 #macro Prod:PORT "1337"
 #macro Prod:WS_PORT "3000"
+//#macro Prod:PORT "1337"
+//#macro Prod:WS_PORT "3000"
 #macro Prod:DUAL_INSTANCE true
 //#macro Prod:DUAL_INSTANCE false
 
@@ -76,6 +82,7 @@ network_set_config(network_config_connect_timeout, 4000)
 function onConnect() {
 	sendHello()
 	sendClientInfo()
+	sendRequestTime()
 }
 
 function onDisconnect() {

@@ -8,12 +8,15 @@ function handlePacket(data) {
 	//trace("Received cmd: %", cmd)
 	
 	switch(cmd) {
+		// simple examples:
 		case "hello":
 			trace(data.str)
 			break
 		case "message":
 			show_message_async(data.msg+"\n (c) Server")
 			break
+		
+		// Predefined events:
 		case "server info":
 			var compatible = data.compatible
 			var meta = data.meta
@@ -23,19 +26,32 @@ function handlePacket(data) {
 				onIncompatible(meta.game_version)
 			}
 			break;
+		case "server timestamp":
+			var old_t = data.ct
+			var new_t = local_timestamp()
+			var ping = new_t - old_t
+			
+			global.start_server_time = data.t + ping/2
+			global.start_local_time = new_t
+			
+			trace("server time: %; client time: %", global.start_server_time, global.start_local_time)
+			
+			global.ping = ping
+			break
+		
 		case "ping":
 			sendPong(data.T)
 			break
 		case "pong":
 			var t = data.T
 			//var new_t = current_time
-			var new_t = round(get_timer() / 1000)
+			var new_t = round(local_timestamp())
 			var ping = new_t - t
 			
 			global.ping = ping
 			break
 		
-		// Predefined events:
+		// Login
 		case "login":
 			var status = data.status
 			if (status == "fail") {
@@ -52,7 +68,6 @@ function handlePacket(data) {
 			}
 			
 			//show_message_async(global.login_result)
-			
 			break
 		case "register":
 			var status = data.status
@@ -67,8 +82,9 @@ function handlePacket(data) {
 			}
 			
 			//show_message_async(global.login_result)
-			
 			break
+		
+		// Lobby functions
 		case "lobby list":
 			var lobbies = data.lobbies
 			global.lobbies = lobbies
@@ -112,10 +128,6 @@ function handlePacket(data) {
 			//room_goto(rMenu)
 			break
 		
-		case "party join":
-			
-			break
-		
 		case "play":
 			trace("playing!")
 			global.playing = true
@@ -148,6 +160,8 @@ function handlePacket(data) {
 			break
 		// changing rooms
 		case "room transition":
+			if (use_timestamps(data)) break;
+			
 			var _room = data.room
 			var _map = _room.map
 			
@@ -168,8 +182,10 @@ function handlePacket(data) {
 			}
 			break
 		
-		// data about the entity
+		// a list of entities
 		case "entities":
+			if (use_timestamps(data)) break;
+		
 			//trace("received entities from room %: %", data.room, array_length(data.entities))
 			
 			// don't spawn in entities if we're not playing (e.x in menus)
@@ -187,8 +203,7 @@ function handlePacket(data) {
 				queuePacket(data)
 				break
 			}
-			
-			if (from_room != curr_room) {
+			else if (from_room != curr_room) {
 				trace("Ignoring received entities from another room (%, we're in %)", from_room, curr_room)
 				break
 			}
@@ -206,10 +221,7 @@ function handlePacket(data) {
 				var props = entity.props
 				var existed = instance_exists(find_by_uuid(uuid, type))
 				var inst = find_or_create(uuid, type)
-				
-				if (inst.last_t > data.t) {
-					continue
-				}
+
 				inst.last_t = data.t
 				
 			
