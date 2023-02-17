@@ -13,8 +13,8 @@ export type StuckAction = 'stop' | 'clip';
 export default class PhysicsEntity extends Entity {
     physicsEnabled:boolean = true;
 
-    grv:Point = { x: 0, y: 0.4 };
-    max_spd:Point = {x: 20, y: 20};
+    grv:Point = { x: 0, y: 800 };
+    max_spd:Point = {x: 2000, y: 2000};
 
     outsideRoomAction: OutsideRoomAction = 'stop';
     collisionType:CollisionType = 'discrete'; // discrete or continuout
@@ -28,13 +28,16 @@ export default class PhysicsEntity extends Entity {
         super(room, x, y);
     }
 
-    move(xspd:number = undefined, yspd:number = 0):void {
+    move(xspd:number = undefined, yspd:number = 0, dt: number = this.room.dt):void {
         // default move
         let def_move = xspd == undefined;
         if (def_move) {
             xspd = this.spd.x;
             yspd = this.spd.y;
         }
+
+        xspd *= dt;
+        yspd *= dt;
 
 
         // stuck in a solid object
@@ -86,9 +89,9 @@ export default class PhysicsEntity extends Entity {
         this.updateCollider();
     }
 
-    update() {
-        this.spd.x += this.grv.x;
-        this.spd.y += this.grv.y;
+    update(dt:number = 1) {
+        this.spd.x += this.grv.x * dt;
+        this.spd.y += this.grv.y * dt;
 
         this.spd.x = clamp(this.spd.x, -this.max_spd.x, this.max_spd.x);
         this.spd.y = clamp(this.spd.y, -this.max_spd.y, this.max_spd.y);
@@ -96,7 +99,7 @@ export default class PhysicsEntity extends Entity {
         this.move();
         this.wrapOutsideRoom();
 
-        super.update();
+        super.update(dt);
     }
 
 

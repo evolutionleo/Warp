@@ -156,7 +156,8 @@ class Entity extends EventEmitter {
     }
 
     // called from room.tick()
-    public update() {
+    public update(dt:number = 1) {
+
         this.emit('update');
 
         // this.roundPos();

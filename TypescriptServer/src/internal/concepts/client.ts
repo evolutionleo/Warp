@@ -49,7 +49,7 @@ export default class Client extends SendStuff implements IClient {
 
     ping: number; /** @type {number} */
 
-    roomJoinTimer: number = -1; // if >0 - joined recently
+    room_join_timer: number = -1; // if >0 - joined recently
 
     /** @type {boolean} */
     get logged_in() {

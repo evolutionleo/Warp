@@ -22,7 +22,12 @@ if (base_update < 0)
 
 array_delete(entity_updates, 0, max(0, base_update-1))
 base_update = min(base_update, 0)
-next_update = min(base_update + 1, array_length(entity_updates)-1)
+// find the closest update in bounds that ideally doesn't have the same timestamp
+for(next_update = base_update; next_update < array_length(entity_updates); next_update++) {
+	if (entity_updates[next_update].t != entity_updates[base_update].t)
+		break
+}
+
 
 trace("base_update: %, next_update: %", base_update, next_update)
 
@@ -59,7 +64,7 @@ if (base_update != next_update) {
 }
 
 var l = array_length(entities)
-			
+
 // for each entity
 for(var i = 0; i < l; i++) {
 	var entity = entities[i]
@@ -86,7 +91,7 @@ for(var i = 0; i < l; i++) {
 	inst.image_yscale = entity.yscale
 	inst.x = entity.x
 	inst.y = entity.y
-			
+	
 	// set the speed
 	if (variable_struct_exists(entity, "spd")) {
 		if (!variable_instance_exists(inst, "spd")) {

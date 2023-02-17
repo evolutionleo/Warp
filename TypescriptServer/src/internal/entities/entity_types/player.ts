@@ -73,7 +73,7 @@ export default class PlayerEntity extends PhysicsEntity {
     isSolid:boolean = true;
 
     walksp:number;
-    jumpHeight:number;
+    jumpSpeed:number;
     cutJump:boolean;
 
     constructor(room:Room, x:number = 0, y:number = 0, client:Client) {
@@ -83,12 +83,12 @@ export default class PlayerEntity extends PhysicsEntity {
 
     create() {
         super.create();
-        this.walksp = 7;
-        this.jumpHeight = 12.5;
+        this.walksp = 420;
+        this.jumpSpeed = 600;
         this.cutJump = false;
     }
 
-    update() {
+    update(dt) {
         this.spd.x = this.inputs.move.x * this.walksp;
 
         if (this.inputs.keys.kjump && this.grounded()) {
@@ -100,7 +100,7 @@ export default class PlayerEntity extends PhysicsEntity {
             this.cutJump = true;
         }
 
-        super.update();
+        super.update(dt);
         let p = this.client.profile;
         if (p) {
             p.state.x = this.x;
@@ -109,7 +109,7 @@ export default class PlayerEntity extends PhysicsEntity {
     }
 
     jump() {
-        this.spd.y = -this.jumpHeight;
+        this.spd.y = -this.jumpSpeed;
         this.cutJump = false;
     }
 }

@@ -2,12 +2,13 @@ import trace from '#util/logging';
 import MatchMaker from '#util/matchmaker';
 import { Account, IAccount } from '#schemas/account';
 import Client from '#concepts/client';
-import Lobby, { lobbyGet } from '#concepts/lobby';
+import Lobby, { lobbyExists, lobbyGet } from '#concepts/lobby';
 import Point from '#types/point';
 import semver from 'semver';
 import chalk from 'chalk';
 import { Socket as TCPSocket } from 'net';
 import { WebSocket as WSSocket } from 'ws';
+import { partyExists } from '#concepts/party';
 
 /**
  * @param {Client} c
@@ -90,10 +91,13 @@ export default async function handlePacket(c:Client, data:any) {
             break;
         case 'lobby info':
             var lobbyid = data.lobbyid;
+            if (lobbyExists(lobbyid))
             c.sendLobbyInfo(lobbyid);
             break;
         case 'lobby join':
-            c.lobbyJoin(data.lobbyid);
+            var lobbyid = data.lobbyid;
+            if (lobbyExists(lobbyid))
+                c.lobbyJoin(lobbyid);
             break;
         case 'lobby leave':
             var lobby:Lobby = c.lobby;
@@ -104,7 +108,8 @@ export default async function handlePacket(c:Client, data:any) {
         
         case 'party join':
             var partyid = data.partyid;
-            c.partyJoin(partyid);
+            if (partyExists(partyid))
+                c.partyJoin(partyid);
             break;
         case 'party leave':
             if (!c.party) return;
@@ -122,14 +127,6 @@ export default async function handlePacket(c:Client, data:any) {
 
             if (user)
                 c.partyInvite(user);
-            break;
-        
-        case 'room transition':
-            if (!c.room) return;
-
-            var room_to_name:string = data.room_to;
-            var room_to = c.lobby.rooms.find(room => room.map.name === room_to_name || room.map.room_name === room_to_name);
-            c.room.movePlayer(c, room_to);
             break;
         
         case 'server timestamp':

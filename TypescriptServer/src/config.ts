@@ -94,17 +94,19 @@ const common_config = {
         use_persistent_position: false, // load the last x/y from the profile on room join and save them on room leave
 
         starting_room: 'Test Room',
-        rest_timeout: 5    // (seconds) - prevents rooms from processing entities
+        rest_timeout: 5,    // (seconds) - prevents rooms from processing entities
                             // when no players are present for a certain amount of time
                             // set to -1 to disable this feature
                             // (!!! setting to 0 might cause problems and unexpected behaviour !!!)
+        
+        recently_joined_timer: 2 // (seconds) - time 
     },
 
     party: {
         max_members: 5 // max party size
     },
 
-    tps: 60, // tickrate
+    tps: 20, // tickrate
 
     // Disable some of the features that you don't need in your game
     // true = enabled, false = disabled
@@ -114,6 +116,7 @@ const common_config = {
     shell_enabled: false, // toggles a console that allows code execution while running the game (better to change this in prod/dev configs rather than here)
     rooms_enabled: true, // toggles lobbies being split into rooms (sub-lobbies with entities)
     entities_enabled: true, // toggles loading/spawning entities
+    dt_enabled: true, // toggles delta time for entity physics
     ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
     logging_enabled: true, // whether or not to log trace()'d messages to server_log.txt
     verbose_lag: false, // logs warning messages to chat when a game tick is taking longer than expected

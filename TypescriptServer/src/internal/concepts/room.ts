@@ -66,7 +66,6 @@ class Room extends EventEmitter {
     entities:EntityList/*Entity[]*/ = new EntityList();
     tree:System;
     players:Client[] = [];
-    recentlyJoinedTimer:number = this.tickrate * 2; // 2 seconds?
 
     tick_counter:number = 0; // counts 
 
@@ -79,6 +78,9 @@ class Room extends EventEmitter {
     bundle:any[] = []; // updated entities that need sending
 
     rest_timeout:number = 0; // disables processing entities when no players are present for config.room_rest_timeout *seconds*
+
+    last_tick_time: number = 0;
+    dt: number = 0;
 
     constructor(map:GameMap|string, lobby:Lobby) {
         super();
@@ -155,6 +157,13 @@ class Room extends EventEmitter {
     
     tick():void {
         let t_beforeTick = Date.now(); // measure the tick time
+        if (global.config.dt_enabled) {
+            this.dt = (t_beforeTick - this.last_tick_time) / 1000;
+        }
+        else {
+            this.dt = 1;
+        }
+        this.last_tick_time = Date.now();
 
         // don't process entities
         if (this.players.length === 0) {
@@ -175,7 +184,7 @@ class Room extends EventEmitter {
         this.tick_counter++; // increment the current tick/frame counter
 
         this.entities.forEach(entity => {
-            entity.update();
+            entity.update(this.dt);
             this.full_bundle.push(entity.bundle());
         });
         this.emit('tick');
@@ -186,14 +195,13 @@ class Room extends EventEmitter {
 
         this.players.forEach(player => {
             // we will send everything every frame to those who joined recently (so that they 100% get it)
-            if (player.roomJoinTimer > 0) {
+            if (player.room_join_timer > 0) {
                 player.send(full_bundle);
-                player.roomJoinTimer--;
+                player.room_join_timer--;
             }
             // broadcast the min bundle (only changed entities) to everyone else
             else if (this.bundle.length > 0)
                 player.send(bundle);
-
         });
 
 
@@ -282,7 +290,7 @@ class Room extends EventEmitter {
             player.entity = player_entity;
         }
         // add to the recently joined list to receive the old entities
-        player.roomJoinTimer = this.recentlyJoinedTimer;
+        player.room_join_timer = global.config.room.recently_joined_timer * global.config.tps;
         
         this.emit('player join', player);
     }
