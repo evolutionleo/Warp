@@ -39,7 +39,9 @@ export default class PhysicsEntity extends Entity {
         xspd *= dt;
         yspd *= dt;
 
-
+        xspd = this.roundedPos(xspd);
+        yspd = this.roundedPos(yspd);
+        
         // stuck in a solid object
         if (this.stuck()) {
             // just clip through everything?
@@ -49,7 +51,6 @@ export default class PhysicsEntity extends Entity {
             }
             return; // help me im stuck
         }
-
 
         if (this.isCollidingX(this.x, this.y, xspd)) {
             if (this.preciseCollisions && xspd != 0) {

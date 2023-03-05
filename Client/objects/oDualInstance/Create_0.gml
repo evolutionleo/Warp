@@ -23,4 +23,5 @@ if (parameter_count() == 4) {
     window_set_caption("P2")
 	
 	// you probably want to add some logic here to disable music, etc.
+	onSecondWindow()
 }

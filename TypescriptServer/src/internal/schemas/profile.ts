@@ -1,17 +1,9 @@
 // This schema is for profiles
-
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const mongoose = require('mongoose');
-
-import { Model, Document, ObjectId } from 'mongoose';
-const { Schema, model } = mongoose;
-
+import { Schema, model, Document, ObjectId, Model } from 'mongoose';
 import { Account, IAccount } from '#schemas/account';
 
 export interface IProfile extends Document {
-    account_id: string,
+    account_id: ObjectId,
     name: string,
 
     online: boolean,
@@ -30,7 +22,7 @@ export interface IProfile extends Document {
 
 // this holds the state of the profile
 // you can edit this schema!
-const profileSchema = new Schema({
+const profileSchema = new Schema<IProfile>({
     account_id: { type: Schema.Types.ObjectId, ref: 'Account' },
     name: { type: String, unique: true },
 
@@ -55,7 +47,7 @@ const profileSchema = new Schema({
 }, {collection: 'Profiles'});
 
 
-export const Profile:Model<IProfile> = model('Profile', profileSchema);
+export const Profile:Model<IProfile> = model<IProfile>('Profile', profileSchema);
 
 export default Profile;
 export function freshProfile(account:IAccount):IProfile { // for when just registered

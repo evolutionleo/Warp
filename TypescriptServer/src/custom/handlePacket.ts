@@ -92,7 +92,7 @@ export default async function handlePacket(c:Client, data:any) {
         case 'lobby info':
             var lobbyid = data.lobbyid;
             if (lobbyExists(lobbyid))
-            c.sendLobbyInfo(lobbyid);
+                c.sendLobbyInfo(lobbyid);
             break;
         case 'lobby join':
             var lobbyid = data.lobbyid;
@@ -152,8 +152,6 @@ export default async function handlePacket(c:Client, data:any) {
                     kjump_press: data.kjump_press
                 }
             }
-            c.entity.send();
-            // c.sendPlayerControls(data);
             break;
         
 

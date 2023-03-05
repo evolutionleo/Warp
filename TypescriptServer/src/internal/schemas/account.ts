@@ -1,19 +1,13 @@
 // this section contains a schema for saving players' account info
 import trace from '#util/logging';
 
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const mongoose = require('mongoose');
-import { Model, Document, ObjectId } from 'mongoose';
-const { Schema, model } = mongoose;
-
+import { Model, model, Document, ObjectId, Schema } from 'mongoose';
 import { hash_password, verify_password } from '#util/password_encryption';
 
 
 export interface IAccount extends Document {
     username: string,
-    password: string,
+    password: string
 }
 
 export interface IAccountModel extends Model<IAccount> {
@@ -22,7 +16,7 @@ export interface IAccountModel extends Model<IAccount> {
 }
 
 // you can edit this schema!
-const accountSchema = new Schema({
+const accountSchema = new Schema<IAccount>({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     // you can add additional properties to the schema here:
@@ -73,8 +67,7 @@ accountSchema.statics.login = function accountLogin(username:string, password:st
     })
 }
 
-// export const Account:IAccountModel = model<IAccount, IAccountModel>('Account', accountSchema);
-export const Account:IAccountModel = model('Account', accountSchema);
+export const Account:IAccountModel = model<IAccount, IAccountModel>('Account', accountSchema);
 export default Account;
 
 

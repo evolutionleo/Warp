@@ -62,6 +62,10 @@ export function lobbyDelete(lobbyid:string) {
     delete global.lobbies[lobbyid];
 }
 
+export function lobbyList():Lobby[] {
+    return (Object.values(global.lobbies)) as Lobby[];
+}
+
 
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {

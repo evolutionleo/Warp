@@ -15,8 +15,8 @@ network_set_config(network_config_use_non_blocking_socket, true)
 
 // a value between 0 and 1, bigger number = less smooth, but more accurate
 #macro POS_INTERPOLATION 1
-// instantly teleports if the distance is > than this
-#macro POS_INTERP_THRESH 1
+// instantly teleports if an entity has moved > than this on a single axis in a single tick
+#macro POS_INTERP_THRESH 100
 
 #macro TIMESTAMPS_ENABLED true
 
@@ -75,28 +75,3 @@ if (!CONFIGS_SET) {
 
 // Allow up to 4000 ping (YYG recommends ~1000 for LAN-only games)
 network_set_config(network_config_connect_timeout, 4000)
-
-
-// This can be used to initiate the server interaction
-// (send the first packet)
-function onConnect() {
-	sendHello()
-	sendClientInfo()
-	sendRequestTime()
-}
-
-function onDisconnect() {
-	trace("Warning: Unhandled disconnect event!")
-}
-
-function onIncompatible(server_game_version) {
-	show_message(stf("Incompatible client version - %! (Server version is %)", GAME_VERSION,  server_game_version))
-	game_end()
-}
-
-
-function leaveGame() {
-	global.playing = false
-	sendLeaveLobby()
-	room_goto(rMenu)
-}

@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import util from 'util';
 import { appendFile } from 'fs';
 
 declare global {
@@ -21,7 +22,7 @@ function trace(...strs:any[]):void {
             str += 'undefined';
         }
         else if (typeof s === 'object') {
-            str += ' ' + JSON.stringify(s);
+            str += ' ' + util.inspect(s);
         }
         else {
             str += ' ' + s.toString();
@@ -36,9 +37,15 @@ function trace(...strs:any[]):void {
 
     if (global.config.logging_enabled) {
         // append to the log file, without any styling special characters
-        appendFile('./server_log.txt', str.replace(styling_regex, '') + '\n', dummy_function);
+        recently_logged += str.replace(styling_regex, '') + '\n';
     }
 }
+
+var recently_logged:string = '';
+setInterval(() => {
+    appendFile('./server_log.txt', recently_logged, dummy_function);
+    recently_logged = '';
+}, 100);
 
 global.trace = trace;
 export default trace;

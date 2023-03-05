@@ -1,7 +1,7 @@
 import trace from '#util/logging';
 import packet from '#internal/packet';
 import { Socket } from 'net';
-import Lobby from '#concepts/lobby';
+import Lobby, { lobbyList } from '#concepts/lobby';
 import { Account, getAccountInfo, IAccount } from '#schemas/account';
 import { Profile, IProfile, getProfileInfo, ProfileInfo } from '#schemas/profile'
 import Point from '#types/point';
@@ -214,7 +214,7 @@ export default abstract class SendStuff implements IClient {
     }
 
     sendLobbyList():void {
-        this.send({ cmd: 'lobby list', lobbies: Object.values(global.lobbies).map(lobby => lobby.getInfo()) }); // lobbies as an array
+        this.send({ cmd: 'lobby list', lobbies: lobbyList().map(lobby => lobby.getInfo()) }); // lobbies as an array
     }
 
     /**

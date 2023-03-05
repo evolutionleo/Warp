@@ -87,7 +87,7 @@ const common_config = {
     room: {
         // .yy room loading
         rooms_path: '../Client/rooms', // (overriden in prod config)
-        warn_on_unknown_entity: true,
+        warn_on_unknown_entity: false,
 
         use_starting_room: true, // join config.room.starting_room on start
         use_last_profile_room: false, // join client.profile.state.room on start if logged in
@@ -173,7 +173,7 @@ const dev_config = {
     shell_enabled: true,
     verbose_lag: true,
 
-    initial_lobbies: 1
+    initial_lobbies: 3
 }
 
 

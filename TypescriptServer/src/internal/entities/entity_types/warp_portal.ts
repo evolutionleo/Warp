@@ -21,7 +21,7 @@ export default class WarpPortal extends Entity {
         y: 32
     }
 
-    collider_type = 'polygon';
+    collider_type = 'box';
 
 
     exit_portal:WarpPortal = null;
@@ -70,8 +70,10 @@ export default class WarpPortal extends Entity {
 
     update() {
         if (this.enterable) {
-            let players = this.placeMeetingAll(this.x, this.y, 'Player') as PlayerEntity[];
+            let players = this.placeMeetingAll<PlayerEntity>(this.x, this.y, 'Player');
+
             // this.continuous_collision = this.continuous_collision.filter(c => players.includes(c));
+            
             this.continuous_collision = this.continuous_collision.filter(c => {
                 if (!this.checkCollision(this.x, this.y, c.e)) c.t--;
                 return c.t >= 0;

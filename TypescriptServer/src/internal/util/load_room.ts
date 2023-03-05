@@ -69,7 +69,7 @@ export default function LoadRoom(room_name:string):LoadedRoom {
                 inst.properties.forEach(p => props[p.propertyId.name] = p.value.replaceAll('\"', ''));
 
                 contents.push({
-                    object_name: inst.objectId.name,
+                    obj: inst.objectId.name,
                     x: inst.x,
                     y: inst.y,
                     xscale: inst.scaleX,

@@ -1,5 +1,5 @@
 import Client from '#concepts/client';
-import Lobby from '#concepts/lobby';
+import Lobby, { lobbyList } from '#concepts/lobby';
 import Ticket from '#concepts/ticket';
 
 export default class MatchMaker {
@@ -20,7 +20,7 @@ export default class MatchMaker {
         var match_lobby = null;
         // this a so called 'arrow function'.
         // (lobby) => {} is the same as function(lobby) {}
-        Object.values(global.lobbies).forEach((lobby) => {
+        lobbyList().forEach((lobby) => {
             // you can add additional checks for user rank, etc.
             // and your own matchmaking logic
             if (!lobby.full) {

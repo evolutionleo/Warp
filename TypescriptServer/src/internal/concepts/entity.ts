@@ -2,19 +2,20 @@ import trace from '#util/logging';
 import Point from "#types/point";
 import BBox from '#types/bbox';
 import { EventEmitter } from "events";
-import { System, Circle, Polygon, ICollider, Types as ColliderTypes } from 'detect-collisions';
-import * as SAT from 'sat';
-import Collider from '#concepts/collider';
+import { System, Circle, Polygon, Body, BodyType as ColliderTypes } from 'detect-collisions';
+import sat from 'sat';
+import { CircleCollider, BoxCollider, PolygonCollider, Collider } from '#concepts/collider';
 
 import { v4 as uuidv4 } from 'uuid';
 import Client from "#concepts/client";
 import Room from "#concepts/room";
 
+const { Vector } = sat;
 
 import PlayerEntity from "#entity/player";
 
 
-export type ColliderType = 'polygon' | 'circle'
+export type ColliderType = 'polygon' | 'circle' | 'box';
 
 
 export type EntityConstructor = {
@@ -28,7 +29,7 @@ export type PlayerEntityConstructor = {
 export type SerializedEntity = {
     id?: string,
     type: string,
-    object_name?: string,
+    obj?: string,
     x: number,
     y: number,
     xscale: number,
@@ -53,9 +54,9 @@ class Entity extends EventEmitter {
     isStatic = false;
     isTrigger = false;
 
-    pos:Point;
-    spd:Point;
-    angle:number;
+    pos:Point; // keep in mind that the coordinates are always set to a whole number (to achieve pixel-perfect collisions)
+    spd:Point; // speed in pixels per second, can be fractional
+    angle:number = 0;
 
     prev_pos:Point;
     prev_serialized:string; // json of serialized entity
@@ -75,8 +76,8 @@ class Entity extends EventEmitter {
     }
 
 
-    collider:Collider; // a polygon
-    collider_type:ColliderType|string = 'polygon';
+    collider:Collider = null; // a polygon or a circle
+    collider_type:ColliderType|string = 'box';
     collider_radius:number = this.width/2; // only relevant when collider_type is 'circle'
     collider_vertices:Point[] = []; // if this is not overridden, a default rectangle collider will be used
     private polygon_set:boolean = false;
@@ -114,45 +115,16 @@ class Entity extends EventEmitter {
         this.spd = { x: 0, y: 0};
         this.prev_pos = { x, y };
 
-        // create the collider
-        switch(this.collider_type) {
-            case 'circle':
-                this.collider = new Collider(
-                    new Circle(this.pos, this.collider_radius)
-                );
-                break;
-            case 'polygon':
-                // the default 
-                if (this.collider_vertices.length == 0) {
-                    this.polygon_set = false;
-                    this.collider_vertices = [
-                        {x: 1, y: this.height},
-                        {x: this.width, y: this.height},
-                        {x: this.width, y: 1},
-                        {x: 1, y: 1}
-                    ]
-                }
-                else {
-                    this.polygon_set = true;
-                }
-
-                this.collider = new Collider(
-                    new Polygon(this.pos, this.collider_vertices)
-                );
-                break;
-            default:
-                throw 'Unknown collider type: ' + this.collider_type;
-        }
-
+        this.createCollider();
         this.collider.entity = this;
+
+        this.tree.insert(this.collider);
 
         // trace(this.propNames)
     }
 
     public create() {
-        if (this.isSolid) {
-            this.tree.insert(this.collider);
-        }
+        this.regenerateCollider();
     }
 
     // called from room.tick()
@@ -162,7 +134,7 @@ class Entity extends EventEmitter {
 
         // this.roundPos();
 
-        // if something changed - send again
+        // if something changed - send again (add to the room's bundle)
         const serialized = JSON.stringify(this.serialize());
         if (serialized != this.prev_serialized || this.sendEveryTick) {
             this.prev_serialized = serialized;
@@ -192,72 +164,62 @@ class Entity extends EventEmitter {
                 }
                 break;
             case 'object':
+            case 'function':
                 if (this instanceof (type as any)) {
                     return true;
                 }
                 break;
             default:
                 console.error('Warning: Unknown type of `type`: ' + typeof type);
-                return true;
+                return false;
         }
+
+        return false;
     }
 
-    public regenerateCollider(x = this.x, y = this.y) {
-        if (this.isSolid)
-            this.tree.remove(this.collider);
-        
-        if (this.collider_type === 'polygon') {
-            if (!this.polygon_set) {
-                this.collider = new Collider(
-                    new Polygon({x, y}, [
-                        {x: 1, y: this.height},
-                        {x: this.width, y: this.height},
-                        {x: this.width, y: 1},
-                        {x: 1, y: 1}
-                    ])
-                );
-            }
-            else {
-                this.collider = new Collider(
-                    new Polygon(this.pos, this.collider_vertices)
-                );
-            }
-        }
-        else if (this.collider_type === 'circle') {
-            this.collider = new Collider(
-                new Circle(this.pos, this.collider_radius)
-            );
+    public createCollider(x = this.x, y = this.y) {
+        let pos = {x: x, y: y};
+
+        // create the collider
+        switch(this.collider_type) {
+            case 'box':
+                this.collider = new BoxCollider(pos, this.width - .01, this.height - .01);
+                break;
+            case 'circle':
+                this.collider = new CircleCollider(pos, this.collider_radius);
+                break;
+            case 'polygon':
+                this.collider = new PolygonCollider(pos, this.collider_vertices);
+                break;
+            default:
+                this.collider = null;
+                throw 'Unknown collider type: ' + this.collider_type;
         }
 
         this.collider.entity = this;
+    }
 
-        if (this.isSolid)
-            this.tree.insert(this.collider);
-        // this.tree.updateBody(this.collider);
+    public regenerateCollider(x = this.x, y = this.y) {
+        if (this.collider !== null)
+            this.tree.remove(this.collider);
+        
+        this.createCollider(x, y);
+        
+        this.tree.insert(this.collider);
     }
     
     protected updateCollider(x = this.x, y = this.y) {
-        // this.regenerateCollider(x, y);
-
-        if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y || x != this.prev_pos.x || y != this.prev_pos.y) {
-            // trace('changed scale or position - regenerating the collider');
+        if (this.size.x != this.prev_size.x || this.size.y != this.prev_size.y) {
             this.regenerateCollider(x, y);
         }
-        else { // try to update the existing collider?
-            this.collider.pos.x = x;
-            this.collider.pos.y = y;
-            this.collider.setAngle(this.angle);
-            if (!this.polygon_set) {
-                this.collider.setPoints([
-                    { x: 1, y: this.height },
-                    { x: this.width, y: this.height },
-                    { x: this.width, y: 1 },
-                    { x: 1, y: 1 }
-                ]);
-            }
-            if (this.isSolid)
-                this.tree.updateBody(this.collider);
-        }
+        
+        // if (this.size.x != this.prev_size.x || this.size.y != this.prev_size.y) {
+        //     // change the collider scale by the same ratio as the entity scale
+        //     this.collider.setScale(this.collider.scaleX * this.size.x / this.prev_size.x, this.collider.scaleY * this.size.y / this.prev_size.y);
+        // }
+        this.collider.setAngle(this.angle);
+        this.collider.setPosition(x, y);
+        this.tree.updateBody(this.collider);
     }
 
     public checkCollision(x: number = this.x, y: number = this.y, e:Entity):boolean {
@@ -265,35 +227,29 @@ class Entity extends EventEmitter {
         return this.tree.checkCollision(this.collider, e.collider);
     }
 
-    public placeMeeting(x:number = this.x, y:number = this.y, type?:EntityType|string):boolean {
+    public placeMeeting(x:number = this.x, y:number = this.y, type:EntityType|string = 'solid'):boolean {
         this.updateCollider(x, y);
 
         this.prev_size = {x: this.size.x, y: this.size.y}
 
-        // the broad-phase
-        let arr = this.tree.getPotentials(this.collider) as Collider[];
-        // let arr = this.tree.all() as Collider[];
-
-        // the narrow-phase
-        return arr.some(
-            (c:Collider) => 
-                c !== this.collider
-                && c.entity.matchesType(type)
-                && this.tree.checkCollision(this.collider, c)
-        );
+        return this.tree.checkOne(this.collider, (res) => {
+            let e = res.b.entity;
+            return e.matchesType(type);
+        });
     }
 
-    public placeMeetingAll(x:number = this.x, y:number = this.y, type?:EntityType|string):Entity[] {
-        // let bbox = this.getBBox(x, y);
+    public placeMeetingAll<T = Entity>(x:number = this.x, y:number = this.y, type:EntityType|string = 'solid'):T[] {
         this.updateCollider(x, y);
 
-        let candidates = this.tree.getPotentials(this.collider) as Collider[];
-        return candidates.filter(
-            (c:Collider) =>
-                c !== this.collider
-                && c.entity.matchesType(type)
-                && this.tree.checkCollision(this.collider, c)
-        ).map(collider => collider.entity);
+        let entities = [];
+        this.tree.checkOne(this.collider, (res) => {
+            let e = res.b.entity;
+            // trace('a:', res.a.entity.type);
+            // trace('b:', e.type);
+            if (e.matchesType(type))
+                entities.push(e);
+        });
+        return entities;
     }
 
     isOutsideRoom(x = this.x, y = this.y):boolean {
@@ -309,19 +265,33 @@ class Entity extends EventEmitter {
         return this.placeMeeting(x, y);
     }
 
-    private roundPos() { // round to 100ths
+    public roundPos() { // round to 100ths
         let prev_x = this.pos.x;
         let prev_y = this.pos.y;
 
         // round
-        this.pos.x = Math.round(this.pos.x * 100) / 100;
-        this.pos.y = Math.round(this.pos.y * 100) / 100;
+        // this.frac_pos.x = this.pos.x - this.roundedPos(this.pos.x);
+        // this.frac_pos.y = this.pos.y - this.roundedPos(this.pos.y);
+
+        this.pos.x = this.roundedPos(this.pos.x);
+        this.pos.y = this.roundedPos(this.pos.y);
 
         // if we became stuck - go back
         if (this.stuck()) {
             this.pos.x = prev_x;
             this.pos.y = prev_y;
         }
+    }
+
+    // public unroundPos() {
+    //     this.pos.x += this.frac_pos.x;
+    //     this.pos.y += this.frac_pos.y;
+    // }
+
+    public roundedPos(n:number) {
+        // return Math.floor(n);
+        // return Math.floor(Math.abs(n) * 100) * Math.sign(n) / 100;
+        return Math.floor(Math.abs(n)) * Math.sign(n);
     }
 
     // entity death
@@ -335,18 +305,18 @@ class Entity extends EventEmitter {
         this.emit('remove');
         var pos = this.room.entities.indexOf(this);
         this.room.entities.splice(pos, 1);
-        if (this.isSolid) {
+        // if (this.isSolid) {
             this.tree.remove(this.collider);
-        }
+        // }
     }
 
     public serialize():SerializedEntity {
         return {
             id: this.id,
             type: this.type,
-            object_name: this.object_name,
-            x: this.x,
-            y: this.y,
+            obj: this.object_name,
+            x: this.roundedPos(this.x),
+            y: this.roundedPos(this.y),
             xscale: this.xscale,
             yscale: this.yscale,
             spd: this.spd,

@@ -45,7 +45,6 @@ function debug_log(str, file) {
 	if is_undefined(file)
 		file = "log.txt"
 	
-	
 	global.logfile = file_text_open_append(working_directory+file)
 	var prefix = "[" + window_get_caption() + "]" + "[" + date_datetime_string(date_current_datetime()) + "]"
 	str = prefix + str

@@ -44,6 +44,8 @@ export default class PlayerEntity extends PhysicsEntity {
     type = PlayerEntity.type;
     object_name = PlayerEntity.object_name;
 
+    collider_type = 'box';
+
     collisionType = 'discrete' as CollisionType;
     preciseCollisions = true;
     outsideRoomAction:OutsideRoomAction = 'wrap';
