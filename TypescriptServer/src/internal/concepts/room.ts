@@ -2,24 +2,13 @@ import trace from '#util/logging';
 import Client from '#concepts/client';
 import Entity, { SerializedEntity } from '#concepts/entity';
 import { EntityConstructor, PlayerEntityConstructor } from '#concepts/entity';
-import { System, Circle, Polygon } from 'detect-collisions';
+import { System } from 'detect-collisions';
 
 import PlayerEntity from '#entities/entity_types/player';
 import GameMap, { MapInfo } from '#concepts/map';
 import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
-import RBush from 'rbush';
 import chalk from 'chalk';
-import PhysicsEntity from '#entities/physics_entity';
-
-// export class MyRBush extends RBush<Entity> {
-//     toBBox(e:Entity) { return e.bbox; }
-//     compareMinX(a:Entity, b:Entity) { return a.bbox.left - b.bbox.left; }
-//     compareMinY(a:Entity, b:Entity) { return a.bbox.top - b.bbox.top; }
-// }
-
-
-// import { entityNames } from '#entities/_entities';
 
 export type RoomEvent = 'tick' | 'spawn' | 'player leave' | 'player join' | 'close';
 

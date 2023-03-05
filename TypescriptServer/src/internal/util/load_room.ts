@@ -61,10 +61,6 @@ export default function LoadRoom(room_name:string):LoadedRoom {
     data.layers.forEach((layer) => {
         if (layer.instances) {
             layer.instances.forEach((inst) => {
-                // let props = inst.properties.map(p => ({
-                //     name: p.propertyId.name,
-                //     value: p.value
-                // }));
                 let props = {};
                 inst.properties.forEach(p => props[p.propertyId.name] = p.value.replaceAll('\"', ''));
 

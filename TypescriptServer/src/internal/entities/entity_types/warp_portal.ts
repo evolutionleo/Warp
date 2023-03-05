@@ -72,8 +72,6 @@ export default class WarpPortal extends Entity {
         if (this.enterable) {
             let players = this.placeMeetingAll<PlayerEntity>(this.x, this.y, 'Player');
 
-            // this.continuous_collision = this.continuous_collision.filter(c => players.includes(c));
-            
             this.continuous_collision = this.continuous_collision.filter(c => {
                 if (!this.checkCollision(this.x, this.y, c.e)) c.t--;
                 return c.t >= 0;

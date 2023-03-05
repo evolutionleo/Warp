@@ -2,15 +2,11 @@ import trace from '#util/logging';
 import Point from "#types/point";
 import BBox from '#types/bbox';
 import { EventEmitter } from "events";
-import { System, Circle, Polygon, Body, BodyType as ColliderTypes } from 'detect-collisions';
-import sat from 'sat';
 import { CircleCollider, BoxCollider, PolygonCollider, Collider } from '#concepts/collider';
 
 import { v4 as uuidv4 } from 'uuid';
 import Client from "#concepts/client";
 import Room from "#concepts/room";
-
-const { Vector } = sat;
 
 import PlayerEntity from "#entity/player";
 
@@ -110,7 +106,6 @@ class Entity extends EventEmitter {
         super();
         this.id = uuidv4();
         this.room = room;
-        // this.create(x, y); // moved to room.spawnEntity
         this.pos = { x, y };
         this.spd = { x: 0, y: 0};
         this.prev_pos = { x, y };
@@ -132,8 +127,6 @@ class Entity extends EventEmitter {
 
         this.emit('update');
 
-        // this.roundPos();
-
         // if something changed - send again (add to the room's bundle)
         const serialized = JSON.stringify(this.serialize());
         if (serialized != this.prev_serialized || this.sendEveryTick) {
@@ -153,9 +146,6 @@ class Entity extends EventEmitter {
                 else if (this.object_name === type) {
                     return true;
                 }
-                // else if (type === 'floor') {
-                //     return this.isFloor;
-                // }
                 else if (type === 'solid') {
                     return this.isSolid;
                 }
@@ -244,8 +234,6 @@ class Entity extends EventEmitter {
         let entities = [];
         this.tree.checkOne(this.collider, (res) => {
             let e = res.b.entity;
-            // trace('a:', res.a.entity.type);
-            // trace('b:', e.type);
             if (e.matchesType(type))
                 entities.push(e);
         });
@@ -269,10 +257,6 @@ class Entity extends EventEmitter {
         let prev_x = this.pos.x;
         let prev_y = this.pos.y;
 
-        // round
-        // this.frac_pos.x = this.pos.x - this.roundedPos(this.pos.x);
-        // this.frac_pos.y = this.pos.y - this.roundedPos(this.pos.y);
-
         this.pos.x = this.roundedPos(this.pos.x);
         this.pos.y = this.roundedPos(this.pos.y);
 
@@ -283,14 +267,7 @@ class Entity extends EventEmitter {
         }
     }
 
-    // public unroundPos() {
-    //     this.pos.x += this.frac_pos.x;
-    //     this.pos.y += this.frac_pos.y;
-    // }
-
     public roundedPos(n:number) {
-        // return Math.floor(n);
-        // return Math.floor(Math.abs(n) * 100) * Math.sign(n) / 100;
         return Math.floor(Math.abs(n)) * Math.sign(n);
     }
 
@@ -305,9 +282,7 @@ class Entity extends EventEmitter {
         this.emit('remove');
         var pos = this.room.entities.indexOf(this);
         this.room.entities.splice(pos, 1);
-        // if (this.isSolid) {
-            this.tree.remove(this.collider);
-        // }
+        this.tree.remove(this.collider);
     }
 
     public serialize():SerializedEntity {
@@ -347,12 +322,7 @@ class Entity extends EventEmitter {
             left: x,
             top: y,
             right: x + w,
-            bottom: y + h,
-
-            // get left() { return this.minX },
-            // get right() { return this.maxX },
-            // get top() { return this.minY },
-            // get bottom() { return this.maxY }
+            bottom: y + h
         }
     }
 
