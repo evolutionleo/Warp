@@ -26,11 +26,13 @@ export default class PlayerEntity extends PhysicsEntity {
     type = PlayerEntity.type;
     object_name = PlayerEntity.object_name;
     
-    collisionType = 'discrete';
-    preciseCollisions = true;
-    outsideRoomAction = 'wrap';
+    collider_type = 'box';
     
-    stuckAction = 'stop';
+    collision_type = 'discrete';
+    precise_collisions = true;
+    outside_room_action = 'wrap';
+    
+    stuck_action = 'stop';
     
     sendEveryTick = true;
     
@@ -46,14 +48,17 @@ export default class PlayerEntity extends PhysicsEntity {
     
     client;
     
+    get name() { return this.client.name; }
+    prop_names = ['name'];
+    
     inputs = defaultInputs;
     
     
-    isSolid = true;
+    is_solid = true;
     
     walksp;
-    jumpHeight;
-    cutJump;
+    jump_speed;
+    cut_jump;
     
     constructor(room, x = 0, y = 0, client) {
         super(room, x, y);
@@ -62,33 +67,33 @@ export default class PlayerEntity extends PhysicsEntity {
     
     create() {
         super.create();
-        this.walksp = 7;
-        this.jumpHeight = 12.5;
-        this.cutJump = false;
+        this.walksp = 420;
+        this.jump_speed = 600;
+        this.cut_jump = false;
     }
     
-    update() {
+    update(dt) {
         this.spd.x = this.inputs.move.x * this.walksp;
         
         if (this.inputs.keys.kjump && this.grounded()) {
             this.jump();
         }
         
-        if (!this.inputs.keys.kjump && !this.cutJump && !this.grounded() && this.spd.y <= -1) {
+        if (!this.inputs.keys.kjump && !this.cut_jump && !this.grounded() && this.spd.y <= -1) {
             this.spd.y /= 2;
-            this.cutJump = true;
+            this.cut_jump = true;
         }
         
-        super.update();
+        super.update(dt);
         let p = this.client.profile;
         if (p) {
-            p.x = this.x;
-            p.y = this.y;
+            p.state.x = this.x;
+            p.state.y = this.y;
         }
     }
     
     jump() {
-        this.spd.y = -this.jumpHeight;
-        this.cutJump = false;
+        this.spd.y = -this.jump_speed;
+        this.cut_jump = false;
     }
 }

@@ -14,6 +14,10 @@ const args = minimist(process.argv.slice(2));
  * @property {string} meta.compatible_game_versions
  * @property {string} meta.server
  *
+ * @property {Object} server
+ * @property {number} server.max_connections
+ * @property {number} server.max_ws_payload
+ *
  * @property {object} lobby
  * @property {number} lobby.max_players
  * @property {boolean} lobby.addIntoPlayOnFull
@@ -25,6 +29,9 @@ const args = minimist(process.argv.slice(2));
  * @property {string} room.starting_room
  * @property {number} room.rest_timeout
  *
+ * @property {object} party
+ * @property {number} party.max_members
+ *
  * @property {number} tps
  *
  * @property {boolean} timestamps_enabled
@@ -34,6 +41,7 @@ const args = minimist(process.argv.slice(2));
  * @property {boolean} rooms_enabled
  * @property {boolean} entities_enabled
  * @property {boolean} ssl_enabled
+ * @property  {boolean} logging_enabled
  *
  * @property {string} ssl_cert_path
  * @property {string} ssl_key_path
@@ -54,13 +62,18 @@ const args = minimist(process.argv.slice(2));
 
 const common_config = {
     meta: {
-        game_name: 'OnlineGame',
+        game_name: 'Warp Game',
         game_version: 'v1.0.0',
         warp_version: 'v5.0.0',
         
         compatible_game_versions: '>=1.0.0',
         
         server: 'unknown'
+    },
+    
+    server: {
+        max_connections: 1000,
+        max_ws_payload: 2 * 1024 * 1024 // 2 MB
     },
     
     // some fundamental lobby settings
@@ -74,15 +87,26 @@ const common_config = {
     room: {
         // .yy room loading
         rooms_path: '../Client/rooms',
-        warn_on_unknown_entity: true,
+        warn_on_unknown_entity: false,
+        
+        use_starting_room: true,
+        use_last_profile_room: false,
+        use_persistent_position: false,
         
         starting_room: 'Test Room',
-        rest_timeout: 5    // (seconds) - prevents rooms from processing entities
+        rest_timeout: 5,
         // when no players are present for a certain amount of time
         // set to -1 to disable this feature
+        // (!!! setting to 0 might cause problems and unexpected behaviour !!!)
+        
+        recently_joined_timer: 2 // (seconds) - time 
     },
     
-    tps: 60,
+    party: {
+        max_members: 5 // max party size
+    },
+    
+    tps: 20,
     
     // Disable some of the features that you don't need in your game
     // true = enabled, false = disabled
@@ -92,7 +116,9 @@ const common_config = {
     shell_enabled: false,
     rooms_enabled: true,
     entities_enabled: true,
+    dt_enabled: true,
     ssl_enabled: false,
+    logging_enabled: true,
     verbose_lag: false,
     
     necessary_login: false,
@@ -119,7 +145,7 @@ const prod_config = {
     ssl_cert_path: '/etc/letsencrypt/live/example.com/cert.pem',
     ssl_key_path: '/etc/letsencrypt/live/example.com/privkey.pem',
     
-    db: args.db || 'mongodb://127.0.0.1:27017/online-game',
+    db: args.db || 'mongodb://127.0.0.1:27017/warp-game',
     // you can add a postfix at the end of the name to separate them
     shell_enabled: false,
     verbose_lag: false,
@@ -142,12 +168,12 @@ const dev_config = {
     ssl_cert_path: '',
     ssl_key_path: '',
     
-    db: args.db || 'mongodb://127.0.0.1:27017/online-game',
+    db: args.db || 'mongodb://127.0.0.1:27017/warp-game',
     
     shell_enabled: true,
     verbose_lag: true,
     
-    initial_lobbies: 1
+    initial_lobbies: 3
 };
 
 
@@ -171,7 +197,7 @@ else {
 }
 
 
-trace(chalk.blueBright('Config loaded! environment: ' + config.env_name));
-
 global.config = config;
 export default config;
+
+trace(chalk.blueBright('Config loaded! environment: ' + config.env_name));

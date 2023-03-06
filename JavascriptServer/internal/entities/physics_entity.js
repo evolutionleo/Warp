@@ -5,22 +5,22 @@ import { clamp, approach } from '#util/maths';
 export default class PhysicsEntity extends Entity {
     physicsEnabled = true;
     
-    grv = { x: 0, y: 0.4 };
-    max_spd = { x: 20, y: 20 };
+    grv = { x: 0, y: 800 };
+    max_spd = { x: 2000, y: 2000 };
     
-    outsideRoomAction = 'stop';
-    collisionType = 'discrete'; // discrete or continuout
-    collisionPrecision = 5; // only works with collisionType != 'discrete'
+    outside_room_action = 'stop';
+    collision_type = 'discrete'; // discrete or continuout
+    collision_precision = 5; // only works with collision_type != 'discrete'
     
-    preciseCollisions = true; // pixel-perfect, but is slower
+    precise_collisions = true; // pixel-perfect, but is slower
     
-    stuckAction = 'stop'; // or 'clip' to clip through walls
+    stuck_action = 'stop'; // or 'clip' to clip through walls
     
     constructor(room, x = 0, y = 0) {
         super(room, x, y);
     }
     
-    move(xspd = undefined, yspd = 0) {
+    move(xspd = undefined, yspd = 0, dt = this.room.dt) {
         // default move
         let def_move = xspd == undefined;
         if (def_move) {
@@ -28,20 +28,24 @@ export default class PhysicsEntity extends Entity {
             yspd = this.spd.y;
         }
         
+        xspd *= dt;
+        yspd *= dt;
+        
+        xspd = this.roundedPos(xspd);
+        yspd = this.roundedPos(yspd);
         
         // stuck in a solid object
         if (this.stuck()) {
             // just clip through everything?
-            if (this.stuckAction === 'clip') {
+            if (this.stuck_action === 'clip') {
                 this.x += xspd;
                 this.y += yspd;
             }
             return; // help me im stuck
         }
         
-        
         if (this.isCollidingX(this.x, this.y, xspd)) {
-            if (this.preciseCollisions && xspd != 0) {
+            if (this.precise_collisions && xspd != 0) {
                 while (!this.isCollidingX(this.x, this.y, Math.sign(xspd))) {
                     this.x += Math.sign(xspd);
                 }
@@ -50,7 +54,7 @@ export default class PhysicsEntity extends Entity {
                 this.spd.x = 0;
             xspd = 0;
         }
-        if (this.outsideRoomAction === 'stop' && this.isOutsideRoom(this.x + xspd, this.y)) {
+        if (this.outside_room_action === 'stop' && this.isOutsideRoom(this.x + xspd, this.y)) {
             if (def_move)
                 this.spd.x = 0;
             xspd = 0;
@@ -59,7 +63,7 @@ export default class PhysicsEntity extends Entity {
         this.updateCollider();
         
         if (this.isCollidingY(this.x, this.y, yspd)) {
-            if (this.preciseCollisions && yspd != 0) {
+            if (this.precise_collisions && yspd != 0) {
                 while (!this.isCollidingY(this.x, this.y, Math.sign(yspd))) {
                     this.y += Math.sign(yspd);
                 }
@@ -68,7 +72,7 @@ export default class PhysicsEntity extends Entity {
                 this.spd.y = 0;
             yspd = 0;
         }
-        if (this.outsideRoomAction === 'stop' && this.isOutsideRoom(this.x, this.y + yspd)) {
+        if (this.outside_room_action === 'stop' && this.isOutsideRoom(this.x, this.y + yspd)) {
             if (def_move) {
                 this.spd.y = 0;
             }
@@ -78,9 +82,9 @@ export default class PhysicsEntity extends Entity {
         this.updateCollider();
     }
     
-    update() {
-        this.spd.x += this.grv.x;
-        this.spd.y += this.grv.y;
+    update(dt = 1) {
+        this.spd.x += this.grv.x * dt;
+        this.spd.y += this.grv.y * dt;
         
         this.spd.x = clamp(this.spd.x, -this.max_spd.x, this.max_spd.x);
         this.spd.y = clamp(this.spd.y, -this.max_spd.y, this.max_spd.y);
@@ -88,7 +92,7 @@ export default class PhysicsEntity extends Entity {
         this.move();
         this.wrapOutsideRoom();
         
-        super.update();
+        super.update(dt);
     }
     
     
@@ -99,7 +103,7 @@ export default class PhysicsEntity extends Entity {
     
     
     wrapOutsideRoom() {
-        if (this.outsideRoomAction !== 'wrap' || !this.isOutsideRoom())
+        if (this.outside_room_action !== 'wrap' || !this.isOutsideRoom())
             return false;
         
         let tryWrap = (x, y) => {
@@ -129,14 +133,14 @@ export default class PhysicsEntity extends Entity {
     }
     
     isCollidingX(x = this.x, y = this.y, xspd = this.spd.x) {
-        if (this.collisionType === 'discrete') {
+        if (this.collision_type === 'discrete') {
             return this.placeMeeting(x + xspd, y);
         }
         else { // continuous
             let target_x = x + xspd;
             let curr_x = x;
             
-            let step = Math.max(Math.abs(target_x - curr_x) / this.collisionPrecision, 1) * Math.sign(target_x - curr_x);
+            let step = Math.max(Math.abs(target_x - curr_x) / this.collision_precision, 1) * Math.sign(target_x - curr_x);
             
             while (curr_x != target_x) {
                 curr_x = approach(curr_x, target_x, step);
@@ -153,14 +157,14 @@ export default class PhysicsEntity extends Entity {
     
     
     isCollidingY(x = this.x, y = this.y, yspd = this.spd.x) {
-        if (this.collisionType === 'discrete') {
+        if (this.collision_type === 'discrete') {
             return this.placeMeeting(x, y + yspd);
         }
         else { // continuous
             let target_y = y + yspd;
             let curr_y = y;
             
-            let step = Math.max(Math.abs(target_y - curr_y) / this.collisionPrecision, 1) * Math.sign(target_y - curr_y);
+            let step = Math.max(Math.abs(target_y - curr_y) / this.collision_precision, 1) * Math.sign(target_y - curr_y);
             
             while (curr_y != target_y) {
                 curr_y = approach(curr_y, target_y, step);

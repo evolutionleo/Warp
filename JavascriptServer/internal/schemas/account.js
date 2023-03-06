@@ -1,24 +1,13 @@
 // this section contains a schema for saving players' account info
 import trace from '#util/logging';
 
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
-
-import { hash_password, verify_password } from '#util/password_encryption';
+import { model, Schema } from 'mongoose';
+import { hashPassword, verifyPassword } from '#util/password_encryption';
 
 // you can edit this schema!
 const accountSchema = new Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    
-    online: { type: Boolean, required: true },
-    
-    friends: [{ type: Schema.Types.ObjectId }],
-    mmr: { type: Number, required: false } // matchmaking rating
-    
     // you can add additional properties to the schema here:
 }, { collection: 'Accounts' });
 
@@ -28,12 +17,9 @@ accountSchema.statics.register = function accountRegister(username, password) {
     return new Promise(async (resolve, reject) => {
         var account = new Account({
             username: username,
-            password: await hash_password(password),
+            password: await hashPassword(password),
             
-            friends: [],
-            mmr: 1000
-            
-            // add more stuff below that is defined in the Account Schema above
+            // you can add more stuff below (you'll also need to define it in the Account Schema above)
         });
         
         account.save(function (err) {
@@ -59,7 +45,7 @@ accountSchema.statics.login = function accountLogin(username, password) {
                 reject('error while logging in');
             }
             else {
-                if (await verify_password(password, account.password)) {
+                if (await verifyPassword(password, account.password)) {
                     resolve(account);
                 }
                 else {
@@ -70,8 +56,14 @@ accountSchema.statics.login = function accountLogin(username, password) {
     });
 };
 
-// export const Account:IAccountModel = model<IAccount, IAccountModel>('Account', accountSchema);
 export const Account = model('Account', accountSchema);
-
-
 export default Account;
+
+export function getAccountInfo(a) {
+    if (a === null)
+        return null;
+    
+    return {
+        username: a.username
+    };
+}

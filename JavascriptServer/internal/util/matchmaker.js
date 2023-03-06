@@ -1,11 +1,17 @@
+import { lobbyList } from '#concepts/lobby';
 
 export default class MatchMaker {
     static queue = [];
     static _interval = null;
     
     // an internal loop
-    static process_matches() {
-        
+    static processMatches() {
+        // Advanced matchmaking coming in v5.1
+    }
+    
+    static findMatch() {
+        throw new Error('Matchmaker.findMatch() is ');
+        // let t = new Ticket();
     }
     
     /**
@@ -13,11 +19,11 @@ export default class MatchMaker {
      * @param {Client} user
      * @returns {Lobby} lobby
      */
-    static find_nonfull_lobby(user) {
+    static findNonfullLobby(user) {
         var match_lobby = null;
         // this a so called 'arrow function'.
         // (lobby) => {} is the same as function(lobby) {}
-        Object.values(global.lobbies).forEach((lobby) => {
+        lobbyList().forEach((lobby) => {
             // you can add additional checks for user rank, etc.
             // and your own matchmaking logic
             if (!lobby.full) {
@@ -35,7 +41,7 @@ export default class MatchMaker {
      * @param {('win'|'loss'|'draw')} result
      * @returns {number} mmr_delta
      */
-    static get_mmr_delta(player_mmr, opponent_mmr, result) {
+    static getMMRDelta(player_mmr, opponent_mmr, result) {
         // win = 1, loss = 0, draw = 0.5
         let res;
         switch (result) {

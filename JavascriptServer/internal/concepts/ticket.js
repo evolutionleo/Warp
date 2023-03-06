@@ -1,9 +1,13 @@
 
 export default class Ticket {
     created; // timestamp
-    by;
+    by; // who created this Ticket (either a single player or a Party)
+    is_party; // true if this is a PartyTicket
+    
+    get avg_mmr() { return this.by.mmr; }
+    
     requirements = {
-        gamemode: 'any'
+        game_mode: 'any'
     };
     
     constructor(by, requirements) {
@@ -16,6 +20,7 @@ export default class Ticket {
 export class SingleTicket extends Ticket {
     constructor(by, requirements) {
         super(by, requirements);
+        this.is_party = false;
         this.by = this.by;
     }
 }
@@ -23,6 +28,7 @@ export class SingleTicket extends Ticket {
 export class PartyTicket extends Ticket {
     constructor(by, requirements) {
         super(by, requirements);
+        this.is_party = true;
         this.by = this.by;
     }
 }

@@ -1,4 +1,8 @@
+import util from 'util';
 import { appendFile } from 'fs';
+
+const dummy_function = () => { };
+const styling_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 
 function trace(...strs) {
     var str = '';
@@ -9,7 +13,7 @@ function trace(...strs) {
             str += 'undefined';
         }
         else if (typeof s === 'object') {
-            str += ' ' + JSON.stringify(s);
+            str += ' ' + util.inspect(s);
         }
         else {
             str += ' ' + s.toString();
@@ -21,10 +25,18 @@ function trace(...strs) {
     
     // console log
     console.log(str);
-    // append to the log file
-    let styling_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
-    appendFile('./server_log.txt', str.replace(styling_regex, '') + '\n', () => { });
+    
+    if (global.config.logging_enabled) {
+        // append to the log file, without any styling special characters
+        recently_logged += str.replace(styling_regex, '') + '\n';
+    }
 }
+
+var recently_logged = '';
+setInterval(() => {
+    appendFile('./server_log.txt', recently_logged, dummy_function);
+    recently_logged = '';
+}, 100);
 
 global.trace = trace;
 export default trace;

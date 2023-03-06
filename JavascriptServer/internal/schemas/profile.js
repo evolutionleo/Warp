@@ -1,26 +1,30 @@
-// This schema is for profiles. The idea is that
-// multiple profiles can be linked to the same account
-
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+// This schema is for profiles
+import { Schema, model } from 'mongoose';
 
 // this holds the state of the profile
 // you can edit this schema!
 const profileSchema = new Schema({
-    account_id: { type: Schema.Types.ObjectId },
-    name: { type: String, required: false },
+    account_id: { type: Schema.Types.ObjectId, ref: 'Account' },
+    name: { type: String, unique: true },
     
-    lobbyid: { type: String, required: false },
-    room: { type: String, required: false },
+    online: { type: Boolean, default: false },
+    last_online: { type: Date, default: Date.now },
     
-    x: { type: Number, required: false },
-    y: { type: Number, required: false }
+    friends: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
+    mmr: { type: Number, required: false },
+    
+    
+    state: {
+        lobbyid: String,
+        room: String,
+        
+        x: Number,
+        y: Number,
+        
+        //hp: Number
+    }
     
     // you can add additional properties to the schema here:
-    // hp: Number,
 }, { collection: 'Profiles' });
 
 
@@ -32,10 +36,26 @@ export function freshProfile(account) {
         account_id: account._id,
         name: account.username,
         
-        lobbyid: '-1',
-        room: global.config.room.starting_room,
-        
-        x: 0,
-        y: 0
+        state: {
+            lobbyid: '',
+            room: '',
+            
+            x: 0,
+            y: 0
+        }
     });
+}
+
+// like profile, but only the data that is useful for sending
+export function getProfileInfo(p) {
+    if (p === null)
+        return null;
+    
+    return {
+        id: p.id,
+        name: p.name,
+        online: p.online,
+        last_online: p.last_online.toISOString(),
+        mmr: p.mmr
+    };
 }

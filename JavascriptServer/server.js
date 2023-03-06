@@ -49,6 +49,7 @@ const server = createServer(function (socket) {
     
     var c = new Client(socket);
     global.clients.push(c); // add the client to clients list (unnecessary)
+    c.ip = socket.remoteAddress;
     
     // Bind functions on events
     
@@ -82,6 +83,8 @@ const server = createServer(function (socket) {
     });
 });
 
+server.maxConnections = config.server.max_connections;
+
 
 server.listen(port, ip, () => {
     trace(chalk.bold.blueBright(`Server running on port ${port}!`));
@@ -100,20 +103,21 @@ if (global.config.ws_enabled) {
         });
     }
     else {
-        http_server = http.createServer({
-        
-        });
+        http_server = http.createServer({});
     }
     
     const ws_server = new ws.WebSocketServer({
         server: http_server,
+        clientTracking: true,
+        maxPayload: config.server.max_ws_payload,
     });
     
-    ws_server.on('connection', (socket) => {
+    ws_server.on('connection', (socket, r) => {
         trace(chalk.blueBright("WebSocket connected!"));
         
         var c = new Client(socket, 'ws');
         global.clients.push(c); // add the client to clients list (unnecessary)
+        c.ip = r.socket.remoteAddress;
         
         // Bind functions on events
         

@@ -1,18 +1,17 @@
 import { EventEmitter } from "events";
-import { Circle, Polygon } from 'detect-collisions';
-import Collider from '#concepts/collider';
+import { CircleCollider, BoxCollider, PolygonCollider } from '#concepts/collider';
 
 import { v4 as uuidv4 } from 'uuid';
 
 // a thing
 class Entity extends EventEmitter {
-    isSolid = false;
-    isStatic = false;
-    isTrigger = false;
+    is_solid = false;
+    is_static = false;
+    is_trigger = false;
     
-    pos;
-    spd;
-    angle;
+    pos; // keep in mind that the coordinates are always set to a whole number (to achieve pixel-perfect collisions)
+    spd; // speed in pixels per second, can be fractional
+    angle = 0;
     
     prev_pos;
     prev_serialized; // json of serialized entity
@@ -22,21 +21,20 @@ class Entity extends EventEmitter {
     
     
     // the custom variables that need sending with the entitiy
-    propNames = []; // automatically loaded in load_room, but ideally should be manually set as well
-    // e.x. propNames = [ 'hp', 'mana', 'jumpHeight' ];
+    prop_names = []; // automatically loaded in load_room, but ideally should be manually set as well
+    // e.x. prop_names = [ 'hp', 'mana', 'jumpHeight' ];
     
     get props() {
         let _props = {};
-        this.propNames.forEach(propName => _props[propName] = this[propName]);
+        this.prop_names.forEach(propName => _props[propName] = this[propName]);
         return _props;
     }
     
     
-    collider; // a polygon
-    collider_type = 'polygon';
+    collider = null; // a polygon or a circle
+    collider_type = 'box';
     collider_radius = this.width / 2; // only relevant when collider_type is 'circle'
     collider_vertices = []; // if this is not overridden, a default rectangle collider will be used
-    polygon_set = false;
     
     get size() {
         return {
@@ -68,55 +66,28 @@ class Entity extends EventEmitter {
         super();
         this.id = uuidv4();
         this.room = room;
-        // this.create(x, y); // moved to room.spawnEntity
         this.pos = { x, y };
         this.spd = { x: 0, y: 0 };
         this.prev_pos = { x, y };
         
-        // create the collider
-        switch (this.collider_type) {
-            case 'circle':
-                this.collider = new Collider(new Circle(this.pos, this.collider_radius));
-                break;
-            case 'polygon':
-                // the default 
-                if (this.collider_vertices.length == 0) {
-                    this.polygon_set = false;
-                    this.collider_vertices = [
-                        { x: 1, y: this.height },
-                        { x: this.width, y: this.height },
-                        { x: this.width, y: 1 },
-                        { x: 1, y: 1 }
-                    ];
-                }
-                else {
-                    this.polygon_set = true;
-                }
-                
-                this.collider = new Collider(new Polygon(this.pos, this.collider_vertices));
-                break;
-            default:
-                throw 'Unknown collider type: ' + this.collider_type;
-        }
-        
+        this.createCollider();
         this.collider.entity = this;
         
-        // trace(this.propNames)
+        this.tree.insert(this.collider);
+        
+        // trace(this.prop_names)
     }
     
     create() {
-        if (this.tags.includes('solid') || this.isSolid) {
-            this.tree.insert(this.collider);
-        }
+        this.regenerateCollider();
     }
     
     // called from room.tick()
-    update() {
+    update(dt = 1) {
+        
         this.emit('update');
         
-        // this.roundPos();
-        
-        // if something changed - send again
+        // if something changed - send again (add to the room's bundle)
         const serialized = JSON.stringify(this.serialize());
         if (serialized != this.prev_serialized || this.sendEveryTick) {
             this.prev_serialized = serialized;
@@ -135,102 +106,98 @@ class Entity extends EventEmitter {
                 else if (this.object_name === type) {
                     return true;
                 }
-                // else if (type === 'floor') {
-                //     return this.isFloor;
-                // }
                 else if (type === 'solid') {
-                    return this.isSolid;
+                    return this.is_solid;
                 }
                 else if (this.hasTag(type)) {
                     return true;
                 }
                 break;
             case 'object':
+            case 'function':
                 if (this instanceof type) {
                     return true;
                 }
                 break;
             default:
                 console.error('Warning: Unknown type of `type`: ' + typeof type);
-                return true;
+                return false;
         }
+        
+        return false;
     }
     
-    regenerateCollider(x = this.x, y = this.y) {
-        if (this.tags.includes('solid') || this.isSolid)
-            this.tree.remove(this.collider);
+    createCollider(x = this.x, y = this.y) {
+        let pos = { x: x, y: y };
         
-        if (this.collider_type === 'polygon') {
-            if (!this.polygon_set) {
-                this.collider = new Collider(new Polygon({ x, y }, [
-                    { x: 1, y: this.height },
-                    { x: this.width, y: this.height },
-                    { x: this.width, y: 1 },
-                    { x: 1, y: 1 }
-                ]));
-            }
-            else {
-                this.collider = new Collider(new Polygon(this.pos, this.collider_vertices));
-            }
-        }
-        else if (this.collider_type === 'circle') {
-            this.collider = new Collider(new Circle(this.pos, this.collider_radius));
+        // create the collider
+        switch (this.collider_type) {
+            case 'box':
+                this.collider = new BoxCollider(pos, this.width - .01, this.height - .01);
+                break;
+            case 'circle':
+                this.collider = new CircleCollider(pos, this.collider_radius);
+                break;
+            case 'polygon':
+                this.collider = new PolygonCollider(pos, this.collider_vertices);
+                break;
+            default:
+                this.collider = null;
+                throw 'Unknown collider type: ' + this.collider_type;
         }
         
         this.collider.entity = this;
+    }
+    
+    regenerateCollider(x = this.x, y = this.y) {
+        if (this.collider !== null)
+            this.tree.remove(this.collider);
         
-        if (this.tags.includes('solid') || this.isSolid)
-            this.tree.insert(this.collider);
-        // this.tree.updateBody(this.collider);
+        this.createCollider(x, y);
+        
+        this.tree.insert(this.collider);
     }
     
     updateCollider(x = this.x, y = this.y) {
-        // this.regenerateCollider(x, y);
-        
-        if (this.prev_size.x != this.size.x || this.prev_size.y != this.size.y || x != this.prev_pos.x || y != this.prev_pos.y) {
-            // trace('changed scale or position - regenerating the collider');
+        if (this.size.x != this.prev_size.x || this.size.y != this.prev_size.y) {
             this.regenerateCollider(x, y);
         }
-        else { // try to update the existing collider?
-            this.collider.pos.x = x;
-            this.collider.pos.y = y;
-            this.collider.setAngle(this.angle);
-            if (!this.polygon_set) {
-                this.collider.setPoints([
-                    { x: 1, y: this.height },
-                    { x: this.width, y: this.height },
-                    { x: this.width, y: 1 },
-                    { x: 1, y: 1 }
-                ]);
-            }
-            this.tree.updateBody(this.collider);
-        }
+        
+        // if (this.size.x != this.prev_size.x || this.size.y != this.prev_size.y) {
+        //     // change the collider scale by the same ratio as the entity scale
+        //     this.collider.setScale(this.collider.scaleX * this.size.x / this.prev_size.x, this.collider.scaleY * this.size.y / this.prev_size.y);
+        // }
+        this.collider.setAngle(this.angle);
+        this.collider.setPosition(x, y);
+        this.tree.updateBody(this.collider);
     }
     
-    placeMeeting(x = this.x, y = this.y, type) {
+    checkCollision(x = this.x, y = this.y, e) {
+        this.updateCollider(x, y);
+        return this.tree.checkCollision(this.collider, e.collider);
+    }
+    
+    placeMeeting(x = this.x, y = this.y, type = 'solid') {
         this.updateCollider(x, y);
         
         this.prev_size = { x: this.size.x, y: this.size.y };
         
-        // the broad-phase
-        let arr = this.tree.getPotentials(this.collider);
-        // let arr = this.tree.all() as Collider[];
-        
-        // the narrow-phase
-        return arr.some((c) => c !== this.collider
-            && c.entity.matchesType(type)
-            && this.tree.checkCollision(this.collider, c));
+        return this.tree.checkOne(this.collider, (res) => {
+            let e = res.b.entity;
+            return e.matchesType(type);
+        });
     }
     
-    placeMeetingAll(x = this.x, y = this.y, type) {
-        // let bbox = this.getBBox(x, y);
-        this.collider.pos.x = x;
-        this.collider.pos.y = y;
+    placeMeetingAll(x = this.x, y = this.y, type = 'solid') {
+        this.updateCollider(x, y);
         
-        let candidates = this.tree.getPotentials(this.collider);
-        return candidates.filter((c) => c !== this.collider
-            && c.entity.matchesType(type)
-            && this.tree.checkCollision(this.collider, c)).map(collider => collider.entity);
+        let entities = [];
+        this.tree.checkOne(this.collider, (res) => {
+            let e = res.b.entity;
+            if (e.matchesType(type))
+                entities.push(e);
+        });
+        return entities;
     }
     
     isOutsideRoom(x = this.x, y = this.y) {
@@ -250,15 +217,18 @@ class Entity extends EventEmitter {
         let prev_x = this.pos.x;
         let prev_y = this.pos.y;
         
-        // round
-        this.pos.x = Math.round(this.pos.x * 100) / 100;
-        this.pos.y = Math.round(this.pos.y * 100) / 100;
+        this.pos.x = this.roundedPos(this.pos.x);
+        this.pos.y = this.roundedPos(this.pos.y);
         
         // if we became stuck - go back
         if (this.stuck()) {
             this.pos.x = prev_x;
             this.pos.y = prev_y;
         }
+    }
+    
+    roundedPos(n) {
+        return Math.floor(Math.abs(n)) * Math.sign(n);
     }
     
     // entity death
@@ -272,18 +242,16 @@ class Entity extends EventEmitter {
         this.emit('remove');
         var pos = this.room.entities.indexOf(this);
         this.room.entities.splice(pos, 1);
-        if (this.isSolid) {
-            this.tree.remove(this.collider);
-        }
+        this.tree.remove(this.collider);
     }
     
     serialize() {
         return {
             id: this.id,
             type: this.type,
-            object_name: this.object_name,
-            x: this.x,
-            y: this.y,
+            obj: this.object_name,
+            x: this.roundedPos(this.x),
+            y: this.roundedPos(this.y),
             xscale: this.xscale,
             yscale: this.yscale,
             spd: this.spd,
@@ -298,12 +266,6 @@ class Entity extends EventEmitter {
     send() {
         const data = this.bundle();
         this.room.bundle.push(data);
-        // if (client === undefined) {
-        //     this.room.broadcast(data);
-        // }
-        // else {
-        //     client.send(data);
-        // }
     }
     
     
@@ -320,12 +282,7 @@ class Entity extends EventEmitter {
             left: x,
             top: y,
             right: x + w,
-            bottom: y + h,
-            
-            // get left() { return this.minX },
-            // get right() { return this.maxX },
-            // get top() { return this.minY },
-            // get bottom() { return this.maxY }
+            bottom: y + h
         };
     }
     
@@ -335,6 +292,9 @@ class Entity extends EventEmitter {
     }
     
     addTag(tag) {
+        if (tag == 'solid')
+            this.is_solid = true;
+        
         return this.tags.push(tag);
     }
     

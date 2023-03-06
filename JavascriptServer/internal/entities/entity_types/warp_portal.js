@@ -1,9 +1,9 @@
 import Entity from "#concepts/entity";
 
 export default class WarpPortal extends Entity {
-    isStatic = true;
-    isSolid = false;
-    // isTrigger = true;
+    is_static = true;
+    is_solid = false;
+    // is_trigger = true;
     
     static type = 'Warp Portal';
     static object_name = 'oWarpPortal';
@@ -15,7 +15,7 @@ export default class WarpPortal extends Entity {
         y: 32
     };
     
-    collider_type = 'polygon';
+    collider_type = 'box';
     
     
     exit_portal = null;
@@ -24,7 +24,7 @@ export default class WarpPortal extends Entity {
     warp_id = undefined; // to link the exit portal with an entrance
     continuous_collision = [];
     
-    propNames = ['portal_type', 'room_to', 'warp_id'];
+    prop_names = ['portal_type', 'room_to', 'warp_id'];
     
     Room_to = null; // with the Capital letter
     
@@ -59,16 +59,22 @@ export default class WarpPortal extends Entity {
         
         player.entity.x = this.exit_portal.x;
         player.entity.y = this.exit_portal.y;
-        this.exit_portal.continuous_collision.push(player.entity);
+        this.exit_portal.continuous_collision.push({ e: player.entity, t: 1 });
     }
     
     update() {
         if (this.enterable) {
             let players = this.placeMeetingAll(this.x, this.y, 'Player');
-            this.continuous_collision = this.continuous_collision.filter(c => players.includes(c));
+            
+            this.continuous_collision = this.continuous_collision.filter(c => {
+                if (!this.checkCollision(this.x, this.y, c.e))
+                    c.t--;
+                return c.t >= 0;
+            });
+            
             // teleport
             players.forEach(player => {
-                if (!this.continuous_collision.includes(player))
+                if (this.continuous_collision.findIndex(c => (c.e == player)) == -1)
                     this.teleport(player.client);
             });
         }

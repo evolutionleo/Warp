@@ -1,9 +1,8 @@
 import trace from '#util/logging';
-import { findLobby } from '#util/lobby_functions';
-import MatchMaker from '#util/matchmaker';
-import { Account } from '#schemas/account';
+import { lobbyExists } from '#concepts/lobby';
 import semver from 'semver';
 import chalk from 'chalk';
+import { partyExists } from '#concepts/party';
 
 /**
  * @param {Client} c
@@ -58,12 +57,12 @@ export default async function handlePacket(c, data) {
             c.sendMessage(data.msg + ' indeed');
             break;
         case 'ping':
-            c.sendPong(data.t);
+            c.sendPong(data.T);
             break;
         case 'pong':
-            let t = data.t;
+            let t = data.T;
             let new_t = new Date().getTime();
-            let dt = new_t - t;
+            let dt = new_t - t - global.start_time;
             
             c.ping = dt;
             
@@ -74,44 +73,25 @@ export default async function handlePacket(c, data) {
         // preset commands
         case 'login':
             var { username, password } = data;
-            Account.login(username, password)
-                .then(function (account) {
-                // this also sends the message
-                c.login(account);
-            }).catch(function (reason) {
-                c.sendLogin('fail', reason);
-            });
+            c.tryLogin(username, password);
             break;
         case 'register':
             var { username, password } = data;
-            Account.register(username, password)
-                .then(function (account) {
-                // this also sends the message
-                c.register(account);
-            }).catch(function (reason) {
-                trace('error: ' + reason);
-                c.sendRegister('fail', reason.toString());
-            });
+            c.tryRegister(username, password);
             break;
+        
         case 'lobby list':
             c.sendLobbyList();
             break;
         case 'lobby info':
             var lobbyid = data.lobbyid;
-            c.sendLobbyInfo(lobbyid);
+            if (lobbyExists(lobbyid))
+                c.sendLobbyInfo(lobbyid);
             break;
         case 'lobby join':
             var lobbyid = data.lobbyid;
-            var lobby;
-            if (lobbyid) {
-                lobby = findLobby(lobbyid);
-            }
-            else {
-                lobby = MatchMaker.find_nonfull_lobby(c);
-            }
-            
-            // it also sends the response
-            lobby.addPlayer(c);
+            if (lobbyExists(lobbyid))
+                c.lobbyJoin(lobbyid);
             break;
         case 'lobby leave':
             var lobby = c.lobby;
@@ -120,20 +100,43 @@ export default async function handlePacket(c, data) {
             }
             break;
         
-        case 'room transition':
-            if (!c.room) {
+        case 'party join':
+            var partyid = data.partyid;
+            if (partyExists(partyid))
+                c.partyJoin(partyid);
+            break;
+        case 'party leave':
+            if (!c.party)
                 return;
-            }
+            c.partyLeave();
+            break;
+        case 'party disband':
+            if (!c.party)
+                return;
+            if (!c.party.isLeader(c))
+                return;
             
-            var room_to_name = data.room_to;
-            var room_to = c.lobby.rooms.find(room => room.map.name === room_to_name || room.map.room_name === room_to_name);
-            c.room.movePlayer(c, room_to);
+            c.party.disband();
+            break;
+        case 'party invite':
+            var profileid = data.profileid;
+            var user = global.clients.find(u => u.profile.id === profileid);
+            
+            if (user)
+                c.partyInvite(user);
+            break;
+        
+        case 'server timestamp':
+            c.sendServerTime(data.t);
             break;
         
         // #######################
         // Add your commands here:
         
         case 'player controls':
+            if (!c.entity)
+                break;
+            
             c.entity.inputs = {
                 move: data.move,
                 keys: {
@@ -147,8 +150,6 @@ export default async function handlePacket(c, data) {
                     kjump_press: data.kjump_press
                 }
             };
-            c.entity.send();
-            // c.sendPlayerControls(data);
             break;
         
         

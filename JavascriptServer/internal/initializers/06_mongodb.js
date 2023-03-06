@@ -7,10 +7,12 @@ const mongoose = require('mongoose');
 const { connect, connection } = mongoose;
 const url = global.config.db;
 
+mongoose.set('strictQuery', false);
+
 var _export;
 
 if (global.config.db_enabled) {
-    connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
+    connect(url, {});
     
     const db = connection;
     
