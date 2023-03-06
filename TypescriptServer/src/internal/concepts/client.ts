@@ -216,7 +216,7 @@ export default class Client extends SendStuff implements IClient {
             lobby = lobbyGet(lobbyid);
         }
         else {
-            lobby = MatchMaker.find_nonfull_lobby(this);
+            lobby = MatchMaker.findNonfullLobby(this);
         }
 
         // it also sends the response

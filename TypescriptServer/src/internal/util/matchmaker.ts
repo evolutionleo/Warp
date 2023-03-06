@@ -7,8 +7,13 @@ export default class MatchMaker {
     static _interval = null;
 
     // an internal loop
-    static process_matches() {
-         
+    static processMatches() {
+         // Advanced matchmaking coming in v5.1
+    }
+
+    static findMatch() {
+        throw new Error('Matchmaker.findMatch() is ');
+        // let t = new Ticket();
     }
     
     /**
@@ -16,7 +21,7 @@ export default class MatchMaker {
      * @param {Client} user
      * @returns {Lobby} lobby
      */
-    static find_nonfull_lobby(user:Client):Lobby {
+    static findNonfullLobby(user:Client):Lobby {
         var match_lobby = null;
         // this a so called 'arrow function'.
         // (lobby) => {} is the same as function(lobby) {}
@@ -38,7 +43,7 @@ export default class MatchMaker {
      * @param {('win'|'loss'|'draw')} result 
      * @returns {number} mmr_delta
      */
-    static get_mmr_delta(player_mmr:number, opponent_mmr:number, result:'win'|'loss'|'draw'):number {
+    static getMMRDelta(player_mmr:number, opponent_mmr:number, result:'win'|'loss'|'draw'):number {
         // win = 1, loss = 0, draw = 0.5
         let res: number;
         switch(result) {

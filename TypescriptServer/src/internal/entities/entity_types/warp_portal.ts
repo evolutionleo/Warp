@@ -7,9 +7,9 @@ import PlayerEntity from "./player";
 type WarpPortalType = 'Entrance' | 'Exit' | 'Both';
 
 export default class WarpPortal extends Entity {
-    isStatic = true;
-    isSolid = false;
-    // isTrigger = true;
+    is_static = true;
+    is_solid = false;
+    // is_trigger = true;
 
     static type = 'Warp Portal';
     static object_name = 'oWarpPortal';
@@ -30,7 +30,7 @@ export default class WarpPortal extends Entity {
     warp_id:number = undefined; // to link the exit portal with an entrance
     continuous_collision:{ e: PlayerEntity, t: number }[] = [];
 
-    propNames = [ 'portal_type', 'room_to', 'warp_id' ];
+    prop_names = [ 'portal_type', 'room_to', 'warp_id' ];
 
     Room_to:Room = null; // with the Capital letter
 

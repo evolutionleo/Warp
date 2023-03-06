@@ -46,11 +46,11 @@ export default class PlayerEntity extends PhysicsEntity {
 
     collider_type = 'box';
 
-    collisionType = 'discrete' as CollisionType;
-    preciseCollisions = true;
-    outsideRoomAction:OutsideRoomAction = 'wrap';
+    collision_type = 'discrete' as CollisionType;
+    precise_collisions = true;
+    outside_room_action:OutsideRoomAction = 'wrap';
 
-    stuckAction:StuckAction = 'stop';
+    stuck_action:StuckAction = 'stop';
 
     sendEveryTick = true;
 
@@ -67,16 +67,16 @@ export default class PlayerEntity extends PhysicsEntity {
     client:Client;
     
     get name() { return this.client.name; }
-    propNames = ['name'];
+    prop_names = ['name'];
 
     inputs:IPlayerInputs = defaultInputs;
 
 
-    isSolid:boolean = true;
+    is_solid:boolean = true;
 
     walksp:number;
-    jumpSpeed:number;
-    cutJump:boolean;
+    jump_speed:number;
+    cut_jump:boolean;
 
     constructor(room:Room, x:number = 0, y:number = 0, client:Client) {
         super(room, x, y);
@@ -86,8 +86,8 @@ export default class PlayerEntity extends PhysicsEntity {
     create() {
         super.create();
         this.walksp = 420;
-        this.jumpSpeed = 600;
-        this.cutJump = false;
+        this.jump_speed = 600;
+        this.cut_jump = false;
     }
 
     update(dt) {
@@ -97,9 +97,9 @@ export default class PlayerEntity extends PhysicsEntity {
             this.jump();
         }
 
-        if (!this.inputs.keys.kjump && !this.cutJump && !this.grounded() && this.spd.y <= -1) {
+        if (!this.inputs.keys.kjump && !this.cut_jump && !this.grounded() && this.spd.y <= -1) {
             this.spd.y /= 2;
-            this.cutJump = true;
+            this.cut_jump = true;
         }
 
         super.update(dt);
@@ -111,7 +111,7 @@ export default class PlayerEntity extends PhysicsEntity {
     }
 
     jump() {
-        this.spd.y = -this.jumpSpeed;
-        this.cutJump = false;
+        this.spd.y = -this.jump_speed;
+        this.cut_jump = false;
     }
 }

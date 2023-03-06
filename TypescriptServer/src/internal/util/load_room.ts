@@ -70,7 +70,7 @@ export default function LoadRoom(room_name:string):LoadedRoom {
                     y: inst.y,
                     xscale: inst.scaleX,
                     yscale: inst.scaleY,
-                    type: global.entityObjects[inst.objectId.name]?.type || UnknownEntity.type,
+                    type: global.entity_objects[inst.objectId.name]?.type || UnknownEntity.type,
                     spd: {x: 0, y: 0},
                     props
                 });

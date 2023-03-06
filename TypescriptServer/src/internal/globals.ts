@@ -13,8 +13,8 @@ declare global {
             parties:{[key: string]: Party};
             entities:EntityType[];
 
-            entityNames:{[key: string]: EntityType}; // type -> EntityType
-            entityObjects:{[key: string]: EntityType}; // object_name -> EntityType
+            entity_names:{[key: string]: EntityType}; // type -> EntityType
+            entity_objects:{[key: string]: EntityType}; // object_name -> EntityType
 
             ping_interval:Timeout;
             start_time:number;

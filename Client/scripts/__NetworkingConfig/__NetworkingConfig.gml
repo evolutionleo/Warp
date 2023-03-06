@@ -21,8 +21,8 @@ network_set_config(network_config_use_non_blocking_socket, true)
 #macro TIMESTAMPS_ENABLED true
 
 // offset in ms, a buffer between server and client time to allow for network latency & inconsistency
-global.time_delay = 100
-#macro TIME_DELAY global.time_delay
+global.server_time_delay = 100
+#macro SERVER_TIME_DELAY global.server_time_delay
 
 
 #macro SOCKET_TYPE SOCKET_TYPES.WS

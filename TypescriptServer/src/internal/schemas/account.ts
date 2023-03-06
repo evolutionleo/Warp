@@ -2,7 +2,7 @@
 import trace from '#util/logging';
 
 import { Model, model, Document, ObjectId, Schema } from 'mongoose';
-import { hash_password, verify_password } from '#util/password_encryption';
+import { hashPassword, verifyPassword } from '#util/password_encryption';
 
 
 export interface IAccount extends Document {
@@ -28,7 +28,7 @@ accountSchema.statics.register = function accountRegister(username:string, passw
     return new Promise(async (resolve, reject) => {
         var account = new Account({
             username: username,
-            password: await hash_password(password),
+            password: await hashPassword(password),
 
             // you can add more stuff below (you'll also need to define it in the Account Schema above)
         })
@@ -56,7 +56,7 @@ accountSchema.statics.login = function accountLogin(username:string, password:st
                 reject('error while logging in');
             }
             else {
-                if (await verify_password(password, account.password)) {
+                if (await verifyPassword(password, account.password)) {
                     resolve(account);
                 }
                 else {

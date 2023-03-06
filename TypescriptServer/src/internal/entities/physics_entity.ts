@@ -16,13 +16,13 @@ export default class PhysicsEntity extends Entity {
     grv:Point = { x: 0, y: 800 };
     max_spd:Point = {x: 2000, y: 2000};
 
-    outsideRoomAction: OutsideRoomAction = 'stop';
-    collisionType:CollisionType = 'discrete'; // discrete or continuout
-    collisionPrecision:number = 5; // only works with collisionType != 'discrete'
+    outside_room_action: OutsideRoomAction = 'stop';
+    collision_type:CollisionType = 'discrete'; // discrete or continuout
+    collision_precision:number = 5; // only works with collision_type != 'discrete'
 
-    preciseCollisions = true; // pixel-perfect, but is slower
+    precise_collisions = true; // pixel-perfect, but is slower
 
-    stuckAction:StuckAction = 'stop'; // or 'clip' to clip through walls
+    stuck_action:StuckAction = 'stop'; // or 'clip' to clip through walls
 
     constructor(room:Room, x: number = 0, y: number = 0) {
         super(room, x, y);
@@ -45,7 +45,7 @@ export default class PhysicsEntity extends Entity {
         // stuck in a solid object
         if (this.stuck()) {
             // just clip through everything?
-            if (this.stuckAction === 'clip') {
+            if (this.stuck_action === 'clip') {
                 this.x += xspd;
                 this.y += yspd;
             }
@@ -53,7 +53,7 @@ export default class PhysicsEntity extends Entity {
         }
 
         if (this.isCollidingX(this.x, this.y, xspd)) {
-            if (this.preciseCollisions && xspd != 0) {
+            if (this.precise_collisions && xspd != 0) {
                 while(!this.isCollidingX(this.x, this.y, Math.sign(xspd))) {
                     this.x += Math.sign(xspd);
                 }
@@ -62,7 +62,7 @@ export default class PhysicsEntity extends Entity {
                 this.spd.x = 0;
             xspd = 0;
         }
-        if (this.outsideRoomAction === 'stop' && this.isOutsideRoom(this.x + xspd, this.y)) {
+        if (this.outside_room_action === 'stop' && this.isOutsideRoom(this.x + xspd, this.y)) {
             if (def_move)
                 this.spd.x = 0
             xspd = 0;
@@ -71,7 +71,7 @@ export default class PhysicsEntity extends Entity {
         this.updateCollider();
 
         if (this.isCollidingY(this.x, this.y, yspd)) {
-            if (this.preciseCollisions && yspd != 0) {
+            if (this.precise_collisions && yspd != 0) {
                 while(!this.isCollidingY(this.x, this.y, Math.sign(yspd))) {
                     this.y += Math.sign(yspd);
                 }
@@ -80,7 +80,7 @@ export default class PhysicsEntity extends Entity {
                 this.spd.y = 0;
             yspd = 0;
         }
-        if (this.outsideRoomAction === 'stop' && this.isOutsideRoom(this.x, this.y + yspd)) {
+        if (this.outside_room_action === 'stop' && this.isOutsideRoom(this.x, this.y + yspd)) {
             if (def_move) {
                 this.spd.y = 0;
             }
@@ -111,7 +111,7 @@ export default class PhysicsEntity extends Entity {
 
 
     private wrapOutsideRoom() {
-        if (this.outsideRoomAction !== 'wrap' || !this.isOutsideRoom())
+        if (this.outside_room_action !== 'wrap' || !this.isOutsideRoom())
             return false;
 
         let tryWrap = (x:number, y:number) => {
@@ -141,14 +141,14 @@ export default class PhysicsEntity extends Entity {
     }
 
     isCollidingX(x = this.x, y = this.y, xspd = this.spd.x) {
-        if (this.collisionType === 'discrete') {
+        if (this.collision_type === 'discrete') {
             return this.placeMeeting(x + xspd, y);
         }
         else { // continuous
             let target_x = x + xspd;
             let curr_x = x;
 
-            let step = Math.max( Math.abs( target_x - curr_x ) / this.collisionPrecision, 1) * Math.sign( target_x - curr_x );
+            let step = Math.max( Math.abs( target_x - curr_x ) / this.collision_precision, 1) * Math.sign( target_x - curr_x );
 
             while(curr_x != target_x) {
                 curr_x = approach(curr_x, target_x, step);
@@ -163,14 +163,14 @@ export default class PhysicsEntity extends Entity {
 
     
     isCollidingY(x = this.x, y = this.y, yspd = this.spd.x) {
-        if (this.collisionType === 'discrete') {
+        if (this.collision_type === 'discrete') {
             return this.placeMeeting(x, y + yspd);
         }
         else { // continuous
             let target_y = y + yspd;
             let curr_y = y;
 
-            let step = Math.max( Math.abs( target_y - curr_y ) / this.collisionPrecision, 1) * Math.sign( target_y - curr_y );
+            let step = Math.max( Math.abs( target_y - curr_y ) / this.collision_precision, 1) * Math.sign( target_y - curr_y );
 
             while(curr_y != target_y) {
                 curr_y = approach(curr_y, target_y, step);

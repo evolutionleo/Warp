@@ -13,8 +13,8 @@ const filenames = fs.readdirSync(entities_dir); // sync because CommonJS
 
 
 
-let entityNames = {};
-let entityObjects = {};
+let entity_names = {};
+let entity_objects = {};
 
 if (!global.config.entities_enabled) {
     // don't load anything
@@ -32,14 +32,14 @@ await Promise.all(filenames.map((filename:string) => {
     });
 }));
 
-global.entities.forEach(entity => { entityNames[entity.type] = entity });
-global.entityNames = entityNames;
+global.entities.forEach(entity => { entity_names[entity.type] = entity });
+global.entity_names = entity_names;
 
-global.entities.forEach(entity => { entityObjects[entity.object_name] = entity });
-global.entityObjects = entityObjects;
+global.entities.forEach(entity => { entity_objects[entity.object_name] = entity });
+global.entity_objects = entity_objects;
 
 }
 
-export { entityNames };
-export { entityObjects };
+export { entity_names };
+export { entity_objects };
 export default global.entities;

@@ -8,7 +8,7 @@ function local_timestamp() {
 // expected current server time in ms
 function server_time() {
 	gml_pragma("forceinline")
-	return global.start_server_time + (local_timestamp() - global.start_local_time) - TIME_DELAY
+	return global.start_server_time + (local_timestamp() - global.start_local_time) - SERVER_TIME_DELAY
 }
 
 

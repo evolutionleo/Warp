@@ -36,7 +36,7 @@ export class EntityList extends Array<Entity> {
 
     // returns only the solid 
     solid() {
-        return this.filter(e => e.isSolid);
+        return this.filter(e => e.is_solid);
     }
 
     withTag(tag:string) {
@@ -118,7 +118,7 @@ class Room extends EventEmitter {
         }
 
         entities.forEach(entity => {
-            const etype = global.entityNames[entity.type];
+            const etype = global.entity_names[entity.type];
             if (etype.type == 'Unknown') { // entity type doesn't exist
                 if (global.config.room.warn_on_unknown_entity) {
                     trace(chalk.yellowBright('Warning: Entity of object type "' + entity.obj + '" not found!'));
@@ -138,8 +138,8 @@ class Room extends EventEmitter {
                 // if (key in Object.getOwnPropertyNames(PhysicsEntity)) {
                     // throw "Collision in props: entity of type " + e.type + " already has a variable called " + key + "!";
                 // }
-                if (!e.propNames.includes(key))
-                    e.propNames.push(key);
+                if (!e.prop_names.includes(key))
+                    e.prop_names.push(key);
                 e[key] = value;
                 // trace(key + ": " + value);
             }

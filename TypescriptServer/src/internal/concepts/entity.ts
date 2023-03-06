@@ -46,9 +46,9 @@ interface Entity {
 
 // a thing
 class Entity extends EventEmitter {
-    isSolid = false;
-    isStatic = false;
-    isTrigger = false;
+    is_solid = false;
+    is_static = false;
+    is_trigger = false;
 
     pos:Point; // keep in mind that the coordinates are always set to a whole number (to achieve pixel-perfect collisions)
     spd:Point; // speed in pixels per second, can be fractional
@@ -62,12 +62,12 @@ class Entity extends EventEmitter {
 
 
     // the custom variables that need sending with the entitiy
-    propNames:string[] = []; // automatically loaded in load_room, but ideally should be manually set as well
-    // e.x. propNames = [ 'hp', 'mana', 'jumpHeight' ];
+    prop_names:string[] = []; // automatically loaded in load_room, but ideally should be manually set as well
+    // e.x. prop_names = [ 'hp', 'mana', 'jumpHeight' ];
 
     get props() {
         let _props = {};
-        this.propNames.forEach(propName => _props[propName] = this[propName]);
+        this.prop_names.forEach(propName => _props[propName] = this[propName]);
         return _props;
     }
 
@@ -76,7 +76,6 @@ class Entity extends EventEmitter {
     collider_type:ColliderType|string = 'box';
     collider_radius:number = this.width/2; // only relevant when collider_type is 'circle'
     collider_vertices:Point[] = []; // if this is not overridden, a default rectangle collider will be used
-    private polygon_set:boolean = false;
 
     get size():Point { // for collisions
         return {
@@ -115,7 +114,7 @@ class Entity extends EventEmitter {
 
         this.tree.insert(this.collider);
 
-        // trace(this.propNames)
+        // trace(this.prop_names)
     }
 
     public create() {
@@ -147,7 +146,7 @@ class Entity extends EventEmitter {
                     return true;
                 }
                 else if (type === 'solid') {
-                    return this.isSolid;
+                    return this.is_solid;
                 }
                 else if (this.hasTag(type)) {
                     return true;
@@ -333,7 +332,7 @@ class Entity extends EventEmitter {
 
     public addTag(tag:string) {
         if (tag == 'solid')
-            this.isSolid = true;
+            this.is_solid = true;
         
         return this.tags.push(tag);
     }

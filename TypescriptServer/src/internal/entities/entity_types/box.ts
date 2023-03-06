@@ -8,9 +8,9 @@ export default class Box extends PhysicsEntity {
     type = Box.type;
     object_name = Box.object_name;
 
-    stuckAction:StuckAction = 'stop';
+    stuck_action:StuckAction = 'stop';
 
-    isSolid = true;
+    is_solid = true;
 
     base_size = {
         x: 32,

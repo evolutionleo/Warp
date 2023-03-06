@@ -1,7 +1,7 @@
 import * as crypto from 'crypto';
 
 
-export async function hash_password(password:string):Promise<string> {
+export async function hashPassword(password:string):Promise<string> {
     return new Promise((resolve, reject) => {
         const salt = crypto.randomBytes(16).toString('hex');
         crypto.scrypt(password, salt, 64, (err, derivedKey) => {
@@ -11,7 +11,7 @@ export async function hash_password(password:string):Promise<string> {
     });
 }
 
-export async function verify_password(password:string, _hash:string):Promise<boolean|Error> {
+export async function verifyPassword(password:string, _hash:string):Promise<boolean|Error> {
     return new Promise((resolve, reject) => {
         const [salt, hash] = _hash.split(':');
         const hashBuffer = Buffer.from(hash, 'hex');
