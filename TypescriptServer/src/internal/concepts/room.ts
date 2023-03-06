@@ -225,11 +225,11 @@ class Room extends EventEmitter {
         this.entities.push(entity);
 
         entity.on('death', () => {
-            this.broadcast({ cmd: 'entity death', id: entity.uuid });
+            this.broadcast({ cmd: 'entity death', id: entity.uuid, obj: entity.object_name });
         });
 
         entity.on('remove', () => {
-            this.broadcast({ cmd: 'entity remove', id: entity.uuid });
+            this.broadcast({ cmd: 'entity remove', id: entity.uuid, obj: entity.object_name });
         });
 
         this.emit('spawn', entity);

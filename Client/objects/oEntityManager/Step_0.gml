@@ -80,6 +80,17 @@ for(var i = 0; i < l; i++) {
 	var type = asset_get_index(entity.obj)
 	var props = entity.props
 	var existed = instance_exists(find_by_uuid(uuid, type))
+	
+	var idx2 = next_e_idx[$ uuid]
+	var idx3 = third_e_idx[$ uuid]
+	
+	var will_exist = !is_undefined(idx2)
+	
+	// don't create entities 1 frame before they are gone
+	if (!existed and !will_exist) {
+		continue
+	}
+	
 	var inst = find_or_create(uuid, type)
 				
 	// if it was just created - it's remote
@@ -110,17 +121,14 @@ for(var i = 0; i < l; i++) {
 				
 				
 	// props
-	var propNames = variable_struct_get_names(props)
-	for(var j = 0; j < array_length(propNames); j++) {
-		var key = propNames[j]
+	var prop_names = variable_struct_get_names(props)
+	for(var j = 0; j < array_length(prop_names); j++) {
+		var key = prop_names[j]
 		var value = props[$ (key)]
 					
 		variable_instance_set(inst, key, value)
 	}
 	
-	
-	var idx2 = next_e_idx[$ inst.uuid]
-	var idx3 = third_e_idx[$ inst.uuid]
 	
 	if (!is_undefined(idx2) and t2 != t1) {
 		var s2 = (t2 != t1 and !is_undefined(idx2)) ? next_entities[idx2] : undefined

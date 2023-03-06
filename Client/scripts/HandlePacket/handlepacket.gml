@@ -212,20 +212,25 @@ function handlePacket(data) {
 			array_push(oEntityManager.entity_updates, data)
 			break
 		case "entity death": // also triggers remove
-			//if (use_timestamps(data))
-			//	break
+			if (use_timestamps(data))
+				break
 			
 			var uuid = data.id
+			var obj = asset_get_index(data.obj)
 			var inst = find_by_uuid(uuid)
-			// use this for death effects
+			// use this for death effects, etc.
 			
 			break
 		case "entity remove":
-			//if (use_timestamps(data))
-			//	break
+			if (use_timestamps(data))
+				break
+			
+			trace("entity remove: %", data.id)
 			
 			var uuid = data.id
-			var inst = find_by_uuid(uuid, all)
+			var obj = asset_get_index(data.obj)
+			var inst = find_by_uuid(uuid, obj)
+			
 			if (instance_exists(inst))
 				instance_destroy(inst)
 			break

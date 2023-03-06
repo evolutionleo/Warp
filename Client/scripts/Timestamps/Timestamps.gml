@@ -15,6 +15,7 @@ function server_time() {
 ///@function	use_timestamps(data)
 ///@param		{struct} data
 ///@returns		{bool} result - true if the packet should be delayed, false if it should be handled right now
+/// usage [inside handlePacket.gml]:  if (use_timestamps(data)) break;
 function use_timestamps(data) {
 	if (!TIMESTAMPS_ENABLED) return 0;
 	

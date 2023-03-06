@@ -12,7 +12,7 @@ function find_by_uuid(uuid, object_type = all, remote = undefined) {
 		if (variable_instance_exists(self, "uuid") and self.uuid == uuid
 		and (is_undefined(remote)
 		or variable_instance_exists(self, "remote") and self.remote == remote))
-			return self
+			return id
 	}
 	return noone
 }
