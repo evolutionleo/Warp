@@ -11,7 +11,7 @@ function onDisconnect() {
 }
 
 function onIncompatible(server_game_version) {
-	show_message(stf("Incompatible client version - %! (Server version is %)", GAME_VERSION,  server_game_version))
+	show_message(str_format("Incompatible client version - %! (Server version is %)", GAME_VERSION,  server_game_version))
 	game_end()
 }
 

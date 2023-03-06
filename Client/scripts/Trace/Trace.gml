@@ -1,6 +1,5 @@
 // some useful utility functions
 
-
 ///@function trace(... )
 function trace(r) {
 	r = string(r)
@@ -15,14 +14,13 @@ function trace(r) {
 		}
 	}
 	show_debug_message(r)
-	// slow af
-	//debug_log(r)
 }
 
-
-#macro stf str_format
-#macro printf trace
-#macro console_log trace
+global.__recently_logged = ""
+time_source_create(time_source_global, 10, time_source_units_frames, function() {
+	debug_log(global.__recently_logged)
+	global.__recently_logged = ""
+}, [], -1)
 
 ///@param str
 function str_format(str)
@@ -41,10 +39,7 @@ function str_format(str)
 	return str
 }
 
-function debug_log(str, file) {
-	if is_undefined(file)
-		file = "log.txt"
-	
+function debug_log(str, file = "client_log.txt") {
 	global.logfile = file_text_open_append(working_directory+file)
 	var prefix = "[" + window_get_caption() + "]" + "[" + date_datetime_string(date_current_datetime()) + "]"
 	str = prefix + str
