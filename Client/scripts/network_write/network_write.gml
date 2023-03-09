@@ -3,6 +3,9 @@
 ///@arg *socket
 // most of the time you just want to send the data to oClient.socket
 function network_write(data, sock = oClient.sock) {
+	if (!oClient.connected)
+		return -1
+	
 	if (TIMESTAMPS_ENABLED) {
 		data.t = local_timestamp() // ms since the client started
 	}
@@ -19,19 +22,23 @@ function network_write(data, sock = oClient.sock) {
 		buffer_copy(buff, 0, size, new_buff, 4)
 	
 		// send!
-		network_send_raw(sock, new_buff, size+4)
+		var status = network_send_raw(sock, new_buff, size+4)
 		
 		// cleanup
 		buffer_delete(new_buff)
 	}
 	else {
 		// send without the size bits
-		network_send_raw(sock, buff, size, network_send_binary)
+		var status = network_send_raw(sock, buff, size, network_send_binary)
 	}
-	
 	
 	// Clean up
 	buffer_delete(buff)
+	
+	if (status < 0) {
+		trace("Failed to send data: status code %", status)
+		oClient.disconnect()
+	}
 }
 
 
@@ -41,10 +48,3 @@ function network_write(data, sock = oClient.sock) {
 function send(data, sock = oClient.socket) {
 	return network_write(data, sock)
 }
-
-// P.s:
-// You might need to change "_u16" and "2" everywhere to a higher power of 2
-// if you're sending something more than 65535 bytes in size
-// (that's because packet size is represented by a uint16)
-
-// jk already changed it to _u32 because entities weight a ton

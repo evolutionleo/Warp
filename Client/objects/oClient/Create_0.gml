@@ -3,16 +3,17 @@
 #region Connect!
 
 connect = function() {
-	// if a packet is split in half, we use this
-	// -1 if no half-pack, a buffer otherwise
+	if (connected)
+		disconnect()
+	
 	connecting = true
 	connected = false
+	
+	// if a packet is split in half, we use this
+	// -1 if no half-pack, a buffer otherwise
 	halfpack = -1
 	
 	alarm[0] = CONNECT_TIMEOUT
-	
-	if (variable_instance_exists(id, "socket"))
-		network_destroy(socket)
 	
 	socket = network_create_socket(SOCKET_TYPE)
 	var port
@@ -28,6 +29,19 @@ connect = function() {
 	network_connect_raw_async(socket, IP, real(port));
 }
 
+disconnect = function() {
+	if (connected) {
+		if (socket)
+			network_destroy(socket)
+		
+		connected = false
+		connecting = false
+		socket = undefined
+		global.ping = -1
+		onDisconnect()
+	}
+}
+
 // connect/disconnect events are defined in __NetworkingConfig.gml
 //onConnect = global.onConnect
 //onDisconnect = global.onDisconnect
@@ -38,5 +52,6 @@ packet_queue = []
 
 connecting = false
 connected = false
+socket = undefined
 
 connect()

@@ -7,7 +7,7 @@ function use_uuid() {
 	self.remote = false // whether an entity is remote or local - local by default
 }
 
-function find_by_uuid(uuid, object_type = all, remote = undefined) {
+function find_by_uuid(uuid, object_type = oEntity, remote = undefined) {
 	with(object_type) {
 		if (variable_instance_exists(self, "uuid") and self.uuid == uuid
 		and (is_undefined(remote)
@@ -17,10 +17,10 @@ function find_by_uuid(uuid, object_type = all, remote = undefined) {
 	return noone
 }
 
-function find_or_create(uuid, object_type, remote = undefined) {
+function find_or_create(uuid, object_type, remote = undefined, props = {}) {
 	var inst = find_by_uuid(uuid, object_type, remote)
 	if inst == noone {
-		inst = instance_create_layer(0, 0, "Instances", object_type)
+		inst = instance_create_layer(0, 0, "Instances", object_type, props)
 		inst.uuid = uuid
 		if (!is_undefined(remote)) {
 			inst.remote = remote

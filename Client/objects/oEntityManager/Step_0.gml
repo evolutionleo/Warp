@@ -24,8 +24,8 @@ if (base_update == -1) exit;
 
 base_update = min(base_update, len)
 
-//array_delete(entity_updates, 0, max(0, base_update-1))
-//base_update = min(base_update, 0)
+array_delete(entity_updates, 0, max(0, base_update-1))
+base_update = min(base_update, 1)
 
 len = array_length(entity_updates)
 
@@ -78,6 +78,12 @@ for(var i = 0; i < l; i++) {
 				
 	var uuid = entity.id
 	var type = asset_get_index(entity.obj)
+	if (type == -1) { // object with this type doesn't exist
+		if (ALLOW_UKNOWN_ENTITIES)
+				type = oEntity
+		else
+			throw "Error: Received unknown entity type: " + string(entity.obj) + ". Set ALLOW_UNKNOWN_ENTITIES to true to disable this error."
+	}
 	var props = entity.props
 	var existed = instance_exists(find_by_uuid(uuid, type))
 	
@@ -91,7 +97,7 @@ for(var i = 0; i < l; i++) {
 		continue
 	}
 	
-	var inst = find_or_create(uuid, type)
+	var inst = find_or_create(uuid, type, , props)
 				
 	// if it was just created - it's remote
 	if (!existed) {
@@ -103,7 +109,7 @@ for(var i = 0; i < l; i++) {
 	if (uuid == global.player_uuid) {
 		inst.remote = false
 	}
-			
+	
 	// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
 	inst.image_xscale = entity.xscale
 	inst.image_yscale = entity.yscale

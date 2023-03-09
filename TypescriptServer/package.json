@@ -14,8 +14,9 @@
         "development": "node . --env=dev",
         "prod": "node . --env=prod",
         "production": "node . --env=prod",
-        "profile": "node --prof --inspect . --env=dev",
-        "postprofile": "node --profile"
+        "profile": "node --prof --env=dev",
+        "postprofile": "node --profile",
+        "build": "npx tsc"
     },
     "dependencies": {
         "@msgpack/msgpack": "^2.8.0",

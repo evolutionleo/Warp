@@ -93,6 +93,8 @@ switch(type) {
 	case network_type_non_blocking_connect:
 		if (!async_load[? "succeeded"]) {
 			trace("Non-blocking connect failed.")
+			connecting = false
+			connected = false
 			break
 		} // otherwise fall into the connect case
 	case network_type_connect:
@@ -103,8 +105,9 @@ switch(type) {
 		break
 	case network_type_disconnect:
 		trace("Disconnected from the server!")
-		connected = false
-		connecting = false
-		onDisconnect()
+		disconnect()
+		//connected = false
+		//connecting = false
+		//onDisconnect()
 		break
 }

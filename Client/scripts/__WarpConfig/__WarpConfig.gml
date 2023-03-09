@@ -9,12 +9,12 @@ trace("Welcome to Warp % by Evoleo!", WARP_VERSION)
 
 network_set_config(network_config_use_non_blocking_socket, true)
 
+#macro ALLOW_UKNOWN_ENTITIES true
+
 // purges all entities from the room (so that there aren't any local duplicates when loading everything from the server)
 // toggle this off if you have some specific case where you need to keep the entities that are in the room locally
 #macro PURGE_ENTITIES_ON_ROOM_START true
 
-// a value between 0 and 1, bigger number = less smooth, but more accurate
-#macro POS_INTERPOLATION 1
 // instantly teleports if an entity has moved > than this on a single axis in a single tick
 #macro POS_INTERP_THRESH 100
 
@@ -23,6 +23,8 @@ network_set_config(network_config_use_non_blocking_socket, true)
 // offset in ms, a buffer between server and client time to allow for network latency & inconsistency
 global.server_time_delay = 100
 #macro SERVER_TIME_DELAY global.server_time_delay
+// if set to true, global.server_time_delay will automatically increase when lag spikes occur
+#macro AUTOADJUST_SERVER_DELAY true
 
 
 #macro SOCKET_TYPE SOCKET_TYPES.WS
@@ -47,8 +49,6 @@ enum SOCKET_TYPES {
 //#macro Prod:IP   "195.2.80.50" // your external server IP
 #macro Prod:PORT "1337"
 #macro Prod:WS_PORT "3000"
-//#macro Prod:PORT "1337"
-//#macro Prod:WS_PORT "3000"
 #macro Prod:DUAL_INSTANCE true
 //#macro Prod:DUAL_INSTANCE false
 

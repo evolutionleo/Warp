@@ -1,7 +1,7 @@
 {
   "resourceType": "GMScript",
   "resourceVersion": "1.0",
-  "name": "NetworkingEvents",
+  "name": "WarpEvents",
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
