@@ -1,10 +1,5 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const mongoose = require('mongoose');
-
-import { Model, Document, ObjectId } from 'mongoose';
-const { Schema, model } = mongoose;
+import mongoose, { Model, Document, ObjectId } from 'mongoose';
+const { model, Schema } = mongoose;
 import { Account, IAccount } from '#schemas/account';
 import Profile, { IProfile } from '#schemas/profile';
 
@@ -61,5 +56,5 @@ friendRequestSchema.statics.cancel = async function(req_id:OID):Promise<void> {
     await FriendRequest.findByIdAndDelete(req_id);
 }
 
-export const FriendRequest:IFriendRequestModel = new model('FriendRequest', friendRequestSchema);
+export const FriendRequest:IFriendRequestModel = model<IFriendRequest, IFriendRequestModel>('FriendRequest', friendRequestSchema);
 export default FriendRequest;

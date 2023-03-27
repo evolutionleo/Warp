@@ -1,5 +1,6 @@
 // This schema is for profiles
-import { Schema, model, Document, ObjectId, Model } from 'mongoose';
+import mongoose, { Document, ObjectId, Model } from 'mongoose';
+const { model, Schema } = mongoose;
 import { Account, IAccount } from '#schemas/account';
 
 export interface IProfile extends Document {

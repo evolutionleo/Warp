@@ -15,25 +15,35 @@ import MatchMaker from '#util/matchmaker';
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
     name = '';
-    socket = null; /** @type {import('ws').WebSocket | import('net').Socket} */
-    type; /** @type {'ws' | 'tcp'} */
+    /** @type {import('ws').WebSocket | import('net').Socket} */
+    socket = null;
+    /** @type {'ws' | 'tcp'} */
+    type;
     ip;
     
-    lobby = null; /** @type {Lobby} */
-    room = null; /** @type {Room} */
-    party = null; /** @type {Party} */
+    /** @type {Lobby} */
+    lobby = null;
+    /** @type {Room} */
+    room = null;
+    /** @type {Party} */
+    party = null;
     
     party_invites = [];
     
-    account = null; /** @type {Account} */
-    profile = null; /** @type {Profile} */
+    /** @type {Account} */
+    account = null;
+    /** @type {Profile} */
+    profile = null;
     
     // used internally in packet.ts
-    halfpack; /** @type {Buffer} */
+    /** @type {Buffer} */
+    halfpack;
     
-    entity = null; /** @type {PlayerEntity} */
+    /** @type {PlayerEntity} */
+    entity = null;
     
-    ping; /** @type {number} */
+    /** @type {number} */
+    ping;
     
     room_join_timer = -1; // if >0 - joined recently
     
@@ -272,6 +282,10 @@ export default class Client extends SendStuff {
         }
     }
     
+    /**
+     * @param {Client|IProfile} user_to
+     * @returns {Promise<IFriendRequest>}
+     */
     async friendRequestSend(user_to) {
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         if (!this.logged_in)
@@ -283,6 +297,11 @@ export default class Client extends SendStuff {
         return await FriendRequest.create({ sender, receiver });
     }
     
+    /**
+     * @param {Client|IProfile} user_from
+     * @param {Client|IProfile} user_to
+     * @returns {Promise<IFriendRequest>}
+     */
     async friendRequestFind(user_from, user_to) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         user_to = user_to instanceof Client ? user_to.profile : user_to;
@@ -290,6 +309,9 @@ export default class Client extends SendStuff {
         return await FriendRequest.findRequestId(user_from._id, user_to._id);
     }
     
+    /**
+     * @param {Client|IProfile} user_from
+     */
     async friendRequestAccept(user_from) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         if (!this.logged_in)
@@ -302,6 +324,9 @@ export default class Client extends SendStuff {
         }
     }
     
+    /**
+     * @param {Client|IProfile} user_from
+     */
     async friendRequestReject(user_from) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         if (!this.logged_in)
@@ -314,6 +339,9 @@ export default class Client extends SendStuff {
         }
     }
     
+    /**
+     * @param {Client|IProfile} user_to
+     */
     async friendRequestCancel(user_to) {
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         if (!this.logged_in)
@@ -326,6 +354,9 @@ export default class Client extends SendStuff {
         }
     }
     
+    /**
+     * @param {Client|IProfile} friend
+     */
     async friendRemove(friend) {
         friend = friend instanceof Client ? friend.profile : friend;
         if (!this.logged_in)
@@ -338,7 +369,6 @@ export default class Client extends SendStuff {
         await Profile.findByIdAndUpdate(my_id, { $pull: { friends: friend_id } });
         await Profile.findByIdAndUpdate(friend_id, { $pull: { friends: my_id } });
     }
-    
     
     
     partyCreate() {
@@ -363,6 +393,9 @@ export default class Client extends SendStuff {
         this.sendPartyInviteSent();
     }
     
+    /**
+     * @param {string} partyid
+     */
     partyJoin(partyid) {
         let party = partyGet(partyid);
         party.addMember(this);

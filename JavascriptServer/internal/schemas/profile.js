@@ -1,5 +1,6 @@
 // This schema is for profiles
-import { Schema, model } from 'mongoose';
+import mongoose from 'mongoose';
+const { model, Schema } = mongoose;
 
 // this holds the state of the profile
 // you can edit this schema!

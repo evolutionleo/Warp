@@ -1,7 +1,8 @@
 // this section contains a schema for saving players' account info
 import trace from '#util/logging';
 
-import { model, Schema } from 'mongoose';
+import mongoose from 'mongoose';
+const { model, Schema }  = mongoose;
 import { hashPassword, verifyPassword } from '#util/password_encryption';
 
 // you can edit this schema!

@@ -69,9 +69,11 @@ export function lobbyList():Lobby[] {
 
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
-    lobbyid:string = "-1"; // assigned when created
+    lobbyid:string = '-1'; // assigned when created
     status:LobbyStatus = 'open';
+    /** @type {Client[]} */
     players:Client[] = [];
+    /** @type {Room[]} */
     rooms:Room[] = [];
     max_players:number = global.config.lobby.max_players || undefined; // smells like Java
 
@@ -90,6 +92,10 @@ export default class Lobby extends EventEmitter {
         }
     }
 
+    /**
+     * @param {Client} player
+     * @returns {void|-1}
+     */
     addPlayer(player:Client):void|-1 {
         if (this.full) {
             trace('warning: can\'t add a player - the lobby is full!');
@@ -125,6 +131,11 @@ export default class Lobby extends EventEmitter {
         }
     }
 
+    /**
+     * @param {Client} player
+     * @param {string?} reason
+     * @param {boolean?} forced
+     */
     kickPlayer(player:Client, reason?:string, forced?:boolean):void {
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
@@ -139,6 +150,9 @@ export default class Lobby extends EventEmitter {
         }
     }
 
+    /**
+     * @param {Client} player
+     */
     addIntoPlay(player:Client):void {
         if (player.lobby === this) {
             player.onPlay();
@@ -148,10 +162,17 @@ export default class Lobby extends EventEmitter {
         }
     }
 
-    findRoomByMapName(room_name:string) {
+    /**
+     * @param {string} room_name
+     * @returns {Room} room
+     */
+    findRoomByMapName(room_name:string):Room {
         return this.rooms.find(r => r.map.name === room_name);
     }
 
+    /**
+     * @param {object} data
+     */
     broadcast(data:object):void {
         this.players.forEach(function(player) {
             player.write(data);
@@ -166,7 +187,7 @@ export default class Lobby extends EventEmitter {
     }
 
     close():void {
-        // kick all plaayers
+        // kick all players
         this.players.forEach((player) => this.kickPlayer(player, 'lobby is closing!', true));
         this.status = 'closed';
     }

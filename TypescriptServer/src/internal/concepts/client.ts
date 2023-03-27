@@ -29,25 +29,35 @@ export type ClientInfo = {
 // this is a wrapper around sockets
 export default class Client extends SendStuff implements IClient {
     name: string = '';
-    socket: Sock = null; /** @type {import('ws').WebSocket | import('net').Socket} */
-    type: SockType; /** @type {'ws' | 'tcp'} */
+    /** @type {import('ws').WebSocket | import('net').Socket} */
+    socket: Sock = null;
+    /** @type {'ws' | 'tcp'} */
+    type: SockType;
     ip: string;
     
-    lobby: Lobby = null; /** @type {Lobby} */
-    room: Room = null; /** @type {Room} */
-    party: Party = null; /** @type {Party} */
+    /** @type {Lobby} */
+    lobby: Lobby = null;
+    /** @type {Room} */
+    room: Room = null;
+    /** @type {Party} */
+    party: Party = null;
 
     party_invites: string[] = [];
 
-    account: IAccount = null; /** @type {Account} */
-    profile: IProfile = null; /** @type {Profile} */
+    /** @type {Account} */
+    account: IAccount = null;
+    /** @type {Profile} */
+    profile: IProfile = null;
 
     // used internally in packet.ts
-    halfpack: Buffer; /** @type {Buffer} */
+    /** @type {Buffer} */
+    halfpack: Buffer;
 
-    entity: PlayerEntity = null; /** @type {PlayerEntity} */
+    /** @type {PlayerEntity} */
+    entity: PlayerEntity = null;
 
-    ping: number; /** @type {number} */
+    /** @type {number} */
+    ping: number;
 
     room_join_timer: number = -1; // if >0 - joined recently
 
@@ -283,6 +293,10 @@ export default class Client extends SendStuff implements IClient {
         }
     }
 
+    /**
+     * @param {Client|IProfile} user_to
+     * @returns {Promise<IFriendRequest>}
+     */
     async friendRequestSend(user_to:Client|IProfile):Promise<IFriendRequest> {
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         if (!this.logged_in) return null;
@@ -293,6 +307,11 @@ export default class Client extends SendStuff implements IClient {
         return await FriendRequest.create({ sender, receiver });
     }
 
+    /**
+     * @param {Client|IProfile} user_from
+     * @param {Client|IProfile} user_to
+     * @returns {Promise<IFriendRequest>}
+     */
     private async friendRequestFind(user_from:Client|IProfile, user_to:Client|IProfile) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         user_to = user_to instanceof Client ? user_to.profile : user_to;
@@ -300,6 +319,9 @@ export default class Client extends SendStuff implements IClient {
         return await FriendRequest.findRequestId(user_from._id, user_to._id);
     }
 
+    /**
+     * @param {Client|IProfile} user_from
+     */
     async friendRequestAccept(user_from:Client|IProfile) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         if (!this.logged_in) return;
@@ -311,6 +333,9 @@ export default class Client extends SendStuff implements IClient {
         }
     }
 
+    /**
+     * @param {Client|IProfile} user_from
+     */
     async friendRequestReject(user_from:Client|IProfile) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         if (!this.logged_in) return;
@@ -322,6 +347,9 @@ export default class Client extends SendStuff implements IClient {
         }
     }
 
+    /**
+     * @param {Client|IProfile} user_to
+     */
     async friendRequestCancel(user_to:Client|IProfile) {
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         if (!this.logged_in) return null;
@@ -333,6 +361,9 @@ export default class Client extends SendStuff implements IClient {
         }
     }
 
+    /**
+     * @param {Client|IProfile} friend
+     */
     async friendRemove(friend:Client|IProfile) {
         friend = friend instanceof Client ? friend.profile : friend;
         if (!this.logged_in) return;
@@ -344,7 +375,6 @@ export default class Client extends SendStuff implements IClient {
         await Profile.findByIdAndUpdate(my_id, { $pull: { friends: friend_id }});
         await Profile.findByIdAndUpdate(friend_id, { $pull: { friends: my_id }});
     }
-
 
 
     partyCreate() {
@@ -367,6 +397,9 @@ export default class Client extends SendStuff implements IClient {
         this.sendPartyInviteSent();
     }
 
+    /**
+     * @param {string} partyid
+     */
     partyJoin(partyid: string) {
         let party = partyGet(partyid);
         party.addMember(this);

@@ -1,8 +1,5 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-
-const mongoose = require('mongoose');
-const { Schema, model } = mongoose;
+import mongoose from 'mongoose';
+const { model, Schema } = mongoose;
 import Profile from '#schemas/profile';
 
 const friendRequestSchema = new Schema({
@@ -41,5 +38,5 @@ friendRequestSchema.statics.cancel = async function (req_id) {
     await FriendRequest.findByIdAndDelete(req_id);
 };
 
-export const FriendRequest = new model('FriendRequest', friendRequestSchema);
+export const FriendRequest = model('FriendRequest', friendRequestSchema);
 export default FriendRequest;

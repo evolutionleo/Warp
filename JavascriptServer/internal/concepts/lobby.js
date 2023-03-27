@@ -45,9 +45,11 @@ export function lobbyList() {
 
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
-    lobbyid = "-1"; // assigned when created
+    lobbyid = '-1'; // assigned when created
     status = 'open';
+    /** @type {Client[]} */
     players = [];
+    /** @type {Room[]} */
     rooms = [];
     max_players = global.config.lobby.max_players || undefined; // smells like Java
     
@@ -66,6 +68,10 @@ export default class Lobby extends EventEmitter {
         }
     }
     
+    /**
+     * @param {Client} player
+     * @returns {void|-1}
+     */
     addPlayer(player) {
         if (this.full) {
             trace('warning: can\'t add a player - the lobby is full!');
@@ -101,6 +107,11 @@ export default class Lobby extends EventEmitter {
         }
     }
     
+    /**
+     * @param {Client} player
+     * @param {string?} reason
+     * @param {boolean?} forced
+     */
     kickPlayer(player, reason, forced) {
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
@@ -115,6 +126,9 @@ export default class Lobby extends EventEmitter {
         }
     }
     
+    /**
+     * @param {Client} player
+     */
     addIntoPlay(player) {
         if (player.lobby === this) {
             player.onPlay();
@@ -124,10 +138,17 @@ export default class Lobby extends EventEmitter {
         }
     }
     
+    /**
+     * @param {string} room_name
+     * @returns {Room} room
+     */
     findRoomByMapName(room_name) {
         return this.rooms.find(r => r.map.name === room_name);
     }
     
+    /**
+     * @param {object} data
+     */
     broadcast(data) {
         this.players.forEach(function (player) {
             player.write(data);
@@ -142,7 +163,7 @@ export default class Lobby extends EventEmitter {
     }
     
     close() {
-        // kick all plaayers
+        // kick all players
         this.players.forEach((player) => this.kickPlayer(player, 'lobby is closing!', true));
         this.status = 'closed';
     }
