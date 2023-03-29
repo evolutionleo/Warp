@@ -13,8 +13,9 @@
 - **MIT license** (you can use this framework in commercial projects and modify/contribute in any way)
 
 # Examples (use old versions)
-- [Platformer Example](https://github.com/evolutionleo/StreamGame)
-- [1v1 Pong Example](https://github.com/evolutionleo/GMOF-pong-example)
+- [Chess Example](https://github.com/evolutionleo/ChessOnline) (uses v5.0)
+- [Platformer Example](https://github.com/evolutionleo/StreamGame) (uses v3.0)
+- [1v1 Pong Example](https://github.com/evolutionleo/GMOF-pong-example) (uses v3.0)
 
 # Installing
 ### \[New!\] Client + Server
