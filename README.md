@@ -34,16 +34,16 @@
 - Clone EmptyClient/ or Releases/EmptyClient.zip
 ### Server-side
 - Install [NodeJS](https://nodejs.org/en/)
-- I recommend using [VS Code](https://code.visualstudio.com/), as it's **very cool** (and in addition to that it provides a handy command line, embedded into the code editor)
+- I recommend using [VS Code](https://code.visualstudio.com/), as it provides a very convenient command line embedded into the code editor
 - Download JSServer.zip from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
-- Open up the clonned folder in command line (or open the folder in VS Code)
+- Open the clonned folder in command line (or open the folder in VS Code)
 - Run `npm install`
 
 - (Optional) To use the accounts/saving system, install the database engine:
 
 ### Database \(Optional\)
 - Install [MongoDB](https://www.mongodb.com/try/download/community)
-- Choose the default settings, it should now run in background
+- Choose the default settings, it should now run in the background
 - Done!
 
 ## If you don't need MongoDB - please disable it in the config file (it's under common_config.db_enabled), otherwise you will get an error!
@@ -54,7 +54,7 @@ Congratulations if you've completed the Installation step!
 
 Anyways. You see, many other networking frameworks might seem a bit overwhelming (even to people who are somewhat experienced in the topic).
 
-And even though versions from v3.0 and above of the framework did add some advanced features, I still tried my best to provide the simplest interface for the basic packet sending/receiving:
+And even though with time Warp has grown a lot with many advanced features introduced, I still tried my best to provide the simplest interface for the basic packet sending/receiving:
 ### Sending a packet (JS and GML)
 Sending a message to the server might be as easy as:
 ```gml
@@ -64,7 +64,7 @@ or even:
 ```gml
 sendHello()
 ```
-if you write a wrapper
+if you create a wrapper function
 
 ### Adding a new command:
 
@@ -77,8 +77,17 @@ if you write a wrapper
 - Add new maps in the `maps/` folder
 - Choose how many lobbies you need in `initializers/04_lobbies.js`
 - Use `"lobby list"`, `"lobby join"`, `"lobby leave"` to work with lobbies
-- Most of the generic logic is already coded, but you can add in features that you personally need
+- Most of the generic logic is already coded, but you can add specific features that you need for your game
 - You can extend the `Lobby` class in `concepts/lobby.js`, the `Map` class in `concepts/map.js`
+
+### (Advanced) Using entities and rooms:
+- (You can always disable entities and rooms completely from `config.js` if you don't need the functionality for your game)
+- Entity types are located inside `internal/entities/entity_types/`, you can add new ones or modify/delete the existing ones
+- Your custom entities generally should inherit from `PhysicsEntity` if they are moving and colliding with other entities, and from the regular `Entity` class otherwise
+- You only need to code the entities behaviour logic once, on the server-side. The client will then interpolate between the data that it receives
+- The `Entity.create()` and `Entity.update(dt)` methods function similarly to GameMaker's Create and Step events (except `tps` (the game's tickrate) is 20 by default as opposed to 60 in GM, and so it's recommended to use the `dt` (aka "delta time") parameter to implement your game physics in a tickrate-agnostic way)
+- The `Entity.object_type` property links the server-side entities to GameMaker's instances/objects
+- Rooms are automatically loaded with all the entities from GameMaker's .yy files from a path defined in `config.js` (by default it's a path to the `Client/rooms/` folder)
 
 ### (Advanced) Using accounts and saving:
 - Make sure you installed MongoDB (instructions in the Installing section)
@@ -86,6 +95,7 @@ if you write a wrapper
 - Info: "Account" is an object that holds a pair of login + password, and some data bound to them, while "Profile" holds the actual gameplay data. One Account can theoretically have many profiles bound to it
 - You can access the gameplay data of each client in `c.profile.%insert_variable%`, it will save automatically
 - If you want to add new properties, extend the schemas in the `schemas/` folder
+
 
 ## Running
 - Client runs as a usual GMS2 project
@@ -102,16 +112,9 @@ if you write a wrapper
 - Follow the original steps, but install TSServer.zip instead of JSServer.zip
 - Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
 
-### Networking
-
-| | |
---------|------------
-| Send command | Use the `Client.send` function or add a wrapper in `custom/sendStuff.ts` |
-| Recieve command | Add a case in `custom/handlePacket.ts` |
-
 ### Running
-- Compile the project by running `npx tsc` or run `npx tsc -w` to avoid recompiling after every change
-- Run `node .` or `node out/server.js`
+- Compile the project by running `npx tsc` or run `npx tsc -w` in the background to avoid recompiling after every change
+- Run `npm run dev`, `node .` or `node out/server.js`
 
 
 ## Contributing
