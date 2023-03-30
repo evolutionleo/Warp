@@ -42,7 +42,7 @@ export default class WarpPortal extends Entity {
     }
 
     private findExitPortal():WarpPortal {
-        return this.Room_to.entities.ofType('Warp Portal').find(e => (e as WarpPortal).warp_id == this.warp_id) as WarpPortal;
+        return this.Room_to.entities.ofType(this.type).find(e => (e as WarpPortal).warp_id == this.warp_id) as WarpPortal;
     }
 
     private findRoomTo():Room {
