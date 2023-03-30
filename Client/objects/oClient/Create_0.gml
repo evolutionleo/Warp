@@ -42,9 +42,6 @@ disconnect = function() {
 	}
 }
 
-
-alarm[1] = 1
-
 // connect/disconnect events are defined in __NetworkingConfig.gml
 //onConnect = global.onConnect
 //onDisconnect = global.onDisconnect
