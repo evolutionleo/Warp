@@ -7,14 +7,11 @@ import PlayerEntity from "./player";
 type WarpPortalType = 'Entrance' | 'Exit' | 'Both';
 
 export default class WarpPortal extends Entity {
+    static type = 'WarpPortal';
+    static object_name = 'oWarpPortal';
     is_static = true;
     is_solid = false;
     // is_trigger = true;
-
-    static type = 'Warp Portal';
-    static object_name = 'oWarpPortal';
-    type = WarpPortal.type;
-    object_name = WarpPortal.object_name;
 
     base_size = {
         x: 32,

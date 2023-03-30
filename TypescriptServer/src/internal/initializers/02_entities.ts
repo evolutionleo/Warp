@@ -1,5 +1,6 @@
 // load everything into global.entities
 // same as with 03_maps
+import trace from '#util/logging';
 import * as fs from 'fs';
 import * as path from 'path';
 

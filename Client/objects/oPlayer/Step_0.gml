@@ -1,4 +1,4 @@
-/// @description platformer physics logic
+/// @description platformer inputs logic
 
 if (!remote) {
 	kup = keyboard_check(ord("W")) || keyboard_check(vk_up)
@@ -13,21 +13,9 @@ if (!remote) {
 	move_x = kright - kleft
 	move_y = kdown - kup
 	
-	sendPlayerControls()
 	
-	//spd.x = move_x * walksp
+	sendPlayerControls()
 }
-
-
-//if (kjump_press and grounded()) {
-//	jump()
-//}
-
-//if (!kjump and !cutJump and !grounded() and spd.y <= -1) {
-//	spd.y *= .5
-//	cutJump = true
-//}
-
 
 // Inherit the parent event
 event_inherited();

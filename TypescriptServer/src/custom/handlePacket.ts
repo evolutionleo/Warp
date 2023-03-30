@@ -9,6 +9,7 @@ import chalk from 'chalk';
 import { Socket as TCPSocket } from 'net';
 import { WebSocket as WSSocket } from 'ws';
 import { partyExists } from '#concepts/party';
+import { clamp } from '#util/maths';
 
 /**
  * @param {Client} c
@@ -152,6 +153,9 @@ export default async function handlePacket(c:Client, data:any) {
                     kjump_press: data.kjump_press
                 }
             }
+
+            c.entity.inputs.move.x = clamp(c.entity.inputs.move.x, -1, 1);
+            c.entity.inputs.move.y = clamp(c.entity.inputs.move.y, -1, 1);
             break;
         
 

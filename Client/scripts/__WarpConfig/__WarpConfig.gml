@@ -43,6 +43,7 @@ enum SOCKET_TYPES {
 #macro Default:PORT "1338"
 #macro Default:WS_PORT "3001"
 #macro Default:DUAL_INSTANCE true
+#macro Default:DUAL_INSTANCE_COUNT 1
 
 // Production
 #macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
@@ -51,6 +52,7 @@ enum SOCKET_TYPES {
 #macro Prod:WS_PORT "3000"
 #macro Prod:DUAL_INSTANCE true
 //#macro Prod:DUAL_INSTANCE false
+#macro Prod:DUAL_INSTANCE_COUNT 1
 
 // Debug/Development
 #macro Dev:IP   "127.0.0.1"	// localhost
@@ -58,6 +60,7 @@ enum SOCKET_TYPES {
 #macro Dev:PORT "1338"
 #macro Dev:WS_PORT "3001"
 #macro Dev:DUAL_INSTANCE true
+#macro Dev:DUAL_INSTANCE_COUNT 2
 
 
 // warn about not setting the config (press the "target" icon in the top-right corner of IDE)

@@ -9,6 +9,7 @@ import GameMap, { MapInfo } from '#concepts/map';
 import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
 import chalk from 'chalk';
+import UnknownEntity from '#entity/unknown';
 
 export type RoomEvent = 'tick' | 'spawn' | 'player leave' | 'player join' | 'close';
 
@@ -119,7 +120,7 @@ class Room extends EventEmitter {
 
         entities.forEach(entity => {
             const etype = global.entity_names[entity.type];
-            if (etype.type == 'Unknown') { // entity type doesn't exist
+            if (etype.type == UnknownEntity.type) { // entity type doesn't exist
                 if (global.config.room.warn_on_unknown_entity) {
                     trace(chalk.yellowBright('Warning: Entity of object type "' + entity.obj + '" not found!'));
                 }

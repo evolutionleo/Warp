@@ -11,8 +11,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Gameplay",
-    "path": "folders/Warp Demo/Objects/Gameplay.yy",
+    "name": "Entities",
+    "path": "folders/Warp/Objects/Entities.yy",
   },
   "parentObjectId": {
     "name": "oPhysicsEntity",

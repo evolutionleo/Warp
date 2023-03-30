@@ -31,7 +31,7 @@ connect = function() {
 
 disconnect = function() {
 	if (connected) {
-		if (socket)
+		if (!is_undefined(socket))
 			network_destroy(socket)
 		
 		connected = false
@@ -41,6 +41,9 @@ disconnect = function() {
 		onDisconnect()
 	}
 }
+
+
+alarm[1] = 1
 
 // connect/disconnect events are defined in __NetworkingConfig.gml
 //onConnect = global.onConnect

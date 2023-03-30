@@ -17,7 +17,6 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Warp Demo","folderPath":"folders/Warp Demo.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Fonts","folderPath":"folders/Warp Demo/Fonts.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Objects","folderPath":"folders/Warp Demo/Objects.yy",},
-    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Gameplay","folderPath":"folders/Warp Demo/Objects/Gameplay.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Menu","folderPath":"folders/Warp Demo/Objects/Menu.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Rooms","folderPath":"folders/Warp Demo/Rooms.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Gameplay","folderPath":"folders/Warp Demo/Rooms/Gameplay.yy",},
@@ -40,6 +39,9 @@
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Struct N' Array Parser","folderPath":"folders/Warp/Scripts/lib/Struct N' Array Parser.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Messagepack","folderPath":"folders/Warp/Scripts/lib/Struct N' Array Parser/Messagepack.yy",},
     {"resourceType":"GMFolder","resourceVersion":"1.0","name":"util","folderPath":"folders/Warp/Scripts/util.yy",},
+    {"resourceType":"GMFolder","resourceVersion":"1.0","name":"Entities","folderPath":"folders/Warp/Objects/Entities.yy","tags":[
+        "entity",
+      ],},
   ],
   "IncludedFiles": [
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"log.txt","CopyToMask":-1,"filePath":"datafiles",},
@@ -91,7 +93,7 @@
     {"id":{"name":"oLobbiesDemo","path":"objects/oLobbiesDemo/oLobbiesDemo.yy",},},
     {"id":{"name":"SUIBackButton","path":"scripts/SUIBackButton/SUIBackButton.yy",},},
     {"id":{"name":"snap_from_messagepack","path":"scripts/snap_from_messagepack/snap_from_messagepack.yy",},},
-    {"id":{"name":"oPing","path":"objects/oPing/oPing.yy",},},
+    {"id":{"name":"oPingManager","path":"objects/oPingManager/oPingManager.yy",},},
     {"id":{"name":"buffer_visualize","path":"scripts/buffer_visualize/buffer_visualize.yy",},},
     {"id":{"name":"sWarpPortal","path":"sprites/sWarpPortal/sWarpPortal.yy",},},
     {"id":{"name":"oEntityManager","path":"objects/oEntityManager/oEntityManager.yy",},},

@@ -6,22 +6,6 @@ event_inherited();
 
 name = ""
 
-walksp = 7
-jumpHeight = 12.5
-cutJump = true
-
-
-jump = function() {
-	spd.y = -jumpHeight
-	cutJump = false
-}
-
-grounded = function() {
-	return meetingSolid(x, y+1, oWall)
-}
-
-
-
 // controls
 kright	= false
 kleft	= false
