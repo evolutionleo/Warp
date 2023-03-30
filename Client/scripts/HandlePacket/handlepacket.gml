@@ -40,7 +40,7 @@ function handlePacket(data) {
 				if (ping < 100)
 					global.server_time_delay = 50
 				else
-					global.server_time_delay = 100 * (ping div 100)
+					global.server_time_delay = 100 * ceil(ping / 100)
 			}
 			
 			global.ping = ping
@@ -56,7 +56,7 @@ function handlePacket(data) {
 			var ping = new_t - t
 			
 			if (AUTOADJUST_SERVER_DELAY)
-				global.server_time_delay = max(global.server_time_delay, 100 * (ping div 100))
+				global.server_time_delay = max(global.server_time_delay, 100 * ceil(ping / 100))
 			
 			global.ping = ping
 			break
