@@ -7,7 +7,7 @@ import PlayerEntity from "./player";
 type WarpPortalType = 'Entrance' | 'Exit' | 'Both';
 
 export default class WarpPortal extends Entity {
-    static type = 'WarpPortal';
+    static type = 'Warp Portal';
     static object_name = 'oWarpPortal';
     is_static = true;
     is_solid = false;
