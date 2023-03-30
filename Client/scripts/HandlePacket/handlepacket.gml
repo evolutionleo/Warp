@@ -31,11 +31,17 @@ function handlePacket(data) {
 			var new_t = local_timestamp()
 			var ping = round(new_t - old_t)
 			
-			// the timestamp server sent + the approx. time it took to get here
-			global.start_server_time = data.t + round(ping / 2)
+			global.start_server_time = data.t
 			global.start_local_time = new_t
 			
 			trace("server time: %; client time: %", global.start_server_time, global.start_local_time)
+			
+			if (AUTOADJUST_SERVER_DELAY) {
+				if (ping < 100)
+					global.server_time_delay = 50
+				else
+					global.server_time_delay = 100 * (ping div 100)
+			}
 			
 			global.ping = ping
 			break
@@ -48,6 +54,9 @@ function handlePacket(data) {
 			//var new_t = current_time
 			var new_t = round(local_timestamp())
 			var ping = new_t - t
+			
+			if (AUTOADJUST_SERVER_DELAY)
+				global.server_time_delay = max(global.server_time_delay, 100 * (ping div 100))
 			
 			global.ping = ping
 			break
