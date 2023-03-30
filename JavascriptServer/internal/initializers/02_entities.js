@@ -1,5 +1,3 @@
-// load everything into global.entities
-// same as with 03_maps
 import * as fs from 'fs';
 import * as path from 'path';
 

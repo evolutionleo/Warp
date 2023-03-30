@@ -3,6 +3,7 @@ import { lobbyExists } from '#concepts/lobby';
 import semver from 'semver';
 import chalk from 'chalk';
 import { partyExists } from '#concepts/party';
+import { clamp } from '#util/maths';
 
 /**
  * @param {Client} c
@@ -150,6 +151,9 @@ export default async function handlePacket(c, data) {
                     kjump_press: data.kjump_press
                 }
             };
+            
+            c.entity.inputs.move.x = clamp(c.entity.inputs.move.x, -1, 1);
+            c.entity.inputs.move.y = clamp(c.entity.inputs.move.y, -1, 1);
             break;
         
         

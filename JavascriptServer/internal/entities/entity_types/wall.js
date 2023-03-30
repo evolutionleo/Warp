@@ -1,12 +1,11 @@
 import Entity from "#concepts/entity";
 
 export default class Wall extends Entity {
+    static type = 'Wall';
+    static object_name = 'oWall';
+    
     is_solid = true;
     is_static = true;
-    static type = "Wall";
-    static object_name = "oWall";
-    type = Wall.type;
-    object_name = Wall.object_name;
     
     base_size = {
         x: 64,

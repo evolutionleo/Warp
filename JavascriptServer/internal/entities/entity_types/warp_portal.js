@@ -1,14 +1,11 @@
 import Entity from "#concepts/entity";
 
 export default class WarpPortal extends Entity {
+    static type = 'Warp Portal';
+    static object_name = 'oWarpPortal';
     is_static = true;
     is_solid = false;
     // is_trigger = true;
-    
-    static type = 'Warp Portal';
-    static object_name = 'oWarpPortal';
-    type = WarpPortal.type;
-    object_name = WarpPortal.object_name;
     
     base_size = {
         x: 32,
@@ -39,7 +36,7 @@ export default class WarpPortal extends Entity {
     }
     
     findExitPortal() {
-        return this.Room_to.entities.ofType('Warp Portal').find(e => e.warp_id == this.warp_id);
+        return this.Room_to.entities.ofType(this.type).find(e => e.warp_id == this.warp_id);
     }
     
     findRoomTo() {

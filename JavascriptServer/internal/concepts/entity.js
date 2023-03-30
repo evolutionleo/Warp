@@ -5,6 +5,13 @@ import { v4 as uuidv4 } from 'uuid';
 
 // a thing
 class Entity extends EventEmitter {
+    static type = 'Unknown';
+    static object_name = 'oUnknownEntity';
+    type;
+    object_name;
+    // type = Entity.type;
+    // object_name = Entity.object_name;
+    
     is_solid = false;
     is_static = false;
     is_trigger = false;
@@ -45,11 +52,6 @@ class Entity extends EventEmitter {
     
     prev_size = this.size;
     
-    static type = 'Unknown';
-    static object_name = 'oUnknownEntity';
-    type = Entity.type; // non-static variable
-    object_name = Entity.object_name;
-    
     tags = [];
     sendEveryTick = false; // either send every frame or only on change
     
@@ -70,6 +72,9 @@ class Entity extends EventEmitter {
         this.spd = { x: 0, y: 0 };
         this.prev_pos = { x, y };
         
+        this.type = this.constructor['type'];
+        this.object_name = this.constructor['object_name'];
+        
         this.createCollider();
         this.collider.entity = this;
         
@@ -84,7 +89,6 @@ class Entity extends EventEmitter {
     
     // called from room.tick()
     update(dt = 1) {
-        
         this.emit('update');
         
         // if something changed - send again (add to the room's bundle)

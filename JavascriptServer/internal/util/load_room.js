@@ -57,13 +57,15 @@ export default function LoadRoom(room_name) {
                 let props = {};
                 inst.properties.forEach(p => props[p.propertyId.name] = p.value.replaceAll('\"', ''));
                 
+                let type = global.entity_objects[inst.objectId.name]?.type || UnknownEntity.type;
+                
                 contents.push({
                     obj: inst.objectId.name,
                     x: inst.x,
                     y: inst.y,
                     xscale: inst.scaleX,
                     yscale: inst.scaleY,
-                    type: global.entity_objects[inst.objectId.name]?.type || UnknownEntity.type,
+                    type,
                     spd: { x: 0, y: 0 },
                     props
                 });

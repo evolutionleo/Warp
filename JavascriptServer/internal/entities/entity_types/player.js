@@ -19,12 +19,8 @@ export const defaultInputs = {
 
 
 export default class PlayerEntity extends PhysicsEntity {
-    
     static type = 'Player';
     static object_name = 'oPlayer';
-    // non-static
-    type = PlayerEntity.type;
-    object_name = PlayerEntity.object_name;
     
     collider_type = 'box';
     
