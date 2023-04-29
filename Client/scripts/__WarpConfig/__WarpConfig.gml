@@ -1,6 +1,6 @@
 // All the macro/config definitions go here
 
-#macro WARP_VERSION "v5.0.0"
+#macro WARP_VERSION "v5.1.0"
 #macro GAME_VERSION "v1.0.0"
 
 trace("Welcome to Warp % by Evoleo!", WARP_VERSION)
@@ -43,11 +43,12 @@ enum SOCKET_TYPES {
 #macro Default:PORT "1338"
 #macro Default:WS_PORT "3001"
 #macro Default:DUAL_INSTANCE true
+// you can set this macro to >1 to test the game with 3+ instances running at once
 #macro Default:DUAL_INSTANCE_COUNT 1
 
 // Production
-#macro Prod:IP   "xxx.xxx.xxx.xxx" // your external server IP
-//#macro Prod:IP   "195.2.80.50" // your external server IP
+#macro Prod:IP   "xxx.xxx.xxx.xxx" // insert your external server IP
+//#macro Prod:IP   "195.2.80.50"
 #macro Prod:PORT "1337"
 #macro Prod:WS_PORT "3000"
 #macro Prod:DUAL_INSTANCE true
@@ -56,11 +57,11 @@ enum SOCKET_TYPES {
 
 // Debug/Development
 #macro Dev:IP   "127.0.0.1"	// localhost
-//#macro IP "192.168.1.1" // LAN (replace with your local IP)
+//#macro IP "192.168.1.1" // LAN (insert your local IP)
 #macro Dev:PORT "1338"
 #macro Dev:WS_PORT "3001"
 #macro Dev:DUAL_INSTANCE true
-#macro Dev:DUAL_INSTANCE_COUNT 2
+#macro Dev:DUAL_INSTANCE_COUNT 1
 
 
 // warn about not setting the config (press the "target" icon in the top-right corner of IDE)

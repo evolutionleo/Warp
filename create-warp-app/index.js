@@ -23,7 +23,7 @@ const questions = [
         type: "list",
         name: "serverTemplate",
         message: "Select server-side template:",
-        choices: ["Empty", "TypeScript", "Old Empty"]
+        choices: ["JavaScript", "TypeScript"]
     },
     {
         type: "list",
@@ -59,14 +59,11 @@ inquirer.prompt(questions).then(answers => {
 
     let server_fname = undefined;
     switch(serverTemplate) {
-        case 'Empty':
+        case 'JavaScript':
             server_fname = 'JSServer.zip'
             break;
         case 'TypeScript':
             server_fname = 'TSServer.zip'
-            break;
-        case 'Old Empty':
-            server_fname = 'JSServerOld.zip'
             break;
         default:
             throw new Error('Unknown Server Template: ' + serverTemplate);
@@ -126,15 +123,25 @@ inquirer.prompt(questions).then(answers => {
         fs.createReadStream(client_fname)
         .pipe(unzipper.Extract({ path: 'Client/' })
         .on('close', () => {
-            if (clientTemplate === 'GameMaker') { // rename the .yyp
+            // rename Client.yyp and Client.resource_order
+            if (clientTemplate === 'GameMaker') {
+                // rename the .yyp
                 const project_file = 'Client.yyp';
                 const project_path = 'Client/' + project_file;
                 const content = fs.readFileSync(project_path, 'utf8');
-                
-                fs.rmSync(project_path);
-
                 const new_project_path = project_path.replace(project_file, projectName + '.yyp');
+
+                fs.renameSync(project_path, new_project_path);
                 fs.writeFileSync(new_project_path, content.replace('Client', projectName));
+
+                // rename the .resource_order
+                const ro_file = 'Client.resource_order';
+                const ro_path = 'Client/' + ro_file;
+                const ro_content = fs.readFileSync(ro_path, 'utf8');
+                const new_ro_path = ro_path.replace(project_file, projectName + '.resource_order');
+
+                fs.renameSync(ro_path, new_ro_path);
+                fs.writeFileSync(new_ro_path, ro_content.replace('Client', projectName));
             }
 
             console.log(chalk.white('Done.'));

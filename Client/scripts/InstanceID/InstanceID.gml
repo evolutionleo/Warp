@@ -1,31 +1,29 @@
-// Script assets have changed for v2.3.0 see
-// https://help.yoyogames.com/hc/en-us/articles/360005277377 for more information
+global.instance_uuids = {}
 
 // put this in create event
 function use_uuid() {
-	self.uuid = uuidv4_generate()
-	self.remote = false // whether an entity is remote or local - local by default
+	if (!variable_instance_exists(self, "uuid")) {
+		self.uuid = uuidv4_generate()
+		self.remote = false // whether an entity is remote or local - local by default
+	}
+	
+	global.instance_uuids[$ self.uuid] = id
 }
 
 function find_by_uuid(uuid, object_type = oEntity, remote = undefined) {
-	with(object_type) {
-		if (variable_instance_exists(self, "uuid") and self.uuid == uuid
-		and (is_undefined(remote)
-		or variable_instance_exists(self, "remote") and self.remote == remote))
-			return id
-	}
-	return noone
+	return global.instance_uuids[$ uuid] ?? noone
 }
 
 function find_or_create(uuid, object_type, remote = undefined, props = {}) {
 	var inst = find_by_uuid(uuid, object_type, remote)
-	if inst == noone {
+	if !instance_exists(inst) {
+		props.uuid = uuid
 		inst = instance_create_layer(0, 0, "Instances", object_type, props)
-		inst.uuid = uuid
+		//inst.uuid = uuid
 		if (!is_undefined(remote)) {
 			inst.remote = remote
 		}
-	}
+	 }
 	
 	return inst
 }

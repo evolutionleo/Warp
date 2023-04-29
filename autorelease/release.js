@@ -1,27 +1,55 @@
 const AdmZip = require('adm-zip');
 const path = require('path');
 
+let curr_zip;
+let curr_folder;
+
+let addFolder = (name) => {
+    curr_zip.addLocalFolder(path.join(__dirname, '..', `${curr_folder}/`, `${name}/`), `/${name}`);
+}
+let addFile = (name) => {
+    curr_zip.addLocalFile(path.join(__dirname, '..', `${curr_folder}/`, `${name}/`), `/${name}`);
+}
+
 // TypeScript server
 const ts_zip = new AdmZip();
-ts_zip.addLocalFolder(path.join(__dirname, '../TypescriptServer/src'), '/src');
-ts_zip.addLocalFile(path.join(__dirname, '../TypescriptServer/package.json'));
-ts_zip.addLocalFile(path.join(__dirname, '../TypescriptServer/tsconfig.json'));
-ts_zip.addLocalFile(path.join(__dirname, '../TypescriptServer/.gitignore'));
-ts_zip.addLocalFile(path.join(__dirname, '../TypescriptServer/README.md'));
+curr_zip = ts_zip;
+curr_folder = 'TypescriptServer';
+addFolder('src');
+
+addFile('package.json');
+addFile('tsconfig.json');
+addFile('jsconfig.json');
+addFile('.gitignore');
+addFile('README.md');
 
 ts_zip.writeZip('../Release/TSServer.zip');
 
 
 // JavaScript server
 const js_zip = new AdmZip();
-js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/custom'), '/custom');
-js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/internal'), '/internal');
-js_zip.addLocalFolder(path.join(__dirname, '../JavascriptServer/maps'), '/maps');
-js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/package.json'));
-js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/.gitignore'));
-js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/server.js'));
-js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/config.js'));
-js_zip.addLocalFile(path.join(__dirname, '../JavascriptServer/README.md'));
+curr_zip = js_zip;
+curr_folder = 'JavascriptServer'
+
+addFolder('cmd');
+addFolder('maps');
+addFolder('util');
+addFolder('types');
+addFolder('schemas');
+addFolder('concepts');
+addFolder('entities');
+addFolder('initializers');
+
+
+addFile('package.json');
+addFile('jsconfig.json');
+
+addFile('.gitignore');
+addFile('README.md');
+
+addFile('server.js');
+addFile('config.js');
+addFile('packet.js');
 
 js_zip.writeZip('../Release/JSServer.zip');
 

@@ -10,16 +10,16 @@
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
         "paths": {
-            "#schemas/*": ["internal/schemas/*"],
-            "#entity/*": ["internal/entities/entity_types/*"],
-            "#entities/*": ["internal/entities/*"],
-            "#initializers/*": ["internal/initializers/*"],
-            "#types/*": ["internal/types/*"],
-            "#concepts/*": ["internal/concepts/*"],
-            "#util/*": ["internal/util/*"],
+            "#schemas/*": ["schemas/*"],
+            "#entity/*": ["entities/entity_types/*"],
+            "#entities/*": ["entities/*"],
+            "#initializers/*": ["initializers/*"],
+            "#types/*": ["types/*"],
+            "#concepts/*": ["concepts/*"],
+            "#util/*": ["util/*"],
 
-            "#custom/*": ["custom/*"],
-            "#internal/*": ["internal/*"],
+            "#cmd/*": ["cmd/*"],
+            "#*": ["*"],
 
             "#root/*": ["./*"],
 

@@ -41,7 +41,8 @@ const args = minimist(process.argv.slice(2));
  * @property {boolean} rooms_enabled
  * @property {boolean} entities_enabled
  * @property {boolean} ssl_enabled
- * @property  {boolean} logging_enabled
+ * @property {boolean} logging_enabled
+ * @property {boolean} validation_enabled
  * 
  * @property {string} ssl_cert_path
  * @property {string} ssl_key_path
@@ -64,7 +65,7 @@ const common_config = {
     meta: {
         game_name: 'Warp Game',
         game_version: 'v1.0.0',
-        warp_version: 'v5.0.0',
+        warp_version: 'v5.1.0',
 
         compatible_game_versions: '>=1.0.0',
 
@@ -119,6 +120,8 @@ const common_config = {
     dt_enabled: true, // toggles delta time for entity physics
     ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
     logging_enabled: true, // whether or not to log trace()'d messages to server_log.txt
+    validation_enabled: true, // validate the incoming commands using ValidatorJS's validators
+    
     verbose_lag: false, // logs warning messages to chat when a game tick is taking longer than expected
     
     necessary_login: false, // if true, won't allow a client to join any lobby before logging in

@@ -8,8 +8,8 @@
   "managed": true,
   "overriddenProperties": [],
   "parent": {
-    "name": "Objects",
-    "path": "folders/Warp/Objects.yy",
+    "name": "Managers",
+    "path": "folders/Warp/Objects/Managers.yy",
   },
   "parentObjectId": null,
   "persistent": true,

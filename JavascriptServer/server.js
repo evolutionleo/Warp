@@ -13,7 +13,7 @@ const { ssl_enabled, ssl_key_path, ssl_cert_path } = global.config;
 import * as fs from 'fs';
 
 import trace from '#util/logging';
-import packet from '#internal/packet';
+import packet from '#packet';
 import Client from '#concepts/client';
 import { delayReceive } from '#util/artificial_delay';
 
@@ -26,13 +26,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
 // load some init scripts (to not put everything in this file)
-const init_files = fs.readdirSync(__dirname + '/internal/initializers', 'utf8');
+const init_files = fs.readdirSync(__dirname + '/initializers', 'utf8');
 
-// because sync/order matters
+// synchronous loading, because order matters
 for (var i = 0; i < init_files.length; i++) {
     var file = init_files[i];
     trace(chalk.blueBright('loading initializer:', file));
-    await import("file://" + __dirname + '/internal/initializers/' + file);
+    await import("file://" + __dirname + '/initializers/' + file);
 }
 trace(chalk.blueBright('loaded initializers!'));
 
@@ -86,7 +86,7 @@ const server = createServer(function (socket) {
 server.maxConnections = config.server.max_connections;
 
 
-server.listen(port, ip, () => {
+server.listen(port, ip, function () {
     trace(chalk.bold.blueBright(`Server running on port ${port}!`));
 });
 
@@ -112,7 +112,7 @@ if (global.config.ws_enabled) {
         maxPayload: config.server.max_ws_payload,
     });
     
-    ws_server.on('connection', (socket, r) => {
+    ws_server.on('connection', function (socket, r) {
         trace(chalk.blueBright("WebSocket connected!"));
         
         var c = new Client(socket, 'ws');

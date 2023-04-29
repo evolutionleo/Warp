@@ -13,8 +13,6 @@ connect = function() {
 	// -1 if no half-pack, a buffer otherwise
 	halfpack = -1
 	
-	alarm[0] = CONNECT_TIMEOUT
-	
 	socket = network_create_socket(SOCKET_TYPE)
 	var port
 	

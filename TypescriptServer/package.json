@@ -1,6 +1,6 @@
 {
-    "name": "warp-framework",
-    "version": "5.0.0",
+    "name": "warp-server",
+    "version": "5.1.0",
     "private": true,
     "description": "",
     "main": "out/server.js",
@@ -20,39 +20,39 @@
     },
     "dependencies": {
         "@msgpack/msgpack": "^2.8.0",
-        "chalk": "^4.1.2",
-        "detect-collisions": "7.0.0",
+        "chalk": "^5.2.0",
+        "detect-collisions": "7.0.5",
         "extend": "^3.0.2",
+        "fastest-validator": "^1.16.0",
         "minimist": "^1.2.8",
         "module-alias": "^2.2.2",
-        "mongoose": "^6.9.2",
-        "node": "^19.6.0",
+        "mongoose": "^7.0.3",
         "performance-now": "^2.1.0",
         "rbush": "3.0.1",
         "semver": "^7.3.8",
         "uuid": "^9.0.0",
-        "ws": "^8.12.1"
+        "ws": "^8.13.0"
     },
     "devDependencies": {
         "@types/minimist": "^1.2.2",
-        "@types/node": "^18.14.0",
+        "@types/node": "^18.15.11",
         "@types/rbush": "^3.0.0",
         "@types/semver": "^7.3.13",
-        "@types/uuid": "^9.0.0",
+        "@types/uuid": "^9.0.1",
         "@types/ws": "^8.5.4",
         "0x": "^4.1.4",
-        "typescript": "^4.9.5"
+        "typescript": "^5.0.3"
     },
     "imports": {
         "#root/*": "./out/*.js",
-        "#custom/*": "./out/custom/*.js",
-        "#internal/*": "./out/internal/*.js",
-        "#schemas/*": "./out/internal/schemas/*.js",
-        "#concepts/*": "./out/internal/concepts/*.js",
-        "#entity/*": "./out/internal/entities/entity_types/*.js",
-        "#entities/*": "./out/internal/entities/*.js",
-        "#initializers/*": "./out/internal/initializers/*.js",
-        "#util/*": "./out/internal/util/*.js",
-        "#types/*": "./out/internal/types/*.js"
+        "#cmd/*": "./out/cmd/*.js",
+        "#*": "./out/*.js",
+        "#schemas/*": "./out/schemas/*.js",
+        "#concepts/*": "./out/concepts/*.js",
+        "#entity/*": "./out/entities/entity_types/*.js",
+        "#entities/*": "./out/entities/*.js",
+        "#initializers/*": "./out/initializers/*.js",
+        "#util/*": "./out/util/*.js",
+        "#types/*": "./out/types/*.js"
     }
 }

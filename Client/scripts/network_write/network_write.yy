@@ -5,7 +5,7 @@
   "isCompatibility": false,
   "isDnD": false,
   "parent": {
-    "name": "Scripts",
-    "path": "folders/Warp/Scripts.yy",
+    "name": "util",
+    "path": "folders/Warp/Scripts/util.yy",
   },
 }

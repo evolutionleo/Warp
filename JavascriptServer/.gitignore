@@ -1,2 +1,5 @@
 node_modules/
-out/
+server_log.txt
+package-lock.json
+__profiles/
+*.0x/

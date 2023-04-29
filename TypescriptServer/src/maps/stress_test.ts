@@ -1,4 +1,4 @@
-import GameMap from '#internal/concepts/map';
+import GameMap from '#concepts/map';
 
 export default new GameMap({
     name: 'Stress Test',

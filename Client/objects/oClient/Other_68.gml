@@ -101,6 +101,7 @@ switch(type) {
 		trace("Connected to the server!")
 		connected = true
 		connecting = false
+		alarm[1] = 60
 		onConnect()
 		break
 	case network_type_disconnect:
