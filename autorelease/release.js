@@ -5,10 +5,10 @@ let curr_zip;
 let curr_folder;
 
 let addFolder = (name) => {
-    curr_zip.addLocalFolder(path.join(__dirname, '..', `${curr_folder}/`, `${name}/`), `/${name}`);
+    curr_zip.addLocalFolder(path.join(__dirname, '..', `${curr_folder}`, `${name}/`), `/${name}`);
 }
 let addFile = (name) => {
-    curr_zip.addLocalFile(path.join(__dirname, '..', `${curr_folder}/`, `${name}/`), `/${name}`);
+    curr_zip.addLocalFile(path.join(__dirname, '..', `${curr_folder}`, name), '');
 }
 
 // TypeScript server
