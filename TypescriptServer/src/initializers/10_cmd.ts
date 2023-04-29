@@ -9,11 +9,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
 async function loadFolder(type) {
-    let files = fs.readdirSync(__dirname + `/../cmd/${type}s`, 'utf8');
+    let dir = __dirname + `/../cmd/${type}s`;
+    let files = fs.readdirSync(dir, 'utf8');
     trace(chalk.blueBright(`Loading ${type}s...`));
 
     // load everything asynchronously
     await Promise.all(files.map(file => {
+        if (fs.statSync(dir + '/' + file).isDirectory()) return;
+
         trace(chalk.blueBright(`> loading ${type}:`, file));
         return import(`file://${__dirname}/../cmd/${type}s/${file}`);
     }));

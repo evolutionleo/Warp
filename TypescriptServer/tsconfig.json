@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "allowJs": true,
+        "removeComments": false,
         "moduleResolution": "Node",
         "baseUrl": "src",
         "outDir": "out/",
@@ -9,6 +10,7 @@
         "target": "ESNext",
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
+        // "declaration": true,
         "paths": {
             "#schemas/*": ["schemas/*"],
             "#entity/*": ["entities/entity_types/*"],

@@ -1,6 +1,6 @@
 import trace from '#util/logging';
 import chalk from 'chalk';
-import SendStuff from '#cmd/sendStuff';
+import { SendStuff } from '#cmd/sendStuff';
 
 import mongoose from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;

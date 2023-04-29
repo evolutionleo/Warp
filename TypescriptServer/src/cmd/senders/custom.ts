@@ -1,6 +1,6 @@
 import SendStuff from "#cmd/sendStuff"
-import Client from "#concepts/client";
-import { IPlayerInputs } from "#entity/player";
+import Client from "#concepts/client"
+import { IPlayerInputs } from "#entity/player"
 
 declare module "#cmd/sendStuff" {
     interface SendStuff {

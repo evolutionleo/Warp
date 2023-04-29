@@ -11,7 +11,7 @@ declare module "#cmd/sendStuff" {
 }
 
 /**
- * @param {string} status 
+ * @param {string} status
  * @param {string} [reason='']
  */
 SendStuff.prototype.sendRegister = function(status:string, reason:string = ''):void {
