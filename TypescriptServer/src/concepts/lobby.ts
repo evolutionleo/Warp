@@ -1,35 +1,17 @@
 import trace from '#util/logging';
-import GameMap from '#concepts/map';
+import GameLevel from '#concepts/level';
 import Client from '#concepts/client';
 import Room, { SerializedRoom, RoomInfo }  from '#concepts/room';
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
+import GameMode from '#concepts/game_mode';
+import GameMap, { GameMapInfo } from './map';
 
-export type LobbyStatus = 'open' | 'closed';
+
 
 // note: only create lobbies with createLobby(), don't call the constructor directly
-
-export type SerializedLobby = {
-    lobbyid: string,
-    status: LobbyStatus,
-    max_players: number,
-    player_count: number,
-    rooms: SerializedRoom[],
-    full: boolean
-}
-
-export type LobbyInfo = {
-    lobbyid: string,
-    status: LobbyStatus,
-    max_players: number,
-    player_count: number,
-    rooms: RoomInfo[],
-    full: boolean
-}
-
-
-export function lobbyCreate() { // returns the lobby instance
-    var lobby = new Lobby();
+export function lobbyCreate(map:GameMap) { // returns the lobby instance
+    var lobby = new Lobby(map);
 
     while(true) {
         // a random 6-digit number
@@ -67,6 +49,28 @@ export function lobbyList():Lobby[] {
 }
 
 
+export type LobbyStatus = 'open' | 'closed';
+
+export type SerializedLobby = {
+    lobbyid: string,
+    status: LobbyStatus,
+    max_players: number,
+    player_count: number,
+    rooms: SerializedRoom[],
+    full: boolean
+}
+
+export type LobbyInfo = {
+    lobbyid: string,
+    status: LobbyStatus,
+    max_players: number,
+    player_count: number,
+    rooms: RoomInfo[],
+    full: boolean,
+    map: GameMapInfo
+}
+
+
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
     lobbyid:string = '-1'; // assigned when created
@@ -75,15 +79,26 @@ export default class Lobby extends EventEmitter {
     players:Client[] = [];
     /** @type {Room[]} */
     rooms:Room[] = [];
-    max_players:number = global.config.lobby.max_players || undefined; // Java???
 
-    constructor() {
+    map:GameMap = null;
+    game_mode:GameMode = null;
+
+    // used when creating a lobby with no map/game mode
+    max_players:number = global.config.lobby.max_players || undefined;
+
+
+    /** @type {Client[][]} */
+    teams: Client[][] = [];
+
+    constructor(map:GameMap = null) {
         super();
 
-        if (global.config.rooms_enabled) {
-            for(let i = 0; i < global.maps.length; i++) {
-                let map = global.maps[i];
-                let room = new Room(map, this);
+        this.map = map;
+
+        if (global.config.rooms_enabled && this.map !== null) {
+            for(let i = 0; i < this.map.levels.length; i++) {
+                let level = this.map.levels[i];
+                let room = new Room(level, this);
                 this.rooms.push(room);
             }
         }
@@ -122,10 +137,10 @@ export default class Lobby extends EventEmitter {
 
         
         // lobby is now full - add everyone
-        if (global.config.lobby.addIntoPlayOnFull && this.players.length == this.max_players) {
-            this.players.forEach(p => this.addIntoPlay(p));
+        if (global.config.lobby.add_into_play_on_full && this.players.length == this.max_players) {
+            this.play();
         }
-        else if (!global.config.lobby.addIntoPlayOnFull) {
+        else if (global.config.lobby.add_into_play_on_join) {
             // immediately add into play
             this.addIntoPlay(player);
         }
@@ -145,7 +160,7 @@ export default class Lobby extends EventEmitter {
 
 
         // close if a player leaves from the lobby?
-        if (global.config.lobby.closeOnLeave) {
+        if (global.config.lobby.close_on_leave) {
             this.close();
         }
     }
@@ -158,7 +173,7 @@ export default class Lobby extends EventEmitter {
             player.onPlay();
         }
         else {
-            trace('something went wrong - trying to add into play a player not from this lobby');
+            trace('something went wrong - trying to add a player from another lobby into play');
         }
     }
 
@@ -166,29 +181,29 @@ export default class Lobby extends EventEmitter {
      * @param {string} room_name
      * @returns {Room} room
      */
-    findRoomByMapName(room_name:string):Room {
-        return this.rooms.find(r => r.map.name === room_name);
+    findRoomByLevelName(room_name:string):Room {
+        return this.rooms.find(r => r.level.name === room_name);
     }
 
     /**
      * @param {object} data
      */
     broadcast(data:object):void {
-        this.players.forEach(function(player) {
+        this.players.forEach((player) => {
             player.write(data);
-        })
+        });
     }
 
+    // add everyone into play
     play():void {
-        var lobby = this;
-        this.players.forEach(function(player) {
-            lobby.addIntoPlay(player);
-        })
+        this.players.forEach((player) => {
+            this.addIntoPlay(player);
+        });
     }
 
-    close():void {
+    close(reason:string = 'lobby is closing!'):void {
         // kick all players
-        this.players.forEach((player) => this.kickPlayer(player, 'lobby is closing!', true));
+        this.players.forEach((player) => this.kickPlayer(player, reason, true));
         this.status = 'closed';
     }
 
@@ -217,7 +232,9 @@ export default class Lobby extends EventEmitter {
             status: this.status,
             max_players: this.max_players,
             player_count: this.player_count,
-            full: this.full
+            full: this.full,
+
+            map: this.map.getInfo()
         }
     }
 

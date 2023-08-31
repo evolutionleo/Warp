@@ -1,17 +1,17 @@
 import SendStuff from "#cmd/sendStuff"
 import Client from "#concepts/client"
-import { IPlayerInputs } from "#entity/player"
+import { PlayerInputs } from "#entities/player"
 
 declare module "#cmd/sendStuff" {
     interface SendStuff {
-        sendPlayerControls(data: IPlayerInputs)
+        sendPlayerControls(data: PlayerInputs)
     }
 }
 
 /**
- * @param {IPlayerInputs} data 
+ * @param {PlayerInputs} data 
  */
-SendStuff.prototype.sendPlayerControls = function(data: IPlayerInputs) {
+SendStuff.prototype.sendPlayerControls = function(data: PlayerInputs) {
     let id = this.entity.uuid;
     this.broadcastRoom({ cmd: 'player controls', id, ...data }, true);
 }

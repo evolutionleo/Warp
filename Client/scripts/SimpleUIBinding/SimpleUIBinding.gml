@@ -1,3 +1,8 @@
+// feather disable GM1041
+
+///@function SUIBind(_get, _set)
+///@param {Function|String} _get
+///@param {Function|String} _set
 function SUIBind(_get = SUIEmptyFunction, _set = SUIEmptyFunction) {
 	// get = "global.something" or get = "oPlayer.username"
 	if is_string(_get) {
@@ -22,7 +27,7 @@ function SUIBind(_get = SUIEmptyFunction, _set = SUIEmptyFunction) {
 		}
 		else if (source == "mouse") {	} // mouse.x/mouse.y are handled below
 		else {
-			source = other
+			source = self
 		}
 		
 		// mouse.x and mouse.y are special

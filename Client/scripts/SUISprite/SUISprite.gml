@@ -1,3 +1,4 @@
+// feather ignore all
 function SUISprite(x, y, spr, img = 0, props = {}, children = []) : SUI_ELEMENT {
 	self.spr = spr
 	self.img = img

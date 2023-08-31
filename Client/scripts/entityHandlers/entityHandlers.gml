@@ -11,7 +11,7 @@ addHandler("entities", function(data) {
 	// don't spawn in entities from another room (can happen during room transitions)
 	var from_room = data.room // the room where the entities are from
 	var curr_room = room_get_name(room) // the current room
-	var target_room = global.game_map.room_name // the target room
+	var target_room = global.game_level.room_name // the target room
 			
 	if (curr_room != target_room) { // in transition right now
 		queuePacket(data)

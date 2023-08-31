@@ -1,6 +1,7 @@
 // All the macro/config definitions go here
+// feather ignore GM1038
 
-#macro WARP_VERSION "v5.1.0"
+#macro WARP_VERSION "v6.0.0"
 #macro GAME_VERSION "v1.0.0"
 
 trace("Welcome to Warp % by Evoleo!", WARP_VERSION)
@@ -29,10 +30,11 @@ global.server_time_delay = 100
 
 #macro SOCKET_TYPE SOCKET_TYPES.WS
 
-enum SOCKET_TYPES {
-	TCP = network_socket_tcp,
-	WS = network_socket_ws,
-	WSS = network_socket_wss
+#macro SOCKET_TYPES global._SOCKET_TYPES
+SOCKET_TYPES = {
+	TCP: network_socket_tcp,
+	WS: network_socket_ws,
+	WSS: network_socket_wss
 }
 
 // Below are config-dependant macros.

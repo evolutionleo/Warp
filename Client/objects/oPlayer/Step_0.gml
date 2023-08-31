@@ -17,5 +17,6 @@ if (!remote) {
 	sendPlayerControls()
 }
 
-// Inherit the parent event
-event_inherited();
+if (state == states.walk) {
+	
+}

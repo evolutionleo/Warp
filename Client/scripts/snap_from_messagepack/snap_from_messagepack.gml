@@ -7,6 +7,7 @@
 /// @param [destroyBuffer]  Set to <true> to destroy the input buffer. Defaults to <false>
 /// 
 /// @jujuadams 2021-09-05
+// feather ignore all
 
 function snap_from_messagepack()
 {

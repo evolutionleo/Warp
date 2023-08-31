@@ -9,9 +9,6 @@
   "bboxMode": 0,
   "collisionKind": 5,
   "collisionTolerance": 0,
-  "ConfigValues": {
-    "Dev": {"textureGroupId":"{\"name\":\"Default\",\"path\":\"texturegroups/Default\"}",},
-  },
   "DynamicTexturePage": false,
   "edgeFiltering": false,
   "For3D": false,

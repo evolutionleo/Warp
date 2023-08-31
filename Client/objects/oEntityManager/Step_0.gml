@@ -1,4 +1,5 @@
 /// @desc
+// feather disable all
 
 base_update = -1
 next_update = -1
@@ -73,7 +74,7 @@ array_foreach(third_entities, function(e, i) { third_e_idx[$ e.id] = i })
 var l = array_length(entities)
 
 // for each entity
-for(var i = 0; i < l; i++) {
+for(i = 0; i < l; i++) {
 	var entity = entities[i]
 				
 	var uuid = entity.id
@@ -84,7 +85,8 @@ for(var i = 0; i < l; i++) {
 		else
 			throw "Error: Received unknown entity type: " + string(entity.obj) + ". Set ALLOW_UNKNOWN_ENTITIES to true to disable this error."
 	}
-	var props = entity.props
+	var props = entity.p
+	var state = entity.st
 	var existed = instance_exists(find_by_uuid(uuid, type))
 	
 	var idx2 = next_e_idx[$ uuid]
@@ -111,10 +113,12 @@ for(var i = 0; i < l; i++) {
 	}
 	
 	// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
-	inst.image_xscale = entity.xscale
-	inst.image_yscale = entity.yscale
+	inst.image_xscale = entity.xs
+	inst.image_yscale = entity.ys
 	inst.x = entity.x
 	inst.y = entity.y
+	
+	inst.state = state
 	
 	// set the speed
 	if (variable_struct_exists(entity, "spd")) {

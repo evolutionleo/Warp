@@ -18,7 +18,7 @@ function SUIText(x, y, text, props = {}, children = []) : SUI_ELEMENT {
 		draw_set_valign(self.get("valign"))
 		
 		var t = self.get("text")
-		draw_text(x, y, t)
+		draw_text(x, y, string(t))
 		self.set("text_w", string_width(t))
 		self.set("text_h", max(string_height(t), string_height("A")))
 		

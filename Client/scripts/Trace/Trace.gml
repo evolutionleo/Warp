@@ -17,7 +17,7 @@ function trace(r) {
 }
 
 global.__recently_logged = ""
-time_source_create(time_source_global, 10, time_source_units_frames, function() {
+global.__logging_timesource = time_source_create(time_source_global, 10, time_source_units_frames, function() {
 	debug_log(global.__recently_logged)
 	global.__recently_logged = ""
 }, [], -1)
@@ -41,7 +41,7 @@ function str_format(str)
 
 function debug_log(str, file = "client_log.txt") {
 	global.logfile = file_text_open_append(working_directory+file)
-	var prefix = "[" + window_get_caption() + "]" + "[" + date_datetime_string(date_current_datetime()) + "]"
+	var prefix = $"[{window_get_caption()}][{date_datetime_string(date_current_datetime())}]"
 	str = prefix + str
 	file_text_write_string(global.logfile, str)
 	show_debug_message("logging: " + str)

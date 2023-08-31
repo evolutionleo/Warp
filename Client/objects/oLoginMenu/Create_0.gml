@@ -1,4 +1,5 @@
 /// @desc
+// feather ignore GM1041
 
 username = ""
 password = ""

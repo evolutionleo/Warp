@@ -11,13 +11,14 @@ export interface IProfile extends Document {
     last_online: Date,
 
     friends: ObjectId[],
-    mmr: number
+    mmr: number,
 
     state: {
         lobbyid: string,
-        room: string, // room/map name
+        room: string, // room/level name
         x: number,
-        y: number
+        y: number,
+        state: number // state.state
     }
 }
 
@@ -55,6 +56,7 @@ export function freshProfile(account:IAccount):IProfile { // for when just regis
     return new Profile({
         account_id: account._id,
         name: account.username,
+        mmr: global.config.matchmaking.mmr_starting,
 
         state: {
             lobbyid: '',

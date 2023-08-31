@@ -23,12 +23,17 @@ function SUITextInput(x, y, w = 192, h = 48, text = "", placeholder = "", props 
 	self.placeholder_element = undefined
 	
 	init = function() {
-		self.box_element = appendChild(new SUIBox(0, 0, get("w"), get("h"), props))
-		self.text_element = appendChild(new SUIText(10, get("h")/2, SUIBind("self.text"), props))
-		//self.text_element = appendChild(new SUIText(10, get("h")/2, self.text, props))
-		self.cursor_element = appendChild(new SUISprite(190, get("h")/2, sSimpleUITextCursor, 0))
-		self.placeholder_element = appendChild(new SUIText(10, get("h")/2, SUIBind("self.placeholder_text")))
-		//self.placeholder_element = appendChild(new SUIText(10, get("h")/2, self.placeholder_text))
+		var bx = 0, by = 0, bw = get("w"), bh = get("h")
+		self.box_element = appendChild(new SUIBox(bx, by, bw, bh, props))
+		
+		var tx = 10, ty = get("h")/2
+		self.text_element = appendChild(new SUIText(tx, ty, SUIBind("self.text", "self.text"), props))
+		
+		var cx = 190, cy = get("h")/2
+		self.cursor_element = appendChild(new SUISprite(cx, cy, sSimpleUITextCursor, 0))
+		
+		var px = 10, py = get("h")/2
+		self.placeholder_element = appendChild(new SUIText(px, py, SUIBind("self.placeholder_text", "self.placeholder_text")))
 		
 		box_element.hoverable = false
 		text_element.hoverable = false

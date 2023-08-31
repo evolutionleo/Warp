@@ -19,6 +19,8 @@ function SUIDistanceToRectangle(px, py, x1, y1, x2, y2) {
 
 #region Variable stuff
 
+///@param {Struct} dest
+///@param {Struct} src
 function SUIInherit(dest, src) {
 	var var_names = variable_struct_get_names(src)
 	var names_len = variable_struct_names_count(src)
@@ -56,25 +58,28 @@ function SUIVarGet(scope, varname) {
 	}
 }
 
+///@function SUIVarSet(scope, varname, value)
+///@param {Any} scope
+///@param {String} varname
+///@param {Any} value
 function SUIVarSet(scope, varname, value) {
 	if (is_undefined(argument[1])) {
 		varname = argument[0]
 		value = argument[1]
 		scope = other
 	}
+	else {
+		value = argument[2]
+	}
 	
 	if (scope == global) {
 		variable_global_set(varname, value)
 	}
+	else if (is_struct(scope)) {
+		variable_struct_set(scope, varname, value)
+	}
 	else {
-		with(scope) {
-			if (is_struct(self)) {
-				variable_struct_set(self, varname, value)
-			}
-			else {
-				variable_instance_set(self, varname, value)
-			}
-		}
+		variable_instance_set(scope, varname, value)
 	}
 }
 

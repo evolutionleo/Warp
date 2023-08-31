@@ -1,6 +1,6 @@
 {
     "name": "warp-server",
-    "version": "5.1.0",
+    "version": "6.0.0",
     "private": true,
     "description": "",
     "main": "out/server.js",
@@ -47,9 +47,9 @@
         "#root/*": "./out/*.js",
         "#cmd/*": "./out/cmd/*.js",
         "#*": "./out/*.js",
+        "#matchmaking/*": "./out/concepts/matchmaking/*.js",
         "#schemas/*": "./out/schemas/*.js",
         "#concepts/*": "./out/concepts/*.js",
-        "#entity/*": "./out/entities/entity_types/*.js",
         "#entities/*": "./out/entities/*.js",
         "#initializers/*": "./out/initializers/*.js",
         "#util/*": "./out/util/*.js",

@@ -4,6 +4,7 @@ import trace from '#util/logging';
 import mongoose, { ObjectId, Document, Model } from 'mongoose';
 const { model, Schema }  = mongoose;
 import { hashPassword, verifyPassword } from '#util/password_encryption';
+import { Names } from '#util/names';
 
 
 export interface IAccount extends Document {
@@ -26,7 +27,13 @@ const accountSchema = new Schema<IAccount>({
 
 // logging in/registering stuff
 accountSchema.statics.register = function accountRegister(username:string, password:string):Promise<string|IAccount> {
+    username = username.toLowerCase();
+
     return new Promise(async (resolve, reject) => {
+        if (!Names.isValid(username)) {
+            reject('failed to register');
+        }
+
         var account = new Account({
             username: username,
             password: await hashPassword(password),
@@ -46,14 +53,17 @@ accountSchema.statics.register = function accountRegister(username:string, passw
 }
 
 accountSchema.statics.login = function accountLogin(username:string, password:string):Promise<string|IAccount> {
+    username = username.toLowerCase();
+
     return new Promise(async (resolve, reject) => {
-        Account.findOne({username: username}, async (err:Error, account:IAccount) => {
-            if (!account) {
-                reject('account not found');
-            }
-            else if (err) {
+        Account.findOne({username: username}).catch((err:Error) => {
+            if (err) {
                 trace(err);
                 reject('error while logging in');
+            }
+        }).then(async (account:IAccount|void) => {
+            if (!account) {
+                reject('account not found');
             }
             else {
                 if (await verifyPassword(password, account.password)) {

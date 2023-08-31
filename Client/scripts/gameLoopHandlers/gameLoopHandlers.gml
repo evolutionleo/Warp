@@ -1,8 +1,20 @@
+addHandler("match found", function(data) {
+	var match = data.match
+	
+	var map = match.map
+	var teams = match.teams
+	var parties = match.parties
+	
+	global.map = map
+	trace("Match found!", data)
+})
+
 addHandler("play", function(data) {
 	trace("playing!")
 	global.playing = true
 	
 	global.lobby = data.lobby // again, just to be safe + update the data
+	global.game_map = data.lobby.map
 	
 	if (!is_undefined(data.start_pos)) {
 		global.start_pos = data.start_pos
@@ -13,9 +25,9 @@ addHandler("play", function(data) {
 	
 	if (!is_undefined(data.room)) {
 		global.room = data.room
-		global.game_map = data.room.map
+		global.game_level = data.room.level
 		
-		var rm = asset_get_index(data.room.map.room_name)
+		var rm = asset_get_index(data.room.level.room_name)
 		if (!room_exists(rm)) {
 			show_message_async("Error: Invalid room name!")
 			return
@@ -35,14 +47,14 @@ addHandler("room transition", function(data) {
 	if (use_timestamps(data)) return;
 	
 	var _room = data.room
-	var _map = _room.map
+	var _level = _room.level
 	
 	global.room = _room
 	global.start_pos = data.start_pos
-	global.game_map = _map
+	global.game_level = _level
 	global.player_uuid = data.uuid
 	
-	var room_name = _map.room_name
+	var room_name = _level.room_name
 	//trace("room transition: % -> %", room_get_name(room), room_name)
 	
 	var rm = asset_get_index(room_name)
@@ -57,4 +69,9 @@ addHandler("room transition", function(data) {
 
 addHandler("game over", function(data) {
 	show_message_async("Game over! " + string(data.reason) + " " + string(data.outcome))
+})
+
+addHandler("mmr change", function(data) {
+	var delta = data.delta
+	var new_mmr = data.new_mmr
 })

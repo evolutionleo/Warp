@@ -1,6 +1,6 @@
 ///@function	addHandler(cmd, handler)
-///@param		{string} cmd
-///@param		{method} handler
+///@param		{String} cmd
+///@param		{Function} handler
 function addHandler(cmd, handler) {
 	static init = false
 	if (!init) {

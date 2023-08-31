@@ -1,3 +1,4 @@
+// feather ignore GM1044
 
 event_inherited()
 

@@ -1,6 +1,8 @@
 import Client from "./client";
 import * as crypto from 'crypto';
 import { ProfileInfo } from "#schemas/profile";
+import Ticket, { MatchRequirements } from "#matchmaking/ticket";
+import MatchMaker from "#matchmaking/matchmaker";
 
 
 export type PartyInfo = {
@@ -49,12 +51,18 @@ export default class Party {
     leader: Client;
     max_members: number; // inherited from config.party.max_members
 
+    get party_size() { return this.members.length; }
+
+    ticket:Ticket = null; // current matchmaking ticket (null = not looking for a match)
+
     constructor(leader:Client) {
         this.members = [];
         this.max_members = global.config.party.max_members;
 
-        this.addMember(leader);
         this.leader = leader;
+        this.addMember(leader);
+
+        this.send();
     }
 
     addMember(member: Client): void {
@@ -67,13 +75,18 @@ export default class Party {
             member.party.kickMember(member, 'changing parties', true);
         }
 
-        if (!this.isMember(member)) {
-            this.members.push(member);
-            member.party = this;
-        }
+        this.matchMakingStop();
+
+        this.members.push(member);
+        member.party = this;
+
+        this.send();
     }
 
     kickMember(member: Client, reason: string = '', forced: boolean = true): void {
+        // leave matchmaking
+        this.matchMakingStop();
+
         if (this.isLeader(member)) {
             if (this.members.length == 1) { // if no one else left
                 this.leader = null;
@@ -83,6 +96,7 @@ export default class Party {
                 this.leader = this.members.find(m => m != member);
             }
         }
+
         this.members.splice(this.members.indexOf(member), 1);
         member.onPartyLeave(this, reason, forced);
         member.party = null;
@@ -90,6 +104,9 @@ export default class Party {
         // delete the party ID if everyone left
         if (this.members.length == 0)
             this.delete();
+        else {
+            this.send();
+        }
     }
 
     disband() {
@@ -100,6 +117,26 @@ export default class Party {
         delete global.parties[this.partyid];
     }
 
+    matchMakingStart(req:MatchRequirements):boolean {
+        if (this.ticket !== null) return false;
+
+        this.ticket = MatchMaker.createTicket(this, req);
+
+        // failed to create a ticket
+        if (this.ticket === null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    matchMakingStop() {
+        if (this.ticket === null) return;
+
+        this.ticket.remove();
+        this.ticket = null;
+    }
+
     setLeader(leader: Client): void {
         this.leader = leader;
     }
@@ -107,7 +144,7 @@ export default class Party {
     isLeader(member: Client): boolean {
         return this.leader == member;
     }
-k
+
     isMember(client: Client): boolean {
         return this.members.includes(client);
     }
@@ -121,12 +158,18 @@ k
         return this.getAvgMMR();
     }
 
+    send() {
+        this.members.forEach(member => {
+            member.sendPartyInfo(this);
+        });
+    }
+
 
     getInfo():PartyInfo {
         return {
             partyid: this.partyid,
             members: this.members.map(m => m.name),
-            leader: this.leader.name
+            leader: this.leader?.name
         };
     }
 };

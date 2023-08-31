@@ -3,6 +3,7 @@
 // Inherit the parent event
 event_inherited();
 
+use_states({ idle: 0, walk: 1 })
 
 name = ""
 

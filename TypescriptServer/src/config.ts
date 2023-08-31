@@ -20,8 +20,9 @@ const args = minimist(process.argv.slice(2));
  * 
  * @property {object} lobby
  * @property {number} lobby.max_players
- * @property {boolean} lobby.addIntoPlayOnFull
- * @property {boolean} lobby.closeOnLeave
+ * @property {boolean} lobby.add_into_play_on_full
+ * @property {boolean} lobby.add_into_play_on_join
+ * @property {boolean} lobby.close_on_leave
  * 
  * @property {object} room
  * @property {string} room.rooms_path
@@ -65,7 +66,7 @@ const common_config = {
     meta: {
         game_name: 'Warp Game',
         game_version: 'v1.0.0',
-        warp_version: 'v5.1.0',
+        warp_version: 'v6.0.0',
 
         compatible_game_versions: '>=1.0.0',
 
@@ -79,10 +80,10 @@ const common_config = {
 
     // some fundamental lobby settings
     lobby: {
-        max_players: 100,
-        addIntoPlayOnFull: false,    // true - add all the players into play at the same time once the lobby is filled,
-                                    // false - add them one by one immediately as they join
-        closeOnLeave: false // close the lobby if a player leaves
+        max_players: 100, // used when creating a lobby with no map/game mode
+        add_into_play_on_full: false,    // true - add all the players into play at the same time once the lobby is filled,
+        add_into_play_on_join: true, // true - add players one by one immediately as they join a lobby
+        close_on_leave: false // close the lobby if a player leaves
     },
 
     room: {
@@ -104,7 +105,20 @@ const common_config = {
     },
 
     party: {
-        max_members: 5 // max party size
+        max_members: 5, // max party size
+        leader_only_mm: false // true - only party leader can start matchmaking
+    },
+
+    matchmaking: {
+        mmr_starting: 1000, // the starting mmr given to new players
+        mmr_min: 1, // can't go below this
+
+        mmr_scale: 1000, // lower number = less effect opponent's mmr has on mmr change
+                         // (chess uses 400, meaning a player with 400 mmr more is on average 10x more likely to win)
+        mmr_max_gain: 50, // the maximum possible amount of mmr that a player can gain after a single game, winning against an equal opponent will give half of this
+        mmr_max_difference: 500, // can't ever register a ranked match with players' mmr difference more than this
+
+        process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms
     },
 
     tps: 20, // tickrate
@@ -126,8 +140,7 @@ const common_config = {
     
     necessary_login: false, // if true, won't allow a client to join any lobby before logging in
 
-    ping_interval: 5 * 1000,
-    mm_process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms
+    ping_interval: 5 * 1000
 }
 
 const prod_config = {
@@ -198,7 +211,7 @@ const env = args.env || 'dev'
 /**
  * @type {Config}
  */
-const config:CONFIG = mergeDeep({}, common_config);
+const config:CONFIG = mergeDeep({}, common_config) as CONFIG;
 
 if (env === 'production' || env === 'prod' || args.prod) {
     mergeDeep(config, prod_config);
@@ -210,6 +223,8 @@ else {
     mergeDeep(config, default_config);
 }
 
+
+export type Config = typeof config;
 
 global.config = config;
 export default config;

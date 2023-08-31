@@ -4,6 +4,7 @@ function onConnect() {
 	sendHello()
 	sendClientInfo()
 	sendRequestTime()
+	sendNameGet()
 }
 
 function onDisconnect() {
@@ -18,6 +19,11 @@ function onIncompatible(server_game_version) {
 // called when the current instance of the game is the dual instance (created by oDualInstance)
 function onSecondWindow() {
 	// you probably want to add some logic here to disable music, etc.
+}
+
+function onLobbyLeave(lobby, forced, reason) {
+	if (room != rLobbiesList and room != rMenu)
+		room_goto(rMenu)
 }
 
 

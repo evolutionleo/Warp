@@ -102,7 +102,8 @@ inquirer.prompt(questions).then(answers => {
         .pipe(unzipper.Extract({ path: 'Server/' })
         .on('close', () => {
             console.log(chalk.white('Done.'));
-            shell.rm('-rf', server_fname);
+            fs.rmSync(server_fname);
+            // shell.rm('-rf', server_fname);
         }));
     };
 
@@ -111,7 +112,7 @@ inquirer.prompt(questions).then(answers => {
 
     console.log(chalk.white('Downloading the server from'), chalk.blueBright(server_url) + chalk.white('...'));
     server_req.on('response', (res) => {
-        res.pipe(server_file);
+        res.pipe(server_file)
         res.on('close', server_cb);
     });
 
@@ -145,7 +146,8 @@ inquirer.prompt(questions).then(answers => {
             }
 
             console.log(chalk.white('Done.'));
-            shell.rm('-rf', client_fname);
+            fs.rmSync(client_fname);
+            // shell.rm('-rf', client_fname);
         }));
     };
 

@@ -4,23 +4,23 @@ import Entity, { SerializedEntity } from '#concepts/entity';
 import { EntityConstructor, PlayerEntityConstructor } from '#concepts/entity';
 import { System } from 'detect-collisions';
 
-import PlayerEntity from '#entities/entity_types/player';
-import GameMap, { MapInfo } from '#concepts/map';
+import PlayerEntity from '#entities/player';
+import GameLevel, { LevelInfo, levelFind } from '#concepts/level';
 import { EventEmitter } from 'events';
 import Lobby from '#concepts/lobby';
 import chalk from 'chalk';
-import UnknownEntity from '#entity/unknown';
+import UnknownEntity from '#entities/unknown';
 
 export type RoomEvent = 'tick' | 'spawn' | 'player leave' | 'player join' | 'close';
 
 export type SerializedRoom = {
     entities: SerializedEntity[],
-    map: GameMap,
+    level: GameLevel,
     player_count: number
 };
 
 export type RoomInfo = {
-    map: MapInfo,
+    level: LevelInfo,
     player_count: number
 }
 
@@ -62,7 +62,7 @@ class Room extends EventEmitter {
     width:number;
     height:number;
 
-    map:GameMap;
+    level:GameLevel;
 
     full_bundle:any[] = []; // all the entities packed
     bundle:any[] = []; // updated entities that need sending
@@ -72,36 +72,34 @@ class Room extends EventEmitter {
     last_tick_time: number = 0;
     dt: number = 0;
 
-    constructor(map:GameMap|string, lobby:Lobby) {
+    constructor(level:GameLevel|string, lobby:Lobby) {
         super();
         this.lobby = lobby;
 
-        // if provided a string -
-        if (typeof map === 'string') {
-            // find a map with the name
-            this.map = global.maps.find(function(_map) {
-                return _map.name === map;
-            })
+        // if provided with a string -
+        if (typeof level === 'string') {
+            // find a level with this name
+            this.level = levelFind(level);
 
-            if (this.map === undefined) {
-                trace(`Error: could not find a map called "${map}"`);
+            if (this.level === undefined) {
+                trace(`Error: could not find a level with the name "${level}"`);
                 this.close();
                 return;
             }
         }
-        else { // otherwise - just set the map
-            this.map = map;
+        else { // otherwise - just set the level directly
+            this.level = level;
         }
 
-        this.width = this.map.width;
-        this.height = this.map.height;
+        this.width = this.level.width;
+        this.height = this.level.height;
         
         // this.tree = new MyRBush(7);
         this.tree = new System();
 
 
         setInterval(this.tick.bind(this), 1000 / this.tickrate);
-        this.unwrap(this.map.contents); // || '[]');
+        this.unwrap(this.level.contents); // || '[]');
     }
 
     // create entities from the contents string
@@ -119,7 +117,7 @@ class Room extends EventEmitter {
         }
 
         entities.forEach(entity => {
-            const etype = global.entity_names[entity.type];
+            const etype = global.entity_names[entity.t];
             if (etype.type == UnknownEntity.type) { // entity type doesn't exist
                 if (global.config.room.warn_on_unknown_entity) {
                     trace(chalk.yellowBright('Warning: Entity of object type "' + entity.obj + '" not found!'));
@@ -128,12 +126,12 @@ class Room extends EventEmitter {
             }
 
             const e = this.spawnEntity(etype, entity.x, entity.y);
-            e.xscale = entity.xscale;
-            e.yscale = entity.yscale;
+            e.xscale = entity.xs;
+            e.yscale = entity.ys;
 
             e.regenerateCollider();
-            for (let key in entity.props) {
-                let value = entity.props[key];
+            for (let key in entity.p) {
+                let value = entity.p[key];
                 // warn about name collisions
                 // if (e[key] !== undefined) {
                 // if (key in Object.getOwnPropertyNames(PhysicsEntity)) {
@@ -184,8 +182,8 @@ class Room extends EventEmitter {
         this.emit('tick');
 
         // broadcast
-        let bundle = { cmd: 'entities', room: this.map.room_name, full: false, entities: this.bundle };
-        let full_bundle = { cmd: 'entities', room: this.map.room_name, full: true, entities: this.full_bundle };
+        let bundle = { cmd: 'entities', room: this.level.room_name, full: false, entities: this.bundle };
+        let full_bundle = { cmd: 'entities', room: this.level.room_name, full: true, entities: this.full_bundle };
 
         this.players.forEach(player => {
             // we will send everything every frame to those who joined recently (so that they 100% get it)
@@ -260,7 +258,7 @@ class Room extends EventEmitter {
         this.players.push(player);
         player.room = this;
 
-        if (player.logged_in) player.profile.state.room = this.map.name;
+        if (player.logged_in) player.profile.state.room = this.level.name;
 
         // create a player entity
         if (global.config.entities_enabled) {
@@ -274,7 +272,7 @@ class Room extends EventEmitter {
             }
             // find a new start position
             else {
-                const p = this.map.getStartPos(this.players.length-1);
+                const p = this.level.getStartPos(this.players.length-1);
                 x = p.x;
                 y = p.y;
             }
@@ -314,7 +312,7 @@ class Room extends EventEmitter {
     serialize():SerializedRoom {
         return {
             player_count: this.players.length,
-            map: this.map,
+            level: this.level,
             entities: this.entities.map(e => e.serialize())
         };
     }
@@ -322,7 +320,7 @@ class Room extends EventEmitter {
     getInfo():RoomInfo {
         return {
             player_count: this.players.length,
-            map: this.map.getInfo()
+            level: this.level.getInfo()
         }
     }
 }

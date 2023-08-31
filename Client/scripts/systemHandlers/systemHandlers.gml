@@ -17,18 +17,8 @@ addHandler("server timestamp", function(data) {
 	var new_t = local_timestamp()
 	var ping = round(new_t - old_t)
 	
-	var old_diff = abs(global.start_server_time - global.start_local_time)
-	var new_diff = abs(data.t - new_t)
-	trace("new: %", new_diff)
-	trace("old: %", old_diff)
-	trace("diff: %", abs(abs(global.start_server_time - global.start_local_time) - abs(data.t - new_t)))
-	
-	var diff = old_diff - new_diff
-	
-	if (abs(diff) > 100) {
-		global.start_server_time = data.t
-		global.start_local_time = new_t
-	}
+	global.start_server_time = data.t
+	global.start_local_time = new_t
 	
 	//trace("server time: %; client time: %", global.start_server_time, global.start_local_time)
 	

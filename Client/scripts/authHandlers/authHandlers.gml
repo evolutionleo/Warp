@@ -1,3 +1,7 @@
+addHandler("name set", function(data) {
+	global.username = data.name
+})
+
 addHandler("login", function(data) {
 	var status = data.status
 	if (status == "fail") {
@@ -7,6 +11,7 @@ addHandler("login", function(data) {
 	else if (status == "success") {
 		global.profile = data.profile
 		global.account = data.account
+		global.username = global.account.username
 		global.login_result = ("Login success!")
 	}
 	else {

@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Client from "#concepts/client";
 import Room from "#concepts/room";
 
-import PlayerEntity from "#entity/player";
+import PlayerEntity from "#entities/player";
 
 
 export type ColliderType = 'polygon' | 'circle' | 'box';
@@ -24,14 +24,16 @@ export type PlayerEntityConstructor = {
 
 export type SerializedEntity = {
     id?: string,
-    type: string,
+    t: string,
     obj?: string,
     x: number,
     y: number,
-    xscale: number,
-    yscale: number,
+    xs: number,
+    ys: number,
     spd?: Point,
-    props?: { // custom variables
+    st: number, // state
+
+    p?: { // custom variables
         [name: string]: any
     }
 }
@@ -101,6 +103,28 @@ class Entity extends EventEmitter {
     id: string;
     get uuid() { return this.id };
     set uuid(_uuid) { this.id = _uuid };
+
+    _state = 0;
+    states = {}; // e.x. "idle": 0, "walk": 1
+    
+    setState(value:number|string) {
+        if (typeof value === 'string') {
+            this._state = this.states[value];
+        }
+        // it's a number
+        // (-1 means keep the old state)
+        else if (value != -1) {
+            this._state = value;
+        }
+    }
+
+    set state(v:number|string) {
+        this.setState(v);
+    }
+
+    get state():number {
+        return this._state;
+    }
     
 
     constructor(room:Room, x:number = 0, y:number = 0) {
@@ -291,14 +315,15 @@ class Entity extends EventEmitter {
     public serialize():SerializedEntity {
         return {
             id: this.id,
-            type: this.type,
+            t: this.type,
             obj: this.object_name,
             x: this.roundedPos(this.x),
             y: this.roundedPos(this.y),
-            xscale: this.xscale,
-            yscale: this.yscale,
+            xs: this.xscale,
+            ys: this.yscale,
             spd: this.spd,
-            props: this.props // uses a getter for props
+            p: this.props, // uses a getter for props
+            st: this.state
         }
     }
 

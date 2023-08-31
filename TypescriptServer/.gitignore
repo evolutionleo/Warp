@@ -3,3 +3,7 @@ out/
 package-lock.json
 __profiles/
 *.0x/
+
+todo.txt
+
+test/

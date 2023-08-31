@@ -24,8 +24,10 @@ interpolateEntity = function(t, t1, inst, t2, s2, t3, s3) {
 		var v2 = is_undefined(s2) ? undefined : variable_struct_get(s2, var_name)
 		var v3 = is_undefined(s3) ? undefined : variable_struct_get(s3, var_name)
 		
+		var value = undefined
+		
 		if (var_name == "x" or var_name == "y") and (abs(v2 - v1) > POS_INTERP_THRESH) {
-			var value = v1
+			value = v1
 		}
 		else if (is_struct(v1)) {
 			value = interpolateStruct(t, t1, v1, t2, v2, t3, v3, interp)

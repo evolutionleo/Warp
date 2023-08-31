@@ -1,6 +1,7 @@
 import SendStuff from "#cmd/sendStuff"
 import Lobby from "#concepts/lobby"
 import Room from "#concepts/room"
+import Match from "#matchmaking/match"
 import Point from '#types/point'
 
 declare module '#cmd/sendStuff' {
@@ -8,7 +9,16 @@ declare module '#cmd/sendStuff' {
         sendPlay(lobby:Lobby, room?:Room, start_pos?:Point, uuid?:string):void
         sendRoomTransition(room_to:Room, start_pos?:Point, uuid?:string):void
         sendGameOver(outcome: string, reason?:string):void
+        sendMatchFound(match:Match):void
+        sendMMRChange(delta:number, new_mmr:number):void
     }
+}
+
+/**
+ * @param {Match} match
+ */
+SendStuff.prototype.sendMatchFound = function(match) {
+    this.send({ cmd: 'match found', match: match.serialize() });
 }
 
 /**
@@ -18,7 +28,7 @@ declare module '#cmd/sendStuff' {
  * @param {string} [uuid=undefined]
  */
 SendStuff.prototype.sendPlay = function(lobby:Lobby, room?:Room, start_pos?:Point, uuid?:string) {
-    this.send({ cmd: 'play', lobby: lobby.getInfo(), room: (room !== null ? room.serialize() : undefined), start_pos, uuid });
+    this.send({ cmd: 'play', lobby: lobby.getInfo(), room: room?.serialize(), start_pos, uuid });
 }
 
 /**
@@ -30,6 +40,18 @@ SendStuff.prototype.sendRoomTransition = function(room_to:Room, start_pos?:Point
     this.send({ cmd: 'room transition', room: room_to.serialize(), start_pos, uuid });
 }
 
+/**
+ * @param {string} outcome
+ * @param {string?} reason
+ */
 SendStuff.prototype.sendGameOver = function(outcome: string, reason:string = '') {
     this.send({ cmd: 'game over', outcome, reason });
+}
+
+/**
+ * @param {number} delta
+ * @param {number} new_mmr
+ */
+SendStuff.prototype.sendMMRChange = function(delta, new_mmr) {
+    this.send({ cmd: 'mmr change', delta, new_mmr });
 }

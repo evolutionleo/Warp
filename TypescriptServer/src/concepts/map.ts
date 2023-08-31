@@ -1,98 +1,60 @@
-import trace from '#util/logging';
-import Point from '#types/point';
-import LoadRoom from '#util/load_room';
+import GameLevel, { LevelInfo, levelFind } from "#concepts/level";
 
+export function mapFind(name:string) {
+    return global.maps.find(m => m.name === name);
+}
 
-// random - everyone is spawned at one of the spawn points at random
-// distributed - each player will spawn at a different point (if possible)
-export type SPAWN_TYPE = 'random' | 'distributed';
-/**
- * @enum {string}
- */
-export const GAME_MODES = {
-    
-};
+export function mapExists(name:string) {
+    return global.maps.some(m => m.name === name);
+}
 
-export type MapData = {
+export type MapDef = {
     name: string,
-    room_name: string,
     description?: string,
-
-    width: number,
-    height: number,
-
-    // content_string: string, // .yy room?
-
-    spawn_type: SPAWN_TYPE,
-    start_pos: Point|Point[],
-    max_players?: number
+    game_mode: string,
+    levels: string[]
 }
 
 export type MapInfo = {
     name: string,
-    room_name: string,
-    description?: string,
-
-    spawn_type: SPAWN_TYPE,
-    start_pos: Point|Point[],
-    max_players?: number
+    game_mode: string,
+    levels: LevelInfo[]
 }
 
-// Map is a blueprint for a room
-export default class GameMap { // represents a game map
-    name:string = ''; // map's display name
-    room_name:string = ''; // room name in GMS2
+export type GameMapInfo = {
+    name: string,
+    game_mode: string,
+    levels: string[]
+}
+
+export default class GameMap {
+    name: string = 'unknown';
+    game_mode: string = 'unknown';
+    levels: GameLevel[] = [];
     description:string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-    preview:string = ''; // maybe implement preview images
-    max_players:number = 99;
 
-    width:number = 1344;
-    height:number = 768;
+    constructor(data: MapDef|GameLevel) {
+        if (data instanceof GameLevel) { // using the constructor to create a map from a single level
+            let level = data;
 
-    spawn_type:SPAWN_TYPE = 'random'; // either 'random' or 'distributed'
-    start_pos:Point[]|Point = [{x: 0, y: 0}]; // if 'random', it picks a random starting pos for everyone, otherwise - goes in order from 0 to *length*
-
-    contents = '[]';
-    // content: string; // a JSON string containing all the contents of the room
-
-    constructor(options:MapData) {
-        Object.assign(this, options);
-        if (global.config.rooms_enabled) {
-            Object.assign(this, LoadRoom(this.room_name));
+            this.name = level.name;
+            this.game_mode = level.game_mode ?? this.game_mode;
+            this.levels = [level];
         }
-
-        // trace(this.contents);
-    }
-
-    getStartPos(idx:number):Point {
-        if (Array.isArray(this.start_pos)) { // it's an array of positions
-            switch(this.spawn_type) {
-                case 'random':
-                    // a random number between 0 and start_pos.length
-                    var index = Math.round(Math.random() * (this.start_pos.length - 1));
-                    return this.start_pos[index];
-                case 'distributed':
-                    // just index clamped to start_pos.length
-                    var index = idx % this.start_pos.length;
-                    return this.start_pos[index];
-                default:
-                    console.error('Error: Invalid map type');
-                    return undefined;
-            }
-        }
-        else { // it's a single object
-            return this.start_pos;
+        else { // creating from a proper definition
+            Object.assign(this, data);
+    
+            let _levels = this.levels as unknown as string[];
+            this.levels = _levels.map(level_name => levelFind(level_name));
         }
     }
 
-    getInfo():MapInfo {
+    getInfo() {
         return {
             name: this.name,
-            room_name: this.room_name,
             description: this.description,
-            spawn_type: this.spawn_type,
-            max_players: this.max_players,
-            start_pos: this.start_pos
+            game_mode: this.game_mode,
+            levels: this.levels.map(l => l.name)
         }
     }
 }

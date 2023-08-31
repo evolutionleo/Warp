@@ -4,27 +4,29 @@ import Lobby from '#concepts/lobby';
 import { IAccount } from '#schemas/account';
 import { IProfile } from '#schemas/profile'
 import Room from '#concepts/room';
-import PlayerEntity from '#entity/player';
+import PlayerEntity from '#entities/player';
 import { SockType, Sock } from '#types/socktype';
 import * as net from 'net';
 import * as ws from 'ws';
 import chalk from 'chalk';
 import Party from '#concepts/party';
 import IClient from '#types/client_properties';
+import Match from '#matchmaking/match';
 
 
 // sender functions can be later called using some_client.sendThing()
 // in handlePacket.js or wherever else where you have client objects
 
-
 export abstract class SendStuff implements IClient {
     abstract name: string;
+    abstract temp_id: string;
     abstract socket: Sock;
     abstract type: SockType;
      
     abstract lobby: Lobby;
     abstract room: Room;
     abstract party: Party;
+    abstract match: Match;
 
     abstract account: IAccount;
     abstract profile: IProfile;
@@ -71,9 +73,8 @@ export abstract class SendStuff implements IClient {
      * @param {boolean} [notme=true] 
      */
     broadcastList(clients:SendStuff[], pack:object, notme:boolean = true) {
-        let me = this;
-        clients.forEach(function(c) {
-            if (c === me && notme) {}
+        clients.forEach((c) => {
+            if (c === this && notme) {}
             else {
                 c.write(pack);
             }

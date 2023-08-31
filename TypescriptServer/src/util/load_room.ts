@@ -1,5 +1,5 @@
 import { SerializedEntity } from '#concepts/entity';
-import UnknownEntity from '#entity/unknown';
+import UnknownEntity from '#entities/unknown';
 import trace from '#util/logging';
 import chalk from 'chalk';
 import * as fs from 'fs';
@@ -70,11 +70,12 @@ export default function LoadRoom(room_name:string):LoadedRoom {
                     obj: inst.objectId.name,
                     x: inst.x,
                     y: inst.y,
-                    xscale: inst.scaleX,
-                    yscale: inst.scaleY,
-                    type,
+                    xs: inst.scaleX,
+                    ys: inst.scaleY,
+                    t: type,
                     spd: {x: 0, y: 0},
-                    props
+                    p: props,
+                    st: -1
                 });
             });
         }

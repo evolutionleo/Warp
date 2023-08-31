@@ -1,4 +1,5 @@
 // some variables
+global.username = ""
 global.playing = false
 
 global.player_uuid = undefined
@@ -8,7 +9,12 @@ global.lobbies = []		 // list of all lobbies
 global.lobby = undefined // joined lobby
 global.room = undefined
 global.party = undefined
+global.game_level = undefined
 global.game_map = undefined
+
+global.party_invites = []
+
+
 
 global.login_result = ""
 
