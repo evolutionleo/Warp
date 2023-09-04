@@ -53,8 +53,8 @@ export default class MatchMaker {
                 // sort once again
                 potential_pool.sort((p1, p2) => p1.mmr - p2.mmr);
 
-                if (potential_pool.length > 0)
-                    trace('pp', potential_pool.map(t => (t.by as Client).name));
+                // if (potential_pool.length > 0)
+                //     trace('pp', potential_pool.map(t => (t.by as Client).name));
 
 
                 // define the pool of players/parties with close enough mmr for the match
@@ -93,8 +93,8 @@ export default class MatchMaker {
                     }
                 }
 
-                if (pool.length > 0)
-                    trace('pool', pool.map(t => (t.by as Client).name));
+                // if (pool.length > 0)
+                //     trace('pool', pool.map(t => (t.by as Client).name));
 
                 // not enough players for a match
                 if (pool.length == 0) {
@@ -155,8 +155,8 @@ export default class MatchMaker {
                 }
             }
 
-            if (teams.flat().length > 0)
-                trace('teams:', teams);
+            // if (teams.flat().length > 0)
+            //     trace('teams:', teams);
 
             // check if all the teams are packed
             for(let i = 0; i < teams_count; i++) {

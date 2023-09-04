@@ -228,9 +228,9 @@ export default class Client extends SendStuff implements IClient {
         
         // leave the lobby (if we're currently in one)
         if (this.lobby)
-            this.lobby.kickPlayer(this, 'disconnected', true);
+            this.lobby.kickPlayer(this, 'disconnect', true);
         if  (this.party)
-            this.party.kickMember(this, 'disconnected', true);
+            this.party.kickMember(this, 'disconnect', true);
     }
 
 

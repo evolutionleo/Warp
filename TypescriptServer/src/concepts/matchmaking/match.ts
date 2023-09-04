@@ -118,11 +118,16 @@ export default class Match {
             });
         });
 
+        // remove all players
+        while(this.players.length > 0) {
+            this.removePlayer(this.players[0], 'game over', true, true);
+        }
+
         if (this.lobby.status !== 'closed')
             this.lobby.close('game over');
     }
 
-    removePlayer(player:Client, reason:string='', forced=false) {
+    removePlayer(player:Client, reason:string='', forced=false, secondary=false) {
         this.teams.forEach(team => {
             let idx = team.indexOf(player);
             if (idx != -1)
@@ -134,7 +139,9 @@ export default class Match {
             this.players.splice(idx, 1);
 
         player.match = null;
-        this.lobby.kickPlayer(player, reason, forced);
+
+        if (!secondary)
+            this.lobby.kickPlayer(player, reason, forced, true);
     }
 
     serialize() {

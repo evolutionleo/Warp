@@ -159,9 +159,9 @@ export default class Lobby extends EventEmitter {
      * @param {string?} reason
      * @param {boolean?} forced
      */
-    kickPlayer(player:Client, reason?:string, forced?:boolean):void {
+    kickPlayer(player:Client, reason?:string, forced=false, secondary=false):void {
         // close if a player leaves from the lobby?
-        if (global.config.lobby.close_on_leave && this.status !== 'closed') {
+        if (global.config.lobby.close_on_leave && this.status !== 'closed' && !secondary) {
             if (this.match && !this.match.ended) { // if left mid-match - end the match
                 // define winning teams' IDs
                 let winning_teams = this.teams.map((t, idx) => t.includes(player) ? -1 : idx).filter(n => n != -1);
@@ -170,18 +170,24 @@ export default class Lobby extends EventEmitter {
             else
                 this.close();
         }
+        else {
+            if (!secondary && this.match && this.match === player.match) {
+                this.match.removePlayer(player, reason, forced, true);
+            }
+    
+            this.teams.forEach(team => {
+                let idx = team.indexOf(player);
+                if (idx !== -1)
+                    team.splice(idx, 1);
+            });
+    
+            var idx = this.players.indexOf(player);
+            this.players.splice(idx, 1);
+            player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
+            player.onLobbyLeave(this, reason, forced);
+            player.lobby = null;
+        }
 
-        this.teams.forEach(team => {
-            let idx = team.indexOf(player);
-            if (idx !== -1)
-                team.splice(idx, 1);
-        });
-
-        var idx = this.players.indexOf(player);
-        this.players.splice(idx, 1);
-        player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
-        player.onLobbyLeave(this, reason, forced);
-        player.lobby = null;
     }
 
     /**
