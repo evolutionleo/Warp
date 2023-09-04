@@ -24,8 +24,6 @@ export type LevelDef = {
     width?: number,
     height?: number,
 
-    game_mode?: string,
-
     // content_string: string, // .yy room?
 
     spawn_type: SPAWN_TYPE,
@@ -36,7 +34,6 @@ export type LevelInfo = {
     name: string,
     description?: string,
 
-    game_mode?:string,
     max_players?: number,
 
     room_name: string,
@@ -49,8 +46,6 @@ export type LevelInfo = {
 export default class GameLevel { // represents a game map
     name:string = ''; // level's display name
     room_name:string = ''; // room name in GMS2
-
-    game_mode:string = '';
 
     width:number = 1344;
     height:number = 768;
@@ -65,8 +60,6 @@ export default class GameLevel { // represents a game map
         if (global.config.rooms_enabled) {
             Object.assign(this, LoadRoom(this.room_name));
         }
-
-        // trace(this.contents);
     }
 
     getStartPos(idx:number):Point {

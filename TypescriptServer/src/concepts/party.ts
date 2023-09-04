@@ -3,6 +3,7 @@ import * as crypto from 'crypto';
 import { ProfileInfo } from "#schemas/profile";
 import Ticket, { MatchRequirements } from "#matchmaking/ticket";
 import MatchMaker from "#matchmaking/matchmaker";
+import Match from "#matchmaking/match";
 
 
 export type PartyInfo = {
@@ -54,6 +55,7 @@ export default class Party {
     get party_size() { return this.members.length; }
 
     ticket:Ticket = null; // current matchmaking ticket (null = not looking for a match)
+    match:Match = null;
 
     constructor(leader:Client) {
         this.members = [];
@@ -119,6 +121,7 @@ export default class Party {
 
     matchMakingStart(req:MatchRequirements):Ticket|string {
         if (this.ticket !== null) return 'already matchmaking';
+        if (this.match !== null) return 'already in a match';
 
         this.ticket = MatchMaker.createTicket(this, req);
 

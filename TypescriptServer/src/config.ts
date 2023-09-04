@@ -81,9 +81,10 @@ const common_config = {
     // some fundamental lobby settings
     lobby: {
         max_players: 100, // used when creating a lobby with no map/game mode
-        add_into_play_on_full: false,    // true - add all the players into play at the same time once the lobby is filled,
-        add_into_play_on_join: true, // true - add players one by one immediately as they join a lobby
-        close_on_leave: false // close the lobby if a player leaves
+        add_into_play_on_full: true,    // true - add all the players into play at the same time once the lobby is filled,
+        add_into_play_on_join: false, // true - add players one by one immediately as they join a lobby
+        allow_join_by_id: false,
+        close_on_leave: true // close the lobby if a player leaves
     },
 
     room: {
@@ -135,6 +136,7 @@ const common_config = {
     ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
     logging_enabled: true, // whether or not to log trace()'d messages to server_log.txt
     validation_enabled: true, // validate the incoming commands using ValidatorJS's validators
+    matchmaking_enabled: true, // use the matchmaking system with queues and tickets
     
     verbose_lag: false, // logs warning messages to chat when a game tick is taking longer than expected
     

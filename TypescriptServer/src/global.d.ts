@@ -6,9 +6,11 @@ import Party from '#concepts/party';
 import { Config } from '#root/config';
 import GameMode from '#concepts/game_mode';
 import GameMap from '#concepts/map';
+import MatchMaker from '#matchmaking/matchmaker';
 
 declare global {
     var config:Config;
+    var matchmaker:typeof MatchMaker;
 
     var clients:Client[];
     var levels:{[key:string]: GameLevel};
@@ -26,6 +28,3 @@ declare global {
 }
 
 export {}
-
-// for some reason this dumb file breaks for gulp-typescript when I make it a .d.ts file
-// also this file is for linting only, so it should be empty in JS output lol

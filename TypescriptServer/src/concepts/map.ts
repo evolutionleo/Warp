@@ -33,12 +33,17 @@ export default class GameMap {
     levels: GameLevel[] = [];
     description:string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
 
-    constructor(data: MapDef|GameLevel) {
-        if (data instanceof GameLevel) { // using the constructor to create a map from a single level
+    constructor(data:MapDef)
+    constructor(data:GameLevel, game_mode:string)
+    constructor(data: MapDef|GameLevel, game_mode?:string) {
+        if (data === null || data === undefined) {
+            throw 'Trying to create a map from a null/undefined definition';
+        }
+        else if (data instanceof GameLevel) { // using the constructor to create a map from a single level
             let level = data;
 
             this.name = level.name;
-            this.game_mode = level.game_mode ?? this.game_mode;
+            this.game_mode = game_mode ?? this.game_mode;
             this.levels = [level];
         }
         else { // creating from a proper definition

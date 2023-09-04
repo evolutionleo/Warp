@@ -8,7 +8,7 @@ import { FriendRequest, IFriendRequest } from '#schemas/friend_request';
 
 import IClient from '#types/client_properties';
 
-import Lobby, { lobbyGet } from '#concepts/lobby';
+import Lobby, { lobbyFind } from '#concepts/lobby';
 import Room from '#concepts/room';
 import Party, { partyCreate, partyGet } from '#concepts/party';
 
@@ -16,7 +16,7 @@ import PlayerEntity from '#entities/player';
 import { SockType, Sock } from '#types/socktype';
 import MatchMaker from '#matchmaking/matchmaker';
 import Ticket, { MatchRequirements } from '#matchmaking/ticket';
-import Match from '#matchmaking/match';
+import Match, { MatchOutcome } from '#matchmaking/match';
 import { Names } from '#util/names';
 
 export type ClientInfo = {
@@ -155,6 +155,10 @@ export default class Client extends SendStuff implements IClient {
         this.sendMatchFound(match);
     }
 
+    onGameOver(outcome:MatchOutcome, reason:string='') {
+        this.sendGameOver(outcome, reason)
+    }
+
     onLogin() { // this.account and this.profile are now defined
         this.profile.online = true;
         this.profile.last_online = new Date();
@@ -184,13 +188,12 @@ export default class Client extends SendStuff implements IClient {
             room = this.lobby.findRoomByLevelName(this.profile.state.room);
         }
         // join the default starting room (from config)
-        else if (global.config.room.use_starting_room) {
+        else if (global.config.room.use_starting_room && this.lobby.findRoomByLevelName(global.config.room.starting_room) !== undefined) {
             room = this.lobby.findRoomByLevelName(global.config.room.starting_room);
         }
         // join the first room in the lobby that isn't the current room?
         else {
-            let c = this;
-            room = this.lobby.rooms.find(r => r !== c.room);
+            room = this.lobby.rooms[0];
         }
 
         // if we found a room to join in the end
@@ -246,7 +249,7 @@ export default class Client extends SendStuff implements IClient {
     lobbyJoin(lobbyid?:string) {
         var lobby:Lobby;
         if (lobbyid) {
-            lobby = lobbyGet(lobbyid);
+            lobby = lobbyFind(lobbyid);
         }
         else {
             lobby = MatchMaker.findNonfullLobby(this);
@@ -433,6 +436,7 @@ export default class Client extends SendStuff implements IClient {
 
     matchMakingStart(req:MatchRequirements):Ticket|string {
         if (this.ticket) return 'already matchmaking';
+        if (this.match) return 'already in a match';
 
         if (this.party) {
             let l = global.config.party.leader_only_mm;
@@ -444,6 +448,16 @@ export default class Client extends SendStuff implements IClient {
             else {
                 return 'not a party leader';
             }
+        }
+        else { // solo q
+            this.ticket = MatchMaker.createTicket(this, req);
+    
+            // failed to create a ticket
+            if (this.ticket === null) {
+                return 'unable to start matchmaking';
+            }
+    
+            return this.ticket;
         }
     }
 

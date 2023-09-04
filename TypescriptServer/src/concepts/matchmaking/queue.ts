@@ -46,11 +46,11 @@ export default class MatchMakingQueue {
     }
 
     count(party_size:number) {
-        return this.tickets[party_size].length;
+        return this.tickets[party_size-1].length;
     }
 
     remove(ticket:Ticket) {
-        let arr = this.tickets[ticket.party_size];
+        let arr = this.tickets[ticket.party_size-1];
         let idx = arr.indexOf(ticket);
         if (idx !== -1)
             arr.splice(idx, 1);

@@ -13,6 +13,9 @@ addHandler('lobby info', (c, data) => {
 });
 
 addHandler('lobby join', (c, data) => {
+    if (!global.config.lobby.allow_join_by_id)
+        return;
+
     var lobbyid = data.lobbyid;
     if (lobbyExists(lobbyid))
         c.lobbyJoin(lobbyid);

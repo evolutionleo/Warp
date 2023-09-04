@@ -5,7 +5,7 @@ export function gameModeExists(name:string) {
     return global.game_modes[name] !== undefined;
 }
 
-export function gameModeGet(name:string):GameMode {
+export function gameModeFind(name:string):GameMode {
     return global.game_modes[name];
 }
 

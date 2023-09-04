@@ -1,14 +1,14 @@
 import SendStuff from "#cmd/sendStuff"
 import Lobby from "#concepts/lobby"
 import Room from "#concepts/room"
-import Match from "#matchmaking/match"
+import Match, { MatchOutcome } from "#matchmaking/match"
 import Point from '#types/point'
 
 declare module '#cmd/sendStuff' {
     interface SendStuff {
         sendPlay(lobby:Lobby, room?:Room, start_pos?:Point, uuid?:string):void
         sendRoomTransition(room_to:Room, start_pos?:Point, uuid?:string):void
-        sendGameOver(outcome: string, reason?:string):void
+        sendGameOver(outcome: MatchOutcome, reason?:string):void
     }
 }
 
@@ -32,9 +32,9 @@ SendStuff.prototype.sendRoomTransition = function(room_to:Room, start_pos?:Point
 }
 
 /**
- * @param {string} outcome
+ * @param {'win'|'loss'|'draw'} outcome
  * @param {string?} reason
  */
-SendStuff.prototype.sendGameOver = function(outcome: string, reason:string = '') {
+SendStuff.prototype.sendGameOver = function(outcome: MatchOutcome, reason:string = '') {
     this.send({ cmd: 'game over', outcome, reason });
 }

@@ -4,8 +4,9 @@ import Client from '#concepts/client';
 import Room, { SerializedRoom, RoomInfo }  from '#concepts/room';
 import { EventEmitter } from 'events';
 import * as crypto from 'crypto';
-import GameMode from '#concepts/game_mode';
+import GameMode, { gameModeFind } from '#concepts/game_mode';
 import GameMap, { GameMapInfo } from './map';
+import Match from '#matchmaking/match';
 
 
 
@@ -29,7 +30,7 @@ export function lobbyCreate(map:GameMap) { // returns the lobby instance
     return lobby;
 }
 
-export function lobbyGet(lobbyid:string) {
+export function lobbyFind(lobbyid:string) {
     return global.lobbies[lobbyid];
 }
 
@@ -78,10 +79,11 @@ export default class Lobby extends EventEmitter {
     /** @type {Client[]} */
     players:Client[] = [];
     /** @type {Room[]} */
-    rooms:Room[] = [];
+    rooms:Room[] = null;
 
     map:GameMap = null;
     game_mode:GameMode = null;
+    match?:Match;
 
     // used when creating a lobby with no map/game mode
     max_players:number = global.config.lobby.max_players || undefined;
@@ -95,32 +97,36 @@ export default class Lobby extends EventEmitter {
 
         this.map = map;
 
-        if (global.config.rooms_enabled && this.map !== null) {
-            for(let i = 0; i < this.map.levels.length; i++) {
-                let level = this.map.levels[i];
-                let room = new Room(level, this);
-                this.rooms.push(room);
+        if (this.map !== null) {
+            this.game_mode = gameModeFind(this.map.game_mode);
+            this.max_players = this.game_mode?.max_players || this.max_players;
+
+            if (global.config.rooms_enabled) {
+                this.rooms = [];
+
+                for(let i = 0; i < this.map.levels.length; i++) {
+                    let level = this.map.levels[i];
+                    let room = new Room(level, this);
+                    this.rooms.push(room);
+                }
             }
-        }
-        else {
-            this.rooms = null;
         }
     }
 
     /**
      * @param {Client} player
-     * @returns {void|-1}
+     * @returns {boolean}
      */
-    addPlayer(player:Client):void|-1 {
+    addPlayer(player:Client):boolean {
         if (this.full) {
             trace('warning: can\'t add a player - the lobby is full!');
             player.onLobbyReject(this, 'lobby is full!');
-            return -1;
+            return false;
         }
         else if (this.players.indexOf(player) !== -1) {
             trace('warning: can\'t add a player who\'s already in the lobby');
             player.onLobbyReject(this, 'already in the lobby');
-            return -1;
+            return false;
         }
         else if (player.lobby !== null) {
             player.lobby.kickPlayer(player, 'changing lobbies', false);
@@ -128,7 +134,7 @@ export default class Lobby extends EventEmitter {
         else if (global.config.necessary_login && !player.logged_in) {
             trace('warning: can\'t add a player who\'s not logged in');
             player.onLobbyReject(this, 'login to join a lobby!');
-            return -1;
+            return false;
         }
 
         this.players.push(player);
@@ -144,6 +150,8 @@ export default class Lobby extends EventEmitter {
             // immediately add into play
             this.addIntoPlay(player);
         }
+
+        return true;
     }
 
     /**
@@ -152,17 +160,28 @@ export default class Lobby extends EventEmitter {
      * @param {boolean?} forced
      */
     kickPlayer(player:Client, reason?:string, forced?:boolean):void {
+        // close if a player leaves from the lobby?
+        if (global.config.lobby.close_on_leave && this.status !== 'closed') {
+            if (this.match && !this.match.ended) { // if left mid-match - end the match
+                // define winning teams' IDs
+                let winning_teams = this.teams.map((t, idx) => t.includes(player) ? -1 : idx).filter(n => n != -1);
+                this.match.end(winning_teams, 'player left');
+            }
+            else
+                this.close();
+        }
+
+        this.teams.forEach(team => {
+            let idx = team.indexOf(player);
+            if (idx !== -1)
+                team.splice(idx, 1);
+        });
+
         var idx = this.players.indexOf(player);
         this.players.splice(idx, 1);
         player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
         player.onLobbyLeave(this, reason, forced);
         player.lobby = null;
-
-
-        // close if a player leaves from the lobby?
-        if (global.config.lobby.close_on_leave) {
-            this.close();
-        }
     }
 
     /**
@@ -203,8 +222,12 @@ export default class Lobby extends EventEmitter {
 
     close(reason:string = 'lobby is closing!'):void {
         // kick all players
-        this.players.forEach((player) => this.kickPlayer(player, reason, true));
         this.status = 'closed';
+        while(this.players.length > 0) {
+            this.kickPlayer(this.players[0], reason, true);
+        }
+        
+        // this.players.forEach((player) => this.kickPlayer(player, reason, true));
     }
 
 

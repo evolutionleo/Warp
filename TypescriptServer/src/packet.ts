@@ -14,7 +14,6 @@ export default class packet {
         sizeBuff.writeUInt32LE(dataBuff.length);
 
         var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 4);
-        // trace(buff);
 
         return buff;
     }
@@ -40,15 +39,10 @@ export default class packet {
 
         if (c.halfpack !== null) {
             data = Buffer.concat([c.halfpack, data], c.halfpack.length + data.length)
-            // trace('-one out');
             c.halfpack = null;
-
-            // trace('converted packet: ', data.toString());
         }
 
         var dataSize = data.length;
-
-        // trace('global packet size: ' + dataSize);
 
         for(var i = 0; i < dataSize;) {
             if (i + 4 > dataSize) { // a split in the size bits
@@ -64,7 +58,6 @@ export default class packet {
                 i -= 4;
                 c.halfpack = Buffer.alloc(dataSize - i);
                 data.copy(c.halfpack, 0, i, dataSize);
-                // trace('one in-');
                 break;
             }
 

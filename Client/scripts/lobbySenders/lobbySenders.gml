@@ -1,15 +1,15 @@
-function sendJoinLobby(lobbyid) {
+function sendLobbyJoin(lobbyid) {
 	send({cmd: "lobby join", lobbyid: lobbyid})
 }
 
-function sendLeaveLobby() {
+function sendLobbyLeave() {
 	send({cmd: "lobby leave"})
 }
 
-function sendRequestLobby(lobbyid) {
+function sendLobbyRequestInfo(lobbyid) {
 	send({cmd: "lobby info", lobbyid: lobbyid})
 }
 
-function sendRequestLobbies() {
+function sendLobbyRequestList() {
 	send({cmd: "lobby list"})
 }

@@ -140,7 +140,6 @@ class Room extends EventEmitter {
                 if (!e.prop_names.includes(key))
                     e.prop_names.push(key);
                 e[key] = value;
-                // trace(key + ": " + value);
             }
         });
     }

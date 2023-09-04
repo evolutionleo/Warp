@@ -3,8 +3,9 @@ import Lobby, { lobbyList } from '#concepts/lobby';
 import Ticket, { MatchRequirements, PartyTicket, SingleTicket } from '#matchmaking/ticket';
 import Party from '#concepts/party';
 import Queue from '#matchmaking/queue';
-import { gameModeGet } from '#concepts/game_mode';
-import Match from './match';
+import { gameModeFind } from '#concepts/game_mode';
+import Match from '#matchmaking/match';
+import trace from '#util/logging';
 
 export type Queues = {
     [mode: string]: Queue
@@ -45,10 +46,15 @@ export default class MatchMaker {
 
                 // add full parties and solo players to the pool of potential players
                 potential_pool.push(...q.get_all(1));
-                potential_pool.push(...q.get_all(team_size));
+                // (but not twice if team size = 1)
+                if (team_size != 1)
+                    potential_pool.push(...q.get_all(team_size));
 
                 // sort once again
                 potential_pool.sort((p1, p2) => p1.mmr - p2.mmr);
+
+                if (potential_pool.length > 0)
+                    trace('pp', potential_pool.map(t => (t.by as Client).name));
 
 
                 // define the pool of players/parties with close enough mmr for the match
@@ -80,12 +86,15 @@ export default class MatchMaker {
                         if (player_count == players_needed) {
                             if (diff < best_diff) {
                                 best_diff = diff;
-                                pool = [].concat(...temp_pool);
+                                pool = [].concat(...temp_pool); // make a copy
                             }
                             break;
                         }
                     }
                 }
+
+                if (pool.length > 0)
+                    trace('pool', pool.map(t => (t.by as Client).name));
 
                 // not enough players for a match
                 if (pool.length == 0) {
@@ -122,14 +131,15 @@ export default class MatchMaker {
             // unranked modes allow parties of any size
             else {
                 // for each party size up to team size
-                for(let party_size = team_size; party_size >= 0; party_size--) {
+                for(let party_size = team_size; party_size > 0; party_size--) {
+                    let j = 0;
                     // for each team
                     for(let i = 0; i < teams_count; i++) {
-                        let j = 0;
                         // while the i'th team can fit a party of party_size - add one
                         while(teams_filled[i] + party_size <= team_size) {
-                            // no more parties of party_size - go to the next party size
-                            if (q.count(party_size) > 0) { break; }
+                            // no more unused parties left of party_size - go to the next party size
+                            if (j >= q.count(party_size))
+                                break;
 
                             let party = q.get(party_size, j);
 
@@ -138,10 +148,15 @@ export default class MatchMaker {
                             teams_mmr[i] += party.avg_mmr * party_size;
                             j++;
                         }
+
+                        // if (j >= q.count(party_size))
+                        //     break;
                     }
                 }
             }
 
+            if (teams.flat().length > 0)
+                trace('teams:', teams);
 
             // check if all the teams are packed
             for(let i = 0; i < teams_count; i++) {
@@ -157,19 +172,19 @@ export default class MatchMaker {
                 break;
             }
 
-
             // remove all the team members from the queue
-            for(let i = 0; i < team_size; i++) {
+            for(let i = 0; i < teams_count; i++) {
                 for(let j = 0; j < teams[i].length; j++) {
                     let ticket = teams[i][j];
                     q.remove(ticket);
                 }
             }
 
-            console.log(teams.map(team => team.map(p => p.mmr)));
+            trace('match made! teams:', teams.map(team => team.map(
+                t => `${(t.by as Client).name} (${t.mmr} mmr)`)));
 
             // create an instance of Match
-            // let match = new Match(mode, teams);
+            let match = new Match(mode, teams);
 
             // the rest (sending, etc.) is handled in the Match() constructor
         }
@@ -177,7 +192,7 @@ export default class MatchMaker {
 
     static canCreateTicket(by:Client|Party, req:MatchRequirements):boolean {
         let party_size = by instanceof Party ? by.members.length : 1;
-        let game_mode = gameModeGet(req.game_mode)
+        let game_mode = gameModeFind(req.game_mode);
 
         // don't allow parties bigger than team size
         if (party_size > game_mode.team_size) {
@@ -185,11 +200,11 @@ export default class MatchMaker {
         }
 
         // ranked game modes currently only allow full parties and single players
-        let is_full_party = party_size == game_mode.team_size
+        let is_full_party = party_size == game_mode.team_size;
         let is_single_player = party_size == 1;
 
         if (game_mode.ranked && !is_full_party && !is_single_player) {
-            return false
+            return false;
         }
 
         // add your conditions here

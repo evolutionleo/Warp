@@ -2,7 +2,7 @@ import SendStuff from "#cmd/sendStuff";
 
 declare module '#cmd/sendStuff' {
     interface SendStuff {
-        // sendSomething()
+        // sendSomething():void
     }
 }
 

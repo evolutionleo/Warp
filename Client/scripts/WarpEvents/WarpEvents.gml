@@ -29,6 +29,6 @@ function onLobbyLeave(lobby, forced, reason) {
 
 function leaveGame() {
 	global.playing = false
-	sendLeaveLobby()
+	sendLobbyLeave()
 	room_goto(rMenu)
 }

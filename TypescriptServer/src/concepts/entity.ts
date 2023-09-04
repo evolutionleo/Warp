@@ -142,8 +142,6 @@ class Entity extends EventEmitter {
         this.collider.entity = this;
 
         this.tree.insert(this.collider);
-
-        // trace(this.prop_names)
     }
 
     public create() {

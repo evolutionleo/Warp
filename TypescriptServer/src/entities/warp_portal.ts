@@ -57,8 +57,11 @@ export default class WarpPortal extends Entity {
             this.exit_portal = this.findExitPortal();
         }
 
-        // player.room should be the same as this.room
-        this.room.movePlayer(player, this.Room_to);
+        
+        if (this.room !== this.Room_to) {
+            // player.room should be the same as this.room
+            this.room.movePlayer(player, this.Room_to);
+        }
 
         player.entity.x = this.exit_portal.x;
         player.entity.y = this.exit_portal.y;

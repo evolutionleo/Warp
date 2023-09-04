@@ -11,13 +11,14 @@ for(var i = 0; i < array_length(global.lobbies); i++) {
 		//mode: lobby.level.mode,
 		//room_name: lobby.level.room_name,
 		players: string(lobby.player_count) + "/" + string(lobby.max_players),
+		status: lobby.status
 		//rooms: lobby.rooms
 	})
 	
 	draw_text(room_width/2, 150 + i * 50, lobby_string)
 }
 
-draw_text(room_width/2, room_height/2+100, "Press buttons 1-9 to join lobbies\nL to leave")
+draw_text(room_width/2, room_height/2+100, "Press buttons 1-9 to join lobbies\nL to leave\nR to refresh")
 
 if (global.lobby) {
 	draw_text(room_width/2, room_height-150, "joined lobbyid: " + global.lobby.lobbyid + "\n"

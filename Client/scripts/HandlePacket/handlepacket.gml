@@ -1,14 +1,31 @@
+global.cmd_handlers = {}
+
 ///@function	addHandler(cmd, handler)
 ///@param		{String} cmd
 ///@param		{Function} handler
 function addHandler(cmd, handler) {
 	static init = false
 	if (!init) {
-		global.cmd_handlers = {}
+		if (!variable_global_exists("cmd_handlers"))
+			global.cmd_handlers = {}
 		init = true
 	}
 	
-	global.cmd_handlers[$ cmd] = handler
+	var handler_struct = new Handler(cmd, handler)
+	var first_handler = global.cmd_handlers[$ cmd]
+	
+	if (!is_undefined(first_handler)) {
+		first_handler.append(handler_struct)
+	}
+	else {
+		global.cmd_handlers[$ cmd] = handler_struct
+	}
+	
+	return handler_struct
+}
+
+function removeHandler(handler) {
+	handler.remove()
 }
 
 ///@function	handlePacket(data)
@@ -34,11 +51,41 @@ function handlePacket(data) {
 		
 		default:
 			if (variable_struct_exists(global.cmd_handlers, cmd)) {
-				global.cmd_handlers[$ cmd](data)
+				var handler = global.cmd_handlers[$ cmd]
+				while(!is_undefined(handler)) {
+					handler.cb(data)
+					handler = handler.next
+				}
 			}
 			else {
 				trace("Warning: Unknown cmd type: " + string(cmd))
 			}
 			break
+	}
+}
+
+
+function Handler(cmd, handler) constructor {
+	self.cmd = cmd
+	cb = handler
+	prev = undefined
+	next = undefined
+	
+	static append = function(handler) {
+		if (!is_undefined(next))
+			return next.append(handler)
+		else
+			next = handler
+	}
+	
+	static remove = function() {
+		if(!is_undefined(prev))
+			prev.next = next
+		else
+			global.cmd_handlers[$ cmd] = next
+		
+		if (!is_undefined(next)) {
+			next.prev = prev
+		}
 	}
 }

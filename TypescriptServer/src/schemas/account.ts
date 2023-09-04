@@ -68,7 +68,12 @@ accountSchema.statics.login = function accountLogin(username:string, password:st
             }
             else {
                 if (await verifyPassword(password, account.password)) {
-                    resolve(account);
+                    if (global.clients.some(c => c.account?.username?.toLowerCase() === account.username.toLowerCase())) {
+                        reject('account is already logged into on another session');
+                    }
+                    else {
+                        resolve(account);
+                    }
                 }
                 else {
                     reject('wrong password');

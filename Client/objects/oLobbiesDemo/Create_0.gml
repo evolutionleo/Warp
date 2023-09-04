@@ -1,7 +1,7 @@
 /// @desc
 
 
-sendRequestLobbies()
+sendLobbyRequestList()
 
 global.canvas = new SUICanvas()
 

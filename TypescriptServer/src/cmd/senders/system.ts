@@ -3,11 +3,12 @@ import { ValidationError } from "fastest-validator";
 
 declare module '#cmd/sendStuff' {
     interface SendStuff {
-        sendServerInfo(compatible:boolean)
-        sendPing()
-        sendPong(T:number)
-        sendServerTime(client_t:number)
-        sendInvalidInput(from_cmd:string, errors:ValidationError[])
+        sendServerInfo(compatible:boolean):void
+        sendPing():void
+        sendPong(T:number):void
+        sendServerTime(client_t:number):void
+        sendInvalidInput(from_cmd:string, errors:ValidationError[]):void
+        sendError(error:string, details?:string):void
     }
 }
 
@@ -37,4 +38,8 @@ SendStuff.prototype.sendServerTime = function(client_t: number) {
 
 SendStuff.prototype.sendInvalidInput = function(from_cmd:string, errors: ValidationError[]) {
     this.send({ cmd: 'invalid input', c: from_cmd, e: errors });
+}
+
+SendStuff.prototype.sendError = function(error:string, details:string='') {
+    this.send({ cmd: 'error', error, details });
 }

@@ -20,7 +20,7 @@ addHandler("lobby join", function(data) {
 	global.lobby = lobby
 	global.game_map = data.lobby.map
 	
-	sendRequestLobbies()
+	sendLobbyRequestList()
 })
 
 addHandler("lobby reject", function(data) {
@@ -45,7 +45,7 @@ addHandler("lobby leave", function(data) {
 	else
 		show_message_async("You left the lobby")
 	
-	sendRequestLobbies()
+	sendLobbyRequestList()
 	
 	onLobbyLeave(lobby, forced, reason)
 })

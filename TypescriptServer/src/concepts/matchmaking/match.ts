@@ -5,8 +5,9 @@ import Lobby, { lobbyCreate } from "#concepts/lobby";
 import GameMap from "#concepts/map";
 import Party from "#concepts/party";
 import Ticket from "#matchmaking/ticket";
-import MatchMaker from "./matchmaker";
+import MatchMaker from "#matchmaking/matchmaker";
 
+export type MatchOutcome = 'win'|'loss'|'draw';
 
 export default class Match {
     mode: GameMode = null;
@@ -20,9 +21,12 @@ export default class Match {
     }
 
     lobby: Lobby;
+    ended:boolean = false;
 
     constructor(mode_name:string, teams:Ticket[][]) {
         this.mode = global.game_modes[mode_name];
+        this.selectMap();
+
         this.teams = [];
 
         for(let i = 0; i < teams.length; i++) {
@@ -31,6 +35,8 @@ export default class Match {
                 let ticket = teams[i][j];
                 if (ticket.is_party) { // add every party member to the team
                     let party = (ticket.by as Party);
+                    party.ticket = null;
+                    party.match = this;
                     party.members.forEach((c) => this.teams[i].push(c));
                     this.parties.push(party.members);
                 }
@@ -40,22 +46,38 @@ export default class Match {
             }
         }
 
+        this.teams_avg_mmr = this.teams.map(team => team.reduce((mmr, c) => c.mmr + mmr, 0) / team.length);
 
         // send the "match found" message to all team members
         this.teams.forEach(team => {
             team.forEach(c => {
+                c.match = this;
+                c.ticket = null;
                 c.onMatchFound(this);
             });
         });
 
-
-        this.teams_avg_mmr = this.teams.map(team => team.reduce((mmr, c) => c.mmr + mmr, 0) / team.length);
-
         this.start();
     }
 
+    selectMap() {
+        // pick a random map
+        let valid_maps = global.maps.filter(map => map.game_mode === this.mode.name);
+
+        if (valid_maps.length === 0) {
+            throw `No valid maps found for a match (game_mode=${this.mode.name})`
+        }
+
+        let idx = Math.floor(Math.random() * valid_maps.length);
+        this.map = valid_maps[idx];
+    }
+
     start() {
+        this.ended = false;
+
         this.lobby = lobbyCreate(this.map);
+        this.lobby.match = this;
+        this.lobby.teams = this.teams;
 
         this.teams.flatMap(t => t).forEach(client => {
             this.lobby.addPlayer(client);
@@ -68,8 +90,10 @@ export default class Match {
     }
 
     end(winning_teams:number[] = [], reason?:string) {
+        this.ended = true;
+
         this.teams.forEach((team, idx) => {
-            let outcome;
+            let outcome:MatchOutcome;
             if (winning_teams.length === 0)
                 outcome = 'draw';
             else
@@ -90,11 +114,27 @@ export default class Match {
             }
 
             team.forEach(c => {
-                c.sendGameOver(outcome, reason);
+                c.onGameOver(outcome, reason);
             });
         });
 
-        this.lobby.close('game over');
+        if (this.lobby.status !== 'closed')
+            this.lobby.close('game over');
+    }
+
+    removePlayer(player:Client, reason:string='', forced=false) {
+        this.teams.forEach(team => {
+            let idx = team.indexOf(player);
+            if (idx != -1)
+                team.splice(idx, 1);
+        });
+
+        let idx = this.players.indexOf(player);
+        if (idx != -1)
+            this.players.splice(idx, 1);
+
+        player.match = null;
+        this.lobby.kickPlayer(player, reason, forced);
     }
 
     serialize() {
