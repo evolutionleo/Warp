@@ -21,6 +21,7 @@ export interface IAccountModel extends Model<IAccount> {
 const accountSchema = new Schema<IAccount>({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    
     // you can add additional properties to the schema here:
 }, {collection: 'Accounts'});
 

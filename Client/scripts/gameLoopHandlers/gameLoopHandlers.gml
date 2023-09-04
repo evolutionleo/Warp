@@ -9,6 +9,13 @@ addHandler("match found", function(data) {
 	trace("Match found!", data)
 })
 
+addHandler("match denied", function(data) {
+	room_goto(rMenu)
+	var s = $"Match denied (reason: {data.reason})"
+	show_message_async(s)
+	trace(s)
+})
+
 addHandler("play", function(data) {
 	trace("playing!")
 	global.playing = true

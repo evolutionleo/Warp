@@ -9,16 +9,7 @@ declare module '#cmd/sendStuff' {
         sendPlay(lobby:Lobby, room?:Room, start_pos?:Point, uuid?:string):void
         sendRoomTransition(room_to:Room, start_pos?:Point, uuid?:string):void
         sendGameOver(outcome: string, reason?:string):void
-        sendMatchFound(match:Match):void
-        sendMMRChange(delta:number, new_mmr:number):void
     }
-}
-
-/**
- * @param {Match} match
- */
-SendStuff.prototype.sendMatchFound = function(match) {
-    this.send({ cmd: 'match found', match: match.serialize() });
 }
 
 /**
@@ -46,12 +37,4 @@ SendStuff.prototype.sendRoomTransition = function(room_to:Room, start_pos?:Point
  */
 SendStuff.prototype.sendGameOver = function(outcome: string, reason:string = '') {
     this.send({ cmd: 'game over', outcome, reason });
-}
-
-/**
- * @param {number} delta
- * @param {number} new_mmr
- */
-SendStuff.prototype.sendMMRChange = function(delta, new_mmr) {
-    this.send({ cmd: 'mmr change', delta, new_mmr });
 }

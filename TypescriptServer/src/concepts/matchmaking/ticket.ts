@@ -7,6 +7,12 @@ export type MatchRequirements = {
     game_mode: string;
 }
 
+export type TicketInfo = {
+    req: MatchRequirements,
+    mmr: number,
+    party_size: number
+}
+
 export default abstract class Ticket {
     created: number; // timestamp
     by: Party|Client; // who created this Ticket (either a single player or a Party)
@@ -39,6 +45,14 @@ export default abstract class Ticket {
     remove() {
         let q = MatchMaker.queues[this.requirements.game_mode];
         q.remove(this);
+    }
+
+    getInfo():TicketInfo {
+        return {
+            party_size: this.party_size,
+            mmr: this.avg_mmr,
+            req: this.requirements
+        }
     }
 }
 

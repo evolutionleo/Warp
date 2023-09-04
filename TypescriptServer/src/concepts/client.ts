@@ -431,8 +431,8 @@ export default class Client extends SendStuff implements IClient {
         party.addMember(this);
     }
 
-    matchMakingStart(req:MatchRequirements) {
-        if (this.ticket) return;
+    matchMakingStart(req:MatchRequirements):Ticket|string {
+        if (this.ticket) return 'already matchmaking';
 
         if (this.party) {
             let l = global.config.party.leader_only_mm;
@@ -440,6 +440,9 @@ export default class Client extends SendStuff implements IClient {
 
             if (canStartMM) {
                 return this.party.matchMakingStart(req);
+            }
+            else {
+                return 'not a party leader';
             }
         }
     }

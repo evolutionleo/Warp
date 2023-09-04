@@ -117,17 +117,17 @@ export default class Party {
         delete global.parties[this.partyid];
     }
 
-    matchMakingStart(req:MatchRequirements):boolean {
-        if (this.ticket !== null) return false;
+    matchMakingStart(req:MatchRequirements):Ticket|string {
+        if (this.ticket !== null) return 'already matchmaking';
 
         this.ticket = MatchMaker.createTicket(this, req);
 
         // failed to create a ticket
         if (this.ticket === null) {
-            return false;
+            return 'unable to start matchmaking';
         }
 
-        return true;
+        return this.ticket;
     }
 
     matchMakingStop() {
