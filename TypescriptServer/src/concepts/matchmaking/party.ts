@@ -1,4 +1,4 @@
-import Client from "./client";
+import Client from "../client";
 import * as crypto from 'crypto';
 import { ProfileInfo } from "#schemas/profile";
 import Ticket, { MatchRequirements } from "#matchmaking/ticket";

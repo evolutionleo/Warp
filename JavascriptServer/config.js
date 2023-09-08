@@ -20,8 +20,9 @@ const args = minimist(process.argv.slice(2));
  *
  * @property {object} lobby
  * @property {number} lobby.max_players
- * @property {boolean} lobby.addIntoPlayOnFull
- * @property {boolean} lobby.closeOnLeave
+ * @property {boolean} lobby.add_into_play_on_full
+ * @property {boolean} lobby.add_into_play_on_join
+ * @property {boolean} lobby.close_on_leave
  *
  * @property {object} room
  * @property {string} room.rooms_path
@@ -65,7 +66,7 @@ const common_config = {
     meta: {
         game_name: 'Warp Game',
         game_version: 'v1.0.0',
-        warp_version: 'v5.1.0',
+        warp_version: 'v6.0.0',
         
         compatible_game_versions: '>=1.0.0',
         
@@ -80,9 +81,10 @@ const common_config = {
     // some fundamental lobby settings
     lobby: {
         max_players: 100,
-        addIntoPlayOnFull: false,
-        // false - add them one by one immediately as they join
-        closeOnLeave: false // close the lobby if a player leaves
+        add_into_play_on_full: true,
+        add_into_play_on_join: false,
+        allow_join_by_id: false,
+        close_on_leave: true // close the lobby if a player leaves
     },
     
     room: {
@@ -104,7 +106,20 @@ const common_config = {
     },
     
     party: {
-        max_members: 5 // max party size
+        max_members: 5,
+        leader_only_mm: false // true - only party leader can start matchmaking
+    },
+    
+    matchmaking: {
+        mmr_starting: 1000,
+        mmr_min: 1,
+        
+        mmr_scale: 1000,
+        // (chess uses 400, meaning a player with 400 mmr more is on average 10x more likely to win)
+        mmr_max_gain: 50,
+        mmr_max_difference: 500,
+        
+        process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms
     },
     
     tps: 20,
@@ -121,13 +136,13 @@ const common_config = {
     ssl_enabled: false,
     logging_enabled: true,
     validation_enabled: true,
+    matchmaking_enabled: true,
     
     verbose_lag: false,
     
     necessary_login: false,
     
-    ping_interval: 5 * 1000,
-    mm_process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms
+    ping_interval: 5 * 1000
 };
 
 const prod_config = {
@@ -198,7 +213,6 @@ else if (env === 'development' || env === 'dev' || args.dev) {
 else {
     mergeDeep(config, default_config);
 }
-
 
 global.config = config;
 export default config;

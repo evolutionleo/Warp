@@ -51,9 +51,10 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.6.0.92",
+    "IDEVersion": "2023.8.0.98",
   },
   "resources": [
+    {"id":{"name":"friendHandlers","path":"scripts/friendHandlers/friendHandlers.yy",},},
     {"id":{"name":"HandlePacket","path":"scripts/HandlePacket/HandlePacket.yy",},},
     {"id":{"name":"rStressTest","path":"rooms/rStressTest/rStressTest.yy",},},
     {"id":{"name":"lobbySenders","path":"scripts/lobbySenders/lobbySenders.yy",},},
@@ -99,6 +100,7 @@
     {"id":{"name":"rTest2","path":"rooms/rTest2/rTest2.yy",},},
     {"id":{"name":"entityHandlers","path":"scripts/entityHandlers/entityHandlers.yy",},},
     {"id":{"name":"r1v1","path":"rooms/r1v1/r1v1.yy",},},
+    {"id":{"name":"friendSenders","path":"scripts/friendSenders/friendSenders.yy",},},
     {"id":{"name":"oPartyUI","path":"objects/oPartyUI/oPartyUI.yy",},},
     {"id":{"name":"oEntity","path":"objects/oEntity/oEntity.yy",},},
     {"id":{"name":"systemSenders","path":"scripts/systemSenders/systemSenders.yy",},},
@@ -110,6 +112,7 @@
     {"id":{"name":"SUITextBox","path":"scripts/SUITextBox/SUITextBox.yy",},},
     {"id":{"name":"oPingManager","path":"objects/oPingManager/oPingManager.yy",},},
     {"id":{"name":"rFindingMatch","path":"rooms/rFindingMatch/rFindingMatch.yy",},},
+    {"id":{"name":"execute_shell_simple_ext","path":"extensions/execute_shell_simple_ext/execute_shell_simple_ext.yy",},},
     {"id":{"name":"buffer_visualize","path":"scripts/buffer_visualize/buffer_visualize.yy",},},
     {"id":{"name":"sWarpPortal","path":"sprites/sWarpPortal/sWarpPortal.yy",},},
     {"id":{"name":"SimpleUIBinding","path":"scripts/SimpleUIBinding/SimpleUIBinding.yy",},},
@@ -127,7 +130,6 @@
     {"id":{"name":"rTest","path":"rooms/rTest/rTest.yy",},},
     {"id":{"name":"NetworkInterpolation","path":"scripts/NetworkInterpolation/NetworkInterpolation.yy",},},
     {"id":{"name":"oFriendList","path":"objects/oFriendList/oFriendList.yy",},},
-    {"id":{"name":"execute_shell_simple_ext","path":"extensions/execute_shell_simple_ext/execute_shell_simple_ext.yy",},},
     {"id":{"name":"rMenu","path":"rooms/rMenu/rMenu.yy",},},
   ],
   "RoomOrderNodes": [
@@ -140,6 +142,7 @@
     {"roomId":{"name":"rFindingMatch","path":"rooms/rFindingMatch/rFindingMatch.yy",},},
     {"roomId":{"name":"rTest","path":"rooms/rTest/rTest.yy",},},
   ],
+  "templateType": null,
   "TextureGroups": [
     {"resourceType":"GMTextureGroup","resourceVersion":"1.3","name":"Default","autocrop":true,"border":2,"compressFormat":"bz2","ConfigValues":{"Dev":{"groupParent":"null","compressFormat":"bz2","loadType":"default",},},"directory":"","groupParent":null,"isScaled":true,"loadType":"default","mipsToGenerate":0,"targets":-1,},
   ],

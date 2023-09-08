@@ -73,9 +73,8 @@ addHandler("room transition", function(data) {
 	}
 })
 
-
 addHandler("game over", function(data) {
-	show_message_async($"Game over! ({data.outcome}), reason: ${data.reason}")
+	show_message_async($"Game over! ({data.outcome}), reason: {data.reason}")
 })
 
 addHandler("mmr change", function(data) {

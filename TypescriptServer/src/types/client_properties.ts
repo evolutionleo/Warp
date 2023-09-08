@@ -3,7 +3,7 @@ import { IAccount, Account } from '#schemas/account';
 
 import Lobby from '#concepts/lobby';
 import Room from '#concepts/room';
-import Party from '#concepts/party';
+import Party from '#matchmaking/party';
 import PlayerEntity from '#entities/player';
 import { Sock, SockType } from './socktype';
 import Match from '#matchmaking/match';

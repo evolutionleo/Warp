@@ -1,5 +1,5 @@
 import { addHandler } from "#cmd/handlePacket";
-import { partyExists } from "#concepts/party";
+import { partyExists } from "#matchmaking/party";
 import Client from "#concepts/client";
 import trace from "#util/logging";
 

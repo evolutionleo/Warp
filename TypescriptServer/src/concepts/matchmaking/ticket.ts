@@ -1,5 +1,5 @@
 import Client from "#concepts/client";
-import Party from "#concepts/party";
+import Party from "#matchmaking/party";
 import MatchMaker from "#matchmaking/matchmaker";
 
 

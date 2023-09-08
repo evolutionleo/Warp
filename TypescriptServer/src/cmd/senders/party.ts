@@ -1,5 +1,5 @@
 import SendStuff from "#cmd/sendStuff"
-import Party from "#concepts/party"
+import Party from "#matchmaking/party"
 
 declare module '#cmd/sendStuff' {
     interface SendStuff {

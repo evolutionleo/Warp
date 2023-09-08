@@ -3,7 +3,7 @@ import Client from "#concepts/client";
 import GameMode from "#concepts/game_mode";
 import Lobby, { lobbyCreate } from "#concepts/lobby";
 import GameMap from "#concepts/map";
-import Party from "#concepts/party";
+import Party from "#matchmaking/party";
 import Ticket from "#matchmaking/ticket";
 import MatchMaker from "#matchmaking/matchmaker";
 
@@ -108,8 +108,11 @@ export default class Match {
                 let mmr_delta = MatchMaker.getMMRDelta(avg_mmr, other_avg_mmr, outcome);
 
                 team.forEach(c => {
-                    c.mmr += mmr_delta;
-                    c.sendMMRChange(mmr_delta, c.mmr);
+                    // don't change the MMR immediately because it will affect other players' calculations
+                    setImmediate(() => {
+                        c.mmr += mmr_delta;
+                        c.sendMMRChange(mmr_delta, c.mmr);
+                    });
                 });
             }
 

@@ -1,4 +1,5 @@
 import * as crypto from 'crypto';
+import MatchMaker from "#matchmaking/matchmaker";
 
 // use this instead of calling the new Party() contructor directly
 export function partyCreate(leader) {
@@ -40,12 +41,19 @@ export default class Party {
     leader;
     max_members; // inherited from config.party.max_members
     
+    get party_size() { return this.members.length; }
+    
+    ticket = null; // current matchmaking ticket (null = not looking for a match)
+    match = null;
+    
     constructor(leader) {
         this.members = [];
         this.max_members = global.config.party.max_members;
         
-        this.addMember(leader);
         this.leader = leader;
+        this.addMember(leader);
+        
+        this.send();
     }
     
     addMember(member) {
@@ -59,13 +67,18 @@ export default class Party {
             member.party.kickMember(member, 'changing parties', true);
         }
         
-        if (!this.isMember(member)) {
-            this.members.push(member);
-            member.party = this;
-        }
+        this.matchMakingStop();
+        
+        this.members.push(member);
+        member.party = this;
+        
+        this.send();
     }
     
     kickMember(member, reason = '', forced = true) {
+        // leave matchmaking
+        this.matchMakingStop();
+        
         if (this.isLeader(member)) {
             if (this.members.length == 1) { // if no one else left
                 this.leader = null;
@@ -75,6 +88,7 @@ export default class Party {
                 this.leader = this.members.find(m => m != member);
             }
         }
+        
         this.members.splice(this.members.indexOf(member), 1);
         member.onPartyLeave(this, reason, forced);
         member.party = null;
@@ -82,6 +96,9 @@ export default class Party {
         // delete the party ID if everyone left
         if (this.members.length == 0)
             this.delete();
+        else {
+            this.send();
+        }
     }
     
     disband() {
@@ -92,6 +109,30 @@ export default class Party {
         delete global.parties[this.partyid];
     }
     
+    matchMakingStart(req) {
+        if (this.ticket !== null)
+            return 'already matchmaking';
+        if (this.match !== null)
+            return 'already in a match';
+        
+        this.ticket = MatchMaker.createTicket(this, req);
+        
+        // failed to create a ticket
+        if (this.ticket === null) {
+            return 'unable to start matchmaking';
+        }
+        
+        return this.ticket;
+    }
+    
+    matchMakingStop() {
+        if (this.ticket === null)
+            return;
+        
+        this.ticket.remove();
+        this.ticket = null;
+    }
+    
     setLeader(leader) {
         this.leader = leader;
     }
@@ -99,7 +140,7 @@ export default class Party {
     isLeader(member) {
         return this.leader == member;
     }
-    k;
+    
     isMember(client) {
         return this.members.includes(client);
     }
@@ -114,12 +155,18 @@ export default class Party {
         return this.getAvgMMR();
     }
     
+    send() {
+        this.members.forEach(member => {
+            member.sendPartyInfo(this);
+        });
+    }
+    
     
     getInfo() {
         return {
             partyid: this.partyid,
             members: this.members.map(m => m.name),
-            leader: this.leader.name
+            leader: this.leader?.name
         };
     }
 }

@@ -4,6 +4,7 @@
 username = ""
 password = ""
 global.login_status = ""
+global.login_result = ""
 
 global.canvas = new SUICanvas()
 

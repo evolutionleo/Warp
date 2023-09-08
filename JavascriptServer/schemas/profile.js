@@ -36,6 +36,7 @@ export function freshProfile(account) {
     return new Profile({
         account_id: account._id,
         name: account.username,
+        mmr: global.config.matchmaking.mmr_starting,
         
         state: {
             lobbyid: '',

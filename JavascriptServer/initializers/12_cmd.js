@@ -17,6 +17,8 @@ async function loadFolder(type) {
     await Promise.all(files.map(file => {
         if (fs.statSync(dir + '/' + file).isDirectory())
             return;
+        if (file.startsWith('_template'))
+            return;
         
         trace(chalk.blueBright(`> loading ${type}:`, file));
         return import(`file://${__dirname}/../cmd/${type}s/${file}`);

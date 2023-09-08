@@ -42,7 +42,7 @@ export default class WarpPortal extends Entity {
     }
 
     private findExitPortal():WarpPortal {
-        return this.Room_to.entities.ofType(this.type).find(e => (e as WarpPortal).warp_id == this.warp_id) as WarpPortal;
+        return this.Room_to.entities.ofType(this.type).find(e => (e as WarpPortal).warp_id == this.warp_id && e !== this) as WarpPortal;
     }
 
     private findRoomTo():Room {
@@ -70,18 +70,20 @@ export default class WarpPortal extends Entity {
 
     update() {
         if (this.enterable) {
-            let players = this.placeMeetingAll<PlayerEntity>(this.x, this.y, 'Player');
-
             this.continuous_collision = this.continuous_collision.filter(c => {
                 if (!this.checkCollision(this.x, this.y, c.e)) c.t--;
                 return c.t >= 0;
             });
 
+            let players = this.placeMeetingAll<PlayerEntity>(this.x, this.y, 'Player');
+
             // teleport
             players.forEach(player => {
-                if (this.continuous_collision.findIndex(c => (c.e == player)) == -1)
-                    this.teleport(player.client);
-            })
+                if (!this.continuous_collision.some(c => c.e == player)) {
+                    // if (!this.exit_portal.placeMeeting())
+                        this.teleport(player.client);
+                }
+            });
         }
 
         super.update();

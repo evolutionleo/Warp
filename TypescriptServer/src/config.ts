@@ -33,6 +33,14 @@ const args = minimist(process.argv.slice(2));
  * @property {object} party
  * @property {number} party.max_members
  * 
+ * @property {object} matchmaking
+ * @property {number} matchmaking.mmr_starting
+ * @property {number} matchmaking.mmr_min
+ * @property {number} matchmaking.mmr_scale
+ * @property {number} matchmaking.mmr_max_gain
+ * @property {number} matchmaking.mmr_max_difference
+ * @property {number} matchmaking.process_interval
+ * 
  * @property {number} tps
  * 
  * @property {boolean} timestamps_enabled
@@ -44,6 +52,8 @@ const args = minimist(process.argv.slice(2));
  * @property {boolean} ssl_enabled
  * @property {boolean} logging_enabled
  * @property {boolean} validation_enabled
+ * @property {boolean} middleware_enabled
+ * @property {boolean} matchmaking_enabled
  * 
  * @property {string} ssl_cert_path
  * @property {string} ssl_key_path
@@ -136,6 +146,7 @@ const common_config = {
     ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
     logging_enabled: true, // whether or not to log trace()'d messages to server_log.txt
     validation_enabled: true, // validate the incoming commands using ValidatorJS's validators
+    middleware_enabled: true, // middleware to execute before some packets are handled
     matchmaking_enabled: true, // use the matchmaking system with queues and tickets
     
     verbose_lag: false, // logs warning messages to chat when a game tick is taking longer than expected

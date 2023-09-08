@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const entities_dir = path.join(__dirname, '/../entities/entity_types/');
+const entities_dir = path.join(__dirname, '/../entities/');
 const filenames = fs.readdirSync(entities_dir); // sync because CommonJS
 
 
@@ -20,6 +20,9 @@ if (!global.config.entities_enabled) {
 else {
     
     await Promise.all(filenames.map((filename) => {
+        if (filename == 'entity.js')
+            return null;
+        
         return new Promise(async (resolve, reject) => {
             var entity = await import("file://" + entities_dir + filename);
             entity = entity.default;

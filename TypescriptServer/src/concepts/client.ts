@@ -10,7 +10,7 @@ import IClient from '#types/client_properties';
 
 import Lobby, { lobbyFind } from '#concepts/lobby';
 import Room from '#concepts/room';
-import Party, { partyCreate, partyGet } from '#concepts/party';
+import Party, { partyCreate, partyGet } from '#matchmaking/party';
 
 import PlayerEntity from '#entities/player';
 import { SockType, Sock } from '#types/socktype';
@@ -160,6 +160,10 @@ export default class Client extends SendStuff implements IClient {
     }
 
     onLogin() { // this.account and this.profile are now defined
+        if (this.profile.mmr === undefined) {
+            this.profile.mmr = 1000;
+        }
+
         this.profile.online = true;
         this.profile.last_online = new Date();
         this.name = this.profile.name;
@@ -557,7 +561,6 @@ export default class Client extends SendStuff implements IClient {
             if (profile) {
                 this.profile = profile;
                 c.onLogin();
-
                 c.sendLogin('success');
             }
             else {

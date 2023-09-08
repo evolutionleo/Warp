@@ -1,6 +1,7 @@
 import trace from '#util/logging';
-import FastestValidator, { ValidationSchema } from 'fastest-validator'
+import FastestValidator, { AsyncCheckFunction, SyncCheckFunction, ValidationSchema } from 'fastest-validator'
 
+export type ValidatorFunction = SyncCheckFunction | AsyncCheckFunction;
 
 export function createValidator(schema:ValidationSchema) {
     let v = new FastestValidator();

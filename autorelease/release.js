@@ -34,7 +34,6 @@ curr_folder = 'JavascriptServer'
 addFolder('cmd');
 addFolder('maps');
 addFolder('util');
-addFolder('types');
 addFolder('schemas');
 addFolder('concepts');
 addFolder('entities');

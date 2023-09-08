@@ -12,10 +12,15 @@ SendStuff.prototype.sendPartyJoin = function (party) {
     this.send({ cmd: 'party join', party: party.getInfo() });
 };
 
-SendStuff.prototype.sendPartyReject = function (party, reason = 'Unable to join party') {
+// Cannot join a party for some reason
+SendStuff.prototype.sendPartyReject = function (party, reason = 'Unable to join the party') {
     this.send({ cmd: 'party reject', party: party?.getInfo(), reason });
 };
 
-SendStuff.prototype.sendPartyInviteSent = function () {
-    this.send({ cmd: 'party invite sent' });
+SendStuff.prototype.sendPartyInviteSent = function (username) {
+    this.send({ cmd: 'party invite sent', to: username });
+};
+
+SendStuff.prototype.sendPartyInfo = function (party) {
+    this.send({ cmd: 'party info', party: party.getInfo() });
 };

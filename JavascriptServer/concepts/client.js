@@ -2,19 +2,22 @@ import trace from '#util/logging';
 import chalk from 'chalk';
 import { SendStuff } from '#cmd/sendStuff';
 
-import mongoose from 'mongoose';
-const ObjectId = mongoose.Types.ObjectId;
 import { Profile, freshProfile } from '#schemas/profile';
 import { Account } from '#schemas/account';
 import { FriendRequest } from '#schemas/friend_request';
 
-import { lobbyGet } from '#concepts/lobby';
-import Party, { partyGet } from '#concepts/party';
-import MatchMaker from '#util/matchmaker';
+import { lobbyFind } from '#concepts/lobby';
+import { partyCreate, partyGet } from '#concepts/party';
+import MatchMaker from '#matchmaking/matchmaker';
+import { Names } from '#util/names';
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
+    /** @type {string} */
     name = '';
+    /** @type {string} */
+    temp_id; // a temporary randomly generated id string
+    
     /** @type {import('ws').WebSocket | import('net').Socket} */
     socket = null;
     /** @type {'ws' | 'tcp'} */
@@ -28,7 +31,12 @@ export default class Client extends SendStuff {
     /** @type {Party} */
     party = null;
     
-    party_invites = [];
+    /** @type {Ticket} */
+    ticket = null;
+    
+    /** @type {Match} */
+    match = null;
+    
     
     /** @type {Account} */
     account = null;
@@ -45,7 +53,7 @@ export default class Client extends SendStuff {
     /** @type {number} */
     ping;
     
-    room_join_timer = -1; // if >0 - joined recently
+    room_join_timer = -1; // if >0 - joined a room recently
     
     /** @type {boolean} */
     get logged_in() {
@@ -59,11 +67,15 @@ export default class Client extends SendStuff {
     
     set mmr(_mmr) {
         if (this.account)
-            this.profile.mmr = _mmr;
+            this.profile.mmr = Math.max(_mmr, global.config.matchmaking.mmr_min);
     }
     
     constructor(socket, type = 'tcp') {
         super();
+        
+        // a random 8-digit number string
+        this.temp_id = Math.floor(Math.random() * 100_000_000).toString();
+        this.temp_id = '0'.repeat(8 - this.temp_id.length) + this.temp_id;
         
         this.socket = socket;
         this.type = type.toLowerCase();
@@ -78,7 +90,10 @@ export default class Client extends SendStuff {
         this.profile = null; // gameplay info
         
         this.ping = -1;
+        
+        this.name = Names.getDefaultName();
     }
+    
     
     // some events
     
@@ -120,6 +135,15 @@ export default class Client extends SendStuff {
         this.sendPartyLeave(party, reason, forced);
     }
     
+    onMatchFound(match) {
+        this.match = match;
+        this.sendMatchFound(match);
+    }
+    
+    onGameOver(outcome, reason = '') {
+        this.sendGameOver(outcome, reason);
+    }
+    
     onLogin() {
         this.profile.online = true;
         this.profile.last_online = new Date();
@@ -146,16 +170,15 @@ export default class Client extends SendStuff {
         
         // join the room last visited (saved in profile)
         if (global.config.room.use_last_profile_room && this.logged_in && this.profile.state.room) {
-            room = this.lobby.findRoomByMapName(this.profile.state.room);
+            room = this.lobby.findRoomByLevelName(this.profile.state.room);
         }
         // join the default starting room (from config)
-        else if (global.config.room.use_starting_room) {
-            room = this.lobby.findRoomByMapName(global.config.room.starting_room);
+        else if (global.config.room.use_starting_room && this.lobby.findRoomByLevelName(global.config.room.starting_room) !== undefined) {
+            room = this.lobby.findRoomByLevelName(global.config.room.starting_room);
         }
         // join the first room in the lobby that isn't the current room?
         else {
-            let c = this;
-            room = this.lobby.rooms.find(r => r !== c.room);
+            room = this.lobby.rooms[0];
         }
         
         // if we found a room to join in the end
@@ -186,11 +209,13 @@ export default class Client extends SendStuff {
         // save everything to the DB
         this.save();
         
+        this.matchMakingStop();
+        
         // leave the lobby (if we're currently in one)
         if (this.lobby)
-            this.lobby.kickPlayer(this, 'disconnected', true);
+            this.lobby.kickPlayer(this, 'disconnect', true);
         if  (this.party)
-            this.party.kickMember(this, 'disconnected', true);
+            this.party.kickMember(this, 'disconnect', true);
     }
     
     
@@ -199,7 +224,7 @@ export default class Client extends SendStuff {
             name: this.name,
             partyid: this.party?.partyid,
             lobbyid: this.lobby?.lobbyid,
-            room_name: this.room?.map.name
+            room_name: this.room?.level.name
         };
     }
     
@@ -209,7 +234,7 @@ export default class Client extends SendStuff {
     lobbyJoin(lobbyid) {
         var lobby;
         if (lobbyid) {
-            lobby = lobbyGet(lobbyid);
+            lobby = lobbyFind(lobbyid);
         }
         else {
             lobby = MatchMaker.findNonfullLobby(this);
@@ -374,7 +399,7 @@ export default class Client extends SendStuff {
     partyCreate() {
         if (this.party)
             this.partyLeave();
-        this.party = new Party(this);
+        this.party = partyCreate(this);
         return this.party;
     }
     
@@ -387,18 +412,60 @@ export default class Client extends SendStuff {
     
     partyInvite(user) {
         if (!this.party)
-            return;
+            this.partyCreate();
+        // if (!this.party) return;
         
         user.sendPartyInvite(this.party);
-        this.sendPartyInviteSent();
+        this.sendPartyInviteSent(user.name);
     }
     
     /**
      * @param {string} partyid
      */
     partyJoin(partyid) {
+        this.matchMakingStop();
+        
         let party = partyGet(partyid);
         party.addMember(this);
+    }
+    
+    matchMakingStart(req) {
+        if (this.ticket)
+            return 'already matchmaking';
+        if (this.match)
+            return 'already in a match';
+        
+        if (this.party) {
+            let l = global.config.party.leader_only_mm;
+            let canStartMM = !l || (l && this.party.isLeader(this));
+            
+            if (canStartMM) {
+                return this.party.matchMakingStart(req);
+            }
+            else {
+                return 'not a party leader';
+            }
+        }
+        else { // solo q
+            this.ticket = MatchMaker.createTicket(this, req);
+            
+            // failed to create a ticket
+            if (this.ticket === null) {
+                return 'unable to start matchmaking';
+            }
+            
+            return this.ticket;
+        }
+    }
+    
+    matchMakingStop() {
+        if (this.party)
+            return this.party.matchMakingStop();
+        else if (this.ticket === null)
+            return;
+        
+        this.ticket.remove();
+        this.ticket = null;
     }
     
     /**
@@ -451,10 +518,10 @@ export default class Client extends SendStuff {
         let c = this;
         
         Account.login(username, password)
-            .then(function (account) {
+            .then((account) => {
             // this also sends the message
             c.login(account);
-        }).catch(function (reason) {
+        }).catch((reason) => {
             c.sendLogin('fail', reason);
         });
     }
@@ -467,10 +534,10 @@ export default class Client extends SendStuff {
         let c = this;
         
         Account.register(username, password)
-            .then(function (account) {
+            .then((account) => {
             // this also sends the message
             c.register(account);
-        }).catch(function (reason) {
+        }).catch((reason) => {
             trace('error: ' + reason);
             c.sendRegister('fail', reason.toString());
         });

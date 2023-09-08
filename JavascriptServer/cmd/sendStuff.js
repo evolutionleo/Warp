@@ -6,7 +6,6 @@ import chalk from 'chalk';
 // sender functions can be later called using some_client.sendThing()
 // in handlePacket.js or wherever else where you have client objects
 
-
 export class SendStuff {
     
     /**
@@ -41,9 +40,8 @@ export class SendStuff {
      * @param {boolean} [notme=true]
      */
     broadcastList(clients, pack, notme = true) {
-        let me = this;
-        clients.forEach(function (c) {
-            if (c === me && notme) { }
+        clients.forEach((c) => {
+            if (c === this && notme) { }
             else {
                 c.write(pack);
             }

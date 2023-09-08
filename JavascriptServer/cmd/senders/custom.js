@@ -1,7 +1,7 @@
 import SendStuff from "#cmd/sendStuff";
 
 /**
- * @param {IPlayerInputs} data
+ * @param {PlayerInputs} data
  */
 SendStuff.prototype.sendPlayerControls = function (data) {
     let id = this.entity.uuid;

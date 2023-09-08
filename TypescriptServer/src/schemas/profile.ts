@@ -92,3 +92,7 @@ export function getProfileInfo(p: IProfile):ProfileInfo {
         mmr: p.mmr
     };
 }
+
+export async function getProfileByName(name: string):Promise<IProfile> {
+    return await Profile.findOne({ name });
+}

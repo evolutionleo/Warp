@@ -9,7 +9,7 @@ import { SockType, Sock } from '#types/socktype';
 import * as net from 'net';
 import * as ws from 'ws';
 import chalk from 'chalk';
-import Party from '#concepts/party';
+import Party from '#matchmaking/party';
 import IClient from '#types/client_properties';
 import Match from '#matchmaking/match';
 

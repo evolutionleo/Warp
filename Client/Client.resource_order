@@ -28,6 +28,7 @@
     {"name":"util","order":1,"path":"folders/Warp/Scripts/util.yy",},
   ],
   "ResourceOrderSettings": [
+    {"name":"friendHandlers","order":6,"path":"scripts/friendHandlers/friendHandlers.yy",},
     {"name":"partySenders","order":4,"path":"scripts/partySenders/partySenders.yy",},
     {"name":"sPlayer","order":2,"path":"sprites/sPlayer/sPlayer.yy",},
     {"name":"oLoginMenu","order":3,"path":"objects/oLoginMenu/oLoginMenu.yy",},
@@ -62,6 +63,7 @@
     {"name":"rTest2","order":2,"path":"rooms/rTest2/rTest2.yy",},
     {"name":"entityHandlers","order":4,"path":"scripts/entityHandlers/entityHandlers.yy",},
     {"name":"r1v1","order":1,"path":"rooms/r1v1/r1v1.yy",},
+    {"name":"friendSenders","order":6,"path":"scripts/friendSenders/friendSenders.yy",},
     {"name":"oPartyUI","order":5,"path":"objects/oPartyUI/oPartyUI.yy",},
     {"name":"systemSenders","order":1,"path":"scripts/systemSenders/systemSenders.yy",},
     {"name":"gameplaySenders","order":3,"path":"scripts/gameplaySenders/gameplaySenders.yy",},

@@ -9,6 +9,7 @@ global.lobbies = {};
 global.parties = {};
 
 global.cmd_validators = {};
+global.packet_middleware = {};
 
 global.maps = [];
 global.levels = {};

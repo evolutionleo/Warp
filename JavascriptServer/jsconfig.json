@@ -2,7 +2,6 @@
     "compilerOptions": {
         "paths": {
             "#schemas/*": ["schemas/*"],
-            "#entity/*": ["entities/entity_types/*"],
             "#entities/*": ["entities/*"],
             "#initializers/*": ["initializers/*"],
             "#types/*": ["types/*"],

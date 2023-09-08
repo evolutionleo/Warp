@@ -63,6 +63,28 @@ class Entity extends EventEmitter {
     set uuid(_uuid) { this.id = _uuid; }
     ;
     
+    _state = 0;
+    states = {}; // e.x. "idle": 0, "walk": 1
+    
+    setState(value) {
+        if (typeof value === 'string') {
+            this._state = this.states[value];
+        }
+        // it's a number
+        // (-1 means keep the old state)
+        else if (value != -1) {
+            this._state = value;
+        }
+    }
+    
+    set state(v) {
+        this.setState(v);
+    }
+    
+    get state() {
+        return this._state;
+    }
+    
     
     constructor(room, x = 0, y = 0) {
         super();
@@ -79,8 +101,6 @@ class Entity extends EventEmitter {
         this.collider.entity = this;
         
         this.tree.insert(this.collider);
-        
-        // trace(this.prop_names)
     }
     
     create() {
@@ -252,14 +272,15 @@ class Entity extends EventEmitter {
     serialize() {
         return {
             id: this.id,
-            type: this.type,
+            t: this.type,
             obj: this.object_name,
             x: this.roundedPos(this.x),
             y: this.roundedPos(this.y),
-            xscale: this.xscale,
-            yscale: this.yscale,
+            xs: this.xscale,
+            ys: this.yscale,
             spd: this.spd,
-            props: this.props // uses a getter for props
+            p: this.props,
+            st: this.state
         };
     }
     

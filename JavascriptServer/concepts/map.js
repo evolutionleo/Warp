@@ -1,66 +1,43 @@
-import LoadRoom from '#util/load_room';
-/**
- * @enum {string}
- */
-export const GAME_MODES = {
+import GameLevel, { levelFind } from "#concepts/level";
 
-};
+export function mapFind(name) {
+    return global.maps.find(m => m.name === name);
+}
 
-// Map is a blueprint for a room
+export function mapExists(name) {
+    return global.maps.some(m => m.name === name);
+}
+
 export default class GameMap {
-    name = ''; // map's display name
-    room_name = ''; // room name in GMS2
+    name = 'unknown';
+    game_mode = 'unknown';
+    levels = [];
     description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-    preview = ''; // maybe implement preview images
-    max_players = 99;
-    
-    width = 1344;
-    height = 768;
-    
-    spawn_type = 'random'; // either 'random' or 'distributed'
-    start_pos = [{ x: 0, y: 0 }]; // if 'random', it picks a random starting pos for everyone, otherwise - goes in order from 0 to *length*
-    
-    contents = '[]';
-    // content: string; // a JSON string containing all the contents of the room
-    
-    constructor(options) {
-        Object.assign(this, options);
-        if (global.config.rooms_enabled) {
-            Object.assign(this, LoadRoom(this.room_name));
+    constructor(data, game_mode) {
+        if (data === null || data === undefined) {
+            throw 'Trying to create a map from a null/undefined definition';
         }
-        
-        // trace(this.contents);
-    }
-    
-    getStartPos(idx) {
-        if (Array.isArray(this.start_pos)) { // it's an array of positions
-            switch (this.spawn_type) {
-                case 'random':
-                    // a random number between 0 and start_pos.length
-                    var index = Math.round(Math.random() * (this.start_pos.length - 1));
-                    return this.start_pos[index];
-                case 'distributed':
-                    // just index clamped to start_pos.length
-                    var index = idx % this.start_pos.length;
-                    return this.start_pos[index];
-                default:
-                    console.error('Error: Invalid map type');
-                    return undefined;
-            }
+        else if (data instanceof GameLevel) { // using the constructor to create a map from a single level
+            let level = data;
+            
+            this.name = level.name;
+            this.game_mode = game_mode ?? this.game_mode;
+            this.levels = [level];
         }
-        else { // it's a single object
-            return this.start_pos;
+        else { // creating from a proper definition
+            Object.assign(this, data);
+            
+            let _levels = this.levels;
+            this.levels = _levels.map(level_name => levelFind(level_name));
         }
     }
     
     getInfo() {
         return {
             name: this.name,
-            room_name: this.room_name,
             description: this.description,
-            spawn_type: this.spawn_type,
-            max_players: this.max_players,
-            start_pos: this.start_pos
+            game_mode: this.game_mode,
+            levels: this.levels.map(l => l.name)
         };
     }
 }

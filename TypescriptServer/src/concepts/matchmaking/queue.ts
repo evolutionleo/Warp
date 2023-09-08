@@ -1,5 +1,5 @@
 import GameMode from "#concepts/game_mode";
-import Party from "#concepts/party";
+import Party from "#matchmaking/party";
 import Ticket, { PartyTicket } from "#matchmaking/ticket";
 
 

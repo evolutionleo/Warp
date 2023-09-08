@@ -1,4 +1,4 @@
-import PhysicsEntity from './../physics_entity.js';
+import PhysicsEntity from '#entities/physics_entity';
 
 export const defaultInputs = {
     move: {
@@ -42,6 +42,8 @@ export default class PlayerEntity extends PhysicsEntity {
         y: 2
     };
     
+    states = { idle: 0, walk: 1 };
+    
     client;
     
     get name() { return this.client.name; }
@@ -69,6 +71,13 @@ export default class PlayerEntity extends PhysicsEntity {
     }
     
     update(dt) {
+        if (this.inputs.move.x != 0) {
+            this.state = this.states.walk;
+        }
+        else {
+            this.state = this.states.idle;
+        }
+        
         this.spd.x = this.inputs.move.x * this.walksp;
         
         if (this.inputs.keys.kjump && this.grounded()) {
@@ -83,6 +92,7 @@ export default class PlayerEntity extends PhysicsEntity {
         super.update(dt);
         let p = this.client.profile;
         if (p) {
+            p.state.state = this.state;
             p.state.x = this.x;
             p.state.y = this.y;
         }

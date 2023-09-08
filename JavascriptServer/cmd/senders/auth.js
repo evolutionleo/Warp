@@ -2,12 +2,16 @@ import SendStuff from "#cmd/sendStuff";
 import { getAccountInfo } from "#schemas/account";
 import { getProfileInfo } from "#schemas/profile";
 
+SendStuff.prototype.sendName = function () {
+    this.send({ cmd: 'name set', name: this.name });
+};
+
 /**
  * @param {string} status
  * @param {string} [reason='']
  */
 SendStuff.prototype.sendRegister = function (status, reason = '') {
-    this.send({ cmd: 'register', status: status, reason: reason });
+    this.send({ cmd: 'register', status, reason });
 };
 
 /**

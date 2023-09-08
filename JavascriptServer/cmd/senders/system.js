@@ -27,3 +27,7 @@ SendStuff.prototype.sendServerTime = function (client_t) {
 SendStuff.prototype.sendInvalidInput = function (from_cmd, errors) {
     this.send({ cmd: 'invalid input', c: from_cmd, e: errors });
 };
+
+SendStuff.prototype.sendError = function (error, details = '') {
+    this.send({ cmd: 'error', error, details });
+};
