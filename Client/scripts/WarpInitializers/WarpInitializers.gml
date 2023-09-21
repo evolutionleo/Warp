@@ -22,7 +22,8 @@ global.account = undefined
 global.profile = undefined
 
 global.friends = []
-global.friend_requests = []
+global.friend_requests_inc = []
+global.friend_requests_out = []
 
 global.ping = -1
 global.start_server_time = -1
