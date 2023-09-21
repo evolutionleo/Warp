@@ -61,3 +61,7 @@ export function getProfileInfo(p) {
         mmr: p.mmr
     };
 }
+
+export async function getProfileByName(name) {
+    return await Profile.findOne({ name });
+}

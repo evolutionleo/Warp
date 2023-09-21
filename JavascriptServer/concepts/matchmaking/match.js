@@ -100,8 +100,11 @@ export default class Match {
                 let mmr_delta = MatchMaker.getMMRDelta(avg_mmr, other_avg_mmr, outcome);
                 
                 team.forEach(c => {
-                    c.mmr += mmr_delta;
-                    c.sendMMRChange(mmr_delta, c.mmr);
+                    // don't change the MMR immediately because it will affect other players' calculations
+                    setImmediate(() => {
+                        c.mmr += mmr_delta;
+                        c.sendMMRChange(mmr_delta, c.mmr);
+                    });
                 });
             }
             

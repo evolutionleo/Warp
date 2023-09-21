@@ -1,7 +1,7 @@
 import Client from '#concepts/client';
 import { lobbyList } from '#concepts/lobby';
 import { PartyTicket, SingleTicket } from '#matchmaking/ticket';
-import Party from '#concepts/party';
+import Party from '#matchmaking/party';
 import { gameModeFind } from '#concepts/game_mode';
 import Match from '#matchmaking/match';
 import trace from '#util/logging';
@@ -48,8 +48,8 @@ export default class MatchMaker {
                 // sort once again
                 potential_pool.sort((p1, p2) => p1.mmr - p2.mmr);
                 
-                // if (potential_pool.length > 0)
-                //     trace('pp', potential_pool.map(t => (t.by as Client).name));
+                if (potential_pool.length > 0)
+                    trace('pp', potential_pool.map(t => t.by.name));
                 
                 
                 // define the pool of players/parties with close enough mmr for the match
@@ -88,8 +88,8 @@ export default class MatchMaker {
                     }
                 }
                 
-                // if (pool.length > 0)
-                //     trace('pool', pool.map(t => (t.by as Client).name));
+                if (pool.length > 0)
+                    trace('pool', pool.map(t => t.by.name));
                 
                 // not enough players for a match
                 if (pool.length == 0) {
@@ -197,6 +197,15 @@ export default class MatchMaker {
         let is_single_player = party_size == 1;
         
         if (game_mode.ranked && !is_full_party && !is_single_player) {
+            return false;
+        }
+        
+        
+        // don't allow players who aren't logged in into ranked
+        let logged_in_party = by instanceof Party && !by.members.some(m => !m.logged_in);
+        let logged_in_player = by instanceof Client && by.logged_in;
+        
+        if (game_mode.ranked && !(logged_in_party || logged_in_player)) {
             return false;
         }
         

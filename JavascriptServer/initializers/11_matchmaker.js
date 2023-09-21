@@ -6,14 +6,14 @@ import trace from "#util/logging";
 global.matchmaker = MatchMaker;
 
 for (const gm in global.game_modes) {
-    MatchMaker.queues[gm] = new Queue(gm);
+    global.matchmaker.queues[gm] = new Queue(gm);
 }
 
 if (global.config.matchmaking_enabled) {
     // start the matchmaking loop
-    MatchMaker._interval = setInterval(() => {
+    global.matchmaker._interval = setInterval(() => {
         try {
-            MatchMaker.processMatches();
+            global.matchmaker.processMatches();
         }
         catch (e) {
             trace(e);

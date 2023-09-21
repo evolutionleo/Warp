@@ -33,6 +33,14 @@ const args = minimist(process.argv.slice(2));
  * @property {object} party
  * @property {number} party.max_members
  *
+ * @property {object} matchmaking
+ * @property {number} matchmaking.mmr_starting
+ * @property {number} matchmaking.mmr_min
+ * @property {number} matchmaking.mmr_scale
+ * @property {number} matchmaking.mmr_max_gain
+ * @property {number} matchmaking.mmr_max_difference
+ * @property {number} matchmaking.process_interval
+ *
  * @property {number} tps
  *
  * @property {boolean} timestamps_enabled
@@ -44,6 +52,8 @@ const args = minimist(process.argv.slice(2));
  * @property {boolean} ssl_enabled
  * @property {boolean} logging_enabled
  * @property {boolean} validation_enabled
+ * @property {boolean} middleware_enabled
+ * @property {boolean} matchmaking_enabled
  *
  * @property {string} ssl_cert_path
  * @property {string} ssl_key_path
@@ -136,6 +146,7 @@ const common_config = {
     ssl_enabled: false,
     logging_enabled: true,
     validation_enabled: true,
+    middleware_enabled: true,
     matchmaking_enabled: true,
     
     verbose_lag: false,

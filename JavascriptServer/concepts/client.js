@@ -7,7 +7,7 @@ import { Account } from '#schemas/account';
 import { FriendRequest } from '#schemas/friend_request';
 
 import { lobbyFind } from '#concepts/lobby';
-import { partyCreate, partyGet } from '#concepts/party';
+import { partyCreate, partyGet } from '#matchmaking/party';
 import MatchMaker from '#matchmaking/matchmaker';
 import { Names } from '#util/names';
 
@@ -145,6 +145,10 @@ export default class Client extends SendStuff {
     }
     
     onLogin() {
+        if (this.profile.mmr === undefined) {
+            this.profile.mmr = 1000;
+        }
+        
         this.profile.online = true;
         this.profile.last_online = new Date();
         this.name = this.profile.name;
@@ -556,7 +560,6 @@ export default class Client extends SendStuff {
             if (profile) {
                 this.profile = profile;
                 c.onLogin();
-                
                 c.sendLogin('success');
             }
             else {
