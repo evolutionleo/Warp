@@ -54,7 +54,7 @@ export async function handlePacket(c:Client, data:Data) {
     }
 
     if (global.config.middleware_enabled && global.packet_middleware[cmd]) {
-        let res = executeMiddleware(cmd, c, data);
+        let res = await executeMiddleware(cmd, c, data);
         if (!res)
             return;
     }
