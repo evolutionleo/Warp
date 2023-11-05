@@ -1,6 +1,6 @@
 {
   "name": "@evoleo/create-warp-app",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Bootstrap a Warp project with a single command!",
   "main": "index.js",
   "bin": {
@@ -23,12 +23,13 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^4.1.2",
+    "decompress": "^4.2.1",
+    "decompress-unzip": "^4.0.1",
     "follow-redirects": "^1.14.5",
     "inquirer": "^8.2.0",
     "shelljs": "^0.8.4",
     "unzipper": "^0.10.11"
   },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/evolutionleo/warp.git"

@@ -46,8 +46,6 @@ else {
     fs.mkdirSync(projectName);
 }
 
-shell.cd(projectName); // actually navigates
-
 
 inquirer.prompt(questions).then(answers => {
     const { serverTemplate, clientTemplate } = answers;
@@ -98,16 +96,17 @@ inquirer.prompt(questions).then(answers => {
     // server
     const server_cb = () => {
         console.log(chalk.white('Unzipping ' + server_fname + '...'));
-        fs.createReadStream(server_fname)
-        .pipe(unzipper.Extract({ path: 'Server/' })
+
+        fs.createReadStream(path.join(projectName, server_fname))
+        .pipe(unzipper.Extract({ path: path.join(__dirname, projectName, 'Server/') })
         .on('close', () => {
             console.log(chalk.white('Done.'));
-            fs.rmSync(server_fname);
+            fs.rmSync(path.join(projectName, server_fname));
             // shell.rm('-rf', server_fname);
         }));
     };
 
-    const server_file = fs.createWriteStream(server_fname);
+    const server_file = fs.createWriteStream(path.join(projectName, server_fname));
     const server_req = https.get(server_url);
 
     console.log(chalk.white('Downloading the server from'), chalk.blueBright(server_url) + chalk.white('...'));
@@ -121,14 +120,14 @@ inquirer.prompt(questions).then(answers => {
     // client
     const client_cb = () => {
         console.log(chalk.white('Unzipping ' + client_fname + '...'));
-        fs.createReadStream(client_fname)
-        .pipe(unzipper.Extract({ path: 'Client/' })
+        fs.createReadStream(path.join(projectName, client_fname))
+        .pipe(unzipper.Extract({ path: path.join(__dirname, projectName, 'Client/') })
         .on('close', () => {
             // rename Client.yyp and Client.resource_order
             if (clientTemplate === 'GameMaker') {
                 // rename the .yyp
                 const project_file = 'Client.yyp';
-                const project_path = 'Client/' + project_file;
+                const project_path = path.join(projectName, 'Client/', project_file);
                 const content = fs.readFileSync(project_path, 'utf8');
                 const new_project_path = project_path.replace(project_file, projectName + '.yyp');
 
@@ -137,7 +136,7 @@ inquirer.prompt(questions).then(answers => {
 
                 // rename the .resource_order
                 const ro_file = 'Client.resource_order';
-                const ro_path = 'Client/' + ro_file;
+                const ro_path = path.join(projectName, 'Client/', ro_file);
                 const ro_content = fs.readFileSync(ro_path, 'utf8');
                 const new_ro_path = ro_path.replace(project_file, projectName + '.resource_order');
 
@@ -146,15 +145,15 @@ inquirer.prompt(questions).then(answers => {
             }
 
             console.log(chalk.white('Done.'));
-            fs.rmSync(client_fname);
+            fs.rmSync(path.join(projectName, client_fname));
             // shell.rm('-rf', client_fname);
         }));
     };
 
-    const client_file = fs.createWriteStream(client_fname);
+    const client_file = fs.createWriteStream(path.join(projectName, client_fname));
     const client_req = https.get(client_url);
 
-    console.log(chalk.white('Downloading the client from'), chalk.blueBright(client_url) + chalk.greenBright('...'));
+    console.log(chalk.white('Downloading the client from'), chalk.blueBright(client_url) + chalk.white('...'));
     client_req.on('response', (res) => {
         res.pipe(client_file);
         res.on('close', client_cb);
