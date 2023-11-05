@@ -1,4 +1,4 @@
-import { addValidator } from "#concepts/validator";
+import { addValidator } from "#cmd/validator";
 
 addValidator(['party join'], {
     partyid: 'string'

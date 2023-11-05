@@ -1,5 +1,6 @@
 import trace from '#util/logging';
 import chalk from 'chalk';
+import { executeMiddleware } from '#cmd/middleware';
 
 const packetHandlers = {};
 
@@ -32,12 +33,18 @@ export async function handlePacket(c, data) {
     if (global.config.validation_enabled) {
         let v = global.cmd_validators[cmd];
         if (typeof v === 'function') {
-            let res = v(data);
-            if (typeof res !== 'boolean') {
+            let res = await v(data);
+            if (res !== true) {
                 c.sendInvalidInput(cmd, res);
                 return;
             }
         }
+    }
+    
+    if (global.config.middleware_enabled && global.packet_middleware[cmd]) {
+        let res = await executeMiddleware(cmd, c, data);
+        if (!res)
+            return;
     }
     
     switch (cmd) {

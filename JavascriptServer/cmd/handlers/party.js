@@ -1,5 +1,5 @@
 import { addHandler } from "#cmd/handlePacket";
-import { partyExists } from "#concepts/party";
+import { partyExists } from "#matchmaking/party";
 
 addHandler('party join', (c, data) => {
     var partyid = data.partyid;

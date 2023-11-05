@@ -51,7 +51,7 @@
   "isEcma": false,
   "LibraryEmitters": [],
   "MetaData": {
-    "IDEVersion": "2023.8.0.98",
+    "IDEVersion": "2023.8.1.102",
   },
   "resources": [
     {"id":{"name":"friendHandlers","path":"scripts/friendHandlers/friendHandlers.yy",},},
