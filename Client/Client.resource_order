@@ -60,6 +60,7 @@
     {"name":"gameLoopHandlers","order":2,"path":"scripts/gameLoopHandlers/gameLoopHandlers.yy",},
     {"name":"SUIText","order":4,"path":"scripts/SUIText/SUIText.yy",},
     {"name":"SUIButton","order":2,"path":"scripts/SUIButton/SUIButton.yy",},
+    {"name":"MultiClientGetClientID","order":1,"path":"scripts/MultiClientGetClientID/MultiClientGetClientID.yy",},
     {"name":"rTest2","order":2,"path":"rooms/rTest2/rTest2.yy",},
     {"name":"entityHandlers","order":4,"path":"scripts/entityHandlers/entityHandlers.yy",},
     {"name":"r1v1","order":1,"path":"rooms/r1v1/r1v1.yy",},
