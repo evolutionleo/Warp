@@ -1,5 +1,3 @@
-global.cmd_handlers = {}
-
 ///@function	addHandler(cmd, handler)
 ///@param		{String} cmd
 ///@param		{Function} handler
