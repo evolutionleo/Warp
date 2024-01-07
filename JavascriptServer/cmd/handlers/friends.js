@@ -1,4 +1,5 @@
 import addHandler from "#cmd/handlePacket";
+import FriendRequest from "#schemas/friend_request";
 
 addHandler('friend req inc', async (c, data) => {
     let from_profiles = await c.getIncomingFriendRequests();
@@ -16,18 +17,20 @@ addHandler('friend list', async (c, data) => {
 });
 
 addHandler('friend req send', (c, data) => {
-    c.friendRequestSend(data.friend);
+    if (!c.profile.friends.includes(data.friend._id) && !FriendRequest.exists({ sender: data.friend._id }))
+        c.friendRequestSend(data.friend);
+    
     c.send({ cmd: 'friend req sent', to: data.friend.name });
 });
 
-addHandler('friend req accept', (c, data) => {
-    c.friendRequestAccept(data.friend);
-    c.send({ cmd: 'friend req accepted', from: data.friend.name });
+addHandler('friend req accept', async (c, data) => {
+    if (await c.friendRequestAccept(data.friend))
+        c.send({ cmd: 'friend req accepted', from: data.friend.name });
 });
 
-addHandler('friend req reject', (c, data) => {
-    c.friendRequestReject(data.friend);
-    c.send({ cmd: 'friend req rejected', from: data.friend.name });
+addHandler('friend req reject', async (c, data) => {
+    if (await c.friendRequestReject(data.friend))
+        c.send({ cmd: 'friend req rejected', from: data.friend.name });
 });
 
 addHandler('friend req cancel', (c, data) => {
@@ -36,8 +39,9 @@ addHandler('friend req cancel', (c, data) => {
 });
 
 addHandler('friend add', async (c, data) => {
-    c.friendAdd(data.friend);
-    c.send({ cmd: 'friend added', name: data.friend.name });
+    let res = await c.friendAdd(data.friend);
+    if (res)
+        c.send({ cmd: 'friend added', name: data.friend.name });
 });
 
 addHandler('friend remove', async (c, data) => {

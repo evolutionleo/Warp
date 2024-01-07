@@ -274,6 +274,17 @@ export default class Client extends SendStuff {
         return await FriendRequest.findOutgoing(this.profile._id);
     }
     
+    async friendCanAdd(friend) {
+        friend = friend instanceof Client ? friend.profile : friend;
+        if (!this.logged_in)
+            return false;
+        
+        let this_id = this.profile._id;
+        let friend_id = friend._id;
+        
+        return this_id != friend_id && !(await this.getFriendIds()).includes(friend_id);
+    }
+    
     /**
      * Send a new friend request or accept an existing one from the user
      * @param friend {IProfile|Client}
@@ -282,11 +293,13 @@ export default class Client extends SendStuff {
         friend = friend instanceof Client ? friend.profile : friend;
         if (!this.logged_in)
             return false;
+        if (!await this.friendCanAdd(friend))
+            return false;
         
         let sender_id = this.profile._id;
         let receiver_id = friend._id;
         
-        let friend_exists = this.profile.friends.includes(receiver_id);
+        let friend_exists = this.profile.friends.some(friend_id => friend_id === receiver_id);
         if (friend_exists) { // already friends
             trace('already friends');
             return false;
@@ -344,13 +357,16 @@ export default class Client extends SendStuff {
     async friendRequestAccept(user_from) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         if (!this.logged_in)
-            return;
+            return false;
         
         // find a request FROM the user
         let inc_request_id = await this.friendRequestFind(user_from, this);
         if (inc_request_id) {
             await FriendRequest.accept(inc_request_id); // this method also updates the .friends arrays
+            return true;
         }
+        
+        return false;
     }
     
     /**
@@ -359,13 +375,16 @@ export default class Client extends SendStuff {
     async friendRequestReject(user_from) {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         if (!this.logged_in)
-            return;
+            return false;
         
         // find a request FROM the user
         let inc_request_id = await this.friendRequestFind(user_from, this);
         if (inc_request_id) {
             await FriendRequest.reject(inc_request_id);
+            return true;
         }
+        
+        return false;
     }
     
     /**
@@ -374,13 +393,15 @@ export default class Client extends SendStuff {
     async friendRequestCancel(user_to) {
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         if (!this.logged_in)
-            return null;
+            return false;
         
         // find a request from us TO the user
         let req_id = await this.friendRequestFind(this, user_to);
         if (req_id) {
             await FriendRequest.cancel(req_id);
+            return true;
         }
+        return false;
     }
     
     /**
@@ -389,7 +410,7 @@ export default class Client extends SendStuff {
     async friendRemove(friend) {
         friend = friend instanceof Client ? friend.profile : friend;
         if (!this.logged_in)
-            return;
+            return false;
         
         let my_id = this.profile._id;
         let friend_id = friend._id;
@@ -397,6 +418,8 @@ export default class Client extends SendStuff {
         // delete from each others' profiles
         await Profile.findByIdAndUpdate(my_id, { $pull: { friends: friend_id } });
         await Profile.findByIdAndUpdate(friend_id, { $pull: { friends: my_id } });
+        
+        return true;
     }
     
     

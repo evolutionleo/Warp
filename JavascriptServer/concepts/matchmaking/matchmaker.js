@@ -48,8 +48,8 @@ export default class MatchMaker {
                 // sort once again
                 potential_pool.sort((p1, p2) => p1.mmr - p2.mmr);
                 
-                if (potential_pool.length > 0)
-                    trace('pp', potential_pool.map(t => t.by.name));
+                // if (potential_pool.length > 0)
+                //     trace('pp', potential_pool.map(t => (t.by as Client).name));
                 
                 
                 // define the pool of players/parties with close enough mmr for the match
