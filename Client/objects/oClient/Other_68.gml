@@ -57,7 +57,7 @@ switch(type) {
 			var packSize = buffer_peek(buff, i, buffer_u32);
 			
 			// if exceding the packet size
-			if (i + packSize > size) {
+			if (i + 4 + packSize > size) {
 				halfpack = buffer_create(size-i, buffer_fixed, 1);
 				buffer_copy(buff, i, size-i, halfpack, 0);
 				//trace("half in-")
