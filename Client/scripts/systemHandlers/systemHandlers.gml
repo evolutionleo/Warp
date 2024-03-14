@@ -37,13 +37,25 @@ addHandler("ping", function(data) {
 })
 
 addHandler("pong", function(data) {
+	static last_pings = []
+	var max_pings = 20
+	
 	var t = data.T
 	//var new_t = current_time
 	var new_t = round(local_timestamp())
 	var ping = new_t - t
 	
-	if (AUTOADJUST_SERVER_DELAY)
-		global.server_time_delay = max(global.server_time_delay, 100 * ceil(ping / 100))
+	array_push(last_pings, ping)
+	if (array_length(last_pings) > max_pings) {
+		array_delete(last_pings, 0, 1)
+	}
+	
+	var sum = array_reduce(last_pings, function(prev, v) { return prev + v })
+	var avg_ping = sum / array_length(last_pings)
+	
+	if (AUTOADJUST_SERVER_DELAY) {
+		global.server_time_delay = 100 * ceil(avg_ping / 100)
+	}
 	
 	global.ping = ping
 })
