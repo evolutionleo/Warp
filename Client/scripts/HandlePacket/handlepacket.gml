@@ -72,8 +72,10 @@ function Handler(cmd, handler) constructor {
 	static append = function(handler) {
 		if (!is_undefined(next))
 			return next.append(handler)
-		else
+		else {
 			next = handler
+			handler.prev = self
+		}
 	}
 	
 	static remove = function() {
