@@ -18,20 +18,21 @@
 - [Pong Example](https://github.com/evolutionleo/GMOF-pong-example) (uses v3.0)
 
 # Installing
-## \[New!\] Client + Server
+## Client + Server (recommended)
 - You need to have [NodeJS](https://nodejs.org/en/) and [npm](https://npmjs.org) installed
 - Install the package with `npm i -g @evoleo/create-warp-app`
 - Run `npx create-warp-app`
 - Select the client and server templates
 - Done! The script will automatically bootstrap a new project from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
 
-## Client-side
+## Client and Server separately
+### Client-side
 - Install .yymps from the [latest release](https://github.com/evolutionleo/Warp/releases/latest)
 - Import it to your project using GameMaker's Local Package system *(you can also choose to include the Demo)*
  OR
-- Install EmptyClient.zip and unzip it
+- Install GMClient.zip and unzip it
 
-## Server-side
+### Server-side
 - Install [NodeJS](https://nodejs.org/en/) (along with npm)
 - Install [VS Code](https://code.visualstudio.com/) (or use any other code editor of your choice)
 - (TypeScript) Install the [Typescript compiler](https://www.typescriptlang.org/) with `npm i -g typescript`
