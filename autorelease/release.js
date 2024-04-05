@@ -1,8 +1,10 @@
 const AdmZip = require('adm-zip');
 const path = require('path');
+const fs = require('fs');
 
 let curr_zip;
 let curr_folder;
+let curr_path;
 
 let addFolder = (name) => {
     curr_zip.addLocalFolder(path.join(__dirname, '..', `${curr_folder}`, `${name}/`), `/${name}`);
@@ -11,17 +13,26 @@ let addFile = (name) => {
     curr_zip.addLocalFile(path.join(__dirname, '..', `${curr_folder}`, name), '');
 }
 
+const zip_ignore =  ['node_modules', 'package-lock.json', 'out'];
+
+let addAll = (curr_path) => {
+    fs.readdirSync(curr_path).forEach((file) => {
+        if (zip_ignore.includes(file)) return;
+    
+        if (file.includes('.'))
+            addFile(file);
+        else
+            addFolder(file);
+    });
+}
+
 // TypeScript server
 const ts_zip = new AdmZip();
 curr_zip = ts_zip;
 curr_folder = 'TypescriptServer';
-addFolder('src');
+curr_path = path.join(__dirname, '..', `${curr_folder}`);
 
-addFile('package.json');
-addFile('tsconfig.json');
-addFile('jsconfig.json');
-addFile('.gitignore');
-addFile('README.md');
+addAll(curr_path);
 
 ts_zip.writeZip('../Release/TSServer.zip');
 
@@ -29,26 +40,10 @@ ts_zip.writeZip('../Release/TSServer.zip');
 // JavaScript server
 const js_zip = new AdmZip();
 curr_zip = js_zip;
-curr_folder = 'JavascriptServer'
+curr_folder = 'JavascriptServer';
+curr_path = path.join(__dirname, '..', `${curr_folder}`);
 
-addFolder('cmd');
-addFolder('maps');
-addFolder('util');
-addFolder('schemas');
-addFolder('concepts');
-addFolder('entities');
-addFolder('initializers');
-
-
-addFile('package.json');
-addFile('jsconfig.json');
-
-addFile('.gitignore');
-addFile('README.md');
-
-addFile('server.js');
-addFile('config.js');
-addFile('packet.js');
+addAll(curr_path);
 
 js_zip.writeZip('../Release/JSServer.zip');
 
