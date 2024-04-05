@@ -1,6 +1,6 @@
 {
   "name": "@evoleo/create-warp-app",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "Bootstrap a Warp project with a single command!",
   "main": "index.js",
   "bin": {

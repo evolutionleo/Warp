@@ -111,7 +111,7 @@ inquirer.prompt(questions).then(answers => {
 
     console.log(chalk.white('Downloading the server from'), chalk.blueBright(server_url) + chalk.white('...'));
     server_req.on('response', (res) => {
-        res.pipe(server_file)
+        res.pipe(server_file);
         res.on('close', server_cb);
     });
 
@@ -122,7 +122,7 @@ inquirer.prompt(questions).then(answers => {
         console.log(chalk.white('Unzipping ' + client_fname + '...'));
         fs.createReadStream(path.join(projectName, client_fname))
         .pipe(unzipper.Extract({ path: path.join(__dirname, projectName, 'Client/') })
-        .on('close', () => {
+        .on('finish', () => {
             // rename Client.yyp and Client.resource_order
             if (clientTemplate === 'GameMaker') {
                 // rename the .yyp
