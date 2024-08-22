@@ -18,7 +18,7 @@
 - [Pong Example](https://github.com/evolutionleo/GMOF-pong-example) (uses v3.0)
 
 # Installing
-## Client + Server (recommended)
+## Client + Server ~~(recommended)~~ (temporarily broken as of 22/04/2024, sorry)
 - You need to have [NodeJS](https://nodejs.org/en/) and [npm](https://npmjs.org) installed
 - Install the package with `npm i -g @evoleo/create-warp-app`
 - Run `npx create-warp-app`
