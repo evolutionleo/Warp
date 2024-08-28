@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MultiClientGetProxyPath",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MultiClientGetProxyPath",
+  "parent":{
+    "name":"MultiClient",
+    "path":"folders/Warp/Extensions/MultiClient.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

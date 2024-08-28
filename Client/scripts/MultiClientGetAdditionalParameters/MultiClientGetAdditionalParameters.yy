@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"MultiClientGetClientID",
+  "%Name":"MultiClientGetAdditionalParameters",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"MultiClientGetClientID",
+  "name":"MultiClientGetAdditionalParameters",
   "parent":{
     "name":"MultiClient",
     "path":"folders/Warp/Extensions/MultiClient.yy",

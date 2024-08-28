@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"MultiClientGetID",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"MultiClientGetID",
+  "parent":{
+    "name":"MultiClient",
+    "path":"folders/Warp/Extensions/MultiClient.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

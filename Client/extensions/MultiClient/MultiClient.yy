@@ -14,10 +14,8 @@
   "copyToTargets":17179869280,
   "description":"",
   "exportToGame":true,
-  "extensionVersion":"1.0.3",
-  "files":[
-    {"$GMExtensionFile":"","%Name":"","constants":[],"copyToTargets":-1,"filename":"post_run_step.bat","final":"","functions":[],"init":"","kind":4,"name":"","order":[],"origname":"","ProxyFiles":[],"resourceType":"GMExtensionFile","resourceVersion":"2.0","uncompress":false,"usesRunnerInterface":false,},
-  ],
+  "extensionVersion":"1.0.5",
+  "files":[],
   "gradleinject":"",
   "hasConvertedCodeInjection":true,
   "helpfile":"",
@@ -40,8 +38,8 @@
   "name":"MultiClient",
   "options":[
     {"$GMExtensionOption":"","%Name":"Number_Of_Clients","defaultValue":"2","description":"","displayName":"Number of clients","exportToINI":false,"extensionId":null,"guid":"5d9f79ea-1b81-4c14-9cdb-bd884ee607e4","hidden":false,"listItems":[],"name":"Number_Of_Clients","optType":1,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
-    {"$GMExtensionOption":"","%Name":"DebugSection","defaultValue":"Enable in debug mode?","description":"","displayName":"","exportToINI":false,"extensionId":null,"guid":"c2dbc7f8-515a-443a-b7e7-c7bb0271d8c7","hidden":false,"listItems":[],"name":"DebugSection","optType":5,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
-    {"$GMExtensionOption":"","%Name":"Enable_Debug_Mode","defaultValue":"False","description":"","displayName":"Enable debug mode","exportToINI":false,"extensionId":null,"guid":"76c270e6-7809-4838-ade8-701846fc795d","hidden":false,"listItems":[],"name":"Enable_Debug_Mode","optType":0,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
+    {"$GMExtensionOption":"","%Name":"Enable_Debug_Mode","defaultValue":"True","description":"","displayName":"Enable debug mode","exportToINI":false,"extensionId":null,"guid":"76c270e6-7809-4838-ade8-701846fc795d","hidden":false,"listItems":[],"name":"Enable_Debug_Mode","optType":0,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
+    {"$GMExtensionOption":"","%Name":"Search_Port","defaultValue":"19839","description":"","displayName":"Debug mode search port","exportToINI":false,"extensionId":null,"guid":"f506fe0e-5a82-4155-8b2a-69e6e6053844","hidden":false,"listItems":[],"name":"Search_Port","optType":1,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
     {"$GMExtensionOption":"","%Name":"Additional_Parameters","defaultValue":"","description":"","displayName":"Additional parameters","exportToINI":false,"extensionId":null,"guid":"a19af317-c0f4-479d-8f1c-5c292032fe3c","hidden":false,"listItems":[],"name":"Additional_Parameters","optType":2,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
     {"$GMExtensionOption":"","%Name":"Use_GM_Web_Fallback","defaultValue":"False","description":"","displayName":"Use GM Web Fallback","exportToINI":false,"extensionId":null,"guid":"f19efce6-255e-43bf-be1c-c062cf1e1ec5","hidden":false,"listItems":[],"name":"Use_GM_Web_Fallback","optType":0,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
     {"$GMExtensionOption":"","%Name":"GM_Web_Fallback_Address","defaultValue":"http://127.0.0.1","description":"","displayName":"GM Web Fallback Address","exportToINI":false,"extensionId":null,"guid":"08c5012e-41c6-4e97-a5d5-a39120aa6c7e","hidden":false,"listItems":[],"name":"GM_Web_Fallback_Address","optType":2,"resourceType":"GMExtensionOption","resourceVersion":"2.0",},
