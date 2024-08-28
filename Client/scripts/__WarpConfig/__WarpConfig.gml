@@ -41,12 +41,12 @@ SOCKET_TYPES = {
 // Choose configs in GameMaker in the top-right corner
 
 // Default (just mirrors debug)
-#macro Default:IP "127.0.0.1"
-#macro Default:PORT "1338"
-#macro Default:WS_PORT "3001"
-#macro Default:DUAL_INSTANCE true
+#macro IP "127.0.0.1"
+#macro PORT "1338"
+#macro WS_PORT "3001"
+#macro DUAL_INSTANCE true
 // you can set this macro to >1 to test the game with 3+ instances running at once
-#macro Default:DUAL_INSTANCE_COUNT 1
+#macro DUAL_INSTANCE_COUNT 1
 
 // Production
 #macro Prod:IP   "xxx.xxx.xxx.xxx" // insert your external server IP
@@ -67,11 +67,12 @@ SOCKET_TYPES = {
 
 
 // warn about not setting the config (press the "target" icon in the top-right corner of IDE)
-#macro CONFIGS_SET true
-#macro Default:CONFIGS_SET false
+#macro CONFIGS_SET false
+#macro Dev:CONFIGS_SET true
+#macro Prod:CONFIGS_SET true
 if (!CONFIGS_SET) {
 	trace("")
-	trace("### Remember to set your config by pressing the 'target' icon in the top-right corner of IDE! (Dev = Development, Prod = Production) ###")
+	trace("!!! Please remember to set your config by pressing the 'target' icon in the top-right corner of IDE! (Dev = Development, Prod = Production) ###")
 	trace("")
 }
 
