@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "_SUIEmpty",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Basic",
-    "path": "folders/Warp Demo/SimpleUI/Scripts/SimpleUI Elements/Basic.yy",
+  "$GMScript":"v1",
+  "%Name":"_SUIEmpty",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"_SUIEmpty",
+  "parent":{
+    "name":"Basic",
+    "path":"folders/Warp Demo/SimpleUI/Scripts/SimpleUI Elements/Basic.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

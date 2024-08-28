@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "UseStates",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "hooks",
-    "path": "folders/Warp/Scripts/hooks.yy",
+  "$GMScript":"v1",
+  "%Name":"UseStates",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"UseStates",
+  "parent":{
+    "name":"hooks",
+    "path":"folders/Warp/Scripts/hooks.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

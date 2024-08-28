@@ -1,9 +1,11 @@
 {
-  "resourceType": "GMNotes",
-  "resourceVersion": "1.1",
-  "name": "ProjectStructure",
-  "parent": {
-    "name": "Warp",
-    "path": "folders/Warp.yy",
+  "$GMNotes":"",
+  "%Name":"ProjectStructure",
+  "name":"ProjectStructure",
+  "parent":{
+    "name":"Warp",
+    "path":"folders/Warp.yy",
   },
+  "resourceType":"GMNotes",
+  "resourceVersion":"2.0",
 }

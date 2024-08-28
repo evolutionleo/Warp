@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "WarpInitializers",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Scripts",
-    "path": "folders/Warp/Scripts.yy",
+  "$GMScript":"v1",
+  "%Name":"WarpInitializers",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"WarpInitializers",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Warp/Scripts.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

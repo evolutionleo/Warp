@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "SimpleUIDefaultProps",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "Scripts",
-    "path": "folders/Warp Demo/SimpleUI/Scripts.yy",
+  "$GMScript":"v1",
+  "%Name":"SimpleUIDefaultProps",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SimpleUIDefaultProps",
+  "parent":{
+    "name":"Scripts",
+    "path":"folders/Warp Demo/SimpleUI/Scripts.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

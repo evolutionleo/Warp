@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "Trace",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "lib",
-    "path": "folders/Warp/Scripts/lib.yy",
+  "$GMScript":"v1",
+  "%Name":"Trace",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Trace",
+  "parent":{
+    "name":"lib",
+    "path":"folders/Warp/Scripts/lib.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

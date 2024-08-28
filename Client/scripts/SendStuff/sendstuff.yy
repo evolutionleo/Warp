@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "SendStuff",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "cmd",
-    "path": "folders/Warp/Scripts/cmd.yy",
+  "$GMScript":"v1",
+  "%Name":"SendStuff",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"SendStuff",
+  "parent":{
+    "name":"cmd",
+    "path":"folders/Warp/Scripts/cmd.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

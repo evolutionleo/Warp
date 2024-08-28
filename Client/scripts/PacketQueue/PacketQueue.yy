@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "PacketQueue",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "util",
-    "path": "folders/Warp/Scripts/util.yy",
+  "$GMScript":"v1",
+  "%Name":"PacketQueue",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"PacketQueue",
+  "parent":{
+    "name":"util",
+    "path":"folders/Warp/Scripts/util.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

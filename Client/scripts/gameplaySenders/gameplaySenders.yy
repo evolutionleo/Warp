@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "gameplaySenders",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "senders",
-    "path": "folders/Warp/Scripts/cmd/senders.yy",
+  "$GMScript":"v1",
+  "%Name":"gameplaySenders",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"gameplaySenders",
+  "parent":{
+    "name":"senders",
+    "path":"folders/Warp/Scripts/cmd/senders.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }

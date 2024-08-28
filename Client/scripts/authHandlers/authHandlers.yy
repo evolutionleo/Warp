@@ -1,11 +1,13 @@
 {
-  "resourceType": "GMScript",
-  "resourceVersion": "1.0",
-  "name": "authHandlers",
-  "isCompatibility": false,
-  "isDnD": false,
-  "parent": {
-    "name": "handlers",
-    "path": "folders/Warp/Scripts/cmd/handlers.yy",
+  "$GMScript":"v1",
+  "%Name":"authHandlers",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"authHandlers",
+  "parent":{
+    "name":"handlers",
+    "path":"folders/Warp/Scripts/cmd/handlers.yy",
   },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
 }
