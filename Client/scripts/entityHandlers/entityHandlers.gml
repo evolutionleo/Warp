@@ -1,6 +1,5 @@
 // a list of entities
 addHandler("entities", function(data) {
-	//if (use_timestamps(data)) return;
 	
 	// don't spawn in entities if we're not playing (e.x in menus)
 	if (!global.playing) {
@@ -44,11 +43,12 @@ addHandler("entity remove", function(data) {
 	if (use_timestamps(data))
 		return;
 	
-	trace("entity remove: %", data.id)
-	
 	var uuid = data.id
 	var obj = asset_get_index(data.obj)
 	var inst = find_by_uuid(uuid, obj)
+	
+	if (instance_exists(oEntityManager))
+		oEntityManager.entities_to_remove[$ uuid] = true
 	
 	if (instance_exists(inst))
 		instance_destroy(inst)

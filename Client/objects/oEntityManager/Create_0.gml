@@ -10,6 +10,8 @@ base_update = -1
 next_update = -1
 third_update = -1
 
+entities_to_remove = {}
+
 interpolateEntity = function(t, t1, inst, t2, s2, t3, s3) {
 	var var_names = variable_struct_get_names(inst.__interpolation)
 	for(var i = 0; i < array_length(var_names); i++) {

@@ -92,24 +92,27 @@ for(i = 0; i < l; i++) {
 	var idx2 = next_e_idx[$ uuid]
 	var idx3 = third_e_idx[$ uuid]
 	
-	var will_exist = !is_undefined(idx2)
+	var will_exist = !is_undefined(idx2) and is_undefined(entities_to_remove[$ uuid])
 	
 	// don't create entities 1 frame before they are gone
 	if (!existed and !will_exist) {
 		continue
 	}
 	
-	var inst = find_or_create(uuid, type, , props)
-				
 	// if it was just created - it's remote
 	if (!existed) {
-		inst.remote = true
-		inst.x = entity.x
-		inst.y = entity.y
+		props.remote = true
 	}
-				
+	
 	if (uuid == global.player_uuid) {
-		inst.remote = false
+		props.remote = false
+	}
+	
+	var inst = find_or_create(uuid, type, , props)
+	
+	if (entities_to_remove[$ uuid]) {
+		instance_destroy(inst)
+		continue
 	}
 	
 	// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
@@ -117,6 +120,8 @@ for(i = 0; i < l; i++) {
 	inst.image_yscale = entity.ys
 	inst.x = entity.x
 	inst.y = entity.y
+	inst.image_angle = entity.a
+	inst.a = entity.a // set for interpolation
 	
 	inst.state = state
 	
