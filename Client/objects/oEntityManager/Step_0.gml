@@ -118,10 +118,9 @@ for(i = 0; i < l; i++) {
 	// the reason I'm not using a with() statement here is because for some reason it is not equivallent to this, and produces weird errors (due to this being called in an Async event)
 	inst.image_xscale = entity.xs
 	inst.image_yscale = entity.ys
+	inst.image_angle = entity.a
 	inst.x = entity.x
 	inst.y = entity.y
-	inst.image_angle = entity.a
-	inst.a = entity.a // set for interpolation
 	
 	inst.state = state
 	

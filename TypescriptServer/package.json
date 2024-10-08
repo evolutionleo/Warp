@@ -14,8 +14,7 @@
         "development": "node . --env=dev",
         "prod": "node . --env=prod",
         "production": "node . --env=prod",
-        "profile": "node --prof --env=dev",
-        "postprofile": "node --profile",
+        "profile": "node out/server.js --prof --env=dev",
         "build": "npx tsc"
     },
     "dependencies": {
