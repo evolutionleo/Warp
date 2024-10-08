@@ -12,7 +12,7 @@ const profileSchema = new Schema({
     last_online: { type: Date, default: Date.now },
     
     friends: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
-    mmr: { type: Number, required: false },
+    mmr: { type: Number, required: false }, // matchmaking rating
     
     
     state: {

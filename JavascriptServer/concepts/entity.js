@@ -2,6 +2,7 @@ import { EventEmitter } from "events";
 import { CircleCollider, BoxCollider, PolygonCollider } from '#concepts/collider';
 
 import { v4 as uuidv4 } from 'uuid';
+import { isDeepStrictEqual } from 'util';
 
 // a thing
 class Entity extends EventEmitter {
@@ -21,7 +22,7 @@ class Entity extends EventEmitter {
     angle = 0;
     
     prev_pos;
-    prev_serialized; // json of serialized entity
+    serialized; // save the last serialized version of this entity (to compare changes)
     
     base_size = { x: 64, y: 64 };
     scale = { x: 1, y: 1 };
@@ -112,10 +113,10 @@ class Entity extends EventEmitter {
         this.emit('update');
         
         // if something changed - send again (add to the room's bundle)
-        const serialized = JSON.stringify(this.serialize());
-        if (serialized != this.prev_serialized || this.sendEveryTick) {
-            this.prev_serialized = serialized;
-            this.send(); // add to the bundle
+        const new_serialized = this.serialize();
+        if (this.sendEveryTick || !isDeepStrictEqual(new_serialized, this.serialized)) {
+            this.serialized = new_serialized;
+            this.send(true); // add to the bundle
         }
     }
     
@@ -187,10 +188,6 @@ class Entity extends EventEmitter {
             this.regenerateCollider(x, y);
         }
         
-        // if (this.size.x != this.prev_size.x || this.size.y != this.prev_size.y) {
-        //     // change the collider scale by the same ratio as the entity scale
-        //     this.collider.setScale(this.collider.scaleX * this.size.x / this.prev_size.x, this.collider.scaleY * this.size.y / this.prev_size.y);
-        // }
         this.collider.setAngle(this.angle);
         this.collider.setPosition(x, y);
         this.tree.updateBody(this.collider);
@@ -278,8 +275,9 @@ class Entity extends EventEmitter {
             y: this.roundedPos(this.y),
             xs: this.xscale,
             ys: this.yscale,
+            a: this.angle,
             spd: this.spd,
-            p: this.props,
+            p: this.props, // uses a getter for props
             st: this.state
         };
     }
@@ -288,8 +286,14 @@ class Entity extends EventEmitter {
         return this.serialize();
     }
     
-    send() {
-        const data = this.bundle();
+    send(cached = false) {
+        let data;
+        
+        if (!cached)
+            data = this.bundle();
+        else
+            data = this.serialized;
+        
         this.room.bundle.push(data);
     }
     
@@ -299,11 +303,6 @@ class Entity extends EventEmitter {
         let w = this.width, h = this.height;
         
         return {
-            // left: x - w/2,
-            // top: y - h/2,
-            // right: x + w/2,
-            // bottom: y + h/2,
-            
             left: x,
             top: y,
             right: x + w,

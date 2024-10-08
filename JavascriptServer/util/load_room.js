@@ -65,6 +65,7 @@ export default function LoadRoom(room_name) {
                     y: inst.y,
                     xs: inst.scaleX,
                     ys: inst.scaleY,
+                    a: inst.rotation,
                     t: type,
                     spd: { x: 0, y: 0 },
                     p: props,

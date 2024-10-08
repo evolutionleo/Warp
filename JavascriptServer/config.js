@@ -90,24 +90,24 @@ const common_config = {
     
     // some fundamental lobby settings
     lobby: {
-        max_players: 100,
-        add_into_play_on_full: true,
-        add_into_play_on_join: false,
+        max_players: 100, // used when creating a lobby with no map/game mode
+        add_into_play_on_full: true,    // true - add all the players into play at the same time once the lobby is filled,
+        add_into_play_on_join: false, // true - add players one by one immediately as they join a lobby
         allow_join_by_id: false,
         close_on_leave: true // close the lobby if a player leaves
     },
     
     room: {
         // .yy room loading
-        rooms_path: '../Client/rooms',
+        rooms_path: '../Client/rooms', // (overriden in prod config)
         warn_on_unknown_entity: false,
         
-        use_starting_room: true,
-        use_last_profile_room: false,
-        use_persistent_position: false,
+        use_starting_room: true, // join config.room.starting_room on start
+        use_last_profile_room: false, // join client.profile.state.room on start if logged in
+        use_persistent_position: false, // load the last x/y from the profile on room join and save them on room leave
         
         starting_room: 'Test Room',
-        rest_timeout: 5,
+        rest_timeout: 5,    // (seconds) - prevents rooms from processing entities
         // when no players are present for a certain amount of time
         // set to -1 to disable this feature
         // (!!! setting to 0 might cause problems and unexpected behaviour !!!)
@@ -116,42 +116,42 @@ const common_config = {
     },
     
     party: {
-        max_members: 5,
+        max_members: 5, // max party size
         leader_only_mm: false // true - only party leader can start matchmaking
     },
     
     matchmaking: {
-        mmr_starting: 1000,
-        mmr_min: 1,
+        mmr_starting: 1000, // the starting mmr given to new players
+        mmr_min: 1, // can't go below this
         
-        mmr_scale: 1000,
+        mmr_scale: 1000, // lower number = less effect opponent's mmr has on mmr change
         // (chess uses 400, meaning a player with 400 mmr more is on average 10x more likely to win)
-        mmr_max_gain: 50,
-        mmr_max_difference: 500,
+        mmr_max_gain: 50, // the maximum possible amount of mmr that a player can gain after a single game, winning against an equal opponent will give half of this
+        mmr_max_difference: 500, // can't ever register a ranked match with players' mmr difference more than this
         
         process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms
     },
     
-    tps: 20,
+    tps: 20, // tickrate
     
     // Disable some of the features that you don't need in your game
     // true = enabled, false = disabled
-    timestamps_enabled: true,
-    ws_enabled: true,
-    db_enabled: true,
-    shell_enabled: false,
-    rooms_enabled: true,
-    entities_enabled: true,
-    dt_enabled: true,
-    ssl_enabled: false,
-    logging_enabled: true,
-    validation_enabled: true,
-    middleware_enabled: true,
-    matchmaking_enabled: true,
+    timestamps_enabled: true, // send timestamps with each packet (there is a client-side config as well)
+    ws_enabled: true, // websocket server?
+    db_enabled: true, // MongoDB support
+    shell_enabled: false, // toggles a console that allows code execution while running the game (better to change this in prod/dev configs rather than here)
+    rooms_enabled: true, // toggles lobbies being split into rooms (sub-lobbies with entities)
+    entities_enabled: true, // toggles loading/spawning entities
+    dt_enabled: true, // toggles delta time for entity physics
+    ssl_enabled: false, // SSL support. false by default (best set in the prod/dev configs)
+    logging_enabled: true, // whether or not to log trace()'d messages to server_log.txt
+    validation_enabled: true, // validate the incoming commands using ValidatorJS's validators
+    middleware_enabled: true, // middleware to execute before some packets are handled
+    matchmaking_enabled: true, // use the matchmaking system with queues and tickets
     
-    verbose_lag: false,
+    verbose_lag: false, // logs warning messages to chat when a game tick is taking longer than expected
     
-    necessary_login: false,
+    necessary_login: false, // if true, won't allow a client to join any lobby before logging in
     
     ping_interval: 5 * 1000
 };
@@ -161,7 +161,7 @@ const prod_config = {
         server: 'production'
     },
     env_name: 'prod',
-    ip: '0.0.0.0',
+    ip: '0.0.0.0', // you need to replace this with your domain if using ssl for it to work
     port: parseInt(args.port) || 1337,
     ws_port: parseInt(args.ws_port) || 3000,
     
@@ -174,7 +174,7 @@ const prod_config = {
     ssl_cert_path: '/etc/letsencrypt/live/example.com/cert.pem',
     ssl_key_path: '/etc/letsencrypt/live/example.com/privkey.pem',
     
-    db: args.db || 'mongodb://127.0.0.1:27017/warp-game',
+    db: args.db || 'mongodb://127.0.0.1:27017/warp-game', // by default it uses the same db name for dev/prod, but
     // you can add a postfix at the end of the name to separate them
     shell_enabled: false,
     verbose_lag: false,
