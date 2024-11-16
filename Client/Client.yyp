@@ -59,6 +59,7 @@
     {"id":{"name":"fTitle","path":"fonts/fTitle/fTitle.yy",},},
     {"id":{"name":"ProjectStructure","path":"notes/ProjectStructure/ProjectStructure.yy",},},
     {"id":{"name":"oBox","path":"objects/oBox/oBox.yy",},},
+    {"id":{"name":"oChatManager","path":"objects/oChatManager/oChatManager.yy",},},
     {"id":{"name":"oClient","path":"objects/oClient/oClient.yy",},},
     {"id":{"name":"oDemo","path":"objects/oDemo/oDemo.yy",},},
     {"id":{"name":"oDualInstance","path":"objects/oDualInstance/oDualInstance.yy",},},

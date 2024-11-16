@@ -1,7 +1,7 @@
 // All the macro/config definitions go here
 // feather ignore GM1038
 
-#macro WARP_VERSION "v6.0.0"
+#macro WARP_VERSION "v7.0.0"
 #macro GAME_VERSION "v1.0.0"
 
 trace("Welcome to Warp % by Evoleo!", WARP_VERSION)
