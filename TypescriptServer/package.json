@@ -1,12 +1,10 @@
 {
     "name": "warp-server",
-    "version": "6.0.0",
+    "version": "7.0.0",
     "private": true,
     "description": "",
     "main": "out/server.js",
-    "author": {
-        "name": "Evoleo"
-    },
+    "author": "Evoleo",
     "type": "module",
     "scripts": {
         "debug": "node --inspect . --env=dev",
@@ -21,25 +19,16 @@
         "@msgpack/msgpack": "^2.8.0",
         "chalk": "^5.2.0",
         "detect-collisions": "7.0.5",
-        "extend": "^3.0.2",
         "fastest-validator": "^1.16.0",
         "minimist": "^1.2.8",
-        "module-alias": "^2.2.2",
-        "mongoose": "^7.0.3",
-        "performance-now": "^2.1.0",
-        "rbush": "3.0.1",
+        "mongoose": "^8.8.1",
         "semver": "^7.3.8",
-        "uuid": "^9.0.0",
         "ws": "^8.13.0"
     },
     "devDependencies": {
-        "@types/minimist": "^1.2.2",
         "@types/node": "^18.15.11",
-        "@types/rbush": "^3.0.0",
         "@types/semver": "^7.3.13",
-        "@types/uuid": "^9.0.1",
         "@types/ws": "^8.5.4",
-        "0x": "^4.1.4",
         "typescript": "^5.0.3"
     },
     "imports": {

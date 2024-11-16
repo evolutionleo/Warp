@@ -4,7 +4,6 @@ import BBox from '#types/bbox';
 import { EventEmitter } from "events";
 import { CircleCollider, BoxCollider, PolygonCollider, Collider } from '#concepts/collider';
 
-import { v4 as uuidv4 } from 'uuid';
 import Client from "#concepts/client";
 import Room from "#concepts/room";
 
@@ -131,7 +130,7 @@ class Entity extends EventEmitter {
 
     constructor(room:Room, x:number = 0, y:number = 0) {
         super();
-        this.id = uuidv4();
+        this.id = crypto.randomUUID();
         this.room = room;
         this.pos = { x, y };
         this.spd = { x: 0, y: 0};
@@ -303,8 +302,8 @@ class Entity extends EventEmitter {
     // removes the entity from the room (and triggers the 'remove' event)
     public remove() {
         this.emit('remove');
-        var pos = this.room.entities.indexOf(this);
-        this.room.entities.splice(pos, 1);
+        let idx = this.room.entities.indexOf(this);
+        this.room.entities.splice(idx, 1);
         this.tree.remove(this.collider);
     }
 

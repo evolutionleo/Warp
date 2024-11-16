@@ -1,7 +1,6 @@
 import { EventEmitter } from "events";
 import { CircleCollider, BoxCollider, PolygonCollider } from '#concepts/collider';
 
-import { v4 as uuidv4 } from 'uuid';
 import { isDeepStrictEqual } from 'util';
 
 // a thing
@@ -89,7 +88,7 @@ class Entity extends EventEmitter {
     
     constructor(room, x = 0, y = 0) {
         super();
-        this.id = uuidv4();
+        this.id = crypto.randomUUID();
         this.room = room;
         this.pos = { x, y };
         this.spd = { x: 0, y: 0 };
