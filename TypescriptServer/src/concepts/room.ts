@@ -94,7 +94,6 @@ class Room extends EventEmitter {
         this.width = this.level.width;
         this.height = this.level.height;
         
-        // this.tree = new MyRBush(7);
         this.tree = new System();
 
 
@@ -214,11 +213,12 @@ class Room extends EventEmitter {
         }
 
 
+        let entity: Entity;
         if (client === null) {
-            var entity = new etype(this, x, y);
+            entity = new etype(this, x, y);
         }
         else {
-            var entity = new (etype as PlayerEntityConstructor)(this, x, y, client);
+            entity = new (etype as PlayerEntityConstructor)(this, x, y, client);
         }
 
         entity.create();

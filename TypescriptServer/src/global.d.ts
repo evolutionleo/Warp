@@ -29,5 +29,5 @@ declare global {
     var start_time:number;
 
     var packet_middleware:{[key:string]: Middleware[]};
-    var cmd_validators:{[key:string]: ValidatorFunction}
+    var cmd_validators:{[key:string]: ValidatorFunction};
 }

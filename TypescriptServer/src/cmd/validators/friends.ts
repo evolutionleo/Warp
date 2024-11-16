@@ -1,6 +1,6 @@
 import { addMiddleware } from "#cmd/middleware";
 import { addValidator } from "#cmd/validator";
-import { getProfileByName } from "#schemas/profile";
+import { getProfileByName } from "#util/auth";
 
 
 let friend_cmds = ['friend req accept', 'friend req reject', 'friend req send', 'friend add', 'friend remove', 'friend req cacnel'];

@@ -6,16 +6,14 @@ import Point from '#types/point';
 import PhysicsEntity, { OutsideRoomAction, CollisionType, StuckAction } from '#entities/physics_entity';
 
 export type PlayerInputs = {
-    keys: {
-        kright: number,
-        kleft: number,
-        kup: number,
-        kdown: number,
-        kjump: boolean,
-        kjump_rel: boolean,
-        kjump_press: boolean
-    }
-    move: Point;
+    kright: number,
+    kleft: number,
+    kup: number,
+    kdown: number,
+    kjump: boolean,
+    kjump_rel: boolean,
+    kjump_press: boolean,
+    move: Point
 }
 
 export const defaultInputs:PlayerInputs = {
@@ -23,16 +21,14 @@ export const defaultInputs:PlayerInputs = {
         x: 0,
         y: 0
     },
-    keys: {
-        kright: 0,
-        kleft: 0,
-        kup: 0,
-        kdown: 0,
+    kright: 0,
+    kleft: 0,
+    kup: 0,
+    kdown: 0,
 
-        kjump: false,
-        kjump_rel: false,
-        kjump_press: false
-    }
+    kjump: false,
+    kjump_rel: false,
+    kjump_press: false
 };
 
 
@@ -98,11 +94,11 @@ export default class PlayerEntity extends PhysicsEntity {
 
         this.spd.x = this.inputs.move.x * this.walksp;
 
-        if (this.inputs.keys.kjump && this.grounded()) {
+        if (this.inputs.kjump && this.grounded()) {
             this.jump();
         }
 
-        if (!this.inputs.keys.kjump && !this.cut_jump && !this.grounded() && this.spd.y <= -1) {
+        if (!this.inputs.kjump && !this.cut_jump && !this.grounded() && this.spd.y <= -1) {
             this.spd.y /= 2;
             this.cut_jump = true;
         }

@@ -2,9 +2,16 @@ import trace from '#util/logging';
 import chalk from 'chalk';
 import { SendStuff } from '#cmd/sendStuff';
 
-import { Profile, IProfile, freshProfile, getProfileInfo } from '#schemas/profile';
-import { Account, IAccount } from '#schemas/account';
+import { SockType, Sock } from '#types/socktype';
+import { Socket as TCPSocket } from 'net';
+import { WebSocket } from 'ws';
+
+import { Profile, IProfile, getProfileInfo } from '#schemas/profile';
+import { Account, IAccount, getAccountInfo } from '#schemas/account';
+import { Session, ISession } from '#schemas/session';
 import { FriendRequest, IFriendRequest } from '#schemas/friend_request';
+
+import { accountLogin, accountRegister, profileCreate } from '#util/auth';
 
 import IClient from '#types/client_properties';
 
@@ -13,7 +20,6 @@ import Room from '#concepts/room';
 import Party, { partyCreate, partyGet } from '#matchmaking/party';
 
 import PlayerEntity from '#entities/player';
-import { SockType, Sock } from '#types/socktype';
 import MatchMaker from '#matchmaking/matchmaker';
 import Ticket, { MatchRequirements } from '#matchmaking/ticket';
 import Match, { MatchOutcome } from '#matchmaking/match';
@@ -28,15 +34,18 @@ export type ClientInfo = {
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff implements IClient {
+    /** @type {boolean} */
+    connected: boolean;
+
     /** @type {string} */
     name: string = '';
     /** @type {string} */
     temp_id: string; // a temporary randomly generated id string
 
-    /** @type {import('ws').WebSocket | import('net').Socket} */
+    /** @type {WebSocket | TCPSocket} */
     socket: Sock = null;
     /** @type {'ws' | 'tcp'} */
-    type: SockType;
+    socket_type: SockType;
     ip: string;
     
     /** @type {Lobby} */
@@ -57,10 +66,15 @@ export default class Client extends SendStuff implements IClient {
     account: IAccount = null;
     /** @type {Profile} */
     profile: IProfile = null;
+    /** @type {ISession} */
+    session: ISession = null;
 
     // used internally in packet.ts
     /** @type {Buffer} */
     halfpack: Buffer;
+
+    /** @type {any[]} */
+    packetQueue: any[];
 
     /** @type {PlayerEntity} */
     entity: PlayerEntity = null;
@@ -85,19 +99,18 @@ export default class Client extends SendStuff implements IClient {
             this.profile.mmr = Math.max(_mmr, global.config.matchmaking.mmr_min);
     }
 
-    constructor(socket:Sock, type:SockType = 'tcp') {
+    constructor(socket:Sock, socket_type:SockType = 'tcp') {
         super();
+        
+        this.connected = true;
 
         // a random 8-digit number string
         this.temp_id = Math.floor(Math.random() * 100_000_000).toString();
         this.temp_id = '0'.repeat(8 - this.temp_id.length) + this.temp_id;
         
         this.socket = socket;
-        this.type = type.toLowerCase() as SockType;
-
-        this.type = type;
+        this.socket_type = socket_type;
         
-        this.socket = socket;
         this.lobby = null; // no lobby
 
         // these are the objects that contain all the meaningful data
@@ -123,8 +136,7 @@ export default class Client extends SendStuff implements IClient {
      * @param {Lobby} lobby
      * @param {string=} reason
      */
-    onLobbyReject(lobby:Lobby, reason?:string) {
-        reason ??= 'lobby is full!';
+    onLobbyReject(lobby:Lobby, reason:string = 'lobby is full!') {
         this.sendLobbyReject(lobby, reason);
     }
 
@@ -185,7 +197,7 @@ export default class Client extends SendStuff implements IClient {
         }
 
         // find a room to join
-        var room:Room = null;
+        let room:Room = null;
 
         // join the room last visited (saved in profile)
         if (global.config.room.use_last_profile_room && this.logged_in && this.profile.state.room) {
@@ -218,13 +230,28 @@ export default class Client extends SendStuff implements IClient {
         }
     }
 
+    disconnect() {
+        if (this.socket_type === 'ws') {
+            (this.socket as WebSocket).close();
+        }
+        else {
+            (this.socket as TCPSocket).destroy();
+        }
+
+        this.socket = null;
+        this.connected = false;
+    }
+
     onDisconnect() {
+        
         // go offline
         if (this.logged_in) {
             this.profile.online = false;
             this.profile.last_online = new Date();
         }
+    }
 
+    destroy() {
         // save everything to the DB
         this.save();
 
@@ -235,6 +262,24 @@ export default class Client extends SendStuff implements IClient {
             this.lobby.kickPlayer(this, 'disconnect', true);
         if  (this.party)
             this.party.kickMember(this, 'disconnect', true);
+
+
+        global.clients.splice(global.clients.indexOf(this), 1);
+    }
+
+    // insert this socket into a "dead" (disconnected) client
+    replace(old_client: Client) {
+        if (old_client.connected) {
+            return null;
+        }
+
+        old_client.socket = this.socket;
+        old_client.socket_type = this.socket_type;
+
+        // delete self from the list
+        global.clients.splice(global.clients.indexOf(this), 1);
+
+        return old_client;
     }
 
 
@@ -251,7 +296,7 @@ export default class Client extends SendStuff implements IClient {
 
 
     lobbyJoin(lobbyid?:string) {
-        var lobby:Lobby;
+        let lobby:Lobby;
         if (lobbyid) {
             lobby = lobbyFind(lobbyid);
         }
@@ -267,7 +312,7 @@ export default class Client extends SendStuff implements IClient {
         if (!this.logged_in)
             return [];
 
-        return (await Profile.findById(this.profile._id).populate<{ friends: IProfile[] }>('friends')).friends;
+        return (await Profile.findById(this.profile.id).populate<{ friends: IProfile[] }>('friends')).friends;
     }
 
     async getFriendIds() {
@@ -279,20 +324,20 @@ export default class Client extends SendStuff implements IClient {
 
     async getIncomingFriendRequests():Promise<IProfile[]> {
         if (!this.logged_in) return [];
-        return await FriendRequest.findIncoming(this.profile._id);
+        return await FriendRequest.findIncoming(this.profile.id);
     }
 
     async getOutgoingFriendRequests():Promise<IProfile[]> {
         if (!this.logged_in) return [];
-        return await FriendRequest.findOutgoing(this.profile._id);
+        return await FriendRequest.findOutgoing(this.profile.id);
     }
 
     async friendCanAdd(friend: Client|IProfile): Promise<boolean> {
         friend = friend instanceof Client ? friend.profile : friend;
         if (!this.logged_in) return false;
 
-        let this_id = this.profile._id;
-        let friend_id = friend._id;
+        let this_id = this.profile.id;
+        let friend_id = friend.id;
 
         return this_id != friend_id && !(await this.getFriendIds()).includes(friend_id);
     }
@@ -306,8 +351,8 @@ export default class Client extends SendStuff implements IClient {
         if (!this.logged_in) return false;
         if (!await this.friendCanAdd(friend)) return false;
 
-        let sender_id = this.profile._id;
-        let receiver_id = friend._id;
+        let sender_id = this.profile.id;
+        let receiver_id = friend.id;
 
         let friend_exists = this.profile.friends.some(friend_id => friend_id === receiver_id);
         if (friend_exists) { // already friends
@@ -342,8 +387,8 @@ export default class Client extends SendStuff implements IClient {
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         if (!this.logged_in) return null;
 
-        let sender = this.profile._id;
-        let receiver = user_to._id;
+        let sender = this.profile.id;
+        let receiver = user_to.id;
 
         return await FriendRequest.create({ sender, receiver });
     }
@@ -357,7 +402,7 @@ export default class Client extends SendStuff implements IClient {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         user_to = user_to instanceof Client ? user_to.profile : user_to;
 
-        return await FriendRequest.findRequestId(user_from._id, user_to._id);
+        return await FriendRequest.findRequestId(user_from.id, user_to.id);
     }
 
     /**
@@ -417,8 +462,8 @@ export default class Client extends SendStuff implements IClient {
         friend = friend instanceof Client ? friend.profile : friend;
         if (!this.logged_in) return false;
 
-        let my_id = this.profile._id;
-        let friend_id = friend._id;
+        let my_id = this.profile.id;
+        let friend_id = friend.id;
 
         // delete from each others' profiles
         await Profile.findByIdAndUpdate(my_id, { $pull: { friends: friend_id }});
@@ -508,7 +553,6 @@ export default class Client extends SendStuff implements IClient {
                 });
         }
         if (this.profile !== null) {
-
             // save the current lobbyid
             if (this.lobby !== null) {
                 this.profile.state.lobbyid = this.lobby.lobbyid;
@@ -527,67 +571,29 @@ export default class Client extends SendStuff implements IClient {
     /**
      * @param {Account} account
      */
-    register(account:IAccount) {
+    async register(account:IAccount) {
+        account.temporary = false;
+
         this.account = account;
-        this.profile = freshProfile(account);
+        this.profile = profileCreate(account);
+
+        await this.account.save();
+        await this.profile.save();
 
         this.onLogin();
-        this.sendRegister('success');
     }
-
-
-    /**
-     * @param {string} username
-     * @param {string} password
-     */
-    tryLogin(username:string, password:string) {
-        let c = this;
-
-        Account.login(username, password)
-        .then((account:IAccount) => {
-            // this also sends the message
-            c.login(account);
-        }).catch((reason) => {
-            c.sendLogin('fail', reason);
-        });
-    }
-
-    /**
-     * @param {string} username
-     * @param {string} password
-     */
-    tryRegister(username:string, password:string) {
-        let c = this;
-
-        Account.register(username, password)
-        .then((account:IAccount) => {
-            // this also sends the message
-            c.register(account);
-        }).catch((reason:Error) => {
-            trace('error: ' + reason);
-            c.sendRegister('fail', reason.toString());
-        });
-    }
-
+    
     /**
      * @param {Account} account
      */
-    login(account:IAccount) {
-        let c = this;
+    async login(account:IAccount) {
         this.account = account;
 
-        Profile.findOne({
-            account_id: this.account._id
-        }).then((profile) => {
-            if (profile) {
-                this.profile = profile;
-                c.onLogin();
-                c.sendLogin('success');
-            }
-            else {
-                trace('Error: Couldn\'t find a profile with these credentials!');
-            }
+        this.profile = await Profile.findOne({
+            account_id: this.account.id
         });
+
+        this.onLogin();
     }
 
     // you add any new methods below

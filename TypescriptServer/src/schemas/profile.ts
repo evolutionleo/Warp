@@ -1,7 +1,5 @@
 // This schema is for profiles
-import mongoose, { Document, ObjectId, Model } from 'mongoose';
-const { model, Schema } = mongoose;
-import { Account, IAccount } from '#schemas/account';
+import { model, Schema, Document, ObjectId, Model } from 'mongoose';
 
 export interface IProfile extends Document {
     account_id: ObjectId,
@@ -36,37 +34,21 @@ const profileSchema = new Schema<IProfile>({
 
 
     state: {
-        lobbyid: String,
-        room: String,
+        lobbyid: { type: String, required: false },
+        room: { type: String, required: false },
     
         x: Number,
         y: Number,
 
-        //hp: Number
+        state: Number
     }
 
     // you can add additional properties to the schema here:
-}, {collection: 'Profiles'});
+});
 
 
-export const Profile:Model<IProfile> = model<IProfile>('Profile', profileSchema);
-
+export const Profile:Model<IProfile> = model<IProfile>('Profile', profileSchema, 'Profiles');
 export default Profile;
-export function freshProfile(account:IAccount):IProfile { // for when just registered
-    return new Profile({
-        account_id: account._id,
-        name: account.username,
-        mmr: global.config.matchmaking.mmr_starting,
-
-        state: {
-            lobbyid: '',
-            room: '',
-    
-            x: 0,
-            y: 0
-        }
-    });
-}
 
 
 
@@ -78,7 +60,7 @@ export type ProfileInfo = {
     last_online: string,
 
     mmr: number
-};
+}
 
 // like profile, but only the data that is useful for sending
 export function getProfileInfo(p: IProfile):ProfileInfo {
@@ -91,8 +73,4 @@ export function getProfileInfo(p: IProfile):ProfileInfo {
         last_online: p.last_online.toISOString(),
         mmr: p.mmr
     };
-}
-
-export async function getProfileByName(name: string):Promise<IProfile> {
-    return await Profile.findOne({ name });
 }

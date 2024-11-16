@@ -1,3 +1,7 @@
+addHandler("match finding", function(data) {
+	trace("started matchmaking!")
+})
+
 addHandler("match found", function(data) {
 	var match = data.match
 	

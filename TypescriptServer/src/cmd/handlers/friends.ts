@@ -18,7 +18,7 @@ addHandler('friend list', async (c, data) => {
 });
 
 addHandler('friend req send', (c, data) => {
-    if (!c.profile.friends.includes((data.friend as IProfile)._id) && !FriendRequest.exists({ sender: data.friend._id }))
+    if (!c.profile.friends.includes((data.friend as IProfile).id) && !FriendRequest.exists({ sender: data.friend.id }))
         c.friendRequestSend(data.friend);
     
     c.send({ cmd: 'friend req sent', to: data.friend.name });

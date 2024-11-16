@@ -12,16 +12,19 @@ import chalk from 'chalk';
 import Party from '#matchmaking/party';
 import IClient from '#types/client_properties';
 import Match from '#matchmaking/match';
+import { ISession } from '#schemas/session';
 
 
 // sender functions can be later called using some_client.sendThing()
 // in handlePacket.js or wherever else where you have client objects
 
 export abstract class SendStuff implements IClient {
+    abstract connected: boolean;
+
     abstract name: string;
     abstract temp_id: string;
     abstract socket: Sock;
-    abstract type: SockType;
+    abstract socket_type: SockType;
      
     abstract lobby: Lobby;
     abstract room: Room;
@@ -30,7 +33,9 @@ export abstract class SendStuff implements IClient {
 
     abstract account: IAccount;
     abstract profile: IProfile;
+    abstract session: ISession;
 
+    abstract packetQueue: any[];
     abstract halfpack: Buffer;
     abstract entity: PlayerEntity;
 
@@ -45,12 +50,20 @@ export abstract class SendStuff implements IClient {
      * basic send
      * @param {any} data 
      */
-    write(data:any) {
+    write(data:any, shouldQueue:boolean = false) {
+        if (!this.connected) {
+            if (shouldQueue) {
+                this.packetQueue.push(data);
+            }
+
+            return;
+        }
+
         if (global.config.timestamps_enabled) { // { t: ms passed since the server started }
             data.t = Date.now() - global.start_time;
         }
 
-        if (this.type === 'ws') {
+        if (this.socket_type === 'ws') {
             (this.socket as ws).send(packet.ws_build(data));
         }
         else {

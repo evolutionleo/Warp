@@ -76,7 +76,7 @@ const common_config = {
     meta: {
         game_name: 'Warp Game',
         game_version: 'v1.0.0',
-        warp_version: 'v6.0.0',
+        warp_version: 'v7.0.0',
 
         compatible_game_versions: '>=1.0.0',
 
@@ -132,6 +132,15 @@ const common_config = {
         process_interval: 1 * 1000 // matchmaking: attempt to create new matches every X ms
     },
 
+    db: {
+        path: 'mongodb://127.0.0.1:27017/',
+        name: 'warp-game' // by default it uses the same db name for dev/prod, but you can use separate ones
+    },
+
+    login: {
+        kick_other_sessions: true
+    },
+
     tps: 20, // tickrate
 
     // Disable some of the features that you don't need in your game
@@ -153,7 +162,8 @@ const common_config = {
     
     necessary_login: false, // if true, won't allow a client to join any lobby before logging in
 
-    ping_interval: 5 * 1000
+    ping_interval: 5 * 1000,
+    reconnect_timeout: 10 * 1000 // keep a "dead" client in all the lobbies after socket disconnecting, waiting to reconnect with the same account
 }
 
 const prod_config = {
@@ -174,8 +184,6 @@ const prod_config = {
     ssl_cert_path: '/etc/letsencrypt/live/example.com/cert.pem',
     ssl_key_path: '/etc/letsencrypt/live/example.com/privkey.pem',
 
-    db: args.db || 'mongodb://127.0.0.1:27017/warp-game', // by default it uses the same db name for dev/prod, but
-                                                             // you can add a postfix at the end of the name to separate them
     shell_enabled: false,
     verbose_lag: false,
 
@@ -196,8 +204,6 @@ const dev_config = {
     ssl_enabled: false,
     ssl_cert_path: '',
     ssl_key_path: '',
-
-    db: args.db || 'mongodb://127.0.0.1:27017/warp-game',
     
     shell_enabled: true,
     verbose_lag: true,

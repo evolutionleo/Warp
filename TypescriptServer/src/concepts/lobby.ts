@@ -12,11 +12,11 @@ import Match from '#matchmaking/match';
 
 // note: only create lobbies with createLobby(), don't call the constructor directly
 export function lobbyCreate(map:GameMap) { // returns the lobby instance
-    var lobby = new Lobby(map);
+    let lobby = new Lobby(map);
 
     while(true) {
         // a random 6-digit number
-        var lobbyid = crypto.randomInt(100000, 999999).toString();
+        let lobbyid = crypto.randomInt(100000, 999999).toString();
         if (lobbyid in global.lobbies) { // just in case of a collision
             continue;
         }
@@ -39,7 +39,7 @@ export function lobbyExists(lobbyid:string) {
 }
 
 export function lobbyDelete(lobbyid:string) {
-    var lobby = global.lobbies[lobbyid];
+    let lobby = global.lobbies[lobbyid];
     lobby.close();
 
     delete global.lobbies[lobbyid];
@@ -181,7 +181,7 @@ export default class Lobby extends EventEmitter {
                     team.splice(idx, 1);
             });
     
-            var idx = this.players.indexOf(player);
+            let idx = this.players.indexOf(player);
             this.players.splice(idx, 1);
             player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
             player.onLobbyLeave(this, reason, forced);

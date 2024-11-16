@@ -7,8 +7,12 @@ import Party from '#matchmaking/party';
 import PlayerEntity from '#entities/player';
 import { Sock, SockType } from './socktype';
 import Match from '#matchmaking/match';
+import { ISession } from '#schemas/session';
 
 export default interface IClient {
+    /** @type {boolean} */
+    connected: boolean;
+
     /** @type {string} */
     name: string;
     /** @type {string} */
@@ -17,7 +21,7 @@ export default interface IClient {
     /** @type {import('ws').WebSocket | import('net').Socket} */
     socket: Sock;
     /** @type {'ws' | 'tcp'} */
-    type: SockType;
+    socket_type: SockType;
     
     /** @type {Lobby} */
     lobby: Lobby;
@@ -36,9 +40,14 @@ export default interface IClient {
     account: IAccount;
     /** @type {Profile} */
     profile: IProfile;
+    /** @type {ISession} */
+    session: ISession;
 
+    // used internally in packet.ts
     /** @type {Buffer} */
-    halfpack: Buffer; // used internally in packet.ts
+    halfpack: Buffer;
+    /** @type {any[]} */
+    packetQueue: any[];
 
     /** @type {PlayerEntity} */
     entity: PlayerEntity;

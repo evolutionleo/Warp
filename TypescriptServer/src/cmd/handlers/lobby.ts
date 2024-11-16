@@ -7,7 +7,7 @@ addHandler('lobby list', (c) => {
 });
 
 addHandler('lobby info', (c, data) => {
-    var lobbyid = data.lobbyid;
+    const lobbyid = data.lobbyid;
     if (lobbyExists(lobbyid))
         c.sendLobbyInfo(lobbyid);
 });
@@ -16,13 +16,13 @@ addHandler('lobby join', (c, data) => {
     if (!global.config.lobby.allow_join_by_id)
         return;
 
-    var lobbyid = data.lobbyid;
+    const lobbyid = data.lobbyid;
     if (lobbyExists(lobbyid))
         c.lobbyJoin(lobbyid);
 });
 
 addHandler('lobby leave', (c, data) => {
-    var lobby:Lobby = c.lobby;
+    let lobby:Lobby = c.lobby;
     if (lobby !== null) {
         lobby.kickPlayer(c, 'you left the lobby', false);
     }

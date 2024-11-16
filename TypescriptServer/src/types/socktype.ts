@@ -1,7 +1,7 @@
 import { WebSocket } from 'ws';
-import { Socket } from 'net';
+import { Socket as TCPSocket } from 'net';
 
 type SockType = 'tcp' | 'ws';
-type Sock = WebSocket | Socket;
+type Sock = TCPSocket | WebSocket;
 export { Sock, SockType };
 export default SockType;

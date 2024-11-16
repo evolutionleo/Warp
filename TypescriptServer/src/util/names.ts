@@ -22,4 +22,8 @@ export class Names {
         s = '0'.repeat(3 - s.length) + s;
         return 'Guest' + s;
     }
+
+    static next = this.getDefaultName;
+    static get = this.getDefaultName;
+    static generate = this.getDefaultName;
 }

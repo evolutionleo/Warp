@@ -1,6 +1,4 @@
-import mongoose, { Model, Document, ObjectId } from 'mongoose';
-const { model, Schema } = mongoose;
-import { Account, IAccount } from '#schemas/account';
+import { model, Schema, Model, Document, ObjectId } from 'mongoose';
 import Profile, { IProfile } from '#schemas/profile';
 
 export interface IFriendRequest extends Document {
@@ -26,15 +24,15 @@ const friendRequestSchema = new Schema({
 }, {collection: 'FriendRequests'});
 
 friendRequestSchema.statics.findIncoming = async function(profile_id:OID):Promise<IProfile[]> {
-    return await (await FriendRequest.find({ receiver: profile_id }).populate<{ sender: IProfile }>('sender')).map(req => req.sender);
+    return (await FriendRequest.find({ receiver: profile_id }).populate<{ sender: IProfile }>('sender')).map(req => req.sender);
 }
 
 friendRequestSchema.statics.findOutgoing = async function(profile_id:OID):Promise<IProfile[]> {
     return (await FriendRequest.find({ sender: profile_id }).populate<{ receiver: IProfile }>('receiver')).map(req => req.receiver);
 }
 
-friendRequestSchema.statics.findRequestId = async function(sender:OID, receiver:OID):Promise<IFriendRequest> {
-    return (await FriendRequest.exists({ sender, receiver }))._id;
+friendRequestSchema.statics.findRequestId = async function(sender:OID, receiver:OID):Promise<ObjectId> {
+    return (await FriendRequest.findOne({ sender, receiver })).id;
 }
 
 friendRequestSchema.statics.requestExists = async function(sender:OID, receiver:OID):Promise<boolean> {

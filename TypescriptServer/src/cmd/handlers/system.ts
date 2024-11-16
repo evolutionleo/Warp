@@ -13,7 +13,7 @@ addHandler('client info', (c, data) => {
 
     const client_game_version = data.game_version;
     const client_warp_version = data.warp_version;
-    const compatible_versions = global.config.meta.compatible_game_versions
+    const compatible_versions = global.config.meta.compatible_game_versions;
     const warp_version = global.config.meta.warp_version;
 
     const warp_version_match = semver.cmp(client_warp_version, '=', warp_version);
@@ -30,7 +30,7 @@ addHandler('client info', (c, data) => {
         // immediately close the socket after 1 last packet
         setImmediate(() => {
             // close the socket
-            if (c.type == 'tcp') {
+            if (c.socket_type == 'tcp') {
                 const s = c.socket as TCPSocket;
                 s.destroy();
             }

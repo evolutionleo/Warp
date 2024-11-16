@@ -29,10 +29,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const init_files = fs.readdirSync(__dirname + '/initializers', 'utf8');
 
 // synchronous loading, because order matters
-for(var i = 0; i < init_files.length; i++) {
-    var file = init_files[i];
+for(let i = 0; i < init_files.length; i++) {
+    let file = init_files[i];
     trace(chalk.blueBright('loading initializer:', file));
-    await import("file://" + __dirname + '/initializers/' + file);
+    await await import("file://" + __dirname + '/initializers/' + file);
 }
 trace(chalk.blueBright('loaded initializers!'));
 
@@ -47,7 +47,7 @@ trace(chalk.greenBright(`Running ${config.meta.game_name} ${config.meta.game_ver
 const server = createServer(function(socket) {
     trace(chalk.blueBright("Socket connected!"));
     
-    var c = new Client(socket);
+    const c = new Client(socket);
     global.clients.push(c); // add the client to clients list (unnecessary)
     c.ip = socket.remoteAddress;
     
@@ -78,8 +78,8 @@ const server = createServer(function(socket) {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        global.clients.splice(global.clients.indexOf(c), 1);
-        trace(chalk.red('Socket closed.'));
+        
+        trace(chalk.red('Socket disconnected.'));
     })
 });
 
@@ -115,7 +115,7 @@ const ws_server = new ws.WebSocketServer({
 ws_server.on('connection', function(socket, r) {
     trace(chalk.blueBright("WebSocket connected!"));
 
-    var c = new Client(socket, 'ws');
+    const c = new Client(socket, 'ws');
     global.clients.push(c); // add the client to clients list (unnecessary)
     c.ip = r.socket.remoteAddress;
 
@@ -146,8 +146,7 @@ ws_server.on('connection', function(socket, r) {
     // When a socket/connection closed
     socket.on('close', function() {
         c.onDisconnect();
-        global.clients.splice(global.clients.indexOf(c), 1);
-        trace(chalk.yellowBright('WebSocket closed.'));
+        trace(chalk.yellowBright('WebSocket disconnected.'));
     });
 });
 

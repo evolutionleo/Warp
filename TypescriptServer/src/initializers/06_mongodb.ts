@@ -1,24 +1,22 @@
 import trace from '#util/logging';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+import mongoose from 'mongoose';
 
-const mongoose = require('mongoose');
-// import * as mongoose from 'mongoose';
 const { connect, connection } = mongoose;
-const url = global.config.db;
+
+const uri = global.config.db.path + global.config.db.name;
 
 mongoose.set('strictQuery', false);
 
 var _export;
 
 if (global.config.db_enabled) {
-    connect(url, {});
+    connect(uri, {});
 
     const db = connection;
 
     _export = new Promise((resolve, reject) => {
         db.once('open', () => {
-            trace('Database connected:', url);
+            trace('Database connected:', uri);
             resolve(db);
         })
         

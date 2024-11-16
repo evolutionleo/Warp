@@ -4,7 +4,7 @@ import Client from "#concepts/client";
 import trace from "#util/logging";
 
 addHandler('party join', (c, data) => {
-    var partyid = data.partyid;
+    let partyid = data.partyid;
     if (partyExists(partyid))
         c.partyJoin(partyid);
 });
