@@ -17,6 +17,11 @@ export default class WarpPortal extends Entity {
         x: 32,
         y: 32
     }
+    
+    origin = {
+        x: 0.5,
+        y: 0.5
+    }
 
     collider_type = 'box';
 

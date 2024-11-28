@@ -1,5 +1,5 @@
 import trace from '#util/logging';
-import Entity from '#concepts/entity';
+import Entity, { ColliderType } from '#concepts/entity';
 import Client from '#concepts/client';
 import Room from '#concepts/room';
 import Point from '#types/point';
@@ -37,6 +37,9 @@ export default class PlayerEntity extends PhysicsEntity {
     static object_name = 'oPlayer';
 
     collider_type = 'box';
+    // collider_type:ColliderType = 'circle';
+    // collider_radius: number = 16;
+    collider_origin = { x: 0, y: 0 };
 
     collision_type = 'discrete' as CollisionType;
     precise_collisions = true;
@@ -54,6 +57,11 @@ export default class PlayerEntity extends PhysicsEntity {
     scale = {
         x: 2,
         y: 2
+    }
+
+    origin = {
+        x: 0.5,
+        y: 0.5
     }
 
     states = { idle: 0, walk: 1 };

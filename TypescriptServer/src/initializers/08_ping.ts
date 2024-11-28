@@ -1,6 +1,10 @@
 const ping_interval = setInterval(() => {
     global.clients.forEach((c) => {
         c.sendPing();
+        
+        if (c.reconnect_timer < 0) {
+
+        }
     })
 }, global.config.ping_interval);
 
