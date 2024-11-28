@@ -18,8 +18,9 @@ export class Names {
     static guest_counter = 1;
 
     static getDefaultName():string {
-        let s = (this.guest_counter++).toString();
-        s = '0'.repeat(3 - s.length) + s;
+        // let s = (this.guest_counter++).toString();
+        let s = Math.floor(Math.random() * 1000000).toString();
+        s = '0'.repeat(6 - s.length) + s;
         return 'Guest' + s;
     }
 

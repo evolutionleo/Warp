@@ -4,7 +4,9 @@ function onConnect() {
 	sendHello()
 	sendClientInfo()
 	sendRequestTime()
-	sendNameGet()
+	//sendNameGet()
+	
+	sendSession()
 }
 
 function onDisconnect() {

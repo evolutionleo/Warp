@@ -30,19 +30,48 @@ addHandler("register", function(data) {
 })
 
 
-addHandler("session create", function(data) {
+
+var sessionHandler = function(data) {
 	if (data.success) {
-		var file = file_text_open_write("session.token")
-		file_text_write_string(file, data.session)
+		var session = data.session
+		
+		// we save the history of all old sessions just in case
+		if (file_exists(SESSION_FILE) and OLD_SESSIONS_FILE != "") {
+			var f1 = file_text_open_read(SESSION_FILE)
+			var f2 = file_text_open_append(OLD_SESSIONS_FILE)
+			file_text_write_string(f2, file_text_read_string(f1))
+			file_text_writeln(f2)
+			file_text_close(f1)
+			file_text_close(f2)
+		}
+		
+		// write the new received session
+		var file = file_text_open_write(SESSION_FILE)
+		file_text_write_string(file, session)
 		file_text_close(file)
+		
+		global.session = session
+		
+		if (data.cmd == "session create") {
+			trace("Session created successfully.")
+		}
+		else if (data.cmd == "session login") {
+			trace("Session login successful.")
+		}
 	}
 	else {
-		trace("Failed to create a session. Reason: %", data.reason)
+		if (data.cmd == "session create") {
+			trace("Failed to create a session. Reason: %", data.reason)
+		}
+		else if (data.cmd == "session login") {
+			trace("Failed to login with a session. Reason: %", data.reason)
+			
+			// create a new session if the old one didn't work
+			//sendSessionCreate()
+		}
 	}
-})
+}
 
-addHandler("session login", function(data) {
-	var success = data.success
-	
-	
-})
+
+addHandler("session create", sessionHandler)
+addHandler("session login", sessionHandler)

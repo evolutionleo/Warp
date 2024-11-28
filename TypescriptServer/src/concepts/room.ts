@@ -271,7 +271,8 @@ class Room extends EventEmitter {
             }
             // find a new start position
             else {
-                const p = this.level.getStartPos(this.players.length-1);
+                // const p = this.level.getStartPos(this.players.length-1);
+                const p = this.level.getStartPos(this.players.indexOf(player));
                 x = p.x;
                 y = p.y;
             }

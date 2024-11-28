@@ -2,6 +2,7 @@ import { addHandler } from "#cmd/handlePacket";
 import { Account, getAccountInfo, IAccount } from "#schemas/account";
 import Session from "#schemas/session";
 import { accountCreate, accountLogin, accountRegister, sessionCreate, sessionGet, sessionLogin } from "#util/auth";
+import trace from "#util/logging";
 import { Names } from "#util/names";
 
 addHandler('name get', (c) => {
@@ -9,6 +10,7 @@ addHandler('name get', (c) => {
 });
 
 // create a brand new (temporary) account
+
 addHandler('session create', async (c, data) => {
     let name = c.name; // default name
 
@@ -18,25 +20,29 @@ addHandler('session create', async (c, data) => {
 
         await c.register(c.account);
 
-        c.send({ cmd: 'session create', success: true, account: getAccountInfo(c.account), session: c.session.token });
+        c.send({ cmd: 'session create', success: true, session: c.session.token });
+        c.sendLogin(true);
     }
     catch (reason) {
-        c.send({ cmd: 'session create', success: false, reason: reason });
+        c.send({ cmd: 'session create', success: false, reason: reason.toString() });
     }
 });
 
 addHandler('session login', async (c, data) => {
     let token = data.session;
+    trace('session token login: ' + token);
     
     try {
         c.session = await sessionGet(token);
         c.account = await sessionLogin(c.session);
 
         await c.login(c.account);
-        c.send({ cmd: 'session login', success: true });
+        c.send({ cmd: 'session login', success: true, session: c.session.token });
+        c.sendLogin(true);
     }
     catch(reason) {
-        c.send({ cmd: 'session login', success: false, reason: reason });
+        trace('error: ' + reason.toString());
+        c.send({ cmd: 'session login', success: false, reason: reason.toString() });
     }
 });
 

@@ -1,6 +1,6 @@
-import { Schema, Model, ObjectId, model } from 'mongoose'
+import { Schema, Model, ObjectId, model, Document } from 'mongoose'
 
-export interface ISession {
+export interface ISession extends Document {
     token: string,
     account_id: ObjectId,
     updatedAt: Date,

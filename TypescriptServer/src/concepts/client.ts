@@ -83,6 +83,7 @@ export default class Client extends SendStuff implements IClient {
     ping: number;
 
     room_join_timer: number = -1; // if >0 - joined a room recently
+    reconnect_timer: number = -1;
 
     /** @type {boolean} */
     get logged_in() {
@@ -237,17 +238,19 @@ export default class Client extends SendStuff implements IClient {
         else {
             (this.socket as TCPSocket).destroy();
         }
-
-        this.socket = null;
-        this.connected = false;
     }
 
     onDisconnect() {
-        
+        this.socket = null;
+        this.connected = false;
+
+        this.reconnect_timer = config.reconnect_timeout;
+
         // go offline
         if (this.logged_in) {
             this.profile.online = false;
             this.profile.last_online = new Date();
+            this.save();
         }
     }
 
@@ -265,6 +268,8 @@ export default class Client extends SendStuff implements IClient {
 
 
         global.clients.splice(global.clients.indexOf(this), 1);
+
+        this.disconnect();
     }
 
     // insert this socket into a "dead" (disconnected) client
@@ -280,6 +285,13 @@ export default class Client extends SendStuff implements IClient {
         global.clients.splice(global.clients.indexOf(this), 1);
 
         return old_client;
+    }
+
+    onReconnect() {
+        if (this.lobby)
+            this.sendLobbyJoin(this.lobby);
+        if (this.room && this.entity)
+            this.sendPlay(this.lobby, this.room, this.entity.pos, this.entity.uuid);
     }
 
 
@@ -546,7 +558,7 @@ export default class Client extends SendStuff implements IClient {
         if (this.account !== null) {
             this.account.save()
                 .then(() => {
-                    trace('Saved the account successfully');
+                    // trace('Saved the account successfully');
                 })
                 .catch((err) => {
                     trace('Error while saving account: ' + err);
@@ -560,11 +572,20 @@ export default class Client extends SendStuff implements IClient {
 
             this.profile.save()
                 .then(() => {
-                    trace('Saved the profile successfully.');
+                    // trace('Saved the profile successfully.');
                 })
                 .catch((err) => {
                     trace('Error while saving profile: ' + err);
                 });
+        }
+        if (this.session !== null) {
+            this.session.save()
+                .then(() => {
+                    // trace('Saved the session successfully');
+                })
+                .catch((err) => {
+                    trace('Error while saving session: ' + err);
+                })
         }
     }
     

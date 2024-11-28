@@ -77,6 +77,8 @@ if (!CONFIGS_SET) {
 }
 
 
+#macro SESSION_FILE $"session{MultiClientGetID()}.token"
+#macro OLD_SESSIONS_FILE "sessions_old.token"
 #macro CONNECT_TIMEOUT 60 * 5 // 5 seconds
 
 

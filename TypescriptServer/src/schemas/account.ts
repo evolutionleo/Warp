@@ -22,6 +22,7 @@ export default Account;
 
 
 export type AccountInfo = {
+    id: string,
     username: string
 }
 
@@ -29,6 +30,7 @@ export function getAccountInfo(a:IAccount):AccountInfo {
     if (a === null) return null;
 
     return {
+        id: a.id,
         username: a.username
     };
 }

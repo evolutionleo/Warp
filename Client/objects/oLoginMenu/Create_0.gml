@@ -9,6 +9,9 @@ global.canvas = new SUICanvas()
 
 global.canvas.appendChild(new SUIBackButton())
 
+txt_account = global.canvas.appendChild(new SUIText(20, room_height-80,
+	SUIBind(function() { return $"account: {global.account}\nprofile: {global.profile}" })))
+
 txt_title = global.canvas.appendChild(new SUITitle(0, room_height/2 - 120, "Login"))
 txt_title.set("center", room_width/2)
 
@@ -32,5 +35,8 @@ var btn_w = 120
 var btn_h = 40
 btn_register = global.canvas.appendChild(new SUIButton(tb_login.get("left"), _y, "register", function() { sendRegister(username, password) }, {w: btn_w, h: btn_h}))
 btn_login = global.canvas.appendChild(new SUIButton(0, _y, "log in", function() { sendLogin(username, password) }, {w: btn_w, h: btn_h}))
+btn_delete = global.canvas.appendChild(new SUIButton(0, 60, "delete session", function() { file_delete(SESSION_FILE); }, {w: 160, h: btn_h}))
+
+btn_delete.set("right", room_width-20)
 
 btn_login.set("right", tb_password.get("right"))

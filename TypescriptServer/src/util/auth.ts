@@ -54,12 +54,12 @@ export function profileCreate(account:IAccount):IProfile { // for when just regi
     });
 }
 
-export function accountCreate(username: string, password = '', temporary = true):IAccount {
+export function accountCreate(username: string, password = '_', temporary = true):IAccount {
     if (!temporary) {
         password = hashPassword(password);
     }
     else {
-        password = '';
+        password = '_';
     }
 
     return new Account({
@@ -136,7 +136,7 @@ export async function sessionGet(session_token: string):Promise<ISession> {
 }
 
 export async function sessionLogin(session: ISession):Promise<IAccount> {
-    const account = await Account.findOne({ id: session.account_id });
+    const account = await Account.findOne({ _id: session.account_id });
     if (!account) {
         throw 'account does not exist';
     }
