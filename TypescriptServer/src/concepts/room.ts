@@ -184,10 +184,10 @@ class Room extends EventEmitter {
         let full_bundle = { cmd: 'entities', room: this.level.room_name, full: true, entities: this.full_bundle };
 
         this.players.forEach(player => {
-            // we will send everything every frame to those who joined recently (so that they 100% get it)
+            // we will send ALL the entities data every frame to those who joined recently (so that they 100% get it)
             if (player.room_join_timer > 0) {
                 player.send(full_bundle);
-                player.room_join_timer--;
+                player.room_join_timer -= 1 / this.tickrate;
             }
             // broadcast the min bundle (only changed entities) to everyone else
             else if (this.bundle.length > 0)
@@ -282,7 +282,7 @@ class Room extends EventEmitter {
             player.entity = player_entity;
         }
         // add to the recently joined list to receive the old entities
-        player.room_join_timer = global.config.room.recently_joined_timer * global.config.tps;
+        player.room_join_timer = global.config.room.recently_joined_timer;
         
         this.emit('player join', player);
     }

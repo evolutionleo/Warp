@@ -9,7 +9,7 @@ import Session, { ISession } from '#schemas/session';
 // these can be slow and should ideally only be called from async functions
 export function hashPassword(password:string):string {
     const salt = crypto.randomBytes(16).toString('hex');
-    const derivedKey = crypto.scryptSync(password, salt, 64);
+    const derivedKey = crypto.scryptSync(password, salt, 32);
     const result = salt + ":" + derivedKey.toString('hex');
 
     return result;
@@ -19,7 +19,7 @@ export function verifyPassword(password:string, _hash:string):boolean {
     const [salt, hash] = _hash.split(':');
     const hashBuffer = Buffer.from(hash, 'hex');
     
-    const keyLength = salt.length == 16 ? 16 : 64; // legacy passwords with salt length 8 & key length 16
+    const keyLength = hashBuffer.length;
     const derivedKey = crypto.scryptSync(password, salt, keyLength);
 
     return crypto.timingSafeEqual(hashBuffer, derivedKey);
@@ -98,7 +98,7 @@ export async function accountActivate(account:IAccount, new_username: string, pa
     if (!Names.isValid(new_username)) {
         throw 'invalid username';
     }
-    if (await Account.exists({ username: new_username })) {
+    if ((await Account.exists({ username: new_username }))._id !== account._id) {
         throw 'username taken';
     }
 

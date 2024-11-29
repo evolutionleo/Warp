@@ -8,7 +8,7 @@ declare module "#cmd/sendStuff" {
         sendName()
         sendRegister(success:boolean, reason?:string)
         sendLogin(success:boolean, reason?:string)
-        sendSession(session_token:string)
+        sendSession(success:boolean, reason?:string, session_token?:string)
     }
 }
 
@@ -30,4 +30,11 @@ SendStuff.prototype.sendRegister = function(success:boolean, reason:string = '')
  */
 SendStuff.prototype.sendLogin = function(success:boolean, reason:string = ''):void {
     this.send({ cmd: 'login', success, reason, account: getAccountInfo(this.account), profile: getProfileInfo(this.profile) });
+}
+
+SendStuff.prototype.sendSession = function(success, reason:string = '', token = undefined) {
+    if (token === undefined && success) {
+        token = this.session.token;
+    }
+    this.send({ cmd: 'session login', success, reason, session: token });
 }

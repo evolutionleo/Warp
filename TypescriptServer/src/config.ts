@@ -112,7 +112,7 @@ const common_config = {
                             // set to -1 to disable this feature
                             // (!!! setting to 0 might cause problems and unexpected behaviour !!!)
         
-        recently_joined_timer: 2 // (seconds) - time 
+        recently_joined_timer: 2 // (seconds) - time after a client joins to receive ALL entity data
     },
 
     party: {
@@ -163,7 +163,7 @@ const common_config = {
     necessary_login: false, // if true, won't allow a client to join any lobby before logging in
 
     ping_interval: 5 * 1000,
-    reconnect_timeout: 10 * 1000 // keep a "dead" client in all the lobbies after socket disconnecting, waiting to reconnect with the same account
+    reconnect_timeout: 15 * 1000 // keep a "dead" client in all the lobbies after socket disconnecting, waiting to reconnect with the same account
 }
 
 const prod_config = {

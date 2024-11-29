@@ -21,7 +21,7 @@ export class Names {
         // let s = (this.guest_counter++).toString();
         let s = Math.floor(Math.random() * 1000000).toString();
         s = '0'.repeat(6 - s.length) + s;
-        return 'Guest' + s;
+        return 'guest' + s;
     }
 
     static next = this.getDefaultName;

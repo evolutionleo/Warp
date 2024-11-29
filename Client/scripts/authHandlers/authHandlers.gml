@@ -67,7 +67,7 @@ var sessionHandler = function(data) {
 			trace("Failed to login with a session. Reason: %", data.reason)
 			
 			// create a new session if the old one didn't work
-			//sendSessionCreate()
+			sendSessionCreate()
 		}
 	}
 }

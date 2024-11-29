@@ -39,6 +39,9 @@ export abstract class SendStuff implements IClient {
     abstract halfpack: Buffer;
     abstract entity: PlayerEntity;
 
+    abstract bindTCP(socket: net.Socket): void;
+    abstract bindWS(socket: WebSocket): void;
+
     
     abstract ping: number;
 

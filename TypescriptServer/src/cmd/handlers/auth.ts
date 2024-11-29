@@ -1,7 +1,7 @@
 import { addHandler } from "#cmd/handlePacket";
 import { Account, getAccountInfo, IAccount } from "#schemas/account";
 import Session from "#schemas/session";
-import { accountCreate, accountLogin, accountRegister, sessionCreate, sessionGet, sessionLogin } from "#util/auth";
+import { accountActivate, accountCreate, accountLogin, accountRegister, sessionCreate, sessionGet, sessionLogin } from "#util/auth";
 import trace from "#util/logging";
 import { Names } from "#util/names";
 
@@ -30,19 +30,30 @@ addHandler('session create', async (c, data) => {
 
 addHandler('session login', async (c, data) => {
     let token = data.session;
-    trace('session token login: ' + token);
     
     try {
         c.session = await sessionGet(token);
         c.account = await sessionLogin(c.session);
 
         await c.login(c.account);
-        c.send({ cmd: 'session login', success: true, session: c.session.token });
+        c.sendSession(true);
         c.sendLogin(true);
+
+        // another client logged into the same session?
+        let old_client = global.clients.find((client) => client !== c && client.session.token === c.session.token);
+        
+        if (old_client !== undefined) {
+            if (old_client.connected) {
+                old_client.disconnect();
+            }
+            
+            old_client.reconnect(c);
+        }
     }
     catch(reason) {
         trace('error: ' + reason.toString());
-        c.send({ cmd: 'session login', success: false, reason: reason.toString() });
+        c.sendSession(false, reason);
+        // c.send({ cmd: 'session login', success: false, reason: reason.toString() });
     }
 });
 
@@ -53,9 +64,11 @@ addHandler('login', (c, data) => {
 
     accountLogin(username, password)
         .then((account:IAccount) => {
-            // this also sends the message
             c.login(account);
+            c.session = sessionCreate(account);
+
             c.sendLogin(true);
+            c.sendSession(true);
         })
         .catch((reason) => {
             c.sendLogin(false, reason);
@@ -66,10 +79,23 @@ addHandler('register', (c, data) => {
     let { username, password } = data;
     username = username.toLowerCase();
 
-    accountRegister(username, password)
+    let promise: Promise<IAccount>;
+
+    if (c.session && c.account && c.account.temporary) {
+        promise = accountActivate(c.account, username, password);
+    }
+    else {
+        promise = accountRegister(username, password);
+    }
+
+    promise
         .then((account:IAccount) => {
             c.register(account);
+            c.session = sessionCreate(c.account);
+
             c.sendRegister(true);
+            c.sendLogin(true);
+            c.sendSession(true);
         })
         .catch((reason) => {
             c.sendRegister(false, reason);

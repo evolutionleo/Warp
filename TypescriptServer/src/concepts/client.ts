@@ -72,9 +72,12 @@ export default class Client extends SendStuff implements IClient {
     // used internally in packet.ts
     /** @type {Buffer} */
     halfpack: Buffer;
-
     /** @type {any[]} */
     packetQueue: any[];
+
+    // used internally in server.ts
+    bindTCP;
+    bindWS;
 
     /** @type {PlayerEntity} */
     entity: PlayerEntity = null;
@@ -82,7 +85,7 @@ export default class Client extends SendStuff implements IClient {
     /** @type {number} */
     ping: number;
 
-    room_join_timer: number = -1; // if >0 - joined a room recently
+    room_join_timer: number = -1; // if >0 - joined a room recently, getting FULL entities list
     reconnect_timer: number = -1;
 
     /** @type {boolean} */
@@ -231,26 +234,42 @@ export default class Client extends SendStuff implements IClient {
         }
     }
 
-    disconnect() {
-        if (this.socket_type === 'ws') {
-            (this.socket as WebSocket).close();
-        }
-        else {
-            (this.socket as TCPSocket).destroy();
-        }
-    }
-
     onDisconnect() {
         this.socket = null;
         this.connected = false;
 
         this.reconnect_timer = config.reconnect_timeout;
 
+        this.matchMakingStop();
+
         // go offline
         if (this.logged_in) {
             this.profile.online = false;
             this.profile.last_online = new Date();
             this.save();
+        }
+    }
+
+    onReconnect() {
+        if (this.lobby)
+            this.sendLobbyJoin(this.lobby);
+        if (this.room && this.entity)
+            this.sendPlay(this.lobby, this.room, this.entity.pos, this.entity.uuid);
+
+        this.room_join_timer = global.config.room.recently_joined_timer;
+    }
+
+    
+    disconnect() {
+        if (this.socket === null) {
+            return;
+        }
+
+        if (this.socket_type === 'ws') {
+            (this.socket as WebSocket).close();
+        }
+        else {
+            (this.socket as TCPSocket).destroy();
         }
     }
 
@@ -267,31 +286,38 @@ export default class Client extends SendStuff implements IClient {
             this.party.kickMember(this, 'disconnect', true);
 
 
-        global.clients.splice(global.clients.indexOf(this), 1);
+        let idx = global.clients.indexOf(this);
+        if (idx != -1)
+            global.clients.splice(idx, 1);
 
         this.disconnect();
     }
 
-    // insert this socket into a "dead" (disconnected) client
-    replace(old_client: Client) {
-        if (old_client.connected) {
-            return null;
+    // move a new client's socket into this "dead" (disconnected) client
+    // removes the other client from the global.clients list
+    reconnect(new_client: Client) {
+        if (this.connected) {
+            return;
         }
 
-        old_client.socket = this.socket;
-        old_client.socket_type = this.socket_type;
+        this.connected = true;
+
+        this.socket = new_client.socket;
+        this.socket_type = new_client.socket_type;
+
+        this.socket.removeAllListeners();
+        
+        if (this.socket_type === 'tcp')
+            this.bindTCP(this.socket);
+        else
+            this.bindWS(this.socket);
 
         // delete self from the list
-        global.clients.splice(global.clients.indexOf(this), 1);
+        let idx = global.clients.indexOf(new_client);
+        if (idx != -1)
+            global.clients.splice(idx, 1);
 
-        return old_client;
-    }
-
-    onReconnect() {
-        if (this.lobby)
-            this.sendLobbyJoin(this.lobby);
-        if (this.room && this.entity)
-            this.sendPlay(this.lobby, this.room, this.entity.pos, this.entity.uuid);
+        this.onReconnect();
     }
 
 
@@ -517,7 +543,7 @@ export default class Client extends SendStuff implements IClient {
     }
 
     matchMakingStart(req:MatchRequirements):Ticket|string {
-        if (this.ticket) return 'already matchmaking';
+        if (this.ticket !== null) return 'already matchmaking';
         if (this.match) return 'already in a match';
 
         if (this.party) {
@@ -554,9 +580,9 @@ export default class Client extends SendStuff implements IClient {
     /**
      * Save account and profile data to the DB
      */
-    save() {
+    async save() {
         if (this.account !== null) {
-            this.account.save()
+            await this.account.save()
                 .then(() => {
                     // trace('Saved the account successfully');
                 })
@@ -570,7 +596,7 @@ export default class Client extends SendStuff implements IClient {
                 this.profile.state.lobbyid = this.lobby.lobbyid;
             }
 
-            this.profile.save()
+            await this.profile.save()
                 .then(() => {
                     // trace('Saved the profile successfully.');
                 })
@@ -579,7 +605,7 @@ export default class Client extends SendStuff implements IClient {
                 });
         }
         if (this.session !== null) {
-            this.session.save()
+            await this.session.save()
                 .then(() => {
                     // trace('Saved the session successfully');
                 })

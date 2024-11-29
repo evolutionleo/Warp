@@ -1,9 +1,9 @@
 import './config.js';
-import { createServer } from 'net';
+import { createServer, Socket } from 'net';
 const port = global.config.port;
 const ip = global.config.ip;
 
-import * as ws from 'ws';
+import WebSocket, { WebSocketServer } from 'ws';
 const ws_port = global.config.ws_port;
 
 import * as http from 'http';
@@ -52,35 +52,38 @@ const server = createServer(function(socket) {
     c.ip = socket.remoteAddress;
     
     // Bind functions on events
-
-    socket.on('error', function(err) {
-        if (err.message.includes('ECONNRESET')) { // this is a disconnect
-            trace(chalk.redBright('Socket violently disconnected.'));
-        }
-        else {
-            trace(chalk.redBright(`Error! ${err}`));
-        }
-    });
-    
-    // When data arrived
-    socket.on('data', function(data) {
-        // create artificial_delay
-        if (delayReceive.enabled) {
-            setTimeout(function() {
-                packet.parse(c, data); // handle the logic
-            }, delayReceive.get());
-        }
-        else { // just parse normally
-            packet.parse(c, data); // handle the logic
-        }
-    });
-    
-    // When a socket/connection closed
-    socket.on('close', function() {
-        c.onDisconnect();
+    c.bindTCP = (socket: Socket) => {
+        socket.on('error', function(err) {
+            if (err.message.includes('ECONNRESET')) { // this is a disconnect
+                trace(chalk.redBright('Socket violently disconnected.'));
+            }
+            else {
+                trace(chalk.redBright(`Error! ${err}`));
+            }
+        });
         
-        trace(chalk.red('Socket disconnected.'));
-    })
+        // When data arrived
+        socket.on('data', function(data) {
+            // create artificial_delay
+            if (delayReceive.enabled) {
+                setTimeout(function() {
+                    packet.parse(c, data); // handle the logic
+                }, delayReceive.get());
+            }
+            else { // just parse normally
+                packet.parse(c, data); // handle the logic
+            }
+        });
+        
+        // When a socket/connection closed
+        socket.on('close', function() {
+            c.onDisconnect();
+            
+            trace(chalk.red('Socket disconnected.'));
+        });
+    }
+
+    c.bindTCP(socket);
 });
 
 server.maxConnections = config.server.max_connections;
@@ -106,7 +109,7 @@ else {
     http_server = http.createServer({});
 }
 
-const ws_server = new ws.WebSocketServer({
+const ws_server = new WebSocketServer({
     server: http_server,
     clientTracking: true,
     maxPayload: config.server.max_ws_payload,
@@ -120,34 +123,37 @@ ws_server.on('connection', function(socket, r) {
     c.ip = r.socket.remoteAddress;
 
     // Bind functions on events
-
-    socket.on('error', function(err) {
-        if (err.message.includes('ECONNRESET')) { // this is a disconnect
-            trace(chalk.redBright('WebSocket violently disconnected.'));
-            // handle disconnect here
-        }
-
-        trace(`Error! ${err}`);
-    });
+    c.bindWS = (socket: WebSocket) => {
+        socket.on('error', function(err) {
+            if (err.message.includes('ECONNRESET')) {
+                trace(chalk.redBright('WebSocket violently disconnected.'));
+                c.onDisconnect();
+            }
     
-    // When data arrived
-    socket.on('message', function(data) {
-        // create artificial_delay
-        if (delayReceive.enabled) {
-            setTimeout(function() {
+            trace(`Error! ${err}`);
+        });
+        
+        // When data arrived
+        socket.on('message', function(data) {
+            // create artificial_delay
+            if (delayReceive.enabled) {
+                setTimeout(function() {
+                    packet.ws_parse(c, data as Buffer); // handle the logic
+                }, delayReceive.get());
+            }
+            else { // just parse normally
                 packet.ws_parse(c, data as Buffer); // handle the logic
-            }, delayReceive.get());
-        }
-        else { // just parse normally
-            packet.ws_parse(c, data as Buffer); // handle the logic
-        }
-    });
+            }
+        });
+    
+        // When a socket/connection closed
+        socket.on('close', function() {
+            trace(chalk.yellowBright('WebSocket disconnected.'));
+            c.onDisconnect();
+        });
+    }
 
-    // When a socket/connection closed
-    socket.on('close', function() {
-        c.onDisconnect();
-        trace(chalk.yellowBright('WebSocket disconnected.'));
-    });
+    c.bindWS(socket);
 });
 
 ws_server.on('error', function (err) {

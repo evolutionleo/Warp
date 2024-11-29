@@ -16,7 +16,7 @@ network_set_config(network_config_use_non_blocking_socket, true)
 // toggle this off if you have some specific case where you need to keep the entities that are in the room locally
 #macro PURGE_ENTITIES_ON_ROOM_START true
 
-// instantly teleports if an entity has moved > than this on a single axis in a single tick
+// instantly teleports if an entity has moved > than this along an axis in a single tick
 #macro POS_INTERP_THRESH 100
 
 #macro TIMESTAMPS_ENABLED true
@@ -79,7 +79,7 @@ if (!CONFIGS_SET) {
 
 #macro SESSION_FILE $"session{MultiClientGetID()}.token"
 #macro OLD_SESSIONS_FILE "sessions_old.token"
-#macro CONNECT_TIMEOUT 60 * 5 // 5 seconds
+//#macro CONNECT_TIMEOUT 60 * 5 // 5 seconds
 
 
 // Allow up to 4000 ping (YYG recommends ~1000 for LAN-only games)

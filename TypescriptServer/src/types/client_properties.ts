@@ -8,6 +8,7 @@ import PlayerEntity from '#entities/player';
 import { Sock, SockType } from './socktype';
 import Match from '#matchmaking/match';
 import { ISession } from '#schemas/session';
+import { Socket } from 'net';
 
 export default interface IClient {
     /** @type {boolean} */
@@ -58,4 +59,7 @@ export default interface IClient {
     logged_in: boolean;
 
     getFriends():Promise<IProfile[]>;
+
+    bindTCP(socket:Socket): void;
+    bindWS(socket:WebSocket): void;
 }
