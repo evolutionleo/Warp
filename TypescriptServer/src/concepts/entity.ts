@@ -33,6 +33,8 @@ export type SerializedEntity = {
     a: number,
     spd?: Point,
     st: number, // state
+    fx?: boolean, // flip
+    fy?: boolean,
 
     p?: { // custom variables
         [name: string]: any
@@ -344,7 +346,7 @@ class Entity extends EventEmitter {
     }
 
     public serialize():SerializedEntity {
-        return {
+        let struct:SerializedEntity = {
             id: this.id,
             t: this.type,
             obj: this.object_name,
@@ -357,6 +359,14 @@ class Entity extends EventEmitter {
             p: this.props, // uses a getter for props
             st: this.state
         }
+
+        if (this.flip.x)
+            struct.fx = true;
+        if (this.flip.y)
+            struct.fy = true;
+
+
+        return struct;
     }
 
     public bundle() {

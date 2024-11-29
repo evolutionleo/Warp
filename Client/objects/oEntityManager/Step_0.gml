@@ -122,6 +122,13 @@ for(i = 0; i < l; i++) {
 	inst.x = entity.x
 	inst.y = entity.y
 	
+	if (entity[$ "fx"]) {
+		inst.image_xscale *= -1
+	}
+	if (entity[$ "fy"]) {
+		inst.image_yscale *= -1
+	}
+	
 	inst.state = state
 	
 	// set the speed
