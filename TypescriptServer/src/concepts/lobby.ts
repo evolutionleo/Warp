@@ -9,7 +9,6 @@ import GameMap, { GameMapInfo } from './map';
 import Match from '#matchmaking/match';
 
 
-
 // note: only create lobbies with createLobby(), don't call the constructor directly
 export function lobbyCreate(map:GameMap) { // returns the lobby instance
     let lobby = new Lobby(map);
@@ -48,7 +47,6 @@ export function lobbyDelete(lobbyid:string) {
 export function lobbyList():Lobby[] {
     return (Object.values(global.lobbies)) as Lobby[];
 }
-
 
 export type LobbyStatus = 'open' | 'closed';
 
@@ -160,6 +158,9 @@ export default class Lobby extends EventEmitter {
      * @param {boolean?} forced
      */
     kickPlayer(player:Client, reason?:string, forced=false, secondary=false):void {
+        if (!this.players.includes(player))
+            return;
+
         // close if a player leaves from the lobby?
         if (global.config.lobby.close_on_leave && this.status !== 'closed' && !secondary) {
             if (this.match && !this.match.ended) { // if left mid-match - end the match

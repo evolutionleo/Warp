@@ -99,7 +99,11 @@ export default class Party {
             }
         }
 
-        this.members.splice(this.members.indexOf(member), 1);
+        let idx = this.members.indexOf(member);
+        if (idx === -1)
+            return;
+
+        this.members.splice(idx, 1);
         member.onPartyLeave(this, reason, forced);
         member.party = null;
 

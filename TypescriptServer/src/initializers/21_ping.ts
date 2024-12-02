@@ -1,3 +1,6 @@
+import trace from "#util/logging";
+import chalk from "chalk";
+
 const ping_interval = setInterval(() => {
     global.clients.forEach((c) => {
         c.sendPing();
@@ -5,6 +8,7 @@ const ping_interval = setInterval(() => {
         if (!c.connected) {
             c.reconnect_timer -= global.config.ping_interval;
             if (c.reconnect_timer < 0) {
+                trace(chalk.yellowBright("Client timed out."));
                 c.destroy();
             }
         }

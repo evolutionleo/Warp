@@ -11,6 +11,14 @@ import PlayerEntity from "#entities/player";
 import { isDeepStrictEqual } from 'util';
 
 
+
+export function entityExists(entityType: typeof Entity|string): boolean {
+    return global.entities.includes(entityType as typeof Entity)
+        || Object.keys(global.entity_objects).includes(entityType as string)
+        || Object.keys(global.entity_names).includes(entityType as string);
+}
+
+
 export type ColliderType = 'polygon' | 'circle' | 'box';
 
 
@@ -48,6 +56,7 @@ export type EntityEvent = 'update' | 'death' | 'remove';
 interface Entity {
     on(event:EntityEvent, callback:(...args:any[])=>void):this;
 }
+
 
 // a thing
 class Entity extends EventEmitter {
