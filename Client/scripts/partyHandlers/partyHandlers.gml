@@ -16,9 +16,9 @@ addHandler("party reject", function(data) {
 addHandler("party invite", function(data) {
 	var p = data.party
 	
-	show_message_async($"incoming party invite. partyid: {p.partyid}")
+	show_message_async($"incoming party invite. party_id: {p.party_id}")
 	
-	var cb = method({p}, function(inv) { return inv.partyid == p.partyid })
+	var cb = method({p}, function(inv) { return inv.party_id == p.party_id })
 	var invite_exists = !array_any(global.party_invites, cb)
 	if(!invite_exists)
 		array_push(global.party_invites, p)

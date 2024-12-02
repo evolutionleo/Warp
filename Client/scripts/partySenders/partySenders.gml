@@ -10,6 +10,6 @@ function sendPartyDisband() {
 	send({ cmd: "party disband" })
 }
 
-function sendPartyJoin(partyid) {
-	send({ cmd: "party join",  partyid })
+function sendPartyJoin(party_id) {
+	send({ cmd: "party join",  party_id })
 }
