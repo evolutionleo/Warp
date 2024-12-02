@@ -7,7 +7,7 @@ import Match from "#matchmaking/match";
 
 
 export type PartyInfo = {
-    partyid: string;
+    party_id: string;
     members: string[];
     leader: string;
 };
@@ -18,13 +18,13 @@ export function partyCreate(leader:Client):Party {
 
     while(true) {
         // a random 6-digit number
-        let partyid = crypto.randomInt(100000, 999999).toString();
-        if (partyid in global.parties) { // just in case of a collision
+        let party_id = crypto.randomInt(100000, 999999).toString();
+        if (party_id in global.parties) { // just in case of a collision
             continue;
         }
         else {
-            global.parties[partyid] = party;
-            party.partyid = partyid;
+            global.parties[party_id] = party;
+            party.party_id = party_id;
             break;
         }
     }
@@ -32,22 +32,22 @@ export function partyCreate(leader:Client):Party {
     return party;
 }
 
-export function partyGet(partyid: string):Party {
-    return global.parties[partyid];
+export function partyGet(party_id: string):Party {
+    return global.parties[party_id];
 }
 
-export function partyExists(partyid: string) {
-    return global.parties.hasOwnProperty(partyid);
+export function partyExists(party_id: string) {
+    return global.parties.hasOwnProperty(party_id);
 }
 
-export function partyDelete(partyid: string):void {
-    let party = global.parties[partyid];
+export function partyDelete(party_id: string):void {
+    let party = global.parties[party_id];
     party.disband();
 }
 
 
 export default class Party {
-    partyid: string;
+    party_id: string;
     members: Client[];
     leader: Client;
     max_members: number; // inherited from config.party.max_members
@@ -120,7 +120,7 @@ export default class Party {
     }
 
     private delete() {
-        delete global.parties[this.partyid];
+        delete global.parties[this.party_id];
     }
 
     matchMakingStart(req:MatchRequirements):Ticket|string {
@@ -174,7 +174,7 @@ export default class Party {
 
     getInfo():PartyInfo {
         return {
-            partyid: this.partyid,
+            party_id: this.party_id,
             members: this.members.map(m => m.name),
             leader: this.leader?.name
         };

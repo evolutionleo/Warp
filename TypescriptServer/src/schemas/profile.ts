@@ -9,6 +9,8 @@ export interface IProfile extends Document {
     last_online: Date,
 
     friends: ObjectId[],
+    chats: ObjectId[],
+
     mmr: number,
 
     state: {
@@ -23,13 +25,14 @@ export interface IProfile extends Document {
 // this holds the state of the profile
 // you can edit this schema!
 const profileSchema = new Schema<IProfile>({
-    account_id: { type: Schema.Types.ObjectId, ref: 'Account' },
-    name: { type: String, unique: true },
+    account_id: { type: Schema.Types.ObjectId, ref: 'Account', index: true },
+    name: { type: String, unique: true, index: true },
 
     online: { type: Boolean, default: false },
     last_online: { type: Date, default: Date.now },
 
     friends: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
+    chats: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
     mmr: { type: Number, required: false }, // matchmaking rating
 
 

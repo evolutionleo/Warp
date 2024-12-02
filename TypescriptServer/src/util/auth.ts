@@ -136,7 +136,7 @@ export async function sessionGet(session_token: string):Promise<ISession> {
 }
 
 export async function sessionLogin(session: ISession):Promise<IAccount> {
-    const account = await Account.findOne({ _id: session.account_id });
+    const account = await Account.findById(session.account_id);
     if (!account) {
         throw 'account does not exist';
     }

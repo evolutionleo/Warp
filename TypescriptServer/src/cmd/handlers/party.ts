@@ -4,9 +4,9 @@ import Client from "#concepts/client";
 import trace from "#util/logging";
 
 addHandler('party join', (c, data) => {
-    let partyid = data.partyid;
-    if (partyExists(partyid))
-        c.partyJoin(partyid);
+    let party_id = data.party_id;
+    if (partyExists(party_id))
+        c.partyJoin(party_id);
 });
 
 addHandler('party leave', (c) => {

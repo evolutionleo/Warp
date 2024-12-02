@@ -6,6 +6,7 @@ import Party from '#matchmaking/party';
 import { Config } from '#root/config';
 import GameMode from '#concepts/game_mode';
 import GameMap from '#concepts/map';
+import Chat from '#concepts/chat';
 import MatchMaker from '#matchmaking/matchmaker';
 import { Middleware } from '#cmd/middleware';
 import { ValidatorFunction } from '#cmd/validator'
@@ -18,6 +19,7 @@ declare global {
     var levels:{[key:string]: GameLevel};
     var lobbies:{[key: string]: Lobby};
     var parties:{[key: string]: Party};
+    var chats:{[key: string]: Chat};
     var entities:EntityType[];
     var game_modes:{[key:string]: GameMode};
     var maps:GameMap[];

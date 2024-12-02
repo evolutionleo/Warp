@@ -1,25 +1,38 @@
 // this section contains a schema for saving players' account info
-
-import { IMessage } from '#concepts/chat';
-import trace from '#util/logging';
-
 import { model, Schema, ObjectId, Document, Model } from 'mongoose';
 
 
-export interface IChatLog {
-    messages: IMessage[]
+export type ChatType = 'global' | 'direct' | 'group';
+
+export interface IMessage {
+    profile_id?: ObjectId | string;
+    name: string;
+    content: string;
+}
+
+const messageSchema = new Schema<IMessage>({
+    profile_id: { type: Schema.Types.ObjectId, ref: 'Profile', required: false },
+    name: String,
+    content: String
+}, { _id: false });
+
+export interface IChatLog extends Document {
+    _id: string,
+    type: ChatType,
+    messages: IMessage[],
+    members: ObjectId[]
 }
 
 // you can edit this schema!
 const chatSchema = new Schema<IChatLog>({
-    messages: [{
-        profile_id: { type: Schema.Types.ObjectId, ref: 'Profile' },
-        name: String,
-        content: String
-    }]
-    
-    // you can add additional properties to the schema here:
+    _id: String,
+
+    messages: [messageSchema],
+    members: [
+        { type: Schema.Types.ObjectId, ref: 'Profile' }
+    ]
 });
 
-export const ChatLog:Model<IChatLog> = model<IChatLog, Model<IChatLog>>('ChatLog', chatSchema, 'ChatLogs');
+
+export const ChatLog:Model<IChatLog> = model<IChatLog, Model<IChatLog>>('Chat', chatSchema, 'Chats');
 export default ChatLog;

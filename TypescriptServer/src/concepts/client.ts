@@ -24,10 +24,11 @@ import MatchMaker from '#matchmaking/matchmaker';
 import Ticket, { MatchRequirements } from '#matchmaking/ticket';
 import Match, { MatchOutcome } from '#matchmaking/match';
 import { Names } from '#util/names';
+import { Chat, chatFind } from '#concepts/chat';
 
 export type ClientInfo = {
     name: string;
-    partyid: string;
+    party_id: string;
     lobbyid: string;
     room_name: string;
 };
@@ -60,6 +61,9 @@ export default class Client extends SendStuff implements IClient {
 
     /** @type {Match} */
     match: Match = null;
+
+    /** @type {Chat[]} */
+    chats: Chat[] = [];
 
 
     /** @type {Account} */
@@ -324,7 +328,7 @@ export default class Client extends SendStuff implements IClient {
     getInfo():ClientInfo {
         return {
             name: this.name,
-            partyid: this.party?.partyid,
+            party_id: this.party?.party_id,
             lobbyid: this.lobby?.lobbyid,
             room_name: this.room?.level.name
         };
@@ -533,12 +537,12 @@ export default class Client extends SendStuff implements IClient {
     }
 
     /**
-     * @param {string} partyid
+     * @param {string} party_id
      */
-    partyJoin(partyid: string) {
+    partyJoin(party_id: string) {
         this.matchMakingStop();
 
-        let party = partyGet(partyid);
+        let party = partyGet(party_id);
         party.addMember(this);
     }
 
@@ -641,6 +645,27 @@ export default class Client extends SendStuff implements IClient {
         });
 
         this.onLogin();
+    }
+
+
+    chatJoin(chat_id: string) {
+        if (!this.profile)
+            return;
+
+        let chat = chatFind(chat_id);
+        if (chat) {
+            chat.addMember(this.profile);
+        }
+    }
+
+    chatConnectAll() {
+        if (!this.profile)
+            return;
+
+        this.profile.chats.forEach(chat_id => {
+            let chat = global.chats[chat_id.toString()];
+            chat.connectMember(this);
+        });
     }
 
     // you add any new methods below
