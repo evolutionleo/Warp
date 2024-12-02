@@ -9,6 +9,7 @@ declare module '#cmd/sendStuff' {
         sendServerTime(client_t:number):void
         sendInvalidInput(from_cmd:string, errors:ValidationError[]):void
         sendError(error:string, details?:string):void
+        sendKick():void
     }
 }
 
@@ -42,4 +43,8 @@ SendStuff.prototype.sendInvalidInput = function(from_cmd:string, errors: Validat
 
 SendStuff.prototype.sendError = function(error:string, details:string='') {
     this.send({ cmd: 'error', error, details });
+}
+
+SendStuff.prototype.sendKick = function() {
+    this.send({ cmd: 'server kick' });
 }

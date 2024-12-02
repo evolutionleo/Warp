@@ -12,6 +12,11 @@ addHandler("server info", function(data) {
 	}
 })
 
+addHandler("server kick", function(data) {
+	show_message("Kicked from the server! Reason: " + data.reason ?? "???")
+	game_end()
+})
+
 addHandler("server timestamp", function(data) {
 	var old_t = data.ct
 	var new_t = local_timestamp()
