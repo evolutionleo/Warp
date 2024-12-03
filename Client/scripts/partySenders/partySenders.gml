@@ -1,5 +1,5 @@
-function sendPartyInvite(uname = "", profileid = "") {
-	send({ cmd: "party invite", profileid, uname })
+function sendPartyInvite(uname = "", profile_id = "") {
+	send({ cmd: "party invite", profile_id, uname })
 }
 
 function sendPartyLeave() {

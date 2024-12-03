@@ -18,12 +18,12 @@ addHandler('party kick', (c, data) => {
     if (!c.party) return;
     if (!c.party.isLeader(c)) return;
     
-    let { profileid, username } = data;
+    let { profile_id, username } = data;
     let reason = data.reason ?? '';
     let member:Client = null;
 
-    if (profileid) {
-        member = global.clients.find(u => u.profile.id === profileid);
+    if (profile_id) {
+        member = global.clients.find(u => u.profile.id === profile_id);
     }
     else {
         member = global.clients.find(u => u.name === username);
@@ -42,11 +42,11 @@ addHandler('party disband', (c) => {
 });
 
 addHandler('party invite', (c, data) => {
-    let { profileid, username } = data;
+    let { profile_id, username } = data;
     let user:Client = null;
 
-    if (profileid) {
-        user = global.clients.find(u => u.profile.id === profileid);
+    if (profile_id) {
+        user = global.clients.find(u => u.profile.id === profile_id);
     }
     else {
         user = global.clients.find(u => u.name === username);
