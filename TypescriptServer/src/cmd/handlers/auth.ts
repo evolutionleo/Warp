@@ -20,11 +20,11 @@ addHandler('session create', async (c, data) => {
 
         await c.register(c.account);
 
-        c.send({ cmd: 'session create', success: true, session: c.session.token });
+        c.sendSessionCreate(true, '', c.session.token);
         c.sendLogin(true);
     }
     catch (reason) {
-        c.send({ cmd: 'session create', success: false, reason: reason.toString() });
+        c.sendSessionCreate(false, reason.toString());
     }
 });
 

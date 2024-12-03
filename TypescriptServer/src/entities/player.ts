@@ -16,20 +16,22 @@ export type PlayerInputs = {
     move: Point
 }
 
-export const defaultInputs:PlayerInputs = {
-    move: {
-        x: 0,
-        y: 0
-    },
-    kright: 0,
-    kleft: 0,
-    kup: 0,
-    kdown: 0,
-
-    kjump: false,
-    kjump_rel: false,
-    kjump_press: false
-};
+export function getDefaultInputs():PlayerInputs {
+    return {
+        move: {
+            x: 0,
+            y: 0
+        },
+        kright: 0,
+        kleft: 0,
+        kup: 0,
+        kdown: 0,
+    
+        kjump: false,
+        kjump_rel: false,
+        kjump_press: false
+    };
+}
 
 
 export default class PlayerEntity extends PhysicsEntity {
@@ -71,7 +73,7 @@ export default class PlayerEntity extends PhysicsEntity {
     get name() { return this.client.name; }
     prop_names = ['name'];
 
-    inputs:PlayerInputs = defaultInputs;
+    inputs:PlayerInputs = getDefaultInputs();
 
 
     is_solid:boolean = true;

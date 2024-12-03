@@ -9,7 +9,7 @@ addHandler("lobby info", function(data) {
 	var lobby = data.lobby
 	for(var i = 0; i < array_length(global.lobbies); i++) {
 		var _lobby = global.lobbies[i]
-		if (_lobby.lobbyid == lobby.lobbyid) {
+		if (_lobby.lobby_id == lobby.lobby_id) {
 			global.lobbies[i] = lobby
 		}
 	}

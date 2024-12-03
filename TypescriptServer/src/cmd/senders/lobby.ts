@@ -8,7 +8,7 @@ declare module '#cmd/sendStuff' {
         sendLobbyReject(lobby:Lobby, reason?:string):void
         sendLobbyLeave(lobby:Lobby, reason?:string, forced?:boolean):void
         sendLobbyUpdate(lobby: Lobby):void
-        sendLobbyInfo(lobbyid: string):void
+        sendLobbyInfo(lobby_id: string):void
         sendLobbyList():void
     }
 }
@@ -49,8 +49,8 @@ SendStuff.prototype.sendLobbyList = function() {
 }
 
 /**
- * @param {string} lobbyid 
+ * @param {string} lobby_id 
  */
-SendStuff.prototype.sendLobbyInfo = function(lobbyid:string) {
-    this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].getInfo()})
+SendStuff.prototype.sendLobbyInfo = function(lobby_id:string) {
+    this.send({ cmd: 'lobby info', lobby: global.lobbies[lobby_id].getInfo()})
 }

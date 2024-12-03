@@ -43,7 +43,7 @@ export function profileCreate(account:IAccount):IProfile { // for when just regi
         mmr: global.config.matchmaking.mmr_starting,
 
         state: {
-            lobbyid: null,
+            lobby_id: null,
             room: null,
     
             x: 0,

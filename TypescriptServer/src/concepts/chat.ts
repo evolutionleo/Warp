@@ -4,6 +4,7 @@ import Account, { IProfile } from "#schemas/profile";
 import { ObjectId } from "mongoose";
 
 import ChatLog, { IChatLog, IMessage } from "#schemas/chat";
+import { randomInt } from "crypto";
 
 export { IChatLog, IMessage };
 
@@ -13,15 +14,28 @@ export function chatFind(chat_id:string) {
 }
 
 export function chatCreate(members:IProfile[] = []) {
-    let chat = new Chat(new ChatLog());
+    let chatlog = new ChatLog();
+    let chat_id:string;
+
+    while(true) {
+        // a random 6-digit number
+        chat_id = randomInt(100000, 999999).toString();
+        if (chat_id in global.chats) { // just in case of a collision
+            continue;
+        }
+        else {
+            chatlog._id = chat_id;
+            break;
+        }
+    }
+
+    let chat = new Chat(chatlog);
 
     for(let member of members) {
         chat.addMember(member, true);
     }
 
     chat.save();
-
-    let chat_id = chat.chat_id;
     global.chats[chat_id] = chat;
 }
 
@@ -112,9 +126,13 @@ export class Chat {
             name: client.name,
             content
         };
-
         this.messages.push(message);
         this.save();
+
+        // broadcast to all online users
+        this.online_members.forEach(
+            member => member.sendChatMessage(this.chat_id, message)
+        );
     }
 }
 

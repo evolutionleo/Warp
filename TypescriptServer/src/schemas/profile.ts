@@ -14,7 +14,7 @@ export interface IProfile extends Document {
     mmr: number,
 
     state: {
-        lobbyid: string,
+        lobby_id: string,
         room: string, // room/level name
         x: number,
         y: number,
@@ -37,7 +37,7 @@ const profileSchema = new Schema<IProfile>({
 
 
     state: {
-        lobbyid: { type: String, required: false },
+        lobby_id: { type: String, required: false },
         room: { type: String, required: false },
     
         x: Number,

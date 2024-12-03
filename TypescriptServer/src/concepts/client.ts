@@ -29,7 +29,7 @@ import { Chat, chatFind } from '#concepts/chat';
 export type ClientInfo = {
     name: string;
     party_id: string;
-    lobbyid: string;
+    lobby_id: string;
     room_name: string;
 };
 
@@ -329,7 +329,7 @@ export default class Client extends SendStuff implements IClient {
         return {
             name: this.name,
             party_id: this.party?.party_id,
-            lobbyid: this.lobby?.lobbyid,
+            lobby_id: this.lobby?.lobby_id,
             room_name: this.room?.level.name
         };
     }
@@ -337,10 +337,10 @@ export default class Client extends SendStuff implements IClient {
     // Below are some preset functions (you probably don't want to change them
 
 
-    lobbyJoin(lobbyid?:string) {
+    lobbyJoin(lobby_id?:string) {
         let lobby:Lobby;
-        if (lobbyid) {
-            lobby = lobbyFind(lobbyid);
+        if (lobby_id) {
+            lobby = lobbyFind(lobby_id);
         }
         else {
             lobby = MatchMaker.findNonfullLobby(this);
@@ -595,9 +595,9 @@ export default class Client extends SendStuff implements IClient {
                 });
         }
         if (this.profile !== null) {
-            // save the current lobbyid
+            // save the current lobby_id
             if (this.lobby !== null) {
-                this.profile.state.lobbyid = this.lobby.lobbyid;
+                this.profile.state.lobby_id = this.lobby.lobby_id;
             }
 
             await this.profile.save()

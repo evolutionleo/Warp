@@ -1,5 +1,5 @@
 import { addValidator } from "#cmd/validator";
 
 addValidator(['lobby info', 'lobby join'], {
-    lobbyid: { type: 'string', optional: true }
+    lobby_id: { type: 'string', optional: true }
 });

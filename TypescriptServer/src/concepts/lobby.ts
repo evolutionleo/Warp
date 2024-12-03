@@ -11,17 +11,20 @@ import Match from '#matchmaking/match';
 
 // note: only create lobbies with createLobby(), don't call the constructor directly
 export function lobbyCreate(map:GameMap) { // returns the lobby instance
+    if (Object.keys(global.lobbies).length > 900000) return null;
+
     let lobby = new Lobby(map);
 
+    // get the ID
     while(true) {
         // a random 6-digit number
-        let lobbyid = crypto.randomInt(100000, 999999).toString();
-        if (lobbyid in global.lobbies) { // just in case of a collision
+        let lobby_id = crypto.randomInt(100000, 999999).toString();
+        if (lobby_id in global.lobbies) { // just in case of a collision
             continue;
         }
         else {
-            global.lobbies[lobbyid] = lobby;
-            lobby.lobbyid = lobbyid;
+            global.lobbies[lobby_id] = lobby;
+            lobby.lobby_id = lobby_id;
             break;
         }
     }
@@ -29,19 +32,19 @@ export function lobbyCreate(map:GameMap) { // returns the lobby instance
     return lobby;
 }
 
-export function lobbyFind(lobbyid:string) {
-    return global.lobbies[lobbyid];
+export function lobbyFind(lobby_id:string) {
+    return global.lobbies[lobby_id];
 }
 
-export function lobbyExists(lobbyid:string) {
-    return global.lobbies.hasOwnProperty(lobbyid);
+export function lobbyExists(lobby_id:string) {
+    return global.lobbies.hasOwnProperty(lobby_id);
 }
 
-export function lobbyDelete(lobbyid:string) {
-    let lobby = global.lobbies[lobbyid];
+export function lobbyDelete(lobby_id:string) {
+    let lobby = global.lobbies[lobby_id];
     lobby.close();
 
-    delete global.lobbies[lobbyid];
+    delete global.lobbies[lobby_id];
 }
 
 export function lobbyList():Lobby[] {
@@ -51,7 +54,7 @@ export function lobbyList():Lobby[] {
 export type LobbyStatus = 'open' | 'closed';
 
 export type SerializedLobby = {
-    lobbyid: string,
+    lobby_id: string,
     status: LobbyStatus,
     max_players: number,
     player_count: number,
@@ -60,7 +63,7 @@ export type SerializedLobby = {
 }
 
 export type LobbyInfo = {
-    lobbyid: string,
+    lobby_id: string,
     status: LobbyStatus,
     max_players: number,
     player_count: number,
@@ -72,7 +75,7 @@ export type LobbyInfo = {
 
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
-    lobbyid:string = '-1'; // assigned when created
+    lobby_id:string = '-1'; // assigned when created
     status:LobbyStatus = 'open';
     /** @type {Client[]} */
     players:Client[] = [];
@@ -242,7 +245,7 @@ export default class Lobby extends EventEmitter {
     // (e.x. we don't want to send functions and everything about every player)
     serialize():SerializedLobby {
         return {
-            lobbyid: this.lobbyid,
+            lobby_id: this.lobby_id,
             rooms: global.config.rooms_enabled
                 ? this.rooms.map(r => r.serialize())
                 : undefined,
@@ -255,7 +258,7 @@ export default class Lobby extends EventEmitter {
 
     getInfo():LobbyInfo {
         return {
-            lobbyid: this.lobbyid,
+            lobby_id: this.lobby_id,
             rooms: global.config.rooms_enabled
                 ? this.rooms.map(r => r.getInfo())
                 : undefined,

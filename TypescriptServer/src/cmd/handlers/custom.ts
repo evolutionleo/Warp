@@ -1,4 +1,5 @@
 import { addHandler } from "#cmd/handlePacket";
+import { PlayerInputs } from "#entities/player";
 import Point from "#types/point";
 import { clamp } from "#util/maths";
 
