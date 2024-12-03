@@ -40,7 +40,7 @@ addHandler('session login', async (c, data) => {
         c.sendLogin(true);
 
         // another client logged into the same session?
-        let old_client = global.clients.find((client) => client !== c && client.session.token === c.session.token);
+        let old_client = global.clients.find((client) => client !== c && client.session?.token === c.session?.token);
         
         if (old_client !== undefined) {
             if (old_client.connected) {

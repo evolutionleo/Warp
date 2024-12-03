@@ -188,6 +188,8 @@ export default class Client extends SendStuff implements IClient {
         this.profile.last_online = new Date();
         this.name = this.profile.name;
 
+        this.chatConnectAll();
+
         this.save();
     }
 
@@ -293,6 +295,8 @@ export default class Client extends SendStuff implements IClient {
         let idx = global.clients.indexOf(this);
         if (idx != -1)
             global.clients.splice(idx, 1);
+
+        this.chatDisconnectAll();
 
         this.disconnect();
     }
@@ -654,7 +658,7 @@ export default class Client extends SendStuff implements IClient {
 
         let chat = chatFind(chat_id);
         if (chat) {
-            chat.addMember(this.profile);
+            chat.addMember(this.profile, this);
         }
     }
 
@@ -665,6 +669,13 @@ export default class Client extends SendStuff implements IClient {
         this.profile.chats.forEach(chat_id => {
             let chat = global.chats[chat_id.toString()];
             chat.connectMember(this);
+
+        });
+    }
+
+    chatDisconnectAll() {
+        this.chats.forEach(chat => {
+            chat.disconnectMember(this);
         });
     }
 

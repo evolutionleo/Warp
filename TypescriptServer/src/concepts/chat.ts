@@ -4,7 +4,7 @@ import Account, { IProfile } from "#schemas/profile";
 import { ObjectId } from "mongoose";
 
 import ChatLog, { IChatLog, IMessage } from "#schemas/chat";
-import { randomInt } from "crypto";
+import { getRandomId } from "#util/random_id";
 
 export { IChatLog, IMessage };
 
@@ -14,35 +14,28 @@ export function chatFind(chat_id:string) {
 }
 
 export function chatCreate(members:IProfile[] = []) {
+    let chat_id:string = getRandomId(global.chats);
+    if (chat_id === null) return null;
+    
     let chatlog = new ChatLog();
-    let chat_id:string;
 
-    while(true) {
-        // a random 6-digit number
-        chat_id = randomInt(100000, 999999).toString();
-        if (chat_id in global.chats) { // just in case of a collision
-            continue;
-        }
-        else {
-            chatlog._id = chat_id;
-            break;
-        }
-    }
-
+    chatlog._id = chat_id;
     let chat = new Chat(chatlog);
 
     for(let member of members) {
-        chat.addMember(member, true);
+        chat.addMember(member, null, true);
     }
 
     chat.save();
     global.chats[chat_id] = chat;
+
+    return chat;
 }
 
 export class Chat {
     chatlog: IChatLog;
 
-    online_members: Client[];
+    online_members: Client[] = [];
     get messages(): IMessage[] {
         return this.chatlog.messages;
     }
@@ -66,12 +59,15 @@ export class Chat {
     }
 
 
-    addMember(profile: IProfile, initial = false) {
+    addMember(profile: IProfile, client = null, initial = false) {
         if (this.members.includes(profile.id))
             return;
 
         profile.chats.push(this.chatlog.id);
         this.members.push(profile.id);
+
+        if (client !== null)
+            this.connectMember(client);
 
         if (!initial)
             this.save();
@@ -83,14 +79,10 @@ export class Chat {
             this.members.splice(idx, 1);
 
         // disconnect the client
-        idx = this.online_members.indexOf(profile.id);
+        idx = this.online_members.findIndex(c => c.profile === profile);
         if (idx !== -1) {
             let client = this.online_members[idx];
-            this.online_members.splice(idx, 1);
-
-            idx = client.chats.indexOf(this);
-            if (idx !== -1)
-                client.chats.splice(idx, 1);
+            this.disconnectMember(client);
         }
         
 
@@ -103,11 +95,11 @@ export class Chat {
     }
 
     connectMember(client: Client) {
-        if (this.online_members.includes(client))
-            return;
+        if (!this.online_members.some(c => (c === client || c.profile?.id === client.profile?.id)))
+            this.online_members.push(client);
 
-        this.online_members.push(client);
-        client.chats.push(this);
+        if (!client.chats.includes(this))
+            client.chats.push(this);
     }
 
     disconnectMember(client: Client) {

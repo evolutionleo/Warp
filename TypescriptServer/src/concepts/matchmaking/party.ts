@@ -4,6 +4,7 @@ import { ProfileInfo } from "#schemas/profile";
 import Ticket, { MatchRequirements } from "#matchmaking/ticket";
 import MatchMaker from "#matchmaking/matchmaker";
 import Match from "#matchmaking/match";
+import { getRandomId } from "#util/random_id";
 
 
 export type PartyInfo = {
@@ -14,20 +15,13 @@ export type PartyInfo = {
 
 // use this instead of calling the new Party() contructor directly
 export function partyCreate(leader:Client):Party {
-    const party = new Party(leader);
+    let party_id = getRandomId(global.parties);
+    if (party_id === null) return null;
+    
+    let party = new Party(leader);
 
-    while(true) {
-        // a random 6-digit number
-        let party_id = crypto.randomInt(100000, 999999).toString();
-        if (party_id in global.parties) { // just in case of a collision
-            continue;
-        }
-        else {
-            global.parties[party_id] = party;
-            party.party_id = party_id;
-            break;
-        }
-    }
+    global.parties[party_id] = party;
+    party.party_id = party_id;
 
     return party;
 }

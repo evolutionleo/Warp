@@ -7,27 +7,18 @@ import * as crypto from 'crypto';
 import GameMode, { gameModeFind } from '#concepts/game_mode';
 import GameMap, { GameMapInfo } from './map';
 import Match from '#matchmaking/match';
+import { getRandomId } from '#util/random_id';
 
 
 // note: only create lobbies with createLobby(), don't call the constructor directly
 export function lobbyCreate(map:GameMap) { // returns the lobby instance
-    if (Object.keys(global.lobbies).length > 900000) return null;
-
+    let lobby_id = getRandomId();
+    if (lobby_id === null) return null;
+    
     let lobby = new Lobby(map);
+    lobby.lobby_id = lobby_id;
 
-    // get the ID
-    while(true) {
-        // a random 6-digit number
-        let lobby_id = crypto.randomInt(100000, 999999).toString();
-        if (lobby_id in global.lobbies) { // just in case of a collision
-            continue;
-        }
-        else {
-            global.lobbies[lobby_id] = lobby;
-            lobby.lobby_id = lobby_id;
-            break;
-        }
-    }
+    global.lobbies[lobby_id] = lobby;
     
     return lobby;
 }

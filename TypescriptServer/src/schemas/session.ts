@@ -8,7 +8,7 @@ export interface ISession extends Document {
 }
 
 export const SessionSchema = new Schema<ISession>({
-    token: String,
+    token: { type: String, index: true },
     account_id: { type: Schema.Types.ObjectId, ref: 'Account' }
 }, { timestamps: true });
 

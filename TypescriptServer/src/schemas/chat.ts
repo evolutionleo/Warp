@@ -25,7 +25,7 @@ export interface IChatLog extends Document {
 
 // you can edit this schema!
 const chatSchema = new Schema<IChatLog>({
-    _id: String,
+    _id: { type: String, unique: true, index: true },
 
     messages: [messageSchema],
     members: [

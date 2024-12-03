@@ -4,7 +4,10 @@ import * as readline from 'readline';
 if (global.config.shell_enabled) {
     trace('starting the eval console...');
 
-    const rl = readline.createInterface(process.stdin, process.stdout);
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
     rl.on('line', async (line) => {
         try {
             let result = eval(line);
@@ -18,7 +21,7 @@ if (global.config.shell_enabled) {
         }
     });
     rl.on('SIGINT', () => {
-        process.exit();
+        process.emit('SIGINT');
     });
     trace('> type right into the console to execute JS code in real time <');
 }

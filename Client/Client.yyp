@@ -91,6 +91,7 @@
     {"id":{"name":"authHandlers","path":"scripts/authHandlers/authHandlers.yy",},},
     {"id":{"name":"authSenders","path":"scripts/authSenders/authSenders.yy",},},
     {"id":{"name":"buffer_visualize","path":"scripts/buffer_visualize/buffer_visualize.yy",},},
+    {"id":{"name":"chatHandlers","path":"scripts/chatHandlers/chatHandlers.yy",},},
     {"id":{"name":"entityHandlers","path":"scripts/entityHandlers/entityHandlers.yy",},},
     {"id":{"name":"friendHandlers","path":"scripts/friendHandlers/friendHandlers.yy",},},
     {"id":{"name":"friendSenders","path":"scripts/friendSenders/friendSenders.yy",},},

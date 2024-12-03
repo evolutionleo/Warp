@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"chatHandlers",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"chatHandlers",
+  "parent":{
+    "name":"handlers",
+    "path":"folders/Warp/Scripts/cmd/handlers.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

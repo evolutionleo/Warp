@@ -9,7 +9,7 @@ export interface IProfile extends Document {
     last_online: Date,
 
     friends: ObjectId[],
-    chats: ObjectId[],
+    chats: string[],
 
     mmr: number,
 
@@ -32,7 +32,7 @@ const profileSchema = new Schema<IProfile>({
     last_online: { type: Date, default: Date.now },
 
     friends: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
-    chats: [{ type: Schema.Types.ObjectId, ref: 'Chat' }],
+    chats: [{ type: String, ref: 'Chat' }], // chat ids are strings
     mmr: { type: Number, required: false }, // matchmaking rating
 
 

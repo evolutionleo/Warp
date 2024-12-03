@@ -53,6 +53,7 @@
     {"name":"__WarpConfig","order":3,"path":"scripts/__WarpConfig/__WarpConfig.yy",},
     {"name":"authHandlers","order":3,"path":"scripts/authHandlers/authHandlers.yy",},
     {"name":"authSenders","order":2,"path":"scripts/authSenders/authSenders.yy",},
+    {"name":"chatHandlers","order":7,"path":"scripts/chatHandlers/chatHandlers.yy",},
     {"name":"entityHandlers","order":4,"path":"scripts/entityHandlers/entityHandlers.yy",},
     {"name":"friendHandlers","order":6,"path":"scripts/friendHandlers/friendHandlers.yy",},
     {"name":"friendSenders","order":6,"path":"scripts/friendSenders/friendSenders.yy",},
