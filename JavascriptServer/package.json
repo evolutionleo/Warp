@@ -23,7 +23,7 @@
         "detect-collisions": "7.0.5",
         "fastest-validator": "^1.16.0",
         "minimist": "^1.2.8",
-        "mongoose": "^7.3.3",
+        "mongoose": "^8.8.3",
         "semver": "^7.5.2",
         "ws": "^8.17.1"
     },
