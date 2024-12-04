@@ -10,6 +10,21 @@ export interface IMessage {
     content: string;
 }
 
+export interface SerializedMessage {
+    profile_id?: string;
+    name: string;
+    content: string;
+}
+
+// for some reason trying to msgpack.encode message with ObjectId leads to a circular reference (???)
+export function messageSerialize(msg:IMessage):SerializedMessage {
+    return {
+        name: msg.name,
+        content: msg.content,
+        profile_id: msg.profile_id?.toString()
+    }
+}
+
 const messageSchema = new Schema<IMessage>({
     profile_id: { type: Schema.Types.ObjectId, ref: 'Profile', required: false },
     name: String,
@@ -19,6 +34,7 @@ const messageSchema = new Schema<IMessage>({
 export interface IChatLog extends Document {
     _id: string,
     type: ChatType,
+    private: boolean,
     messages: IMessage[],
     members: ObjectId[]
 }
@@ -27,6 +43,8 @@ export interface IChatLog extends Document {
 const chatSchema = new Schema<IChatLog>({
     _id: { type: String, unique: true, index: true },
 
+    private: { type: Boolean, default: false },
+    type: { type: String, default: 'group' },
     messages: [messageSchema],
     members: [
         { type: Schema.Types.ObjectId, ref: 'Profile' }

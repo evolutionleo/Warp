@@ -7,5 +7,13 @@ addHandler("chat msg", function(data) {
 })
 
 addHandler("chat history", function(data) {
-	trace(data.messages)
+	trace(data.history)
+})
+
+addHandler("chats list", function(data) {
+	var ids = data.chats
+})
+
+addHandler("chat info", function(data) {
+	trace("chat info: %", data.chat)
 })

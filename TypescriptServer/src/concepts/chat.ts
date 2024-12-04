@@ -13,14 +13,17 @@ export function chatFind(chat_id:string) {
     return global.chats[chat_id];
 }
 
-export function chatCreate(members:IProfile[] = []) {
+export function chatCreate(members:IProfile[] = [], isPrivate = false) {
     let chat_id:string = getRandomId(global.chats);
     if (chat_id === null) return null;
     
     let chatlog = new ChatLog();
 
     chatlog._id = chat_id;
+    chatlog.private = isPrivate;
+
     let chat = new Chat(chatlog);
+
 
     for(let member of members) {
         chat.addMember(member, null, true);
@@ -30,6 +33,12 @@ export function chatCreate(members:IProfile[] = []) {
     global.chats[chat_id] = chat;
 
     return chat;
+}
+
+export interface SerializedChat {
+    chat_id: string,
+    online_members: string[],
+    members: string[]
 }
 
 export class Chat {
@@ -100,6 +109,8 @@ export class Chat {
 
         if (!client.chats.includes(this))
             client.chats.push(this);
+
+        client.sendChatHistory(this.chat_id, this.messages);
     }
 
     disconnectMember(client: Client) {
@@ -112,38 +123,41 @@ export class Chat {
             client.chats.splice(idx, 1);
     }
 
-    writeMessage(client: Client, content: string) {
-        const message:IMessage = {
-            profile_id: client.profile.id,
-            name: client.name,
-            content
-        };
+    writeMessage(content: string, author: Client|string = 'SYSTEM') {
+        let name:string, profile_id:string;
+
+        // author is not logged in/anonymous
+        if (typeof author === 'string') {
+            name = author;
+            profile_id = null;
+        }
+        else {
+            name = author.name;
+            profile_id = author.profile?.id ?? null;
+        }
+
+        const message = {
+            name,
+            content,
+            profile_id
+        }
+
         this.messages.push(message);
         this.save();
 
         // broadcast to all online users
         this.online_members.forEach(
-            member => member.sendChatMessage(this.chat_id, message)
+            client => client.sendChatMessage(this.chat_id, message)
         );
+    }
+
+    serialize():SerializedChat {
+        return {
+            chat_id: this.chat_id,
+            members: this.members.map(profile_id => profile_id.toString()),
+            online_members: this.online_members.map(client => client.name)
+        }
     }
 }
 
 export default Chat;
-
-// export class GlobalChat extends Chat {
-//     constructor() {
-//         // super(global.clients);
-//     }
-// }
-
-// export class DirectChat extends Chat {
-//     constructor(client1:Client, client2:Client) {
-//         // super([client1, client2]);
-//     }
-// }
-
-// export class GroupChat extends Chat {
-//     constructor(members: Client[]) {
-//         // super(members);
-//     }
-// }

@@ -13,6 +13,7 @@ import Party from '#matchmaking/party';
 import IClient from '#types/client_properties';
 import Match from '#matchmaking/match';
 import { ISession } from '#schemas/session';
+import Chat from '#concepts/chat';
 
 
 // sender functions can be later called using some_client.sendThing()
@@ -38,6 +39,8 @@ export abstract class SendStuff implements IClient {
     abstract packetQueue: any[];
     abstract halfpack: Buffer;
     abstract entity: PlayerEntity;
+
+    abstract chats: Chat[];
 
     abstract bindTCP(socket: net.Socket): void;
     abstract bindWS(socket: WebSocket): void;

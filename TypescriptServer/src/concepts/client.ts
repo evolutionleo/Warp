@@ -62,7 +62,7 @@ export default class Client extends SendStuff implements IClient {
     /** @type {Match} */
     match: Match = null;
 
-    /** @type {Chat[]} */
+    /** @type {string[]} */
     chats: Chat[] = [];
 
 
@@ -662,14 +662,23 @@ export default class Client extends SendStuff implements IClient {
         }
     }
 
+    chatLeave(chat_id: string) {
+        if (!this.profile)
+            return;
+
+        let chat = chatFind(chat_id);
+        if (chat) {
+            chat.kickMember(this.profile);
+        }
+    }
+
     chatConnectAll() {
         if (!this.profile)
             return;
 
         this.profile.chats.forEach(chat_id => {
-            let chat = global.chats[chat_id.toString()];
-            chat.connectMember(this);
-
+            let chat = chatFind(chat_id);
+            chat?.connectMember(this);
         });
     }
 

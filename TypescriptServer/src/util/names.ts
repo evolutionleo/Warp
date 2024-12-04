@@ -11,6 +11,8 @@ export class Names {
         if (name.startsWith('guest')) {
             return false;
         }
+        if (name === 'system')
+            return false;
 
         return true;
     }
