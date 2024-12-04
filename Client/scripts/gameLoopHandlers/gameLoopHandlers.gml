@@ -53,6 +53,10 @@ addHandler("play", function(data) {
 })
 
 
+addHandler("reconnect", function(data) {
+	trace("reconnected!")
+})
+
 // changing rooms
 addHandler("room transition", function(data) {
 	if (use_timestamps(data)) return;

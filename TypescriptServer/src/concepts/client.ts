@@ -257,11 +257,14 @@ export default class Client extends SendStuff implements IClient {
     }
 
     onReconnect() {
+        this.send({ cmd: 'reconnect' /* ... */ });
+
         if (this.lobby)
             this.sendLobbyJoin(this.lobby);
         if (this.room && this.entity)
             this.sendPlay(this.lobby, this.room, this.entity.pos, this.entity.uuid);
 
+        // receive all entities from the room once again
         this.room_join_timer = global.config.room.recently_joined_timer;
     }
 
