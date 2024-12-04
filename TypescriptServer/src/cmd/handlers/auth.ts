@@ -23,7 +23,7 @@ addHandler('name set', async (c, data) => {
         if (!Names.isValid(name)) {
             return;
         }
-        if (clients.some(client => client.name === name)) {
+        if (global.clients.some(client => client.name === name)) {
             return;
         }
 

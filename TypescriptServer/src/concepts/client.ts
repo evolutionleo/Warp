@@ -244,7 +244,7 @@ export default class Client extends SendStuff implements IClient {
         this.socket = null;
         this.connected = false;
 
-        this.reconnect_timer = config.reconnect_timeout;
+        this.reconnect_timer = global.config.reconnect_timeout;
 
         this.matchMakingStop();
 

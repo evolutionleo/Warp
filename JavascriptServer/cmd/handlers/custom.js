@@ -1,26 +1,11 @@
 import { addHandler } from "#cmd/handlePacket";
-import { clamp } from "#util/maths";
-
 
 addHandler('player controls', (c, data) => {
     if (!c.entity)
         return;
     
-    c.entity.inputs = {
-        move: data.move,
-        keys: {
-            kright: data.kright,
-            kleft: data.kleft,
-            kup: data.kup,
-            kdown: data.kdown,
-            
-            kjump: data.kjump,
-            kjump_rel: data.kjump_rel,
-            kjump_press: data.kjump_press
-        }
-    };
-    
-    c.entity.inputs.move.x = clamp(c.entity.inputs.move.x, -1, 1);
-    c.entity.inputs.move.y = clamp(c.entity.inputs.move.y, -1, 1);
+    for (let input_name in c.entity.inputs) {
+        if (data[input_name] !== undefined)
+            c.entity.inputs[input_name] = data[input_name];
+    }
 });
-

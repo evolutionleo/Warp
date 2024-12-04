@@ -24,7 +24,7 @@ else {
             return null;
         
         return new Promise(async (resolve, reject) => {
-            var entity = await import("file://" + entities_dir + filename);
+            let entity = await import("file://" + entities_dir + filename);
             entity = entity.default;
             
             global.entities.push(entity);

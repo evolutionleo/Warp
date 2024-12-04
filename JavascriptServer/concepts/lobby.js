@@ -1,44 +1,37 @@
 import trace from '#util/logging';
 import Room  from '#concepts/room';
 import { EventEmitter } from 'events';
-import * as crypto from 'crypto';
 import { gameModeFind } from '#concepts/game_mode';
-
+import { getRandomId } from '#util/random_id';
 
 
 // note: only create lobbies with createLobby(), don't call the constructor directly
 export function lobbyCreate(map) {
-    var lobby = new Lobby(map);
+    let lobby_id = getRandomId();
+    if (lobby_id === null)
+        return null;
     
-    while (true) {
-        // a random 6-digit number
-        var lobbyid = crypto.randomInt(100000, 999999).toString();
-        if (lobbyid in global.lobbies) { // just in case of a collision
-            continue;
-        }
-        else {
-            global.lobbies[lobbyid] = lobby;
-            lobby.lobbyid = lobbyid;
-            break;
-        }
-    }
+    let lobby = new Lobby(map);
+    lobby.lobby_id = lobby_id;
+    
+    global.lobbies[lobby_id] = lobby;
     
     return lobby;
 }
 
-export function lobbyFind(lobbyid) {
-    return global.lobbies[lobbyid];
+export function lobbyFind(lobby_id) {
+    return global.lobbies[lobby_id];
 }
 
-export function lobbyExists(lobbyid) {
-    return global.lobbies.hasOwnProperty(lobbyid);
+export function lobbyExists(lobby_id) {
+    return global.lobbies.hasOwnProperty(lobby_id);
 }
 
-export function lobbyDelete(lobbyid) {
-    var lobby = global.lobbies[lobbyid];
+export function lobbyDelete(lobby_id) {
+    let lobby = global.lobbies[lobby_id];
     lobby.close();
     
-    delete global.lobbies[lobbyid];
+    delete global.lobbies[lobby_id];
 }
 
 export function lobbyList() {
@@ -48,7 +41,7 @@ export function lobbyList() {
 
 // in context of an MMO this is a shard/separated world
 export default class Lobby extends EventEmitter {
-    lobbyid = '-1'; // assigned when created
+    lobby_id = '-1'; // assigned when created
     status = 'open';
     /** @type {Client[]} */
     players = [];
@@ -134,6 +127,9 @@ export default class Lobby extends EventEmitter {
      * @param {boolean?} forced
      */
     kickPlayer(player, reason, forced = false, secondary = false) {
+        if (!this.players.includes(player))
+            return;
+        
         // close if a player leaves from the lobby?
         if (global.config.lobby.close_on_leave && this.status !== 'closed' && !secondary) {
             if (this.match && !this.match.ended) { // if left mid-match - end the match
@@ -155,7 +151,7 @@ export default class Lobby extends EventEmitter {
                     team.splice(idx, 1);
             });
             
-            var idx = this.players.indexOf(player);
+            let idx = this.players.indexOf(player);
             this.players.splice(idx, 1);
             player.room?.removePlayer(player); // if in a room - kick, otherwise don't error out
             player.onLobbyLeave(this, reason, forced);
@@ -215,7 +211,7 @@ export default class Lobby extends EventEmitter {
     // (e.x. we don't want to send functions and everything about every player)
     serialize() {
         return {
-            lobbyid: this.lobbyid,
+            lobby_id: this.lobby_id,
             rooms: global.config.rooms_enabled
                 ? this.rooms.map(r => r.serialize())
                 : undefined,
@@ -228,7 +224,7 @@ export default class Lobby extends EventEmitter {
     
     getInfo() {
         return {
-            lobbyid: this.lobbyid,
+            lobby_id: this.lobby_id,
             rooms: global.config.rooms_enabled
                 ? this.rooms.map(r => r.getInfo())
                 : undefined,

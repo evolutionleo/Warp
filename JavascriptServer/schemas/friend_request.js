@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const { model, Schema } = mongoose;
+import { model, Schema } from 'mongoose';
 import Profile from '#schemas/profile';
 
 const friendRequestSchema = new Schema({
@@ -8,7 +7,7 @@ const friendRequestSchema = new Schema({
 }, { collection: 'FriendRequests' });
 
 friendRequestSchema.statics.findIncoming = async function (profile_id) {
-    return await (await FriendRequest.find({ receiver: profile_id }).populate('sender')).map(req => req.sender);
+    return (await FriendRequest.find({ receiver: profile_id }).populate('sender')).map(req => req.sender);
 };
 
 friendRequestSchema.statics.findOutgoing = async function (profile_id) {
@@ -16,7 +15,7 @@ friendRequestSchema.statics.findOutgoing = async function (profile_id) {
 };
 
 friendRequestSchema.statics.findRequestId = async function (sender, receiver) {
-    return (await FriendRequest.exists({ sender, receiver }))._id;
+    return (await FriendRequest.findOne({ sender, receiver })).id;
 };
 
 friendRequestSchema.statics.requestExists = async function (sender, receiver) {

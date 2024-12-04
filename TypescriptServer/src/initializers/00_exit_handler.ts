@@ -2,7 +2,7 @@ import trace from '#util/logging';
 import chalk from 'chalk';
 
 async function cleanup() {
-    await Promise.all(clients.map(c => c.save()));
+    await Promise.all(global.clients.map(c => c.save()));
     trace('saved all client data!');
 }
 

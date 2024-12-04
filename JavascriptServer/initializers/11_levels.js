@@ -22,10 +22,10 @@ trace(chalk.blueBright(`found levels: [${filenames.join(', ')}]`));
 // but still waits until everything is loaded
 await Promise.all(filenames.map((filename) => {
     return new Promise(async (resolve, reject) => {
-        var this_level = await import("file://" + levels_dir + filename);
+        let this_level = await import("file://" + levels_dir + filename);
         this_level = this_level.default;
         
-        var name = this_level.name;
+        let name = this_level.name;
         if (global.levels[name] !== undefined) {
             throw `Error: Level with the name "${name}" already exists!`;
         }

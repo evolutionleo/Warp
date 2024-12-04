@@ -1,18 +1,19 @@
 import trace from '#util/logging';
 import chalk from 'chalk';
 
-function cleanup() {
-    // note: only synchronous operations here!
+async function cleanup() {
+    await Promise.all(global.clients.map(c => c.save()));
+    trace('saved all client data!');
 }
 
-function onProcessExit(exitCode = undefined) {
+async function onProcessExit(exitCode = undefined) {
     trace('Running onProcessExit()');
     
     if (exitCode !== undefined)
         trace('Exit code:', exitCode);
     
     trace('Running cleanup...');
-    cleanup();
+    await cleanup();
     trace('Cleanup finished.');
     
     
@@ -21,7 +22,7 @@ function onProcessExit(exitCode = undefined) {
 }
 
 // do something when app is closing
-// process.on('exit', onProcessExit.bind({ noexit: true }));
+// process.on('exit', () => trace('Exited!'));
 
 //catches ctrl+c event
 process.on('SIGINT', onProcessExit);

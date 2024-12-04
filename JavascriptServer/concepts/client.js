@@ -2,26 +2,31 @@ import trace from '#util/logging';
 import chalk from 'chalk';
 import { SendStuff } from '#cmd/sendStuff';
 
-import { Profile, freshProfile } from '#schemas/profile';
-import { Account } from '#schemas/account';
+import { Profile } from '#schemas/profile';
 import { FriendRequest } from '#schemas/friend_request';
+
+import { profileCreate } from '#util/auth';
 
 import { lobbyFind } from '#concepts/lobby';
 import { partyCreate, partyGet } from '#matchmaking/party';
 import MatchMaker from '#matchmaking/matchmaker';
 import { Names } from '#util/names';
+import { chatFind } from '#concepts/chat';
 
 // this is a wrapper around sockets
 export default class Client extends SendStuff {
+    /** @type {boolean} */
+    connected;
+    
     /** @type {string} */
     name = '';
     /** @type {string} */
     temp_id; // a temporary randomly generated id string
     
-    /** @type {import('ws').WebSocket | import('net').Socket} */
+    /** @type {WebSocket | TCPSocket} */
     socket = null;
     /** @type {'ws' | 'tcp'} */
-    type;
+    socket_type;
     ip;
     
     /** @type {Lobby} */
@@ -37,15 +42,26 @@ export default class Client extends SendStuff {
     /** @type {Match} */
     match = null;
     
+    /** @type {string[]} */
+    chats = [];
+    
     
     /** @type {Account} */
     account = null;
     /** @type {Profile} */
     profile = null;
+    /** @type {ISession} */
+    session = null;
     
     // used internally in packet.ts
     /** @type {Buffer} */
     halfpack;
+    /** @type {any[]} */
+    packetQueue;
+    
+    // used internally in server.ts
+    bindTCP;
+    bindWS;
     
     /** @type {PlayerEntity} */
     entity = null;
@@ -53,7 +69,8 @@ export default class Client extends SendStuff {
     /** @type {number} */
     ping;
     
-    room_join_timer = -1; // if >0 - joined a room recently
+    room_join_timer = -1; // if >0 - joined a room recently, getting FULL entities list
+    reconnect_timer = -1;
     
     /** @type {boolean} */
     get logged_in() {
@@ -70,19 +87,18 @@ export default class Client extends SendStuff {
             this.profile.mmr = Math.max(_mmr, global.config.matchmaking.mmr_min);
     }
     
-    constructor(socket, type = 'tcp') {
+    constructor(socket, socket_type = 'tcp') {
         super();
+        
+        this.connected = true;
         
         // a random 8-digit number string
         this.temp_id = Math.floor(Math.random() * 100_000_000).toString();
         this.temp_id = '0'.repeat(8 - this.temp_id.length) + this.temp_id;
         
         this.socket = socket;
-        this.type = type.toLowerCase();
+        this.socket_type = socket_type;
         
-        this.type = type;
-        
-        this.socket = socket;
         this.lobby = null; // no lobby
         
         // these are the objects that contain all the meaningful data
@@ -108,8 +124,7 @@ export default class Client extends SendStuff {
      * @param {Lobby} lobby
      * @param {string=} reason
      */
-    onLobbyReject(lobby, reason) {
-        reason ??= 'lobby is full!';
+    onLobbyReject(lobby, reason = 'lobby is full!') {
         this.sendLobbyReject(lobby, reason);
     }
     
@@ -153,6 +168,8 @@ export default class Client extends SendStuff {
         this.profile.last_online = new Date();
         this.name = this.profile.name;
         
+        this.chatConnectAll();
+        
         this.save();
     }
     
@@ -170,7 +187,7 @@ export default class Client extends SendStuff {
         }
         
         // find a room to join
-        var room = null;
+        let room = null;
         
         // join the room last visited (saved in profile)
         if (global.config.room.use_last_profile_room && this.logged_in && this.profile.state.room) {
@@ -204,12 +221,45 @@ export default class Client extends SendStuff {
     }
     
     onDisconnect() {
+        this.socket = null;
+        this.connected = false;
+        
+        this.reconnect_timer = global.config.reconnect_timeout;
+        
+        this.matchMakingStop();
+        
         // go offline
         if (this.logged_in) {
             this.profile.online = false;
             this.profile.last_online = new Date();
+            this.save();
+        }
+    }
+    
+    onReconnect() {
+        if (this.lobby)
+            this.sendLobbyJoin(this.lobby);
+        if (this.room && this.entity)
+            this.sendPlay(this.lobby, this.room, this.entity.pos, this.entity.uuid);
+        
+        this.room_join_timer = global.config.room.recently_joined_timer;
+    }
+    
+    
+    disconnect() {
+        if (this.socket === null) {
+            return;
         }
         
+        if (this.socket_type === 'ws') {
+            this.socket.close();
+        }
+        else {
+            this.socket.destroy();
+        }
+    }
+    
+    destroy() {
         // save everything to the DB
         this.save();
         
@@ -220,14 +270,50 @@ export default class Client extends SendStuff {
             this.lobby.kickPlayer(this, 'disconnect', true);
         if  (this.party)
             this.party.kickMember(this, 'disconnect', true);
+        
+        
+        let idx = global.clients.indexOf(this);
+        if (idx != -1)
+            global.clients.splice(idx, 1);
+        
+        this.chatDisconnectAll();
+        
+        this.disconnect();
+    }
+    
+    // move a new client's socket into this "dead" (disconnected) client
+    // removes the other client from the global.clients list
+    reconnect(new_client) {
+        if (this.connected) {
+            return;
+        }
+        
+        this.connected = true;
+        
+        this.socket = new_client.socket;
+        this.socket_type = new_client.socket_type;
+        
+        this.socket.removeAllListeners();
+        
+        if (this.socket_type === 'tcp')
+            this.bindTCP(this.socket);
+        else
+            this.bindWS(this.socket);
+        
+        // delete self from the list
+        let idx = global.clients.indexOf(new_client);
+        if (idx != -1)
+            global.clients.splice(idx, 1);
+        
+        this.onReconnect();
     }
     
     
     getInfo() {
         return {
             name: this.name,
-            partyid: this.party?.partyid,
-            lobbyid: this.lobby?.lobbyid,
+            party_id: this.party?.party_id,
+            lobby_id: this.lobby?.lobby_id,
             room_name: this.room?.level.name
         };
     }
@@ -235,10 +321,10 @@ export default class Client extends SendStuff {
     // Below are some preset functions (you probably don't want to change them
     
     
-    lobbyJoin(lobbyid) {
-        var lobby;
-        if (lobbyid) {
-            lobby = lobbyFind(lobbyid);
+    lobbyJoin(lobby_id) {
+        let lobby;
+        if (lobby_id) {
+            lobby = lobbyFind(lobby_id);
         }
         else {
             lobby = MatchMaker.findNonfullLobby(this);
@@ -252,7 +338,7 @@ export default class Client extends SendStuff {
         if (!this.logged_in)
             return [];
         
-        return (await Profile.findById(this.profile._id).populate('friends')).friends;
+        return (await Profile.findById(this.profile.id).populate('friends')).friends;
     }
     
     async getFriendIds() {
@@ -265,13 +351,13 @@ export default class Client extends SendStuff {
     async getIncomingFriendRequests() {
         if (!this.logged_in)
             return [];
-        return await FriendRequest.findIncoming(this.profile._id);
+        return await FriendRequest.findIncoming(this.profile.id);
     }
     
     async getOutgoingFriendRequests() {
         if (!this.logged_in)
             return [];
-        return await FriendRequest.findOutgoing(this.profile._id);
+        return await FriendRequest.findOutgoing(this.profile.id);
     }
     
     async friendCanAdd(friend) {
@@ -279,8 +365,8 @@ export default class Client extends SendStuff {
         if (!this.logged_in)
             return false;
         
-        let this_id = this.profile._id;
-        let friend_id = friend._id;
+        let this_id = this.profile.id;
+        let friend_id = friend.id;
         
         return this_id != friend_id && !(await this.getFriendIds()).includes(friend_id);
     }
@@ -296,8 +382,8 @@ export default class Client extends SendStuff {
         if (!await this.friendCanAdd(friend))
             return false;
         
-        let sender_id = this.profile._id;
-        let receiver_id = friend._id;
+        let sender_id = this.profile.id;
+        let receiver_id = friend.id;
         
         let friend_exists = this.profile.friends.some(friend_id => friend_id === receiver_id);
         if (friend_exists) { // already friends
@@ -333,8 +419,8 @@ export default class Client extends SendStuff {
         if (!this.logged_in)
             return null;
         
-        let sender = this.profile._id;
-        let receiver = user_to._id;
+        let sender = this.profile.id;
+        let receiver = user_to.id;
         
         return await FriendRequest.create({ sender, receiver });
     }
@@ -348,7 +434,7 @@ export default class Client extends SendStuff {
         user_from = user_from instanceof Client ? user_from.profile : user_from;
         user_to = user_to instanceof Client ? user_to.profile : user_to;
         
-        return await FriendRequest.findRequestId(user_from._id, user_to._id);
+        return await FriendRequest.findRequestId(user_from.id, user_to.id);
     }
     
     /**
@@ -412,8 +498,8 @@ export default class Client extends SendStuff {
         if (!this.logged_in)
             return false;
         
-        let my_id = this.profile._id;
-        let friend_id = friend._id;
+        let my_id = this.profile.id;
+        let friend_id = friend.id;
         
         // delete from each others' profiles
         await Profile.findByIdAndUpdate(my_id, { $pull: { friends: friend_id } });
@@ -447,17 +533,17 @@ export default class Client extends SendStuff {
     }
     
     /**
-     * @param {string} partyid
+     * @param {string} party_id
      */
-    partyJoin(partyid) {
+    partyJoin(party_id) {
         this.matchMakingStop();
         
-        let party = partyGet(partyid);
+        let party = partyGet(party_id);
         party.addMember(this);
     }
     
     matchMakingStart(req) {
-        if (this.ticket)
+        if (this.ticket !== null)
             return 'already matchmaking';
         if (this.match)
             return 'already in a match';
@@ -498,29 +584,37 @@ export default class Client extends SendStuff {
     /**
      * Save account and profile data to the DB
      */
-    save() {
+    async save() {
         if (this.account !== null) {
-            this.account.save()
+            await this.account.save()
                 .then(() => {
-                trace('Saved the account successfully');
+                // trace('Saved the account successfully');
             })
                 .catch((err) => {
                 trace('Error while saving account: ' + err);
             });
         }
         if (this.profile !== null) {
-            
-            // save the current lobbyid
+            // save the current lobby_id
             if (this.lobby !== null) {
-                this.profile.state.lobbyid = this.lobby.lobbyid;
+                this.profile.state.lobby_id = this.lobby.lobby_id;
             }
             
-            this.profile.save()
+            await this.profile.save()
                 .then(() => {
-                trace('Saved the profile successfully.');
+                // trace('Saved the profile successfully.');
             })
                 .catch((err) => {
                 trace('Error while saving profile: ' + err);
+            });
+        }
+        if (this.session !== null) {
+            await this.session.save()
+                .then(() => {
+                // trace('Saved the session successfully');
+            })
+                .catch((err) => {
+                trace('Error while saving session: ' + err);
             });
         }
     }
@@ -528,66 +622,65 @@ export default class Client extends SendStuff {
     /**
      * @param {Account} account
      */
-    register(account) {
+    async register(account) {
+        account.temporary = false;
+        
         this.account = account;
-        this.profile = freshProfile(account);
+        this.profile = profileCreate(account);
+        
+        await this.account.save();
+        await this.profile.save();
         
         this.onLogin();
-        this.sendRegister('success');
-    }
-    
-    
-    /**
-     * @param {string} username
-     * @param {string} password
-     */
-    tryLogin(username, password) {
-        let c = this;
-        
-        Account.login(username, password)
-            .then((account) => {
-            // this also sends the message
-            c.login(account);
-        }).catch((reason) => {
-            c.sendLogin('fail', reason);
-        });
-    }
-    
-    /**
-     * @param {string} username
-     * @param {string} password
-     */
-    tryRegister(username, password) {
-        let c = this;
-        
-        Account.register(username, password)
-            .then((account) => {
-            // this also sends the message
-            c.register(account);
-        }).catch((reason) => {
-            trace('error: ' + reason);
-            c.sendRegister('fail', reason.toString());
-        });
     }
     
     /**
      * @param {Account} account
      */
-    login(account) {
-        let c = this;
+    async login(account) {
         this.account = account;
         
-        Profile.findOne({
-            account_id: this.account._id
-        }).then((profile) => {
-            if (profile) {
-                this.profile = profile;
-                c.onLogin();
-                c.sendLogin('success');
-            }
-            else {
-                trace('Error: Couldn\'t find a profile with these credentials!');
-            }
+        this.profile = await Profile.findOne({
+            account_id: this.account.id
+        });
+        
+        this.onLogin();
+    }
+    
+    
+    chatJoin(chat_id) {
+        if (!this.profile)
+            return;
+        
+        let chat = chatFind(chat_id);
+        if (chat) {
+            chat.addMember(this.profile, this);
+        }
+    }
+    
+    chatLeave(chat_id) {
+        if (!this.profile)
+            return;
+        
+        let chat = chatFind(chat_id);
+        if (chat) {
+            chat.kickMember(this.profile);
+        }
+    }
+    
+    chatConnectAll() {
+        if (!this.profile)
+            return;
+        
+        this.profile.chats.forEach(chat_id => {
+            let chat = chatFind(chat_id);
+            chat?.connectMember(this);
+        });
+    }
+    
+    chatDisconnectAll() {
+        this.chats.forEach(chat => {
+            chat.disconnectMember(this);
         });
     }
 }

@@ -7,22 +7,22 @@ addHandler('lobby list', (c) => {
 });
 
 addHandler('lobby info', (c, data) => {
-    var lobbyid = data.lobbyid;
-    if (lobbyExists(lobbyid))
-        c.sendLobbyInfo(lobbyid);
+    const lobby_id = data.lobby_id;
+    if (lobbyExists(lobby_id))
+        c.sendLobbyInfo(lobby_id);
 });
 
 addHandler('lobby join', (c, data) => {
     if (!global.config.lobby.allow_join_by_id)
         return;
     
-    var lobbyid = data.lobbyid;
-    if (lobbyExists(lobbyid))
-        c.lobbyJoin(lobbyid);
+    const lobby_id = data.lobby_id;
+    if (lobbyExists(lobby_id))
+        c.lobbyJoin(lobby_id);
 });
 
 addHandler('lobby leave', (c, data) => {
-    var lobby = c.lobby;
+    let lobby = c.lobby;
     if (lobby !== null) {
         lobby.kickPlayer(c, 'you left the lobby', false);
     }

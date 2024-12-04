@@ -5,9 +5,9 @@ const dummy_function = () => { };
 const styling_regex = /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g;
 
 function trace(...strs) {
-    var str = '';
+    let str = '';
     
-    for (var i = 0; i < strs.length; i++) {
+    for (let i = 0; i < strs.length; i++) {
         let s = strs[i];
         if (typeof s === 'undefined') {
             str += 'undefined';

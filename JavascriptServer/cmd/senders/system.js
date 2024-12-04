@@ -31,3 +31,7 @@ SendStuff.prototype.sendInvalidInput = function (from_cmd, errors) {
 SendStuff.prototype.sendError = function (error, details = '') {
     this.send({ cmd: 'error', error, details });
 };
+
+SendStuff.prototype.sendKick = function () {
+    this.send({ cmd: 'server kick' });
+};

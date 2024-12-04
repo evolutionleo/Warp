@@ -16,7 +16,7 @@ trace(chalk.blueBright(`found game modes: [${filenames.join(', ')}]`));
 
 await Promise.all(filenames.map((filename) => {
     return new Promise(async (resolve, reject) => {
-        var gm = await import("file://" + gms_dir + filename);
+        let gm = await import("file://" + gms_dir + filename);
         gm = gm.default;
         
         // find the maps for the game mode

@@ -2,9 +2,9 @@ import { addHandler } from "#cmd/handlePacket";
 import { partyExists } from "#matchmaking/party";
 
 addHandler('party join', (c, data) => {
-    var partyid = data.partyid;
-    if (partyExists(partyid))
-        c.partyJoin(partyid);
+    let party_id = data.party_id;
+    if (partyExists(party_id))
+        c.partyJoin(party_id);
 });
 
 addHandler('party leave', (c) => {
@@ -19,12 +19,12 @@ addHandler('party kick', (c, data) => {
     if (!c.party.isLeader(c))
         return;
     
-    let { profileid, username } = data;
+    let { profile_id, username } = data;
     let reason = data.reason ?? '';
     let member = null;
     
-    if (profileid) {
-        member = global.clients.find(u => u.profile.id === profileid);
+    if (profile_id) {
+        member = global.clients.find(u => u.profile.id === profile_id);
     }
     else {
         member = global.clients.find(u => u.name === username);
@@ -45,11 +45,11 @@ addHandler('party disband', (c) => {
 });
 
 addHandler('party invite', (c, data) => {
-    let { profileid, username } = data;
+    let { profile_id, username } = data;
     let user = null;
     
-    if (profileid) {
-        user = global.clients.find(u => u.profile.id === profileid);
+    if (profile_id) {
+        user = global.clients.find(u => u.profile.id === profile_id);
     }
     else {
         user = global.clients.find(u => u.name === username);

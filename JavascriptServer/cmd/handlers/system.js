@@ -28,7 +28,7 @@ addHandler('client info', (c, data) => {
         // immediately close the socket after 1 last packet
         setImmediate(() => {
             // close the socket
-            if (c.type == 'tcp') {
+            if (c.socket_type == 'tcp') {
                 const s = c.socket;
                 s.destroy();
             }

@@ -12,12 +12,20 @@ export class SendStuff {
      * basic send
      * @param {any} data
      */
-    write(data) {
+    write(data, shouldQueue = false) {
+        if (!this.connected) {
+            if (shouldQueue) {
+                this.packetQueue.push(data);
+            }
+            
+            return;
+        }
+        
         if (global.config.timestamps_enabled) { // { t: ms passed since the server started }
             data.t = Date.now() - global.start_time;
         }
         
-        if (this.type === 'ws') {
+        if (this.socket_type === 'ws') {
             this.socket.send(packet.ws_build(data));
         }
         else {

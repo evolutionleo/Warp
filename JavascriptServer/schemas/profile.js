@@ -1,52 +1,36 @@
 // This schema is for profiles
-import mongoose from 'mongoose';
-const { model, Schema } = mongoose;
+import { model, Schema } from 'mongoose';
 
 // this holds the state of the profile
 // you can edit this schema!
 const profileSchema = new Schema({
-    account_id: { type: Schema.Types.ObjectId, ref: 'Account' },
-    name: { type: String, unique: true },
+    account_id: { type: Schema.Types.ObjectId, ref: 'Account', index: true },
+    name: { type: String, unique: true, index: true },
     
     online: { type: Boolean, default: false },
     last_online: { type: Date, default: Date.now },
     
     friends: [{ type: Schema.Types.ObjectId, ref: 'Profile' }],
+    chats: [{ type: String, ref: 'Chat' }], // chat ids are strings
     mmr: { type: Number, required: false }, // matchmaking rating
     
     
     state: {
-        lobbyid: String,
-        room: String,
+        lobby_id: { type: String, required: false },
+        room: { type: String, required: false },
         
         x: Number,
         y: Number,
         
-        //hp: Number
+        state: Number
     }
     
     // you can add additional properties to the schema here:
-}, { collection: 'Profiles' });
+});
 
 
-export const Profile = model('Profile', profileSchema);
-
+export const Profile = model('Profile', profileSchema, 'Profiles');
 export default Profile;
-export function freshProfile(account) {
-    return new Profile({
-        account_id: account._id,
-        name: account.username,
-        mmr: global.config.matchmaking.mmr_starting,
-        
-        state: {
-            lobbyid: '',
-            room: '',
-            
-            x: 0,
-            y: 0
-        }
-    });
-}
 
 // like profile, but only the data that is useful for sending
 export function getProfileInfo(p) {
@@ -60,8 +44,4 @@ export function getProfileInfo(p) {
         last_online: p.last_online.toISOString(),
         mmr: p.mmr
     };
-}
-
-export async function getProfileByName(name) {
-    return await Profile.findOne({ name });
 }

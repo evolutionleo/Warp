@@ -13,11 +13,11 @@ export default class MatchMaker {
     // an internal loop
     static processMatches() {
         // handle each mode's queue separately
-        for (let mode in this.queues) {
-            let match_found = true;
-            
+        for (const mode in this.queues) {
             let game_mode = global.game_modes[mode];
             let q = this.queues[mode];
+            
+            let match_found = true;
             
             let team_size = game_mode.team_size;
             
@@ -143,14 +143,12 @@ export default class MatchMaker {
                             j++;
                         }
                         
-                        // if (j >= q.count(party_size))
-                        //     break;
+                        if (j >= q.count(party_size))
+                            break;
                     }
                 }
+                
             }
-            
-            // if (teams.flat().length > 0)
-            //     trace('teams:', teams);
             
             // check if all the teams are packed
             for (let i = 0; i < teams_count; i++) {
@@ -163,7 +161,7 @@ export default class MatchMaker {
             
             if (!match_found) {
                 // skip to the next game mode
-                break;
+                continue;
             }
             
             // remove all the team members from the queue
@@ -239,7 +237,7 @@ export default class MatchMaker {
      * @returns {Lobby} lobby
      */
     static findNonfullLobby(user) {
-        var match_lobby = null;
+        let match_lobby = null;
         lobbyList().forEach((lobby) => {
             if (!lobby.full) {
                 match_lobby = lobby;

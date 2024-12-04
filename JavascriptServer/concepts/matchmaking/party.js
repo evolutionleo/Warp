@@ -1,42 +1,36 @@
-import * as crypto from 'crypto';
 import MatchMaker from "#matchmaking/matchmaker";
+import { getRandomId } from "#util/random_id";
 
 // use this instead of calling the new Party() contructor directly
 export function partyCreate(leader) {
-    const party = new Party(leader);
+    let party_id = getRandomId(global.parties);
+    if (party_id === null)
+        return null;
     
-    while (true) {
-        // a random 6-digit number
-        let partyid = crypto.randomInt(100000, 999999).toString();
-        if (partyid in global.parties) { // just in case of a collision
-            continue;
-        }
-        else {
-            global.parties[partyid] = party;
-            party.partyid = partyid;
-            break;
-        }
-    }
+    let party = new Party(leader);
+    
+    global.parties[party_id] = party;
+    party.party_id = party_id;
     
     return party;
 }
 
-export function partyGet(partyid) {
-    return global.parties[partyid];
+export function partyGet(party_id) {
+    return global.parties[party_id];
 }
 
-export function partyExists(partyid) {
-    return global.parties.hasOwnProperty(partyid);
+export function partyExists(party_id) {
+    return global.parties.hasOwnProperty(party_id);
 }
 
-export function partyDelete(partyid) {
-    let party = global.parties[partyid];
+export function partyDelete(party_id) {
+    let party = global.parties[party_id];
     party.disband();
 }
 
 
 export default class Party {
-    partyid;
+    party_id;
     members;
     leader;
     max_members; // inherited from config.party.max_members
@@ -89,7 +83,11 @@ export default class Party {
             }
         }
         
-        this.members.splice(this.members.indexOf(member), 1);
+        let idx = this.members.indexOf(member);
+        if (idx === -1)
+            return;
+        
+        this.members.splice(idx, 1);
         member.onPartyLeave(this, reason, forced);
         member.party = null;
         
@@ -106,7 +104,7 @@ export default class Party {
     }
     
     delete() {
-        delete global.parties[this.partyid];
+        delete global.parties[this.party_id];
     }
     
     matchMakingStart(req) {
@@ -164,7 +162,7 @@ export default class Party {
     
     getInfo() {
         return {
-            partyid: this.partyid,
+            party_id: this.party_id,
             members: this.members.map(m => m.name),
             leader: this.leader?.name
         };

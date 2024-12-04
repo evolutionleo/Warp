@@ -37,8 +37,8 @@ SendStuff.prototype.sendLobbyList = function () {
 };
 
 /**
- * @param {string} lobbyid
+ * @param {string} lobby_id
  */
-SendStuff.prototype.sendLobbyInfo = function (lobbyid) {
-    this.send({ cmd: 'lobby info', lobby: global.lobbies[lobbyid].getInfo() });
+SendStuff.prototype.sendLobbyInfo = function (lobby_id) {
+    this.send({ cmd: 'lobby info', lobby: global.lobbies[lobby_id].getInfo() });
 };

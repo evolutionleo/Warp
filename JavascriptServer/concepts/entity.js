@@ -1,7 +1,15 @@
 import { EventEmitter } from "events";
 import { CircleCollider, BoxCollider, PolygonCollider } from '#concepts/collider';
-
 import { isDeepStrictEqual } from 'util';
+
+
+
+export function entityExists(entityType) {
+    return global.entities.includes(entityType)
+        || Object.keys(global.entity_objects).includes(entityType)
+        || Object.keys(global.entity_names).includes(entityType);
+}
+
 
 // a thing
 class Entity extends EventEmitter {
@@ -9,8 +17,6 @@ class Entity extends EventEmitter {
     static object_name = 'oUnknownEntity';
     type;
     object_name;
-    // type = Entity.type;
-    // object_name = Entity.object_name;
     
     is_solid = false;
     is_static = false;
@@ -19,12 +25,14 @@ class Entity extends EventEmitter {
     pos; // keep in mind that the coordinates are always set to a whole number (to achieve pixel-perfect collisions)
     spd; // speed in pixels per second, can be fractional
     angle = 0;
+    origin = { x: 0, y: 0 }; // origin from 0 (top/left) to 1 (bottom/right)
     
     prev_pos;
     serialized; // save the last serialized version of this entity (to compare changes)
     
     base_size = { x: 64, y: 64 };
     scale = { x: 1, y: 1 };
+    flip = { x: 0, y: 0 };
     
     
     // the custom variables that need sending with the entitiy
@@ -40,6 +48,7 @@ class Entity extends EventEmitter {
     
     collider = null; // a polygon or a circle
     collider_type = 'box';
+    collider_origin = { x: 0, y: 0 };
     collider_radius = this.width / 2; // only relevant when collider_type is 'circle'
     collider_vertices = []; // if this is not overridden, a default rectangle collider will be used
     
@@ -70,7 +79,7 @@ class Entity extends EventEmitter {
         if (typeof value === 'string') {
             this._state = this.states[value];
         }
-        // it's a number
+        // state is a number
         // (-1 means keep the old state)
         else if (value != -1) {
             this._state = value;
@@ -98,7 +107,6 @@ class Entity extends EventEmitter {
         this.object_name = this.constructor['object_name'];
         
         this.createCollider();
-        this.collider.entity = this;
         
         this.tree.insert(this.collider);
     }
@@ -152,12 +160,15 @@ class Entity extends EventEmitter {
     }
     
     createCollider(x = this.x, y = this.y) {
-        let pos = { x: x, y: y };
+        let pos = {
+            x: x + this.width * (this.collider_origin.x - this.origin.x),
+            y: y + this.height * (this.collider_origin.y - this.origin.y)
+        };
         
         // create the collider
         switch (this.collider_type) {
             case 'box':
-                this.collider = new BoxCollider(pos, this.width - .01, this.height - .01);
+                this.collider = new BoxCollider(pos, this.base_size.x - .01, this.base_size.y - .01);
                 break;
             case 'circle':
                 this.collider = new CircleCollider(pos, this.collider_radius);
@@ -169,6 +180,10 @@ class Entity extends EventEmitter {
                 this.collider = null;
                 throw 'Unknown collider type: ' + this.collider_type;
         }
+        
+        this.collider.setScale(this.xscale, this.yscale);
+        this.collider.setAngle(this.angle);
+        // this.tree.updateBody(this.collider);
         
         this.collider.entity = this;
     }
@@ -182,46 +197,72 @@ class Entity extends EventEmitter {
         this.tree.insert(this.collider);
     }
     
-    updateCollider(x = this.x, y = this.y) {
-        if (this.size.x != this.prev_size.x || this.size.y != this.prev_size.y) {
-            this.regenerateCollider(x, y);
+    updateCollider(x = this.x, y = this.y, collider = this.collider) {
+        let pos = {
+            x: x + this.width * (this.collider_origin.x - this.origin.x),
+            y: y + this.height * (this.collider_origin.y - this.origin.y)
+        };
+        
+        if (collider === this.collider) {
+            collider.setScale(this.xscale, this.yscale);
+            collider.setAngle(this.angle);
+            collider.setPosition(pos.x, pos.y);
+        }
+        else {
+            collider.setPosition(x, y);
         }
         
-        this.collider.setAngle(this.angle);
-        this.collider.setPosition(x, y);
-        this.tree.updateBody(this.collider);
+        this.tree.updateBody(collider);
     }
     
-    checkCollision(x = this.x, y = this.y, e) {
-        this.updateCollider(x, y);
-        return this.tree.checkCollision(this.collider, e.collider);
+    checkCollision(x = this.x, y = this.y, e, collider = this.collider) {
+        this.updateCollider(x, y, collider);
+        
+        let result = this.tree.checkCollision(collider, e.collider);
+        
+        // move back the collider
+        if (collider === this.collider)
+            this.updateCollider(this.x, this.y);
+        
+        return result;
     }
     
-    placeMeeting(x = this.x, y = this.y, type = 'solid') {
-        this.updateCollider(x, y);
+    placeMeeting(x = this.x, y = this.y, type = 'solid', collider = this.collider) {
+        this.updateCollider(x, y, collider);
         
         this.prev_size = { x: this.size.x, y: this.size.y };
         
-        return this.tree.checkOne(this.collider, (res) => {
+        let result = this.tree.checkOne(this.collider, (res) => {
             let e = res.b.entity;
-            return e.matchesType(type);
+            return e && e.matchesType(type);
         });
+        
+        // move back the collider
+        if (collider === this.collider)
+            this.updateCollider(this.x, this.y);
+        
+        return result;
     }
     
-    placeMeetingAll(x = this.x, y = this.y, type = 'solid') {
-        this.updateCollider(x, y);
+    placeMeetingAll(x = this.x, y = this.y, type = 'solid', collider = this.collider) {
+        this.updateCollider(x, y, collider);
         
         let entities = [];
-        this.tree.checkOne(this.collider, (res) => {
+        this.tree.checkOne(collider, (res) => {
             let e = res.b.entity;
-            if (e.matchesType(type))
+            if (e && e.matchesType(type))
                 entities.push(e);
         });
+        
+        // move back the collider
+        if (collider === this.collider)
+            this.updateCollider(this.x, this.y);
+        
         return entities;
     }
     
     isOutsideRoom(x = this.x, y = this.y) {
-        let bbox = this.bbox; // this is an optimization btw
+        let bbox = this.bbox; // don't call the getter every time
         
         return bbox.left - this.x + x > this.room.width
             || bbox.right - this.x + x < 0
@@ -259,14 +300,17 @@ class Entity extends EventEmitter {
     
     // removes the entity from the room (and triggers the 'remove' event)
     remove() {
+        let idx = this.room.entities.indexOf(this);
+        if (idx === -1) { // already removed
+            return;
+        }
         this.emit('remove');
-        var pos = this.room.entities.indexOf(this);
-        this.room.entities.splice(pos, 1);
+        this.room.entities.splice(idx, 1);
         this.tree.remove(this.collider);
     }
     
     serialize() {
-        return {
+        let struct = {
             id: this.id,
             t: this.type,
             obj: this.object_name,
@@ -279,6 +323,14 @@ class Entity extends EventEmitter {
             p: this.props, // uses a getter for props
             st: this.state
         };
+        
+        if (this.flip.x)
+            struct.fx = true;
+        if (this.flip.y)
+            struct.fy = true;
+        
+        
+        return struct;
     }
     
     bundle() {
@@ -301,11 +353,14 @@ class Entity extends EventEmitter {
         let x = this.x, y = this.y;
         let w = this.width, h = this.height;
         
+        let ox = this.origin.x;
+        let oy = this.origin.y;
+        
         return {
-            left: x,
-            top: y,
-            right: x + w,
-            bottom: y + h
+            left: x - w * ox,
+            top: y - h * oy,
+            right: x + w * (1 - ox),
+            bottom: y + h * (1 - oy)
         };
     }
     

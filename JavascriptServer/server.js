@@ -3,7 +3,7 @@ import { createServer } from 'net';
 const port = global.config.port;
 const ip = global.config.ip;
 
-import * as ws from 'ws';
+import { WebSocketServer } from 'ws';
 const ws_port = global.config.ws_port;
 
 import * as http from 'http';
@@ -29,10 +29,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const init_files = fs.readdirSync(__dirname + '/initializers', 'utf8');
 
 // synchronous loading, because order matters
-for (var i = 0; i < init_files.length; i++) {
-    var file = init_files[i];
+for (let i = 0; i < init_files.length; i++) {
+    let file = init_files[i];
     trace(chalk.blueBright('loading initializer:', file));
-    await import("file://" + __dirname + '/initializers/' + file);
+    await await import("file://" + __dirname + '/initializers/' + file);
 }
 trace(chalk.blueBright('loaded initializers!'));
 
@@ -47,40 +47,43 @@ trace(chalk.greenBright(`Running ${config.meta.game_name} ${config.meta.game_ver
 const server = createServer(function (socket) {
     trace(chalk.blueBright("Socket connected!"));
     
-    var c = new Client(socket);
+    const c = new Client(socket);
     global.clients.push(c); // add the client to clients list (unnecessary)
     c.ip = socket.remoteAddress;
     
     // Bind functions on events
-    
-    socket.on('error', function (err) {
-        if (err.message.includes('ECONNRESET')) { // this is a disconnect
-            trace(chalk.redBright('Socket violently disconnected.'));
-        }
-        else {
-            trace(chalk.redBright(`Error! ${err}`));
-        }
-    });
-    
-    // When data arrived
-    socket.on('data', function (data) {
-        // create artificial_delay
-        if (delayReceive.enabled) {
-            setTimeout(function () {
+    c.bindTCP = (socket) => {
+        socket.on('error', function (err) {
+            if (err.message.includes('ECONNRESET')) { // this is a disconnect
+                trace(chalk.redBright('Socket violently disconnected.'));
+            }
+            else {
+                trace(chalk.redBright(`Error! ${err}`));
+            }
+        });
+        
+        // When data arrived
+        socket.on('data', function (data) {
+            // create artificial_delay
+            if (delayReceive.enabled) {
+                setTimeout(function () {
+                    packet.parse(c, data); // handle the logic
+                }, delayReceive.get());
+            }
+            else { // just parse normally
                 packet.parse(c, data); // handle the logic
-            }, delayReceive.get());
-        }
-        else { // just parse normally
-            packet.parse(c, data); // handle the logic
-        }
-    });
+            }
+        });
+        
+        // When a socket/connection closed
+        socket.on('close', function () {
+            c.onDisconnect();
+            
+            trace(chalk.red('Socket disconnected.'));
+        });
+    };
     
-    // When a socket/connection closed
-    socket.on('close', function () {
-        c.onDisconnect();
-        global.clients.splice(global.clients.indexOf(c), 1);
-        trace(chalk.red('Socket closed.'));
-    });
+    c.bindTCP(socket);
 });
 
 server.maxConnections = config.server.max_connections;
@@ -106,7 +109,7 @@ if (global.config.ws_enabled) {
         http_server = http.createServer({});
     }
     
-    const ws_server = new ws.WebSocketServer({
+    const ws_server = new WebSocketServer({
         server: http_server,
         clientTracking: true,
         maxPayload: config.server.max_ws_payload,
@@ -115,40 +118,42 @@ if (global.config.ws_enabled) {
     ws_server.on('connection', function (socket, r) {
         trace(chalk.blueBright("WebSocket connected!"));
         
-        var c = new Client(socket, 'ws');
+        const c = new Client(socket, 'ws');
         global.clients.push(c); // add the client to clients list (unnecessary)
         c.ip = r.socket.remoteAddress;
         
         // Bind functions on events
-        
-        socket.on('error', function (err) {
-            if (err.message.includes('ECONNRESET')) { // this is a disconnect
-                trace(chalk.redBright('WebSocket violently disconnected.'));
-                // handle disconnect here
-            }
+        c.bindWS = (socket) => {
+            socket.on('error', function (err) {
+                if (err.message.includes('ECONNRESET')) {
+                    trace(chalk.redBright('WebSocket violently disconnected.'));
+                    c.onDisconnect();
+                }
+                
+                trace(`Error! ${err}`);
+            });
             
-            trace(`Error! ${err}`);
-        });
-        
-        // When data arrived
-        socket.on('message', function (data) {
-            // create artificial_delay
-            if (delayReceive.enabled) {
-                setTimeout(function () {
+            // When data arrived
+            socket.on('message', function (data) {
+                // create artificial_delay
+                if (delayReceive.enabled) {
+                    setTimeout(function () {
+                        packet.ws_parse(c, data); // handle the logic
+                    }, delayReceive.get());
+                }
+                else { // just parse normally
                     packet.ws_parse(c, data); // handle the logic
-                }, delayReceive.get());
-            }
-            else { // just parse normally
-                packet.ws_parse(c, data); // handle the logic
-            }
-        });
+                }
+            });
+            
+            // When a socket/connection closed
+            socket.on('close', function () {
+                trace(chalk.yellowBright('WebSocket disconnected.'));
+                c.onDisconnect();
+            });
+        };
         
-        // When a socket/connection closed
-        socket.on('close', function () {
-            c.onDisconnect();
-            global.clients.splice(global.clients.indexOf(c), 1);
-            trace(chalk.yellowBright('WebSocket closed.'));
-        });
+        c.bindWS(socket);
     });
     
     ws_server.on('error', function (err) {

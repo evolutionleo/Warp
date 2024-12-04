@@ -11,6 +11,8 @@ export class Names {
         if (name.startsWith('guest')) {
             return false;
         }
+        if (name === 'system')
+            return false;
         
         return true;
     }
@@ -18,8 +20,13 @@ export class Names {
     static guest_counter = 1;
     
     static getDefaultName() {
-        let s = (this.guest_counter++).toString();
-        s = '0'.repeat(3 - s.length) + s;
-        return 'Guest' + s;
+        // let s = (this.guest_counter++).toString();
+        let s = Math.floor(Math.random() * 1000000).toString();
+        s = '0'.repeat(6 - s.length) + s;
+        return 'guest' + s;
     }
+    
+    static next = this.getDefaultName;
+    static get = this.getDefaultName;
+    static generate = this.getDefaultName;
 }

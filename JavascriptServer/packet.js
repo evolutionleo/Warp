@@ -8,11 +8,11 @@ export default class packet {
      * @returns {Uint8Array} pack
      */
     static build(data) {
-        var dataBuff = encode(data);
-        var sizeBuff = Buffer.alloc(4);
+        let dataBuff = encode(data);
+        let sizeBuff = Buffer.alloc(4);
         sizeBuff.writeUInt32LE(dataBuff.length);
         
-        var buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 4);
+        let buff = Buffer.concat([sizeBuff, dataBuff], dataBuff.length + 4);
         
         return buff;
     }
@@ -41,16 +41,16 @@ export default class packet {
             c.halfpack = null;
         }
         
-        var dataSize = data.length;
+        let dataSize = data.length;
         
-        for (var i = 0; i < dataSize;) {
+        for (let i = 0; i < dataSize;) {
             if (i + 4 > dataSize) { // a split in the size bits
                 c.halfpack = Buffer.alloc(dataSize - i);
                 data.copy(c.halfpack, 0, i, dataSize);
                 break;
             }
             
-            var packSize = data.readUInt32LE(i); // unpack the size
+            let packSize = data.readUInt32LE(i); // unpack the size
             i += 4;
             
             if (i + packSize > dataSize) {
@@ -60,7 +60,7 @@ export default class packet {
                 break;
             }
             
-            var dataPack = Buffer.alloc(packSize); // unpack the data
+            let dataPack = Buffer.alloc(packSize); // unpack the data
             data.copy(dataPack, 0, i, i + packSize);
             i += packSize;
             

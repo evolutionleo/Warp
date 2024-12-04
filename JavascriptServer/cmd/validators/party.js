@@ -1,5 +1,5 @@
 import { addValidator } from "#cmd/validator";
 
 addValidator(['party join'], {
-    partyid: 'string'
+    party_id: 'string'
 });

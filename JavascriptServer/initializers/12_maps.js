@@ -16,7 +16,7 @@ trace(chalk.blueBright(`found maps: [${filenames.join(', ')}]`));
 
 await Promise.all(filenames.map((filename) => {
     return new Promise(async (resolve, reject) => {
-        var map = await import("file://" + maps_dir + filename);
+        let map = await import("file://" + maps_dir + filename);
         map = map.default;
         global.maps.push(map);
         

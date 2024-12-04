@@ -7,17 +7,31 @@ SendStuff.prototype.sendName = function () {
 };
 
 /**
- * @param {string} status
+ * @param {string} success
  * @param {string} [reason='']
  */
-SendStuff.prototype.sendRegister = function (status, reason = '') {
-    this.send({ cmd: 'register', status, reason });
+SendStuff.prototype.sendRegister = function (success, reason = '') {
+    this.send({ cmd: 'register', success, reason });
 };
 
 /**
- * @param {string} status
+ * @param {string} success
  * @param {string} [reason='']
  */
-SendStuff.prototype.sendLogin = function (status, reason = '') {
-    this.send({ cmd: 'login', status, reason, account: getAccountInfo(this.account), profile: getProfileInfo(this.profile) });
+SendStuff.prototype.sendLogin = function (success, reason = '') {
+    this.send({ cmd: 'login', success, reason, account: getAccountInfo(this.account), profile: getProfileInfo(this.profile) });
+};
+
+SendStuff.prototype.sendSession = function (success, reason = '', token = undefined) {
+    if (token === undefined && success) {
+        token = this.session.token;
+    }
+    this.send({ cmd: 'session login', success, reason, session: token });
+};
+
+SendStuff.prototype.sendSessionCreate = function (success, reason = '', token = undefined) {
+    if (token === undefined && success) {
+        token = this.session.token;
+    }
+    this.send({ cmd: 'session create', success: true, reason, session: token });
 };

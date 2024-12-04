@@ -1,11 +1,11 @@
 import PhysicsEntity from '#entities/physics_entity';
 
-export const defaultInputs = {
-    move: {
-        x: 0,
-        y: 0
-    },
-    keys: {
+export function getDefaultInputs() {
+    return {
+        move: {
+            x: 0,
+            y: 0
+        },
         kright: 0,
         kleft: 0,
         kup: 0,
@@ -14,8 +14,8 @@ export const defaultInputs = {
         kjump: false,
         kjump_rel: false,
         kjump_press: false
-    }
-};
+    };
+}
 
 
 export default class PlayerEntity extends PhysicsEntity {
@@ -23,6 +23,9 @@ export default class PlayerEntity extends PhysicsEntity {
     static object_name = 'oPlayer';
     
     collider_type = 'box';
+    // collider_type:ColliderType = 'circle';
+    // collider_radius: number = 16;
+    collider_origin = { x: 0, y: 0 };
     
     collision_type = 'discrete';
     precise_collisions = true;
@@ -42,6 +45,11 @@ export default class PlayerEntity extends PhysicsEntity {
         y: 2
     };
     
+    origin = {
+        x: 0.5,
+        y: 0.5
+    };
+    
     states = { idle: 0, walk: 1 };
     
     client;
@@ -49,7 +57,7 @@ export default class PlayerEntity extends PhysicsEntity {
     get name() { return this.client.name; }
     prop_names = ['name'];
     
-    inputs = defaultInputs;
+    inputs = getDefaultInputs();
     
     
     is_solid = true;
@@ -80,11 +88,11 @@ export default class PlayerEntity extends PhysicsEntity {
         
         this.spd.x = this.inputs.move.x * this.walksp;
         
-        if (this.inputs.keys.kjump && this.grounded()) {
+        if (this.inputs.kjump && this.grounded()) {
             this.jump();
         }
         
-        if (!this.inputs.keys.kjump && !this.cut_jump && !this.grounded() && this.spd.y <= -1) {
+        if (!this.inputs.kjump && !this.cut_jump && !this.grounded() && this.spd.y <= -1) {
             this.spd.y /= 2;
             this.cut_jump = true;
         }
