@@ -76,6 +76,17 @@ export async function getProfileByName(name: string):Promise<IProfile> {
     return await Profile.findOne({ name });
 }
 
+export async function profileRename(profile: IProfile, new_name: string):Promise<IProfile> {
+    if (!Names.isValid(new_name)) {
+        throw 'invalid name';
+    }
+    if (await Profile.exists({ name: new_name })) {
+        throw 'name already taken';
+    }
+
+    profile.name = new_name;
+    return await profile.save();
+}
 
 
 // logging in/registering stuff

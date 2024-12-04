@@ -1,12 +1,35 @@
 import { addHandler } from "#cmd/handlePacket";
 import { Account, getAccountInfo, IAccount } from "#schemas/account";
 import Session from "#schemas/session";
-import { accountActivate, accountCreate, accountLogin, accountRegister, sessionCreate, sessionGet, sessionLogin } from "#util/auth";
+import { accountActivate, accountCreate, accountLogin, accountRegister, profileRename, sessionCreate, sessionGet, sessionLogin } from "#util/auth";
 import trace from "#util/logging";
 import { Names } from "#util/names";
 
 addHandler('name get', (c) => {
     c.sendName();
+});
+
+addHandler('name set', async (c, data) => {
+    let name = data.name;
+
+    if (c.logged_in) {
+        try {
+            await profileRename(c.profile, name);
+            c.sendName();
+        }
+        catch(e) {}
+    }
+    else {
+        if (!Names.isValid(name)) {
+            return;
+        }
+        if (clients.some(client => client.name === name)) {
+            return;
+        }
+
+        c.name = name;
+        c.sendName();
+    }
 });
 
 // create a brand new (temporary) account
