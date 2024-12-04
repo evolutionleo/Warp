@@ -53,10 +53,6 @@ addHandler("play", function(data) {
 })
 
 
-addHandler("reconnect", function(data) {
-	trace("reconnected!")
-})
-
 // changing rooms
 addHandler("room transition", function(data) {
 	if (use_timestamps(data)) return;
@@ -88,4 +84,8 @@ addHandler("game over", function(data) {
 addHandler("mmr change", function(data) {
 	var delta = data.delta
 	var new_mmr = data.new_mmr
+})
+
+addHandler("reconnect", function(data) {
+	trace("reconnected!")
 })
