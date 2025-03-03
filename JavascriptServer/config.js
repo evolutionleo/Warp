@@ -141,6 +141,10 @@ const common_config = {
         kick_other_sessions: true
     },
     
+    chat: {
+        create_global_chat: true
+    },
+    
     tps: 20, // tickrate
     
     // Disable some of the features that you don't need in your game
