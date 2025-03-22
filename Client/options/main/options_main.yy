@@ -1,5 +1,5 @@
 {
-  "$GMMainOptions":"v1",
+  "$GMMainOptions":"v3",
   "%Name":"Main",
   "ConfigValues":{
     "Dev":{
@@ -10,6 +10,7 @@
     },
   },
   "name":"Main",
+  "option_audio_error_behaviour":true,
   "option_author":"",
   "option_collision_compatibility":true,
   "option_copy_on_write_enabled":true,
@@ -17,6 +18,9 @@
   "option_gameguid":"35a08916-5ccb-4b43-a5cb-ccc32c4cf9b5",
   "option_gameid":"0",
   "option_game_speed":60,
+  "option_legacy_json_parsing":true,
+  "option_legacy_number_conversion":true,
+  "option_legacy_other_behaviour":true,
   "option_mips_for_3d_textures":false,
   "option_remove_unused_assets":false,
   "option_sci_usesci":false,

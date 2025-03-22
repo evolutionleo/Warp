@@ -1,5 +1,10 @@
 /// @desc
 
+if (instance_number(oClient) > 1) {
+	instance_destroy()
+	exit
+}
+
 #region Connect!
 
 connect = function() {
