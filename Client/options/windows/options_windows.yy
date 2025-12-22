@@ -1,5 +1,5 @@
 {
-  "$GMWindowsOptions":"",
+  "$GMWindowsOptions":"v1",
   "%Name":"Windows",
   "ConfigValues":{
     "Dev":{
@@ -12,6 +12,7 @@
   "option_windows_company_info":"YoYo Games Ltd",
   "option_windows_copyright_info":"",
   "option_windows_copy_exe_to_dest":true,
+  "option_windows_d3dswapeffectdiscard":false,
   "option_windows_description_info":"A GameMaker Studio 2 Game",
   "option_windows_disable_sandbox":true,
   "option_windows_display_cursor":true,

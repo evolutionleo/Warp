@@ -29,13 +29,13 @@
   "physicsShapePoints":[],
   "physicsStartAwake":true,
   "properties":[
-    {"$GMObjectProperty":"v1","%Name":"portal_type","filters":[],"listItems":[
+    {"$GMObjectProperty":"v2","%Name":"portal_type","filters":[],"listItems":[
         "\"Entrance\"",
         "\"Exit\"",
         "\"Both\"",
       ],"multiselect":false,"name":"portal_type","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"\"Entrance\"","varType":6,},
-    {"$GMObjectProperty":"v1","%Name":"warp_id","filters":[],"listItems":[],"multiselect":false,"name":"warp_id","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"0","varType":1,},
-    {"$GMObjectProperty":"v1","%Name":"room_to","filters":[
+    {"$GMObjectProperty":"v2","%Name":"warp_id","filters":[],"listItems":[],"multiselect":false,"name":"warp_id","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"0","varType":1,},
+    {"$GMObjectProperty":"v2","%Name":"room_to","filters":[
         "GMRoom",
       ],"listItems":[],"multiselect":false,"name":"room_to","rangeEnabled":false,"rangeMax":10.0,"rangeMin":0.0,"resourceType":"GMObjectProperty","resourceVersion":"2.0","value":"undefined","varType":5,},
   ],
