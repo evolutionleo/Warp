@@ -31,7 +31,7 @@ const messageSchema = new Schema<IMessage>({
     content: String
 }, { _id: false });
 
-export interface IChatLog extends Document {
+export interface IChatLog {//extends Document {
     _id: string,
     type: ChatType,
     private: boolean,
@@ -39,9 +39,11 @@ export interface IChatLog extends Document {
     members: ObjectId[]
 }
 
+export type TChatLogDocument = IChatLog & Document<string, {}, IChatLog>;
+
 // you can edit this schema!
 const chatSchema = new Schema<IChatLog>({
-    _id: { type: String, unique: true, index: true },
+    _id: { type: String, default: '' },
 
     private: { type: Boolean, default: false },
     type: { type: String, default: 'group' },

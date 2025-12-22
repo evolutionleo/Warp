@@ -315,13 +315,15 @@ export default class Client extends SendStuff implements IClient {
 
         this.socket = new_client.socket;
         this.socket_type = new_client.socket_type;
-
-        this.socket.removeAllListeners();
         
-        if (this.socket_type === 'tcp')
+        if (this.socket_type === 'tcp') {
+            (this.socket as TCPSocket).removeAllListeners();
             this.bindTCP(this.socket);
-        else
+        }
+        else {
+            (this.socket as WebSocket).removeAllListeners();
             this.bindWS(this.socket);
+        }
 
         // delete self from the list
         let idx = global.clients.indexOf(new_client);

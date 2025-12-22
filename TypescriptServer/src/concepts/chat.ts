@@ -1,9 +1,9 @@
 import Client from "#concepts/client";
 import Account, { IProfile } from "#schemas/profile";
 
-import { ObjectId } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
-import ChatLog, { IChatLog, IMessage } from "#schemas/chat";
+import ChatLog, { IChatLog, IMessage, TChatLogDocument } from "#schemas/chat";
 import { getRandomId } from "#util/random_id";
 
 export { IChatLog, IMessage };
@@ -42,7 +42,7 @@ export interface SerializedChat {
 }
 
 export class Chat {
-    chatlog: IChatLog;
+    chatlog: TChatLogDocument;
 
     online_members: Client[] = [];
     get messages(): IMessage[] {
@@ -59,7 +59,7 @@ export class Chat {
         return this.chatlog.members;
     }
 
-    constructor(chatlog: IChatLog) {
+    constructor(chatlog: TChatLogDocument) {
         this.chatlog = chatlog;
     }
 

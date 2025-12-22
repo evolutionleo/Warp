@@ -64,6 +64,10 @@ const server = createServer(function(socket) {
         
         // When data arrived
         socket.on('data', function(data) {
+            // ensure it's a buffer
+            if (typeof data === 'string')
+                return;
+
             // create artificial_delay
             if (delayReceive.enabled) {
                 setTimeout(function() {
